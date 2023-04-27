@@ -8,21 +8,20 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import kr.co.cf.admin.service.AdminService;
+import kr.co.cf.admin.service.AdminUserService;
 
 @Controller
-public class AdminController {
+public class AdminUserController {
 	
-	@Autowired AdminService adminService;
+	@Autowired AdminUserService adminUserService;
 	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Model model) {
 		
-		adminService.insert("carrot",25);
+		adminUserService.insert("carrot",25);
 		
 		return "home";
 	}
-	
 }
