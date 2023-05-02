@@ -17,15 +17,16 @@ import kr.co.cf.admin.service.AdminUserService;
 public class AdminUserController {
 	
 	@Autowired AdminUserService adminUserService;
-	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Model model) {
+
 		ArrayList<AdminUserDTO> list = new ArrayList<AdminUserDTO>();
 		list=adminUserService.list();
 		logger.info("list" + list);
 		model.addAttribute("list",list);
 		return "adminUser";
+
 	}
 }

@@ -17,6 +17,7 @@ public class AdminUserService {
 	@Autowired AdminUserDAO adminUserDAO;
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
+
 	public ArrayList<AdminUserDTO> list() {
 		
 		return adminUserDAO.list();
