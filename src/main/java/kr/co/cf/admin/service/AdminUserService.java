@@ -11,12 +11,8 @@ import kr.co.cf.admin.dao.AdminUserDAO;
 @Service
 public class AdminUserService {
 	
-	@Autowired AdminUserDAO adminUserDAO;
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	public void insert(String user_name, int age) {
-		logger.info(user_name,age);
-		adminUserDAO.insert(user_name,age);
-	}
+
 
 }

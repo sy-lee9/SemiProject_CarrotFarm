@@ -13,14 +13,13 @@ import kr.co.cf.admin.service.AdminUserService;
 @Controller
 public class AdminUserController {
 	
-	@Autowired AdminUserService adminUserService;
 	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Model model) {
 		
-		adminUserService.insert("carrot",25);
+		logger.info("정상 접속");
 		
 		return "home";
 	}

@@ -4,7 +4,68 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.cf.matching.dao.MatchingDAO">
-	
-
+	<select id="basicList" resultType="kr.co.cf.matching.dto.MatchingDTO">
+ 		
+		SELECT 
+		  categoryId,
+		  matchingIdx, 
+		  writerId, 
+		  (SELECT gu FROM location WHERE locationIdx = (SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu, 
+		  subject, 
+		  gameDate, 
+		  gamePlay, 
+		  matchingWriteDate,
+		  (SELECT COUNT(userID) FROM game WHERE gameAppState='확정' AND matchingIdx = m.matchingIdx) AS matchingNumforSure, 
+		  matchingNum, 
+		  content, 
+		  matchigState,
+		  bHit 
+		FROM matching m;
+ 	</select>
+ 	
+ 	<select id="matchingDetail" resultType="kr.co.cf.matching.dto.MatchingDTO">
+ 		SELECT
+ 			matchingIdx,
+ 			gamePlay,
+ 			matchingNum,
+ 			subject,
+ 			gameDate,
+ 			writerId,
+ 			content,
+ 			(SELECT COUNT(userID) FROM game WHERE gameAppState='확정' AND matchingIdx = m.matchingIdx) AS matchingNumforSure,
+ 			(SELECT gu FROM location WHERE locationIdx = (SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu, 
+ 			(SELECT courtName From court Where courtIdx=m.courtIdx) AS courtName,
+ 			(SELECT courtLatitude From court Where courtIdx=m.courtIdx) AS courtLatitude,
+ 			(SELECT courtLongitude From court Where courtIdx=m.courtIdx) AS courtLongitude,
+ 			(SELECT courtTel From court Where courtIdx=m.courtIdx) AS courtTel
+ 		FROM matching m
+ 		Where matchingIdx = #{param1}
+ 	</select>
+ 	
+ 	<update id="upHit">
+ 		UPDATE matching SET bHit = bHit+1 WHERE matchingIdx=#{param1}
+ 	</update>
+ 	
+ 	<insert id="matchingWrite" useGeneratedKeys="true" keyColumn="matchingIdx" keyProperty="matchingIdx" parameterType="kr.co.cf.matching.dto.MatchingDTO">
+ 		INSERT INTO matching(categoryId,content,courtIdx,gameDate,gamePlay,matchingNum,subject,writerId)
+ 		VALUES(#{categoryId},#{content},#{courtIdx},#{gameDate},#{gamePlay},#{matchingNum},#{subject},#{writerId})
+ 	</insert>
+ 	
+ 	<insert id="game" parameterType="kr.co.cf.matching.dto.MatchingDTO">
+ 		INSERT INTO game(categoryId,matchingIdx,userId,gameAppState)
+		VALUES(#{categoryId},#{matchingIdx},#{writerId},#{gameAppState})
+ 	</insert>
+ 	
+ 	<delete id="deleteGame">
+ 		DELETE FROM game WHERE matchingIdx = #{param1};
+ 	</delete>
+ 	
+ 	<delete id="deleteMatching">
+ 		DELETE FROM matching WHERE matchingIdx = #{param1};
+ 	</delete>
+ 	
 
 </mapper>
+
+
+
