@@ -24,7 +24,7 @@ public class TeamController {
 	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = "/team", method = RequestMethod.GET)
 	public String home() {
 		return "team/teamRegist";		
 	}
