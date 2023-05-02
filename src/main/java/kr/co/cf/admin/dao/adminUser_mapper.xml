@@ -4,7 +4,8 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.cf.admin.dao.AdminUserDAO">
-	<insert id="insert">
-		INSERT INTO test_table(user_name,age) VALUES(#{param1},#{param2})
-	</insert>
+	<select id="list" resultType="kr.co.cf.admin.dto.AdminUserDTO">
+		select u.userId,u.nickname,u.userName,u.userJoinDate,u.email,u.userIdx,p.photoName from user u,photo p
+where p.photoId =u.userId;
+	</select>
 </mapper>
