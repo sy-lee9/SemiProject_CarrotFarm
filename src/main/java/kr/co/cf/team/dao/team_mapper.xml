@@ -5,6 +5,14 @@
 
 <mapper namespace="kr.co.cf.team.dao.TeamDAO">
 	
-
+	<select id="overlay" resultType="int">
+		SELECT COUNT(teamName) FROM team WHERE teamName = #{param1}
+	</select>
+	
+	<insert id="teamRegist" parameterType="kr.co.cf.team.dto.TeamDTO">
+		INSERT INTO team(teamName,teamFavTime,teamFavNum,teamIntroduce,teamMatchState,teamDisband,locationIdx) 
+			VALUES(#{teamName},#{teamFavTime},#{teamFavNum},#{teamIntroduce},#{teamMatchState},
+			#{teamDisband},#{locationIdx})
+	</insert>
 
 </mapper>
