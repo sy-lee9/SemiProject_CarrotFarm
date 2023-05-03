@@ -2,6 +2,7 @@ package kr.co.cf.team.dto;
 
 public class TeamDTO {
 	
+	private int teamIdx;
 	private String teamName;
 	private String teamFavTime;
 	private int teamFavNum;
@@ -9,61 +10,67 @@ public class TeamDTO {
 	private String teamMatchState;
 	private boolean teamDisband;
 	private int locationIdx;
-
-	public int getLocationIdx() {
-		return locationIdx;
+	private int teamManner;
+	private int teamUser;
+	
+	public int getTeamIdx() {
+		return teamIdx;
 	}
-
-	public void setLocationIdx(int locationIdx) {
-		this.locationIdx = locationIdx;
+	public void setTeamIdx(int teamIdx) {
+		this.teamIdx = teamIdx;
 	}
-
-	public String isTeamMatchState() {
-		return teamMatchState;
-	}
-
-	public void setTeamMatchState(String teamMatchState) {
-		this.teamMatchState = teamMatchState;
-	}
-
-	public boolean isTeamDisband() {
-		return teamDisband;
-	}
-
-	public void setTeamDisband(boolean teamDisband) {
-		this.teamDisband = teamDisband;
-	}
-
 	public String getTeamName() {
 		return teamName;
 	}
-
 	public void setTeamName(String teamName) {
 		this.teamName = teamName;
 	}
-
 	public String getTeamFavTime() {
 		return teamFavTime;
 	}
-
 	public void setTeamFavTime(String teamFavTime) {
 		this.teamFavTime = teamFavTime;
 	}
-
 	public int getTeamFavNum() {
 		return teamFavNum;
 	}
-
 	public void setTeamFavNum(int teamFavNum) {
 		this.teamFavNum = teamFavNum;
 	}
-
 	public String getTeamIntroduce() {
 		return teamIntroduce;
 	}
-
 	public void setTeamIntroduce(String teamIntroduce) {
 		this.teamIntroduce = teamIntroduce;
 	}
-
+	public String getTeamMatchState() {
+		return teamMatchState;
+	}
+	public void setTeamMatchState(String teamMatchState) {
+		this.teamMatchState = teamMatchState;
+	}
+	public boolean isTeamDisband() {
+		return teamDisband;
+	}
+	public void setTeamDisband(boolean teamDisband) {
+		this.teamDisband = teamDisband;
+	}
+	public int getLocationIdx() {
+		return locationIdx;
+	}
+	public void setLocationIdx(int locationIdx) {
+		this.locationIdx = locationIdx;
+	}
+	public int getTeamManner() {
+		return teamManner;
+	}
+	public void setTeamManner(int teamManner) {
+		this.teamManner = teamManner;
+	}
+	public int getTeamUser() {
+		return teamUser;
+	}
+	public void setTeamUser(int teamUser) {
+		this.teamUser = teamUser;
+	}
 }

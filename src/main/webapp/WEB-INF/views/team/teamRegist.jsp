@@ -25,6 +25,10 @@
 		width: 100%;
 	}
 	
+	#location{
+		width: 80%;
+	}
+	
 	textarea{
 		width: 100%;
 		height: 100%;
@@ -33,7 +37,7 @@
 </style>
 </head>
 <body>
-	<form action="teamRegist.do" method="post" enctype="multipart/form-data">
+	<form action="team/teamRegist.do" method="post" enctype="multipart/form-data">
 	<table>
 		<thead>
 			<colgroup>
@@ -47,6 +51,7 @@
 				<td>
 					<input type="text" id="teamName" name="teamName"/>
 					<span id="msg"></span>
+					<div hidden="true"><span id="count">0</span>/<span id="max-count">0</span></div>
 				</td>
 			</tr>
 			<tr>
@@ -58,7 +63,7 @@
 			<tr>
 				<th>주 활동지역</th>
 				<td>
-					<input type="text" id="location" readonly /> &nbsp;&nbsp;
+					<input type="text" id="location" name="location"  readonly /> &nbsp;&nbsp;
 					<input type="button" id="address_kakao" value="검색"/>
 				</td>
 			</tr>
@@ -89,7 +94,7 @@
 			<tr>
 				<th>소개글</th>
 				<td>
-					<textarea id="teamIntroduce" name="teamIntroduce"></textarea>
+					<textarea id="teamIntroduce" name="teamIntroduce" placeholder="팀소개글 및 구하는 포지션 등을 자유롭게 작성해주세요."></textarea>
 				</td>
 			<tr>
 				<th colspan="2">
@@ -103,12 +108,43 @@
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
 
+	document.getElementById('teamName').addEventListener('keyup',checkByte);
+	var countSpan = document.getElementById('count');
+	var message = '';
+	var MAX_MESSAGE_BYTE = 20;
+	document.getElementById('max-count').innerHTML = MAX_MESSAGE_BYTE.toString();
+	
+	function checkByte(event){
+		const totalByte = count(event.target.value);
+		
+		if(totalByte <= MAX_MESSAGE_BYTE){
+			countSpan.innerText = totalByte.toString();
+			message = event.target.value;
+		}else{
+			alert("한글 10자, 영문 20자까지만 입력가능 합니다.")
+			countSpan.innerText=count(message).toString();
+			event.target.value = message;
+		}
+	}
+	
+	function count(message){
+		var totalByte = 0;
+		
+		for(var i=0; i<message.length; i++){
+			var currentByte = message.charCodeAt(i);
+			(currentByte>128) ? totalByte += 2 : totalByte++;
+		}
+		return totalByte;
+	}
+
     document.getElementById("address_kakao").addEventListener("click", function(){ 
     	//주소검색 버튼을 클릭하면 카카오 지도 발생
         new daum.Postcode({
             oncomplete: function(data) { //선택시 입력값 세팅
                 var sigungu = data.sigungu; // '구' 주소 넣기
-                document.getElementById("location").value = sigungu;                
+                document.getElementById("location").value = sigungu;
+                console.log($('#location').val());
+                console.log(sigungu);
             }
         }).open();
     });
@@ -141,7 +177,7 @@
 		
 		$.ajax({
 			type:'post',
-			url:'overlay.ajax',
+			url:'team/overlay.ajax',
 			data:{
 				teamName:teamName
 			},

@@ -4,7 +4,116 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.cf.board.dao.BoardDAO">
+
+	<select id="flist" resultType="kr.co.cf.board.dto.BoardDTO">
+		SELECT
+			boardIdx, userId, subject, content, writeTime, bHit
+		FROM board ORDER BY boardIdx DESC
+	</select>
 	
-
-
+	<select id="falist" resultType="kr.co.cf.board.dto.BoardDTO">
+		SELECT
+			boardIdx, userId, subject, writeTime, bHit
+		FROM board ORDER BY boardIdx DESC LIMIT #{param1} OFFSET #{param2}
+	</select>
+	
+	<select id="fatotalCount" resultType="int">
+		SELECT COUNT(boardIdx) FROM board
+	</select>
+	
+	<insert 
+		useGeneratedKeys="true"
+		keyColumn="boardIdx"
+		keyProperty="boardIdx"
+		id="fwrite" parameterType="kr.co.cf.board.dto.BoardDTO">
+		INSERT INTO board(subject, userId, content, categoryId)
+			VALUES(#{subject}, #{userId}, #{content}, #{categoryId})
+	</insert>
+	
+	<insert id = "ffileWrite">
+		INSERT INTO photo(categoryId, photoId, photoName)
+			VALUES('p',#{param1}, #{param2})
+	</insert>
+	
+	<update id = "fupHit">
+		UPDATE board SET bHit = bHit+1
+			WHERE boardIdx = #{param1}
+	</update>
+	
+	<select id = "fdetail" resultType="kr.co.cf.board.dto.BoardDTO">
+		SELECT
+			b.boardidx, b.userId, b.subject, b.content, b.writeTime,
+			p.photoIdx, p.photoName, p.photoId
+		FROM board b left JOIN photo p ON b.boardIdx = p.photoId
+		WHERE b.boardIdx = #{param1}
+	</select>
+	
+	<delete id="fdelete">
+		DELETE FROM board WHERE boardIdx = #{param1}
+	</delete>
+	
+	<select id="ffindFile" resultType="String">
+		SELECT photoName FROM photo WHERE photoIdx = #{param1}
+	</select>
+	
+	<update id="fupdate" parameterType="hashmap">
+		UPDATE board SET subject = #{subject}
+			,userId = #{userId}
+			,content = #{content}
+		WHERE boardIdx = #{bidx}
+	</update>
+	
+	
+	
+	
+	
+	
+	<select id="nlist" resultType="kr.co.cf.board.dto.BoardDTO">
+		SELECT
+			boardIdx, userId, subject, content, writeTime, bHit
+		FROM board ORDER BY boardIdx DESC
+	</select>
+	
+	<insert 
+		useGeneratedKeys="true"
+		keyColumn="boardIdx"
+		keyProperty="boardIdx"
+		id="nwrite" parameterType="kr.co.cf.board.dto.BoardDTO">
+		INSERT INTO board(subject, userId, content, categoryId)
+			VALUES(#{subject}, #{userId}, #{content}, #{categoryId})
+	</insert>
+	
+	<insert id = "nfileWrite">
+		INSERT INTO photo(categoryId, photoId, photoName)
+			VALUES('p',#{param1}, #{param2})
+	</insert>
+	
+	<update id = "nupHit">
+		UPDATE board SET bHit = bHit+1
+			WHERE boardIdx = #{param1}
+	</update>
+	
+	<select id = "ndetail" resultType="kr.co.cf.board.dto.BoardDTO">
+		SELECT
+			b.boardidx, b.userId, b.subject, b.content, b.writeTime,
+			p.photoIdx, p.photoName, p.photoId
+		FROM board b left JOIN photo p ON b.boardIdx = p.photoId
+		WHERE b.boardIdx = #{param1}
+	</select>
+	
+	<delete id="ndelete">
+		DELETE FROM board WHERE boardIdx = #{param1}
+	</delete>
+	
+	<select id="nfindFile" resultType="String">
+		SELECT photoName FROM photo WHERE photoIdx = #{param1}
+	</select>
+	
+	<update id="nupdate" parameterType="hashmap">
+		UPDATE board SET subject = #{subject}
+			,userId = #{userId}
+			,content = #{content}
+		WHERE boardIdx = #{bidx}
+	</update>
+	
 </mapper>
