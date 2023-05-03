@@ -2,6 +2,8 @@ package kr.co.cf.main.controller;
 
 import java.util.HashMap;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,12 @@ public class JoinController {
 	
 	@Autowired JoinService service;
 	
+
+	@RequestMapping(value="/login")
+	public String home() {
+		return "login";
+	}
+	
 	@RequestMapping(value = "/idChk.ajax", method = RequestMethod.POST)
 	   @ResponseBody
 	   public HashMap<String, Object> idChk(@RequestParam String userId) {
@@ -37,6 +45,26 @@ public class JoinController {
 	      logger.info("nickChk-controller");
 	      return service.nickChk(nickName);
 	   }
+	
+	@RequestMapping(value="/login.ajax")
+	@ResponseBody
+	public HashMap<String, Object> login(
+			@RequestParam String id,@RequestParam String pw, 
+			HttpSession session){
+		
+		logger.info(id+"/"+pw);
+		int success = service.login(id,pw);
+		logger.info("login success : "+success);
+		
+		if(success == 1) {
+			session.setAttribute("loginId", id);
+		}
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("success", success);
+		
+		return map;
+	}
 
 	
 	 @RequestMapping(value = "/join")

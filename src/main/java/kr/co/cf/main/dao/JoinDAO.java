@@ -18,6 +18,8 @@ public interface JoinDAO {
 
 	int locationFind(String location);
 
+	int login(String id, String pw);
+
 
 
 

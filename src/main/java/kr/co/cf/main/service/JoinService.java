@@ -114,4 +114,9 @@ private int photoSave(MultipartFile userProfile,HashMap<String, String> params) 
     return photoWrite;
  }
 
+public int login(String id, String pw) {
+	
+	return dao.login(id,pw);
+}
+
 }

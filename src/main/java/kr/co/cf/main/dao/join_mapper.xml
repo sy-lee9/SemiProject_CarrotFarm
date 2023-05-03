@@ -31,4 +31,9 @@
    	<select id="locationFind" resultType="int">
       SELECT locationIdx FROM location WHERE gu = #{param1}
    </select>
+   
+   <select id="login" resultType="int">
+		SELECT COUNT(userId) FROM user WHERE
+			userId = #{param1} AND userPw = #{param2}	
+	</select>
 </mapper>
