@@ -85,4 +85,8 @@ public class CourtController {
 		
 		return page;
 	}
+	@RequestMapping(value="/courtReviewDelete.do")
+	public String courtReviewDelete(@RequestParam HashMap<String, String> params) {
+		return "redirect:/courtDetail.do?courtIdx="+params.get("courtIdx");
+	}
 }

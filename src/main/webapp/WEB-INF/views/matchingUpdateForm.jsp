@@ -19,7 +19,7 @@
 		
 		<input type="text" name="subject" placeholder="제목을 입력해주세요" value="${dto.subject}">
 		<input type="datetime" name="gameDate" id="date" placeholder="경기 일시" value="${dto.gameDate}">
-		<input type="text" name="writerId" value="${LoginId}" style="border:none;" readonly>
+		<input type="text" name="writerId" value="${session.loginId}" style="border:none;" readonly>
 
 		<br>
 

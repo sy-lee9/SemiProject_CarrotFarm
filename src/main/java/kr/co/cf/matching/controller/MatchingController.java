@@ -27,7 +27,7 @@ public class MatchingController {
 	@RequestMapping(value = "/matching/list.do")
 	public String matchingList(Model model, HttpSession session) {
 		
-		session.setAttribute("LoginId", "user01");
+		logger.info("session" + session.getAttribute("loginId"));
 		
 		logger.info("모집글 리스트 불러오기");
 		
@@ -60,8 +60,9 @@ public class MatchingController {
 		logger.info("모집글 작성 categoryIdx : " + categoryId);
 		
 		// 로그인 정보 받아 와 작성자 저장
-		String writerId = (String)session.getAttribute("LoginId");
-		model.addAttribute("LoginId", session.getAttribute("writerId"));
+		logger.info("session" + session.getAttribute("loginId"));
+		String writerId = (String)session.getAttribute("loginId");
+		model.addAttribute("writerId", writerId);
 		
 		// 저장된 작성자아이디를 이용해 사용자의 등록된 선호 위치 저장
 		MatchingDTO writerData = new MatchingDTO();
@@ -76,9 +77,10 @@ public class MatchingController {
 		// 경기장 정보 가져오기 
 		ArrayList<MatchingDTO> courtList = new ArrayList<MatchingDTO>();
 		courtList = matchingService.courtList();
-		for (int i = 0; i < courtList.size(); i++) {
-			logger.info("idx : "+courtList.get(i).getLocationIdx());
-		}
+		/*
+		 * for (int i = 0; i < courtList.size(); i++) {
+		 * logger.info("idx : "+courtList.get(i).getLocationIdx()); }
+		 */
 		logger.info("locationIdx : " + courtList);
 		model.addAttribute("courtList", courtList);
 		
@@ -100,7 +102,7 @@ public class MatchingController {
 		matchingDto.setGamePlay(params.get("gamePlay"));
 		matchingDto.setMatchingNum(Integer.parseInt(params.get("matchingNum")));
 		matchingDto.setSubject(params.get("subject"));
-		matchingDto.setWriterId((String) session.getAttribute("LoginId"));
+		matchingDto.setWriterId(params.get("writerId"));
 		
 		
 		matchingService.matchingWrite(matchingDto);

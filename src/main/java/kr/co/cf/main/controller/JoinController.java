@@ -60,8 +60,10 @@ public class JoinController {
 			session.setAttribute("loginId", id);
 		}
 		
+		logger.info("session" + session.getAttribute("loginId"));
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("success", success);
+		
 		
 		return map;
 	}

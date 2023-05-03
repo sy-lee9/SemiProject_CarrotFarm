@@ -1,4 +1,4 @@
-/*package kr.co.cf.team.controller;
+package kr.co.cf.team.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,12 +25,9 @@ public class TeamController {
 	@Autowired TeamService TeamService;
 	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
-<<<<<<< HEAD
 	
-	@RequestMapping(value = "/team", method = RequestMethod.GET)
-	public String home() {
-		return "team/teamRegist";		
-=======
+
+
 
 	@RequestMapping(value = {"/team","/team/list.do"})
 	public String list(Model model) {
@@ -40,7 +37,7 @@ public class TeamController {
 		model.addAttribute("list", list);
 		return "/team/teamList";
 
->>>>>>> 40588d733c07430c3ee31f246343c6040cf7162b
+
 	}
 	
 	@RequestMapping(value = "/team/teamRegist.go")
@@ -71,7 +68,7 @@ public class TeamController {
 
 
 
-}*/
+}
 
 
 
