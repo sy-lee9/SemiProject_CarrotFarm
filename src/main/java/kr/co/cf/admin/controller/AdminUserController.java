@@ -19,7 +19,7 @@ public class AdminUserController {
 	@Autowired AdminUserService adminUserService;
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	@RequestMapping(value = "/admin", method = RequestMethod.GET)
+	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Model model) {
 
 		ArrayList<AdminUserDTO> list = new ArrayList<AdminUserDTO>();
