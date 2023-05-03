@@ -20,7 +20,7 @@ table, th, td{
 	<table>
 		<thead>
 			<tr>
-				<th>${dto.gamePlay}</th>
+				<th>${dto.gamePlay}:${dto.gamePlay}</th>
 				<th>${dto.gu}</th>
 				<th>&#128100 ${dto.matchingNumforSure}/${dto.matchingNum}</th>
 				<th>${dto.subject}</th>
@@ -39,16 +39,13 @@ table, th, td{
 	     		<td colspan="4">
 	     			</br>🏀 경기 일시 : ${dto.gameDate} 
 	     			</br>🏀 경기 장소 : ${dto.courtName}
+	     			</br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 주소: ${dto.courtAddress}
 	     			</br>🏀 모집 인원 :	 &#128100 ${dto.matchingNumforSure}/${dto.matchingNum} 
-	     			</br>🏀 경기 방식 : ${dto.gamePlay} 
+	     			</br>🏀 경기 방식 : ${dto.gamePlay} : ${dto.gamePlay}
 	     			</br>🏀 ${dto.content}
 	     		</td>
 	     	</tr>
-	     	<tr>
-	     		<td colspan="7">
-	     			${dto.content}
-	     		</td>
-	     	</tr>
+	     	
 	     	<tr>
 	     		<td colspan="3">
 	     			<button>신청자 목록</button>
@@ -69,13 +66,13 @@ table, th, td{
     <script>
         var container = document.getElementById('map');
         var options = {
-            center: new kakao.maps.LatLng(${dto.courtLongitude},${dto.courtLatitude}),
+            center: new kakao.maps.LatLng(${dto.courtLatitude},${dto.courtLongitude}),
             level: 4
         };
 
         var map = new kakao.maps.Map(container, options);
 
-        var markerPosition  = new kakao.maps.LatLng(${dto.courtLongitude},${dto.courtLatitude}); 
+        var markerPosition  = new kakao.maps.LatLng(${dto.courtLatitude},${dto.courtLongitude}); 
 
         var marker = new kakao.maps.Marker({
             position: markerPosition

@@ -1,6 +1,5 @@
 package kr.co.cf.matching.controller;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -60,9 +59,28 @@ public class MatchingController {
 		
 		logger.info("모집글 작성 categoryIdx : " + categoryId);
 		
-		model.addAttribute("LoginId", session.getAttribute("LoginId"));
+		// 로그인 정보 받아 와 작성자 저장
+		String writerId = (String)session.getAttribute("LoginId");
+		model.addAttribute("LoginId", session.getAttribute("writerId"));
 		
-		logger.info("모집글 작성 LoginId : " + session.getAttribute("LoginId"));
+		// 저장된 작성자아이디를 이용해 사용자의 등록된 선호 위치 저장
+		MatchingDTO writerData = new MatchingDTO();
+		writerData = matchingService.matchingWriterData(writerId);
+		model.addAttribute("writerData", writerData);
+		
+		//  지역 리스트 가져오기 
+		ArrayList<MatchingDTO> locationList = new ArrayList<MatchingDTO>();
+		locationList = matchingService.locationList();
+		model.addAttribute("locationList", locationList);
+		
+		// 경기장 정보 가져오기 
+		ArrayList<MatchingDTO> courtList = new ArrayList<MatchingDTO>();
+		courtList = matchingService.courtList();
+		for (int i = 0; i < courtList.size(); i++) {
+			logger.info("idx : "+courtList.get(i).getLocationIdx());
+		}
+		logger.info("locationIdx : " + courtList);
+		model.addAttribute("courtList", courtList);
 		
 		return "matchingWriteForm";
 	}
@@ -90,7 +108,7 @@ public class MatchingController {
 		matchingDto.setGameAppState("확정");
 		
 		matchingService.game(matchingDto);
-		int matchingIdx = matchingDto.getmatchingIdx();
+		int matchingIdx = matchingDto.getMatchingIdx();
 		
 		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx;
 	}
@@ -109,7 +127,16 @@ public class MatchingController {
 		return "matchingUpdateForm";
 	}
 	
-	
+	@RequestMapping(value = "/matching/update.do")
+	public String matchingUpdate(@RequestParam HashMap<String, String> params) {
+		
+		logger.info("수정데이터"+params);
+		
+		matchingService.matchingUpdate(params);
+		
+		
+		return "redirect:/matching/detail.go?matchingIdx="+params.get("matchingIdx");
+	}
 	
 	@RequestMapping(value = "/matching/delete.do")
 	public String matchingDelete(@RequestParam String matchingIdx) {
