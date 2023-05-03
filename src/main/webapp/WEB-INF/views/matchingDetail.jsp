@@ -41,29 +41,40 @@ table, th, td{
 	     			</br>🏀 경기 장소 : ${dto.courtName}
 	     			</br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 주소: ${dto.courtAddress}
 	     			</br>🏀 모집 인원 :	 &#128100 ${dto.matchingNumforSure}/${dto.matchingNum} 
+					<button> 참가자 목록</button>	
+
+	     		
+						     			
+	     			
 	     			</br>🏀 경기 방식 : ${dto.gamePlay} : ${dto.gamePlay}
 	     			</br>🏀 ${dto.content}
 	     		</td>
 	     	</tr>
 	     	
 	     	<tr>
-	     		<td colspan="3">
-	     			<button>신청자 목록</button>
-	     			<button>참가자 목록</button>
-	     		</td>
+	     		<th colspan="3">
+	     			<button>신청자 목록</button>	
+	     		</th>
 	     		<th>
 	     			<button>모집하기</button>
 	     		</th>
-	     		<td colspan="3">
-	     			<button onclick="location.href='update.go?matchingIdx=${dto.matchingIdx}'">수정하기</button>
-	     			<button onclick="location.href='delete.do?matchingIdx=${dto.matchingIdx}'">삭제하기</button>
-	     		</td>
+	     		<c:if test="${dto.writerId eq loginId }">
+		     		<th colspan="3">
+		     			<button onclick="location.href='update.go?matchingIdx=${dto.matchingIdx}'">수정하기</button>
+		     			<button onclick="location.href='delete.do?matchingIdx=${dto.matchingIdx}'">삭제하기</button>
+		     		</th>
+	     		</c:if>
+	     		<c:if test="${dto.writerId ne loginId }">
+		     		
+	     		</c:if>
+	     		
 	     	</tr>
 	    </tbody>
 	</table>
 </body>
 
     <script>
+   
         var container = document.getElementById('map');
         var options = {
             center: new kakao.maps.LatLng(${dto.courtLatitude},${dto.courtLongitude}),
