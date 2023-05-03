@@ -4,15 +4,41 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.cf.team.dao.TeamDAO">
+
+	<select id="list" resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			t.teamIdx,t.teamMatchState,t.locationIdx,t.teamName,t.teamIntroduce,t.teamManner,t.teamDisband
+		FROM team t left join photo p on t.teamIdx = p.photoId
+	</select>
+<!-- 	
+	<select id="teamProfilePhotoFind" resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT photoName,photoId FROM photo WHERE categoryId = 't01'
+	</select>
+ -->	
+	<select id="userCount" resultType="int">
+		SELECT COUNT(userId) FROM teamUser;
+	</select>
 	
 	<select id="overlay" resultType="int">
 		SELECT COUNT(teamName) FROM team WHERE teamName = #{param1}
 	</select>
 	
-	<insert id="teamRegist" parameterType="kr.co.cf.team.dto.TeamDTO">
-		INSERT INTO team(teamName,teamFavTime,teamFavNum,teamIntroduce,teamMatchState,teamDisband,locationIdx) 
+	<insert 
+	useGeneratedKeys="true"
+		keyColumn="teamIdx"
+		keyProperty="teamIdx"
+	id="teamRegist" parameterType="kr.co.cf.team.dto.TeamDTO">
+		INSERT INTO team(teamName,teamFavTime,teamFavNum,teamIntroduce,teamMatchState,teamDisband,locationIdx,teamManner) 
 			VALUES(#{teamName},#{teamFavTime},#{teamFavNum},#{teamIntroduce},#{teamMatchState},
-			#{teamDisband},#{locationIdx})
+			#{teamDisband},#{locationIdx},#{teamManner})
+	</insert>
+	
+	<select id="locationFind" resultType="int">
+		SELECT locationIdx FROM location WHERE gu = #{param1}
+	</select>
+	
+	<insert id="photoWrite">
+		INSERT INTO photo(categoryId,photoName,photoId) VALUES('t01',#{photoName},#{teamIdx})
 	</insert>
 
 </mapper>

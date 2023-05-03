@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC   "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.cf.main.dao.JoinDAO">
+	
+<select id="idChk" resultType="int">
+      SELECT COUNT(userId) FROM user WHERE userId = #{param1}
+   </select>
+   
+   <select id="nickChk" resultType="int">
+      SELECT COUNT(nickName) FROM user WHERE nickName = #{param1}
+   </select>
+   
+   <insert id="join" parameterType="kr.co.cf.main.dto.JoinDTO">
+      INSERT INTO user(userId,nickName,userPw,userName,birthday,email) 
+         VALUES(#{userId},#{nickName},#{userPw},#{userName},#{birthday},#{email})
+   </insert>
+   
+   <insert id="joinData" parameterType="kr.co.cf.main.dto.JoinDTO">
+      INSERT INTO userData(userId,height,position,locationIdx,favTime) 
+         VALUES(#{userId},#{height},#{position},#{locationIdx},#{favTime})
+   </insert>
+
+	<insert id="photoWrite" parameterType="String">
+      INSERT INTO photo(categoryId,photoName,photoId) 
+      VALUES((select categoryId from category where categoryKind = 'userProfile'),#{param1},'userProfile')
+   	</insert>
+   	
+   	<select id="locationFind" resultType="int">
+      SELECT locationIdx FROM location WHERE gu = #{param1}
+   </select>
+   
+   <select id="login" resultType="int">
+		SELECT COUNT(userId) FROM user WHERE
+			userId = #{param1} AND userPw = #{param2}	
+	</select>
+</mapper>
