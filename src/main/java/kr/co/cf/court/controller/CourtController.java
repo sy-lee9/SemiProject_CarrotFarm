@@ -1,5 +1,10 @@
 package kr.co.cf.court.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import kr.co.cf.court.dto.CourtDTO;
 import kr.co.cf.court.service.CourtService;
@@ -17,32 +21,35 @@ public class CourtController {
 	@Autowired CourtService courtService;
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	@RequestMapping("/court")
+	@RequestMapping("/")
 	public String court(Model model) {
-		model.addAttribute("adress","서울특별시 구로동");
-		return "court";
+		ArrayList<CourtDTO> list = courtService.list();
+		model.addAttribute("courtList",list);
+		model.addAttribute("address","구로구");
+		return "court2";
 	}
 	
 	@RequestMapping("/courtDetail.do")
-	public String courtDetail(Model model, @RequestParam String courtName, @RequestParam String courtLatitude, @RequestParam String courtLongitude) {
+	public String courtDetail(Model model, @RequestParam String courtIdx) {
 		logger.info("디테일 가기");
-		logger.info(courtName+"/"+courtLatitude+"/"+courtLongitude);
-		CourtDTO courtdto = courtService.searchCourt(courtLatitude,courtLongitude);
-		logger.info("courtdto :"+ courtdto);
-		if(courtdto==null) {
-			int cnt = courtService.addCourt(courtName,courtLatitude,courtLongitude);
-			logger.info("업데이트 row :"+cnt);
-		}else {
-			model.addAttribute("courtInfo", courtdto);
-		}
+		logger.info(courtIdx);
 		return "courtDetail";
 		
 	}
 	
-	@RequestMapping("/court2")
-	public String court2(Model model) {
-		model.addAttribute("adress","서울특별시 구로동");
-		return "court2";
+	@RequestMapping("/courtNameSearch.do")
+	public String courtNameSearch(Model model, @RequestParam String searchCourt) {
+		String page;
+		logger.info(searchCourt);
+		CourtDTO courtdto = courtService.courtNameSearch(searchCourt);
+		if(courtdto == null) {
+			model.addAttribute("msg","검색 결과가 없습니다.");
+			page = "redirect:/";
+		}else {
+			model.addAttribute("courtNameSerach",courtdto);
+			page ="court2";
+		}
+		return page;
 	}
 	
 }

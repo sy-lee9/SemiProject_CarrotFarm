@@ -9,6 +9,20 @@ public class CourtDTO {
 	private String courtState;
 	private double courtLatitude;
 	private double courtLongitude;
+	private String gu;
+	private String courtAddress;
+	public String getCourtAddress() {
+		return courtAddress;
+	}
+	public void setCourtAddress(String courtAddress) {
+		this.courtAddress = courtAddress;
+	}
+	public String getGu() {
+		return gu;
+	}
+	public void setGu(String gu) {
+		this.gu = gu;
+	}
 	public int getCourtIdx() {
 		return courtIdx;
 	}

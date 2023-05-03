@@ -9,7 +9,20 @@
 	</select>
 	
 	<insert id="addCourt" >
-		insert into court(locationIdx,courtName,courtLatitude,courtLongitude) values(1,#{param1},#{param2},#{param3})
+		insert into court(locationIdx,courtName,courtTel,courtInOut,courtState,courtLatitude,courtLongitude,courtAddress)
+				values('1',#{param1},'','out','사용가능',#{param2},#{param3},#{param4})
 	</insert>
-
+	
+	<select id="list" resultType="kr.co.cf.court.dto.CourtDTO">
+		SELECT c.courtIdx,c.courtName,c.courtInOut,c.courtState,c.courtAddress,c.courtLatitude,c.courtLongitude, l.gu FROM court c
+				JOIN location l ON c.locationIdx = l.locationIdx
+	</select>
+	<select id="location" resultType="kr.co.cf.court.dto.CourtDTO">
+		select courtLatitude,courtLongitude from court;
+	</select>
+	
+	<select id="courtNameSearch" resultType="kr.co.cf.court.dto.CourtDTO">
+		select courtName,courtLatitude,courtLongitude,courtIdx from court where courtName like '%'+#{param1}+'%'
+	</select>
+	
 </mapper>

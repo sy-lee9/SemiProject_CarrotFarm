@@ -1,5 +1,8 @@
 package kr.co.cf.court.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +21,21 @@ public class CourtService {
 		return courtdao.searchCourt(courtLatitude,courtLongitude);
 	}
 
-	public int addCourt(String courtName, String courtLatitude, String courtLongitude) {
+	public int addCourt(String courtName, String courtLatitude, String courtLongitude, String courtAddress) {
 		
-		return courtdao.addCourt(courtName,courtLatitude,courtLongitude);
+		return courtdao.addCourt(courtName,courtLatitude,courtLongitude,courtAddress);
+	}
+
+	public ArrayList<CourtDTO> list() {
+		return courtdao.list();
+	}
+
+	public ArrayList<CourtDTO> location() {
+		return courtdao.location();
+	}
+
+	public CourtDTO courtNameSearch(String searchCourt) {
+		return courtdao.courtNameSearch(searchCourt);
 	}
 
 }
