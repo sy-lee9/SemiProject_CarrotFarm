@@ -29,5 +29,15 @@ public interface MatchingDAO {
 
 	void matchingUpdate(HashMap<String, String> params);
 
+	ArrayList<MatchingDTO> commentList(String matchingIdx);
+
+	void commentWrite(HashMap<String, String> params);
+
+	void commentDelete(String commentIdx);
+
+	MatchingDTO commentGet(String commentIdx);
+
+	void commentUpdate(HashMap<String, String> params);
+
 
 }

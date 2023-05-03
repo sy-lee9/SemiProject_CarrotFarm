@@ -84,7 +84,38 @@
 		UPDATE matching SET subject=#{subject},gameDate=#{gameDate}, gamePlay=#{gamePlay},matchingNum=#{matchingNum},content=#{content} WHERE matchingIdx=#{matchingIdx}
 	</update>
 	
-
+	<select id="commentList" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT
+			commentIdx,
+			userId,
+			commentWriteTime,
+			commentContent
+		FROM comment
+		WHERE categoryId='m01' AND comentId=#{param1}
+	</select>
+	
+	<insert id="commentWrite" parameterType="hashmap">
+		INSERT INTO comment(userId, categoryId,comentId,commentContent) VALUES(#{userId},#{categoryId},#{comentId},#{commentContent})
+	</insert>
+	
+	<delete id="commentDelete">
+		DELETE FROM comment WHERE commentIdx = #{param1};
+	</delete>
+	
+	<select id="commentGet" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT
+			commentIdx,
+			userId,
+			commentWriteTime,
+			commentContent
+		FROM comment
+		WHERE commentIdx=#{param1}
+	</select>
+	
+	<update id="commentUpdate" parameterType="hashmap">
+		UPDATE comment SET commentContent=#{commentContent} WHERE commentIdx=#{commentIdx}
+	
+	</update>
 </mapper>
 
 
