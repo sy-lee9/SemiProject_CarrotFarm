@@ -14,8 +14,11 @@
 	</insert>
 	
 	<select id="list" resultType="kr.co.cf.court.dto.CourtDTO">
-		SELECT c.courtIdx,c.courtName,c.courtInOut,c.courtState,c.courtAddress,c.courtLatitude,c.courtLongitude, l.gu FROM court c
-				JOIN location l ON c.locationIdx = l.locationIdx
+		SELECT c.courtIdx, c.courtName,c.courtAddress, c.courtInOut, c.courtState, c.courtLatitude, c.courtLongitude, l.gu, AVG(cr.courtStar) AS courtStar
+			FROM court c
+			JOIN location l ON c.locationIdx = l.locationIdx
+			LEFT JOIN courtReview cr ON c.courtIdx = cr.courtIdx
+			GROUP BY c.courtIdx
 	</select>
 	<select id="location" resultType="kr.co.cf.court.dto.CourtDTO">
 		select courtLatitude,courtLongitude from court;
@@ -25,4 +28,36 @@
 		select courtName,courtLatitude,courtLongitude,courtIdx from court where courtName like '%'+#{param1}+'%'
 	</select>
 	
+	<select  id="courtDetail" resultType="kr.co.cf.court.dto.CourtDTO">
+		select  c.courtIdx,c.courtName,c.courtInOut,c.courtState,c.courtAddress, avg(cr.courtStar) as courtStar ,c.courtLatitude,c.courtLongitude 
+		from court c
+		left join courtreview cr on c.courtIdx =cr.courtIdx 
+		where c.courtIdx=#{param1};
+	</select>
+	
+	<insert 
+		useGeneratedKeys="true"
+		keyColumn="courtReviewIdx"
+		keyProperty="courtReviewIdx"
+		id="courtReviewWrite" parameterType="hashmap">
+		insert into courtReview(courtIdx,userId,courtName,courtOneLineReview,courtStar)
+			values(#{courtIdx},#{userId},#{courtName},#{courtOneLineReview},#{courtStar})
+	</insert>
+	
+	<insert id="fileWrite">
+		insert into photo(categoryId,photoId,photoName)
+			values('p',#{param1},#{param2})
+	</insert>
+	
+	<select id="courtReviewList" resultType="kr.co.cf.court.dto.CourtDTO">
+		select userId,courtOneLineReview,courtStar,courtReviewIdx from courtReview where courtIdx=#{param1}
+	</select>
+	
+	<select id="reviewWriter" resultType="String" parameterType="hashmap">
+		select userId from courtReview where courtIdx=#{courtIdx} and userId=#{userId}
+	</select>
+	
+	<select id="reviewPhotoList" resultType="kr.co.cf.court.dto.CourtDTO">
+		select photoName from photo where photoId in (select courtReviewIdx from courtreview where courtIdx=#{param1})
+	</select>
 </mapper>

@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.cf.court.dto.CourtDTO;
 import kr.co.cf.court.service.CourtService;
@@ -30,9 +32,25 @@ public class CourtController {
 	}
 	
 	@RequestMapping("/courtDetail.do")
-	public String courtDetail(Model model, @RequestParam String courtIdx) {
+	public String courtDetail(Model model, @RequestParam String courtIdx,HttpSession session) {
 		logger.info("디테일 가기");
 		logger.info(courtIdx);
+		CourtDTO dto =courtService.courtDetail(courtIdx);
+		model.addAttribute("courtInfo",dto);
+		logger.info("경기장 정보 불러오기");
+		ArrayList<CourtDTO> courtReviewList = courtService.courtReviewList(courtIdx);
+		logger.info("리뷰 목록 "+courtReviewList);
+		if(session.getAttribute("reviewMsg") != null) {
+			String msg=(String)session.getAttribute("reviewMsg");
+			session.removeAttribute("reviewMsg");
+			model.addAttribute("msg",msg);
+		}
+		model.addAttribute("courtReviewList",courtReviewList);
+		ArrayList<CourtDTO> reviewPhotoList = courtService.reviewPhotoList(courtIdx);
+		for(int i=0;i<reviewPhotoList.size();i++) {
+			logger.info("photoName :"+reviewPhotoList.get(i).getPhotoName());
+		}
+		model.addAttribute("reviewPhotoList",reviewPhotoList);
 		return "courtDetail";
 		
 	}
@@ -52,4 +70,19 @@ public class CourtController {
 		return page;
 	}
 	
+	@RequestMapping(value="/courtReviewWrite.do", method = RequestMethod.POST)
+	public String courtReviewWrite(Model model,@RequestParam HashMap<String, String> params,HttpSession session,MultipartFile photo) {
+		logger.info("넘어오는 값: "+params);
+		String userId = courtService.reviewWriter(params);
+		logger.info(userId);
+		String page = "redirect:/courtDetail.do?courtIdx="+params.get("courtIdx");
+		if(userId==null) {
+			page = courtService.courtReviewWrite(params,photo);
+			logger.info("params : " + params);
+		}else {
+			session.setAttribute("reviewMsg","이미 리뷰를 작성하셨습니다.");
+		}
+		
+		return page;
+	}
 }

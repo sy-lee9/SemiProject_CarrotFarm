@@ -20,7 +20,8 @@
 		  content, 
 		  matchigState,
 		  bHit 
-		FROM matching m;
+		FROM matching m
+		ORDER By matchingIdx DESC
  	</select>
  	
  	<select id="matchingDetail" resultType="kr.co.cf.matching.dto.MatchingDTO">
@@ -32,14 +33,17 @@
  			gameDate,
  			writerId,
  			content,
+ 			courtIdx,
  			(SELECT COUNT(userID) FROM game WHERE gameAppState='확정' AND matchingIdx = m.matchingIdx) AS matchingNumforSure,
  			(SELECT gu FROM location WHERE locationIdx = (SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu, 
  			(SELECT courtName From court Where courtIdx=m.courtIdx) AS courtName,
  			(SELECT courtLatitude From court Where courtIdx=m.courtIdx) AS courtLatitude,
  			(SELECT courtLongitude From court Where courtIdx=m.courtIdx) AS courtLongitude,
+ 			(SELECT courtAddress From court Where courtIdx=m.courtIdx) AS courtAddress,
  			(SELECT courtTel From court Where courtIdx=m.courtIdx) AS courtTel
  		FROM matching m
  		Where matchingIdx = #{param1}
+ 		
  	</select>
  	
  	<update id="upHit">
@@ -64,6 +68,22 @@
  		DELETE FROM matching WHERE matchingIdx = #{param1};
  	</delete>
  	
+ 	<select id="locationList" resultType="kr.co.cf.matching.dto.MatchingDTO">
+ 		SELECT locationIdx, gu FROM location;
+ 	</select>
+	
+	<select id="matchingWriterData" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT locationIdx, gu FROM location WHERE locationIdx = (SELECT locationIdx FROM userData WHERE userId=#{param1})
+	</select>
+	
+	<select id="courtList" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT courtIdx, locationIdx, courtName, courtTel, courtInOut, courtState, courtLatitude, courtLongitude, courtAddress FROM court
+	</select>
+	
+	<update id="matchingUpdate" parameterType="hashmap">
+		UPDATE matching SET subject=#{subject},gameDate=#{gameDate}, gamePlay=#{gamePlay},matchingNum=#{matchingNum},content=#{content} WHERE matchingIdx=#{matchingIdx}
+	</update>
+	
 
 </mapper>
 

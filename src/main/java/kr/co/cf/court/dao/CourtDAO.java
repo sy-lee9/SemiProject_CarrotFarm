@@ -17,4 +17,16 @@ public interface CourtDAO {
 
 	CourtDTO courtNameSearch(String searchCourt);
 
+	CourtDTO courtDetail(String courtIdx);
+
+	int courtReviewWrite(CourtDTO dto);
+
+	ArrayList<CourtDTO> courtReviewList(String courtIdx);
+
+	String reviewWriter(HashMap<String, String> params);
+
+	void fileWrite(int courtReviewIdx, String photoName);
+
+	ArrayList<CourtDTO> reviewPhotoList(String courtIdx);
+
 }

@@ -32,6 +32,7 @@
 				</th>
 				<th id="courtName"><a href="courtDetail.do?courtIdx=${court.courtIdx}">${court.courtName}</a></th>
 				<th>${court.courtAddress}</th>
+				<th>☆${court.courtStar}</th>
 			</tr>
 		</c:forEach>
 	</table>
