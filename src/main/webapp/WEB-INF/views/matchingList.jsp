@@ -21,9 +21,9 @@
 
 	<select id="gamePlay">
 	  <option value="">경기방식</option>
-	  <option value="1:1">1:1</option>
-	  <option value="3:3">3:3</option>
-	  <option value="5:5">5:5</option>
+	  <option value="1">1:1</option>
+	  <option value="3">3:3</option>
+	  <option value="5">5:5</option>
 	</select>
 	
 	<select id="sort">
@@ -55,7 +55,7 @@
 			<c:forEach items="${list}" var="list">
 				<c:if test="${list.categoryId == 'm01'}">
 					<tr>
-						<td id="gamePlay">${list.gamePlay}</td>
+						<td id="gamePlay">${list.gamePlay}:${list.gamePlay}</td>
 						<td>${list.gu}</td>
 						<td id="gamePlayer">&#128100 ${list.matchingNumforSure}/${list.matchingNum}</td>
 						<td id="subject"><a href="detail.go?matchingIdx=${list.matchingIdx}">${list.subject}</a></td>

@@ -47,5 +47,26 @@ public class MatchingService {
 		
 	}
 
+	public ArrayList<MatchingDTO> locationList() {
+		return matchingDAO.locationList();
+	}
+
+	public MatchingDTO matchingWriterData(String writerId) {
+		
+		return matchingDAO.matchingWriterData(writerId);
+	}
+
+	public ArrayList<MatchingDTO> courtList() {
+		ArrayList<MatchingDTO> list = matchingDAO.courtList();
+		logger.info("locationIdx : " + list.get(0).getLocationIdx());
+		return matchingDAO.courtList();
+	}
+
+	public void matchingUpdate(HashMap<String, String> params) {
+		
+		matchingDAO.matchingUpdate(params);
+	
+	}
+
 	
 }

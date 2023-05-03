@@ -1,6 +1,7 @@
 package kr.co.cf.matching.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import kr.co.cf.matching.dto.MatchingDTO;
 
@@ -19,6 +20,14 @@ public interface MatchingDAO {
 	void deleteGame(String matchingIdx);
 
 	void deleteMatching(String matchingIdx);
+
+	ArrayList<MatchingDTO> locationList();
+
+	MatchingDTO matchingWriterData(String writerId);
+
+	ArrayList<MatchingDTO> courtList();
+
+	void matchingUpdate(HashMap<String, String> params);
 
 
 }

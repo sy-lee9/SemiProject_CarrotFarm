@@ -33,6 +33,7 @@ public class TeamController {
 		logger.info("list size : "+list.size());
 		model.addAttribute("list", list);
 		return "/team/teamList";
+
 	}
 	
 	@RequestMapping(value = "/team/teamRegist.go")
