@@ -5,7 +5,9 @@
 <head>
 <meta charset="UTF-8">
 <title>🏀 당근농장</title>
-<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+		
 <style>
 
 	table, th, td{
@@ -14,10 +16,13 @@
 		padding : 5px 10px;
 	}
 	
+	
 
 </style>
 </head>
 <body>
+
+	
 
 	<select id="gamePlay">
 	  <option value="">경기방식</option>
@@ -65,12 +70,15 @@
 					</tr>
 				</c:if>
 			</c:forEach>
-		</tbody>
+			</tbody>
+			<tr>
+			
+		
 	</table>
 </body>
 
 <script>
-
+	
 	// 경기 방식 선택에 따른 출력
 	$('#gamePlay').change(function(){
 		var selectedGamePlay = $(this).val();
@@ -84,9 +92,10 @@
 		// 각각의 데이터 행마다 선택한 요소와 다음 값이 일치 해야만 보여 줄 것 
 		$('tbody tr').each(function(){
 			var checkGamePlay = $(this).find('#gamePlay').text();
-			console.log(checkGamePlay);
+			var one = checkGamePlay.split(":")[0];
+			console.log(one);
 			
-			if (selectedGamePlay == checkGamePlay){
+			if (selectedGamePlay == one){
 				$(this).show();
 		      } else {
 		        $(this).hide();

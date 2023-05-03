@@ -26,10 +26,31 @@ public class MatchingDTO {
 	private String userId;
 	private String courtAddress;
 	private String locationIdx;
+	private Date commentWriteTime;
+	private String commentContent;
+	private String commentIdx;
 	
 	
 	
 	
+	public String getCommentIdx() {
+		return commentIdx;
+	}
+	public void setCommentIdx(String commentIdx) {
+		this.commentIdx = commentIdx;
+	}
+	public Date getCommentWriteTime() {
+		return commentWriteTime;
+	}
+	public void setCommentWriteTime(Date commentWriteTime) {
+		this.commentWriteTime = commentWriteTime;
+	}
+	public String getCommentContent() {
+		return commentContent;
+	}
+	public void setCommentContent(String commentContent) {
+		this.commentContent = commentContent;
+	}
 	public String getLocationIdx() {
 		return locationIdx;
 	}
