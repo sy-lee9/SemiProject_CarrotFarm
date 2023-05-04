@@ -98,12 +98,14 @@ table, th, td{
 		     
 		     <tr>
 
-			     <form method="post" action="commentWrite.do?categoryId=m01&comentId=${dto.matchingIdx}" >
+			     <form method="post" action="commentUpdate.do?">
 			     		<th >
+			     			<input type="text" name="commentIdx" value="${commentDto.commentIdx}" hidden>
+			     			<input type="text" name="matchingIdx" value="${dto.matchingIdx}" style= "border:none;" hidden>
 			     			<input type="text" name="userId" value="${loginId}" style= "border:none;" readonly>
 			     		</th>
 			     		<th colspan="5">
-			     			<input type="text" name="commentContent">
+			     			<input type="text" name="commentContent" value="${commentDto.commentContent}">
 			     		</th>
 			     		<th>
 			     			<button>작성</button>

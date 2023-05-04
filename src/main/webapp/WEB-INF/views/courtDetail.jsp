@@ -48,47 +48,84 @@
 	<div">
 		<table>
 			<tr>
-				<th colspan="2">${courtInfo.courtName}</th>	
+				<th>${courtInfo.courtName}</th>
+				<th>
+					<c:if test="${courtInfo.courtStar eq ''}">0.0</c:if>
+					<c:if test="${courtInfo.courtStar ne ''}">${courtInfo.courtStar}</c:if>
+				</th>	
 			</tr>
 			<tr>
 				<th>위치</th>
-				<th>서울 특별시 금천구 가산동 1-1
-			</tr>
-			<tr>
-				<th>위치</th>
-				<th>정보 없음</th>
+				<th>${courtInfo.courtAddress}</th>
 			</tr>
 			<tr>
 				<th>실내/외</th>
-				<th>정보 없음</th>
+				<th>
+					<c:if test="${courtInfo.courtInOut eq 'out'}">실외</c:if>
+					<c:if test="${courtInfo.courtInOut eq 'in'}">실내</c:if>
+				</th>
 			</tr>
 			<tr>
 				<th>사용 여부</th>
-				<th>정보 없음</th>
+				<th>${courtInfo.courtState}</th>
 			</tr>
 		</table>
 	</div>
-	<div>리뷰 공간</div>
-	<hr/>
+	<div>경기장 리뷰
+		<table>
+			<c:forEach items="${courtReviewList}" var="courtReview">
+			<tr>
+				<th>${courtReview.userId}</th>
+				<th>${courtReview.courtOneLineReview}</th>				
+				<th>☆${courtReview.courtStar}</th>
+				<th><a href="courtReviewDelete.do?courtReviewIdx=${courtReview.courtReviewIdx}&courtIdx=${courtInfo.courtIdx}">삭제</a></th>
+			</tr>
+		</c:forEach>
+		</table>
+	</div>
 	<div>
+		사진 모아보기
+		<table>
+			<c:if test="${reviewPhotoList eq null}">
+			</c:if>
+			
+			<c:if test="${reviewPhotoList ne null}">
+				<c:forEach items="${reviewPhotoList}" var="reviewPhotos">
+					<tr>
+						<td><img width="100" src="/photo/${reviewPhotos.photoName}"/></td>
+					</tr>			
+				</c:forEach>
+			</c:if>
+		</table>
+				
+
+	</div>
+	<hr/>
+	<form action="courtReviewWrite.do" method="post" enctype="multipart/form-data">
+	<div>
+		
+		<input type="hidden" name="courtIdx" value="${courtInfo.courtIdx}"/>
+		<input type="hidden" name="courtName" value="${courtInfo.courtName}"/>
+		<input type="hidden" name="userId" value="test2"/>
 		리뷰작성<input type="text" name="courtOneLineReview" style="display: inline-block;"/>
-		<input type="file"/ style="display: inline-block;">
-		<label>별점을 선택해주세요:</label>
+		<input type="file" name="photo" style="display: inline-block;"/>
+		<label>별점</label>
 		<div class="rating" style="display: inline-block;">
-		  <input type="radio" id="star5" name="rating" value="5">
+		  <input type="radio" id="star5" name="courtStar" value="5">
 		  <label for="star5"></label>
-		  <input type="radio" id="star4" name="rating" value="4">
+		  <input type="radio" id="star4" name="courtStar" value="4">
 		  <label for="star4"></label>
-		  <input type="radio" id="star3" name="rating" value="3">
+		  <input type="radio" id="star3" name="courtStar" value="3">
 		  <label for="star3"></label>
-		  <input type="radio" id="star2" name="rating" value="2">
+		  <input type="radio" id="star2" name="courtStar" value="2">
 		  <label for="star2"></label>
-		  <input type="radio" id="star1" name="rating" value="1">
+		  <input type="radio" id="star1" name="courtStar" value="1">
 		  <label for="star1"></label>
 	</div>
 		
 		<button>작성</button>
 	</div>
+	</form>
 	 
 </body>
 <script>
@@ -113,6 +150,10 @@
 	
 	//아래 코드는 지도 위의 마커를 제거하는 코드입니다
 	//marker.setMap(null); 
+	var msg = "${msg}";
+	if(msg != ""){
+		alert(msg);
+	}
 </script>
 </html>
 

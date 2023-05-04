@@ -25,6 +25,9 @@ public class TeamController {
 	@Autowired TeamService TeamService;
 	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+
+
 
 	@RequestMapping(value = "/team")
 	public String list() {
