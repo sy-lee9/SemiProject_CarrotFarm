@@ -9,6 +9,10 @@ public interface BoardDAO {
 
 	ArrayList<BoardDTO> flist();
 
+	ArrayList<BoardDTO> falist(int cnt, int offset);
+	
+	int fatotalCount();
+	
 	int fwrite(BoardDTO dto);
 
 	void ffileWrite(int photoIdx, String photoId);
@@ -23,14 +27,16 @@ public interface BoardDAO {
 
 	int fupdate(HashMap<String, String> params);
 	
-	int fatotalCount();
 
-	ArrayList<BoardDTO> falist(int cnt, int offset);
 
 	
 	
 
 	ArrayList<BoardDTO> nlist();
+	
+	ArrayList<BoardDTO> nalist(int cnt, int offset);
+	
+	int natotalCount();
 
 	int nwrite(BoardDTO dto);
 
@@ -46,5 +52,38 @@ public interface BoardDAO {
 
 	int nupdate(HashMap<String, String> params);
 
+	String userRight(String loginId);
+
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	ArrayList<BoardDTO> ilist();
+	
+	ArrayList<BoardDTO> ialist(int cnt, int offset);
+	
+	int iatotalCount();
+
+	int iwrite(BoardDTO dto);
+
+	void ifileWrite(int photoIdx, String photoId);
+	
+	void iupHit(String boardIdx);
+
+	BoardDTO idetail(String boardIdx);
+
+	String ifindFile(String bidx);
+
+	int idelete(String bidx);
+
+	int iupdate(HashMap<String, String> params);
+
+	String iuserRight(String loginId);
 }

@@ -8,13 +8,13 @@
 	<select id="flist" resultType="kr.co.cf.board.dto.BoardDTO">
 		SELECT
 			boardIdx, userId, subject, content, writeTime, bHit
-		FROM board ORDER BY boardIdx DESC
+		FROM board WHERE categoryId = 'b001' ORDER BY boardIdx DESC 
 	</select>
 	
 	<select id="falist" resultType="kr.co.cf.board.dto.BoardDTO">
 		SELECT
 			boardIdx, userId, subject, writeTime, bHit
-		FROM board ORDER BY boardIdx DESC LIMIT #{param1} OFFSET #{param2}
+		FROM board WHERE categoryId = 'b001' ORDER BY boardIdx DESC LIMIT #{param1} OFFSET #{param2}
 	</select>
 	
 	<select id="fatotalCount" resultType="int">
@@ -32,7 +32,7 @@
 	
 	<insert id = "ffileWrite">
 		INSERT INTO photo(categoryId, photoId, photoName)
-			VALUES('p',#{param1}, #{param2})
+			VALUES('p',#{param1}, #{param2}) 
 	</insert>
 	
 	<update id = "fupHit">
@@ -42,10 +42,10 @@
 	
 	<select id = "fdetail" resultType="kr.co.cf.board.dto.BoardDTO">
 		SELECT
-			b.boardidx, b.userId, b.subject, b.content, b.writeTime,
+			b.boardIdx, b.userId, b.subject, b.content, b.writeTime,
 			p.photoIdx, p.photoName, p.photoId
-		FROM board b left JOIN photo p ON b.boardIdx = p.photoId
-		WHERE b.boardIdx = #{param1}
+		FROM board b left JOIN photo p ON (b.boardIdx = p.photoId)
+		WHERE b.boardIdx = #{boardIdx}
 	</select>
 	
 	<delete id="fdelete">
@@ -71,7 +71,17 @@
 	<select id="nlist" resultType="kr.co.cf.board.dto.BoardDTO">
 		SELECT
 			boardIdx, userId, subject, content, writeTime, bHit
-		FROM board ORDER BY boardIdx DESC
+		FROM board WHERE categoryId = 'b002' ORDER BY boardIdx DESC
+	</select>
+	
+	<select id="nalist" resultType="kr.co.cf.board.dto.BoardDTO">
+		SELECT
+			boardIdx, userId, subject, writeTime, bHit
+		FROM board WHERE categoryId = 'b002' ORDER BY boardIdx DESC LIMIT #{param1} OFFSET #{param2}
+	</select>
+	
+	<select id="natotalCount" resultType="int">
+		SELECT COUNT(boardIdx) FROM board
 	</select>
 	
 	<insert 
@@ -115,5 +125,78 @@
 			,content = #{content}
 		WHERE boardIdx = #{bidx}
 	</update>
+	
+	<select id="userRight" resultType="String">
+		SELECT userRight FROM user WHERE userId = #{param1}
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	<select id="ilist" resultType="kr.co.cf.board.dto.BoardDTO">
+		SELECT
+			boardIdx, userId, subject, content, writeTime, bHit
+		FROM board WHERE categoryId = 'b003' ORDER BY boardIdx DESC
+	</select>
+	
+	<select id="ialist" resultType="kr.co.cf.board.dto.BoardDTO">
+		SELECT
+			boardIdx, userId, subject, writeTime, bHit
+		FROM board WHERE categoryId = 'b003' ORDER BY boardIdx DESC LIMIT #{param1} OFFSET #{param2}
+	</select>
+	
+	<select id="iatotalCount" resultType="int">
+		SELECT COUNT(boardIdx) FROM board
+	</select>
+	
+	<insert 
+		useGeneratedKeys="true"
+		keyColumn="boardIdx"
+		keyProperty="boardIdx"
+		id="iwrite" parameterType="kr.co.cf.board.dto.BoardDTO">
+		INSERT INTO board(subject, userId, content, categoryId)
+			VALUES(#{subject}, #{userId}, #{content}, #{categoryId})
+	</insert>
+	
+	<insert id = "ifileWrite">
+		INSERT INTO photo(categoryId, photoId, photoName)
+			VALUES('p',#{param1}, #{param2})
+	</insert>
+	
+	<update id = "iupHit">
+		UPDATE board SET bHit = bHit+1
+			WHERE boardIdx = #{param1}
+	</update>
+	
+	<select id = "idetail" resultType="kr.co.cf.board.dto.BoardDTO">
+		SELECT
+			b.boardidx, b.userId, b.subject, b.content, b.writeTime,
+			p.photoIdx, p.photoName, p.photoId
+		FROM board b left JOIN photo p ON b.boardIdx = p.photoId
+		WHERE b.boardIdx = #{param1}
+	</select>
+	
+	<delete id="idelete">
+		DELETE FROM board WHERE boardIdx = #{param1}
+	</delete>
+	
+	<select id="ifindFile" resultType="String">
+		SELECT photoName FROM photo WHERE photoIdx = #{param1}
+	</select>
+	
+	<update id="iupdate" parameterType="hashmap">
+		UPDATE board SET subject = #{subject}
+			,userId = #{userId}
+			,content = #{content}
+		WHERE boardIdx = #{bidx}
+	</update>
+	
+	<select id="iuserRight" resultType="String">
+		SELECT userRight FROM user WHERE userId = #{param1}
+	</select>
 	
 </mapper>

@@ -30,10 +30,7 @@
 <body>
 	게시물 갯수 : 
 	<select id="pagePerNum">
-		<option value="5">5</option>
 		<option value="10">10</option>
-		<option value="15">15</option>
-		<option value="20">20</option>
 	</select>
 	<button onclick="location.href='freeboardWrite.go'">등록</button>
 	<table>
@@ -42,27 +39,19 @@
 				<th>번호</th>
 				<th>제목</th>
 				<th>작성자</th>
-				<th>조회수</th>
-				<th>작성일</th>			
+				<th>작성일</th>
+				<th>조회수</th>			
 			</tr>
 		</thead>
-		<tbody id="falist">
-			<c:forEach items="${list}" var="board">
-				<tr>
-					<td>${board.boardIdx}</td>
-					<td><a href = "freeboardDetail.do?bidx=${board.boardIdx}">${board.subject}</a></td>
-					<td>${board.userId}</td>
-					<td>${board.bHit}</td>
-					<td>${board.writeTime}</td>
-				</tr>
-			</c:forEach>
+		<tbody id="list">
+			
 		</tbody>
 		<tr>
 			<td colspan="5" id="paging">	
 				<div class="container">									
 					<nav aria-label="Page navigation" style="text-align:center">
 						<ul class="pagination" id="pagination"></ul>
-					</nav>					
+					</nav>
 				</div>
 			</td>
 		</tr>
@@ -80,7 +69,7 @@ $('#pagePerNum').change(function(){
 function listCall(page){
 	$.ajax({
 		type:'post',
-		url:'list.ajax',
+		url:'flist.ajax',
 		data:{
 			'page':page,
 			'cnt':$('#pagePerNum').val()	
@@ -94,7 +83,7 @@ function listCall(page){
 			$('#pagination').twbsPagination({
 				startPage:data.currPage, 
 				totalPages:data.pages, 
-				visiblePages:5,
+				visiblePages:10,
 				onPageClick:function(event,page){
 					console.log(page,showPage);
 					if (page != showPage) {
@@ -116,17 +105,17 @@ function listPrint(falist){
 	falist.forEach(function(item,idx){
 		content +='<tr>';
 		content +='<td>'+item.boardIdx+'</td>';
-		content +='<td>'+item.subject+'</td>';
+		content +='<td><a href="freeboardDetail.do?bidx='+item.boardIdx+'">'+item.subject+'</a></td>';
 		content +='<td>'+item.userId+'</td>';
 		
 
 		var date = new Date(item.writeTime);
-		content +='<td>'+date.toLocaleDateString('ko-KR')+'</td>'; //기본값 en-US
+		content +='<td>'+date.toLocaleDateString('ko-KR')+'</td>';
 		content +='<td>'+item.bHit+'</td>';
 		content +='<tr>';
 	});
-	$('#falist').empty();
-	$('#falist').append(content);
+	$('#list').empty();
+	$('#list').append(content);
 }
 </script>
 </html>
