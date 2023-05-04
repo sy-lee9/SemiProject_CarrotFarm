@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.cf.court.dto.CourtDTO;
@@ -23,12 +24,15 @@ public class CourtController {
 	@Autowired CourtService courtService;
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	@RequestMapping("/")
+	@RequestMapping("/court")
 	public String court(Model model) {
+		
 		ArrayList<CourtDTO> list = courtService.list();
 		model.addAttribute("courtList",list);
-		model.addAttribute("address","구로구");
-		return "court2";
+		ArrayList<CourtDTO> guList = courtService.guList();
+		model.addAttribute("guList",guList);
+		model.addAttribute("address", "서울특별시");
+		return "court3";
 	}
 	
 	@RequestMapping("/courtDetail.do")
@@ -87,6 +91,23 @@ public class CourtController {
 	}
 	@RequestMapping(value="/courtReviewDelete.do")
 	public String courtReviewDelete(@RequestParam HashMap<String, String> params) {
+		logger.info("리뷰 삭제 시 받아오는 값 :"+params);
+		courtService.courtReviewDelete(params);
 		return "redirect:/courtDetail.do?courtIdx="+params.get("courtIdx");
+	}
+	
+	@RequestMapping(value="/courtList.ajax")
+	@ResponseBody
+	public HashMap<String, Object> courtList(@RequestParam String gu) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		if(gu.equals("서울특별시")||gu.equals("none")) {
+			ArrayList<CourtDTO> courtList = courtService.list();
+			map.put("courtList", courtList);
+		}else {
+			ArrayList<CourtDTO> courtList = courtService.courtList(gu);
+			map.put("courtList", courtList);
+		}
+		
+		return map;
 	}
 }

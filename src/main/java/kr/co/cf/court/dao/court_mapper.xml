@@ -60,4 +60,29 @@
 	<select id="reviewPhotoList" resultType="kr.co.cf.court.dto.CourtDTO">
 		select photoName from photo where photoId in (select courtReviewIdx from courtreview where courtIdx=#{param1})
 	</select>
+	
+	<select id="findFile" resultType="String" parameterType="hashmap">
+		select photoName from photo where photoId=#{courtReviewIdx}
+	</select>
+	
+	<delete id="courtPhotoDelete" parameterType="hashmap">
+		delete from photo where photoId=#{courtReviewIdx}
+	</delete>
+	
+	<delete id="courtReviewDelete" parameterType="hashmap">
+		delete from courtReview where courtReviewIdx=#{courtReviewIdx}
+	</delete>
+	
+	<select id="guList" resultType="kr.co.cf.court.dto.CourtDTO">
+		select gu from location;
+	</select>
+	
+	<select id="courtList" resultType="kr.co.cf.court.dto.CourtDTO">
+		SELECT c.courtIdx, c.courtName,c.courtAddress, c.courtInOut, c.courtState, c.courtLatitude, c.courtLongitude, l.gu, AVG(cr.courtStar) AS courtStar
+			FROM court c
+			JOIN location l ON c.locationIdx = l.locationIdx
+			LEFT JOIN courtReview cr ON c.courtIdx = cr.courtIdx
+			where l.gu=#{param1}
+			GROUP BY c.courtIdx
+	</select>
 </mapper>
