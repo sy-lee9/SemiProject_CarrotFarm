@@ -117,6 +117,30 @@ table, th, td{
 		  
 	<script>
 
+	var container = document.getElementById('map');
+    var options = {
+        center: new kakao.maps.LatLng(${dto.courtLatitude},${dto.courtLongitude}),
+        level: 4
+    };
+
+    var map = new kakao.maps.Map(container, options);
+
+    var markerPosition  = new kakao.maps.LatLng(${dto.courtLatitude},${dto.courtLongitude}); 
+
+    var marker = new kakao.maps.Marker({
+        position: markerPosition
+    });
+
+    marker.setMap(map);
+    
+    var iwContent = '<div style="padding:5px;">${dto.courtName} </br> ${dto.courtTel}</div>'; 
+    var infowindow = new kakao.maps.InfoWindow({
+        content : iwContent
+    });
+
+    kakao.maps.event.addListener(marker, 'click', function() {
+        infowindow.open(map, marker);
+    });
 
 	
 	
@@ -127,30 +151,6 @@ table, th, td{
 	
 	
 	
-        var container = document.getElementById('map');
-        var options = {
-            center: new kakao.maps.LatLng(${dto.courtLatitude},${dto.courtLongitude}),
-            level: 4
-        };
-
-        var map = new kakao.maps.Map(container, options);
-
-        var markerPosition  = new kakao.maps.LatLng(${dto.courtLatitude},${dto.courtLongitude}); 
-
-        var marker = new kakao.maps.Marker({
-            position: markerPosition
-        });
-
-        marker.setMap(map);
         
-        var iwContent = '<div style="padding:5px;">${dto.courtName} </br> ${dto.courtTel}</div>'; 
-        var infowindow = new kakao.maps.InfoWindow({
-            content : iwContent
-        });
-
-        kakao.maps.event.addListener(marker, 'click', function() {
-            infowindow.open(map, marker);
-        });
-
     </script>
 </html>

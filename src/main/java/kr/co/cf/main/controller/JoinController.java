@@ -71,7 +71,7 @@ public class JoinController {
 	
 	 @RequestMapping(value = "/join")
 	    public String join(Model model) {
-
+		 
 	        return "join";
 	    }
 	 
