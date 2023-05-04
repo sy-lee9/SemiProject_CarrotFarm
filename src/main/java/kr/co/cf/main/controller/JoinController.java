@@ -59,6 +59,7 @@ public class JoinController {
 		
 		logger.info(id+"/"+pw);
 		JoinDTO dto = service.login(id,pw);
+
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		
 		if(dto != null) {
@@ -66,6 +67,7 @@ public class JoinController {
 			session.setAttribute("nickName", dto.getNickName());
 			map.put("user", dto);
 		}
+		
 		
 		return map;
 	}
@@ -77,10 +79,10 @@ public class JoinController {
        return "redirect:/";
     }
 
-	/* È¸¿ø°¡ÀÔ */
+	/* È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 	 @RequestMapping(value = "/join")
 	    public String join(Model model) {
-
+		 
 	        return "join";
 	    }
 	 
@@ -91,7 +93,7 @@ public class JoinController {
 			return "adminUser";
 		}
 	 
-	 /* ¾ÆÀÌµð Ã£±â */
+	 /* ï¿½ï¿½ï¿½Ìµï¿½ Ã£ï¿½ï¿½ */
 	 @RequestMapping(value="/findIdView")
 		public String findIdView() throws Exception{
 			return"findIdView";
@@ -102,7 +104,7 @@ public class JoinController {
 			logger.info("email"+dto.getEmail());
 					
 			if(service.findIdCheck(dto.getEmail())==0) {
-			model.addAttribute("msg", "ÀÌ¸ÞÀÏÀ» È®ÀÎÇØÁÖ¼¼¿ä");
+			model.addAttribute("msg", "ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½ï¿½");
 			return "findIdView";
 			}else {
 			model.addAttribute("user", service.findId(dto.getEmail()));
@@ -110,7 +112,7 @@ public class JoinController {
 			}
 		}
 		
-		/* ºñ¹Ð¹øÈ£ Ã£±â */
+		/* ï¿½ï¿½Ð¹ï¿½È£ Ã£ï¿½ï¿½ */
 		@RequestMapping(value = "/findpw.go")
 		public String findPwPOST1() throws Exception{
 			return "findPw";

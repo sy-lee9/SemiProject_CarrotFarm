@@ -34,25 +34,29 @@
 		<button id="searchButton">검색</button>
 	</form>
 	<div>
-	<table>
-		<c:forEach items="${courtList}" var="court">
-			<tr>
-				<th>${court.courtState}</th>
-				<th>${court.gu}</th>				
-				<th>
-					<c:if test="${court.courtInOut eq 'out'}">실외</c:if>
-					<c:if test="${court.courtInOut eq 'in'}">실내</c:if>
-				</th>
-				<th id="courtName"><a href="courtDetail.do?courtIdx=${court.courtIdx}">${court.courtName}</a></th>
-				<th>${court.courtAddress}</th>
-				<th>☆${court.courtStar}</th>
-			</tr>
-		</c:forEach>
+	<table id="courtList">
+		<thead>
+		</thead>
+		<tbody>
+			<c:forEach items="${courtList}" var="court">
+				<tr>
+					<th>${court.courtState}</th>
+					<th>${court.gu}</th>				
+					<th>
+						<c:if test="${court.courtInOut eq 'out'}">실외</c:if>
+						<c:if test="${court.courtInOut eq 'in'}">실내</c:if>
+					</th>
+					<th id="courtName"><a href="courtDetail.do?courtIdx=${court.courtIdx}">${court.courtName}</a></th>
+					<th>${court.courtAddress}</th>
+					<th>☆${court.courtStar}</th>
+				</tr>
+			</c:forEach>
+		</tbody>
 	</table>
 	</div>
 </body>
 <script>
-	var address="서울특별시";
+	var address="${address}";
 	$('#gu').change(function(){
 		address = $(this).val();
 		$.ajax({
@@ -63,35 +67,13 @@
 			success:function(data){
 				console.log(data);
 				console.log(data.courtList.length);
-				var position=[];
-				<c:forEach items="${courtList}" var="item">
-					position.push({
-						 content :'${item.courtName}', latlng: new kakao.maps.LatLng(${item.courtLatitude}, ${item.courtLongitude})});
-				</c:forEach>
-				for(var i=0; i<position.length;i++){
-					
-				    
-				    // 마커를 생성합니다
-				    var marker = new kakao.maps.Marker({
-				        map: map, // 마커를 표시할 지도
-				        position: position[i].latlng, // 마커를 표시할 위치 
-				    });
-				    var infowindow = new kakao.maps.InfoWindow({
-				 	       content: position[i].content // 인포윈도우에 표시할 내용
-				    });
-				    kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
-				    kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+				for(var i=0;i<markers.length;i++){
+					markers[i].setMap(null);
 				}
-				function makeOverListener(map, marker, infowindow) {
-				    return function() {
-				        infowindow.open(map, marker);
-				    };
-				}
-				function makeOutListener(infowindow) {
-				    return function() {
-				        infowindow.close();
-				    };
-				}
+				console.log(data.courtList);
+				markerDraw(data.courtList);
+				courtListDraw(data.courtList);
+				mapGeocoder(address);
 			},
 			error:function(e){
 				console.log(e);
@@ -111,7 +93,7 @@
 	var geocoder = new kakao.maps.services.Geocoder();
 	
 	//주소로 좌표를 검색합니다
-	geocoder.addressSearch("${address}", function(result, status) {
+	geocoder.addressSearch(address, function(result, status) {
 	
 	// 정상적으로 검색이 완료됐으면 
 	 if (status === kakao.maps.services.Status.OK) {
@@ -134,6 +116,7 @@
     map.setCenter(coords);
 } 
 });
+	var markers=[];
 	var position=[];
 	<c:forEach items="${courtList}" var="item">
 		position.push({
@@ -141,12 +124,15 @@
 	</c:forEach>
 	for(var i=0; i<position.length;i++){
 		
-	    
-	    // 마커를 생성합니다
-	    var marker = new kakao.maps.Marker({
-	        map: map, // 마커를 표시할 지도
-	        position: position[i].latlng, // 마커를 표시할 위치 
-	    });
+
+		// 마커를 생성합니다
+		var marker = new kakao.maps.Marker({
+		     map: map, // 마커를 표시할 지도
+		     position: position[i].latlng, // 마커를 표시할 위치 
+		});
+		markers.push(marker);
+		console.log(markers[i]);
+	       
 	    var infowindow = new kakao.maps.InfoWindow({
 	        content: position[i].content // 인포윈도우에 표시할 내용
 	    });
@@ -163,26 +149,74 @@
 	        infowindow.close();
 	    };
 	}
-	$('#searchButton').click(function(){
-	      //검색어 확인 
-	      var searchText = $('#searchInput').val();
-	      console.log(searchText);
-	      
-	      $('tr').each(function() {
-	         var courtName = $(this).find('#courtName').text();
-	         if (subject.includes(searchText)){
-	            $(this).show();
-	         } else {
-	              $(this).hide();
-	          }
-	      });
-	   });
 	
-	var msg = "${msg}";
-	if(msg != ""){
-		alert(msg);
+	function markerDraw(list){
+		markers=[];
+		position=[];
+		list.forEach(function(item,idx){
+			console.log(item.courtLatitude);
+		position.push({
+			 content :item.courtName, 
+			 latlng: new kakao.maps.LatLng(item.courtLatitude, item.courtLongitude)
+			 });
+		});
+		for(var i=0; i<position.length;i++){
+			// 마커를 생성합니다
+			var marker = new kakao.maps.Marker({
+		    	map: map, // 마커를 표시할 지도
+		     	position: position[i].latlng, // 마커를 표시할 위치 
+			});
+			markers.push(marker);
+			console.log(markers[i]);
+	       
+	    var infowindow = new kakao.maps.InfoWindow({
+	        content: position[i].content // 인포윈도우에 표시할 내용
+	    });
+	    kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
+	    kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+		}
+		function makeOverListener(map, marker, infowindow) {
+	    	return function() {
+	        	infowindow.open(map, marker);
+	    	};
+		}
+		function makeOutListener(infowindow) {
+	    	return function() {
+	        	infowindow.close();
+	    	};
+		}
 	}
-	
+	function courtListDraw(list){
+		$('#courtList tbody').empty();
+		var content = '';
+		list.forEach(function(item,index){
+			content += '<tr>';
+			content += '<th>'+item.courtState+'</th>';
+			content+='<th>'+item.gu+'</th>';
+			content +='<th id="courtName"><a href="courtDetail.do?courtIdx='+item.courtIdx+'">'+item.courtName+'</a></th>';
+			content +='<th>'+item.courtAddress+'</th>';
+			content +='<th>'+item.courtStar+'</th>';
+		});
+		$('#courtList tbody').append(content);
+	}
+	function mapGeocoder(address){
+		var geocoder = new kakao.maps.services.Geocoder();
+		geocoder.addressSearch(address, function(result, status) {
+			 if (status === kakao.maps.services.Status.OK) {
+			
+			    var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+		    var marker = new kakao.maps.Marker({
+		        map: map,
+		        position: coords
+		    });
+		    var infowindow = new kakao.maps.InfoWindow({
+		        content: '<div style="width:150px;text-align:center;padding:6px 0;">선호지역</div>'
+		    });
+		    infowindow.open(map, marker);
+		    map.setCenter(coords);
+		} 
+		});
+	}
 </script>
 </html>
 	

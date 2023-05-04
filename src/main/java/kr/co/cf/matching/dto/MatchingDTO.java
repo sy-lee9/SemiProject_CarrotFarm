@@ -24,8 +24,45 @@ public class MatchingDTO {
 	private float courtLongitude;
 	private String gameAppState;
 	private String userId;
+	private String courtAddress;
+	private String locationIdx;
+	private Date commentWriteTime;
+	private String commentContent;
+	private String commentIdx;
 	
 	
+	
+	
+	public String getCommentIdx() {
+		return commentIdx;
+	}
+	public void setCommentIdx(String commentIdx) {
+		this.commentIdx = commentIdx;
+	}
+	public Date getCommentWriteTime() {
+		return commentWriteTime;
+	}
+	public void setCommentWriteTime(Date commentWriteTime) {
+		this.commentWriteTime = commentWriteTime;
+	}
+	public String getCommentContent() {
+		return commentContent;
+	}
+	public void setCommentContent(String commentContent) {
+		this.commentContent = commentContent;
+	}
+	public String getLocationIdx() {
+		return locationIdx;
+	}
+	public void setLocationIdx(String locationIdx) {
+		this.locationIdx = locationIdx;
+	}
+	public String getCourtAddress() {
+		return courtAddress;
+	}
+	public void setCourtAddress(String courtAddress) {
+		this.courtAddress = courtAddress;
+	}
 	public String getUserId() {
 		return userId;
 	}
@@ -38,10 +75,10 @@ public class MatchingDTO {
 	public void setGameAppState(String gameAppState) {
 		this.gameAppState = gameAppState;
 	}
-	public int getmatchingIdx() {
+	public int getMatchingIdx() {
 		return matchingIdx;
 	}
-	public void setmatchingIdx(int matchingIdx) {
+	public void setMatchingIdx(int matchingIdx) {
 		this.matchingIdx = matchingIdx;
 	}
 	public String getCategoryId() {

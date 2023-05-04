@@ -4,25 +4,10 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.cf.matching.dao.MatchingDAO">
-	<select id="basicList" resultType="kr.co.cf.matching.dto.MatchingDTO">
- 		
-		SELECT 
-		  categoryId,
-		  matchingIdx, 
-		  writerId, 
-		  (SELECT gu FROM location WHERE locationIdx = (SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu, 
-		  subject, 
-		  gameDate, 
-		  gamePlay, 
-		  matchingWriteDate,
-		  (SELECT COUNT(userID) FROM game WHERE gameAppState='확정' AND matchingIdx = m.matchingIdx) AS matchingNumforSure, 
-		  matchingNum, 
-		  content, 
-		  matchigState,
-		  bHit 
-		FROM matching m;
- 	</select>
- 	
+	<select id="userData" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT locationIdx FROM userdata WHERE userId=#{param1}
+	</select>
+	
  	<select id="matchingDetail" resultType="kr.co.cf.matching.dto.MatchingDTO">
  		SELECT
  			matchingIdx,
@@ -32,14 +17,17 @@
  			gameDate,
  			writerId,
  			content,
+ 			courtIdx,
  			(SELECT COUNT(userID) FROM game WHERE gameAppState='확정' AND matchingIdx = m.matchingIdx) AS matchingNumforSure,
  			(SELECT gu FROM location WHERE locationIdx = (SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu, 
  			(SELECT courtName From court Where courtIdx=m.courtIdx) AS courtName,
  			(SELECT courtLatitude From court Where courtIdx=m.courtIdx) AS courtLatitude,
  			(SELECT courtLongitude From court Where courtIdx=m.courtIdx) AS courtLongitude,
+ 			(SELECT courtAddress From court Where courtIdx=m.courtIdx) AS courtAddress,
  			(SELECT courtTel From court Where courtIdx=m.courtIdx) AS courtTel
  		FROM matching m
  		Where matchingIdx = #{param1}
+ 		
  	</select>
  	
  	<update id="upHit">
@@ -64,7 +52,186 @@
  		DELETE FROM matching WHERE matchingIdx = #{param1};
  	</delete>
  	
+ 	<select id="locationList" resultType="kr.co.cf.matching.dto.MatchingDTO">
+ 		SELECT locationIdx, gu FROM location;
+ 	</select>
+	
+	<select id="matchingWriterData" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT locationIdx, gu FROM location WHERE locationIdx = (SELECT locationIdx FROM userData WHERE userId=#{param1})
+	</select>
+	
+	<select id="courtList" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT courtIdx, locationIdx, courtName, courtTel, courtInOut, courtState, courtLatitude, courtLongitude, courtAddress FROM court
+	</select>
+	
+	<update id="matchingUpdate" parameterType="hashmap">
+		UPDATE matching SET subject=#{subject},gameDate=#{gameDate}, gamePlay=#{gamePlay},matchingNum=#{matchingNum},content=#{content} WHERE matchingIdx=#{matchingIdx}
+	</update>
+	
+	<select id="commentList" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT
+			commentIdx,
+			userId,
+			commentWriteTime,
+			commentContent
+		FROM comment
+		WHERE categoryId='m01' AND comentId=#{param1}
+	</select>
+	
+	<insert id="commentWrite" parameterType="hashmap">
+		INSERT INTO comment(userId, categoryId,comentId,commentContent) VALUES(#{userId},#{categoryId},#{comentId},#{commentContent})
+	</insert>
+	
+	<delete id="commentDelete">
+		DELETE FROM comment WHERE commentIdx = #{param1};
+	</delete>
+	
+	<select id="commentGet" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT
+			commentIdx,
+			userId,
+			commentWriteTime,
+			commentContent
+		FROM comment
+		WHERE commentIdx=#{param1}
+	</select>
+	
+	<update id="commentUpdate" parameterType="hashmap">
+		UPDATE comment SET commentContent=#{commentContent} WHERE commentIdx=#{commentIdx}
+	
+	</update>
+	
+	<select id="totalCount" resultType="int">
+		SELECT COUNT(matchingIdx) FROM matching WHERE categoryId=#{param1}
+	</select>
+	
+	<select id="totalCountGamePlay" parameterType="hashmap" resultType="int">
+		SELECT COUNT(matchingIdx) FROM matching WHERE gamePlay=#{gamePlay} AND categoryId=#{categoryId}
+	</select>
+	
+	<select id="totalCountLocationIdx" parameterType="hashmap" resultType="int">
+		SELECT COUNT(matchingIdx) FROM matching WHERE courtIdx IN (SELECT courtIdx FROM court WHERE locationIdx =#{locationIdx}) AND categoryId=#{categoryId}
+	</select>
+	
+	<select id="totalCountSearch" resultType="int">
+		SELECT COUNT(matchingIdx) FROM matching 
+		WHERE categoryId=#{param1} AND (subject LIKE CONCAT('%' #{param2} '%') OR writerId LIKE CONCAT('%' #{param2} '%'))
+	</select>	
+	
+	
+	<select id="totalCountAll" parameterType="hashmap" resultType="int">
+		SELECT COUNT(matchingIdx) FROM matching WHERE courtIdx IN (SELECT courtIdx FROM court WHERE locationIdx =#{locationIdx}) AND categoryId=#{categoryId} AND gamePlay=#{gamePlay}
+	</select>
+	
+	<select id="list" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT 
+		  categoryId,
+		  matchingIdx, 
+		  writerId, 
+		  (SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx) AS locationIdx,
+		  (SELECT gu FROM location WHERE locationIdx = (SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu, 
+		  subject, 
+		  gameDate, 
+		  gamePlay, 
+		  matchingWriteDate,
+		  (SELECT COUNT(userID) FROM game WHERE gameAppState='확정' AND matchingIdx = m.matchingIdx) AS matchingNumforSure, 
+		  matchingNum, 
+		  content, 
+		  matchigState,
+		  bHit 
+		FROM matching m
+		WHERE categoryId=#{param2}
+		ORDER By matchingIdx DESC 
+		LIMIT 10 OFFSET #{param1}
+	</select>
 
+	<select id="listGamePlay" parameterType="hashmap" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT 
+		  categoryId,
+		  matchingIdx, 
+		  (SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx) AS locationIdx,
+		  writerId, 
+		  (SELECT gu FROM location WHERE locationIdx = (SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu, 
+		  subject, 
+		  gameDate, 
+		  gamePlay, 
+		  matchingWriteDate,
+		  (SELECT COUNT(userID) FROM game WHERE gameAppState='확정' AND matchingIdx = m.matchingIdx) AS matchingNumforSure, 
+		  matchingNum, 
+		  content, 
+		  matchigState,
+		  bHit 
+		FROM matching m
+		WHERE gamePlay=#{gamePlay} AND categoryId =#{categoryId}
+		ORDER By matchingIdx DESC 
+		LIMIT 10 OFFSET #{offset}
+	</select>
+	
+	<select id="listLocationIdx" parameterType="hashmap" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT 
+		  categoryId,
+		  matchingIdx, 
+		  (SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx) AS locationIdx,
+		  writerId, 
+		  (SELECT gu FROM location WHERE locationIdx = (SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu, 
+		  subject, 
+		  gameDate, 
+		  gamePlay, 
+		  matchingWriteDate,
+		  (SELECT COUNT(userID) FROM game WHERE gameAppState='확정' AND matchingIdx = m.matchingIdx) AS matchingNumforSure, 
+		  matchingNum, 
+		  content, 
+		  matchigState,
+		  bHit 
+		FROM matching m
+		WHERE courtIdx IN (SELECT courtIdx FROM court WHERE locationIdx =#{locationIdx}) AND categoryId =  #{categoryId}
+		ORDER By matchingIdx DESC 
+		LIMIT 10 OFFSET #{offset}
+	</select>
+	
+	<select id="listAll" parameterType="hashmap" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT 
+		  categoryId,
+		  matchingIdx, 
+		  writerId,
+		  (SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx) AS locationIdx, 
+		  (SELECT gu FROM location WHERE locationIdx = (SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu, 
+		  subject, 
+		  gameDate, 
+		  gamePlay, 
+		  matchingWriteDate,
+		  (SELECT COUNT(userID) FROM game WHERE gameAppState='확정' AND matchingIdx = m.matchingIdx) AS matchingNumforSure, 
+		  matchingNum, 
+		  content, 
+		  matchigState,
+		  bHit 
+		FROM matching m
+		WHERE gamePlay=#{gamePlay} AND courtIdx IN (SELECT courtIdx FROM court WHERE locationIdx =#{locationIdx}) AND categoryId =  #{categoryId}
+		ORDER By matchingIdx DESC 
+		LIMIT 10 OFFSET #{offset}
+	</select>
+	
+	<select id="listSearch" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT 
+		  categoryId,
+		  matchingIdx, 
+		  writerId, 
+		  (SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx) AS locationIdx,
+		  (SELECT gu FROM location WHERE locationIdx = (SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu, 
+		  subject, 
+		  gameDate, 
+		  gamePlay, 
+		  matchingWriteDate,
+		  (SELECT COUNT(userID) FROM game WHERE gameAppState='확정' AND matchingIdx = m.matchingIdx) AS matchingNumforSure, 
+		  matchingNum, 
+		  content, 
+		  matchigState,
+		  bHit 
+		FROM matching m
+		WHERE categoryId=#{categoryId} AND (subject LIKE CONCAT('%' #{search} '%') OR writerId LIKE CONCAT('%' #{search} '%'))
+		ORDER By matchingIdx DESC 
+		LIMIT 10 OFFSET #{offset}
+	</select>
 </mapper>
 
 
