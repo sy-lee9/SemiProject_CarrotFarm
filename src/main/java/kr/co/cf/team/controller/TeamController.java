@@ -25,6 +25,8 @@ public class TeamController {
 	@Autowired TeamService TeamService;
 	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+
 
 
 	@RequestMapping(value = {"/team","/team/list.do"})
@@ -34,6 +36,7 @@ public class TeamController {
 		logger.info("list size : "+list.size());
 		model.addAttribute("list", list);
 		return "/team/teamList";
+
 
 	}
 	

@@ -1,5 +1,7 @@
 package kr.co.cf.court.dto;
 
+import java.sql.Date;
+
 public class CourtDTO {
 	private int courtIdx;
 	private int locationId;
@@ -9,6 +11,63 @@ public class CourtDTO {
 	private String courtState;
 	private double courtLatitude;
 	private double courtLongitude;
+	private String gu;
+	private String courtAddress;
+	private int courtReviewIdx;
+	private String userId;
+	private Date courtReviewDate;
+	private String courtOneLineReview;
+	private double courtStar;
+	private String photoName;
+	 
+	public String getPhotoName() {
+		return photoName;
+	}
+	public void setPhotoName(String photoName) {
+		this.photoName = photoName;
+	}
+	public int getCourtReviewIdx() {
+		return courtReviewIdx;
+	}
+	public void setCourtReviewIdx(int courtReviewIdx) {
+		this.courtReviewIdx = courtReviewIdx;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	public Date getCourtReviewDate() {
+		return courtReviewDate;
+	}
+	public void setCourtReviewDate(Date courtReviewDate) {
+		this.courtReviewDate = courtReviewDate;
+	}
+	public String getCourtOneLineReview() {
+		return courtOneLineReview;
+	}
+	public void setCourtOneLineReview(String courtOneLineReview) {
+		this.courtOneLineReview = courtOneLineReview;
+	}
+	public double getCourtStar() {
+		return courtStar;
+	}
+	public void setCourtStar(double courtStar) {
+		this.courtStar = courtStar;
+	}
+	public String getCourtAddress() {
+		return courtAddress;
+	}
+	public void setCourtAddress(String courtAddress) {
+		this.courtAddress = courtAddress;
+	}
+	public String getGu() {
+		return gu;
+	}
+	public void setGu(String gu) {
+		this.gu = gu;
+	}
 	public int getCourtIdx() {
 		return courtIdx;
 	}

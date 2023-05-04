@@ -68,5 +68,25 @@ public class MatchingService {
 	
 	}
 
+	public ArrayList<MatchingDTO> commentList(String matchingIdx) {
+		return matchingDAO.commentList(matchingIdx);
+	}
+
+	public void commentWrite(HashMap<String, String> params) {
+		matchingDAO.commentWrite(params);
+	}
+
+	public void commentDelete(String commentIdx) {
+		matchingDAO.commentDelete(commentIdx);
+	}
+
+	public MatchingDTO commentGet(String commentIdx) {
+		return matchingDAO.commentGet(commentIdx);
+	}
+
+	public void commentUpdate(HashMap<String, String> params) {
+		matchingDAO.commentUpdate(params);
+	}
+
 	
 }

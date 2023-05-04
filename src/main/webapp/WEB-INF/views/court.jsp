@@ -38,7 +38,7 @@ var map = new kakao.maps.Map(mapContainer, mapOption);
 var geocoder = new kakao.maps.services.Geocoder();
 
 //주소로 좌표를 검색합니다
-geocoder.addressSearch('강남구', function(result, status) {
+geocoder.addressSearch('종로구', function(result, status) {
 
 	var ps = new kakao.maps.services.Places();
 // 정상적으로 검색이 완료됐으면 
@@ -66,7 +66,7 @@ geocoder.addressSearch('강남구', function(result, status) {
     	ps.keywordSearch(searchTest, placesSearchCB,{x:coords.La,y:coords.Ma,radius:20000});
     }else{
     	
-   	 	ps.keywordSearch('한강시민공원 농구장', placesSearchCB,{x:coords.La,y:coords.Ma,radius:20000});    
+   	 	ps.keywordSearch('신내공원 농구장 ', placesSearchCB,{x:coords.La,y:coords.Ma,radius:20000});    
     }
     
 } 
@@ -89,7 +89,7 @@ function placesSearchCB (data, status, pagination) {
             displayMarker(data[i]);    
             bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
             content += '<tr>';
-    		content+='<td>' + '<a href="courtDetail.do?courtName=' + data[i].place_name + '&courtLatitude=' + data[i].y + '&courtLongitude=' + data[i].x + '">' + data[i].place_name + '</a></td>';
+    		content+='<td>' + '<a href="courtDetail.do?courtName=' + data[i].place_name + '&courtLatitude=' + data[i].y + '&courtLongitude=' + data[i].x + '&courtAddress='+data[i].address_name+'">' + data[i].place_name + '</a></td>';
     		content += '</tr>';
         }
         $('#test').empty();
@@ -121,8 +121,7 @@ function displayMarker(place) {
         infowindow.open(map, marker);
     });
 }
-var markerPosition  = new kakao.maps.LatLng(37.4952702,126.887634 ); 
-
+var markerPosition  = new kakao.maps.LatLng(37.58186,126.81324); 
 //마커를 생성합니다
 var marker = new kakao.maps.Marker({
  position: markerPosition,
