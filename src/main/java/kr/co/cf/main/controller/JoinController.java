@@ -1,7 +1,10 @@
 package kr.co.cf.main.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -15,7 +18,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
+import kr.co.cf.main.dao.JoinDAO;
+import kr.co.cf.main.dto.JoinDTO;
 import kr.co.cf.main.service.JoinService;
 
 @Controller
@@ -26,7 +32,6 @@ public class JoinController {
 	
 	@Autowired JoinService service;
 	
-
 	@RequestMapping(value="/login")
 	public String home() {
 		return "login";
@@ -53,20 +58,26 @@ public class JoinController {
 			HttpSession session){
 		
 		logger.info(id+"/"+pw);
-		int success = service.login(id,pw);
-		logger.info("login success : "+success);
-		
-		if(success == 1) {
-			session.setAttribute("loginId", id);
-		}
-		
+		JoinDTO dto = service.login(id,pw);
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("success", success);
+		
+		if(dto != null) {
+			session.setAttribute("loginId", id);
+			session.setAttribute("nickName", dto.getNickName());
+			map.put("user", dto);
+		}
 		
 		return map;
 	}
-
 	
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout(HttpSession session) {
+       
+       session.removeAttribute("nickName");
+       return "redirect:/";
+    }
+
+	/* 회원가입 */
 	 @RequestMapping(value = "/join")
 	    public String join(Model model) {
 
@@ -77,7 +88,72 @@ public class JoinController {
 		public String write(Model model, MultipartFile userProfile, @RequestParam HashMap<String, String> params) {
 		 String msg = service.write(userProfile,params);
 			model.addAttribute("msg",msg);
-			return "team/home";
+			return "adminUser";
 		}
+	 
+	 /* 아이디 찾기 */
+	 @RequestMapping(value="/findIdView")
+		public String findIdView() throws Exception{
+			return"findIdView";
+		}
+		
+		@RequestMapping(value="/findId")
+		public String findId(JoinDTO dto,Model model) throws Exception{
+			logger.info("email"+dto.getEmail());
+					
+			if(service.findIdCheck(dto.getEmail())==0) {
+			model.addAttribute("msg", "이메일을 확인해주세요");
+			return "findIdView";
+			}else {
+			model.addAttribute("user", service.findId(dto.getEmail()));
+			return "findId";
+			}
+		}
+		
+		/* 비밀번호 찾기 */
+		@RequestMapping(value = "/findpw.go")
+		public String findPwPOST1() throws Exception{
+			return "findPw";
+		}
+		
+		
+		@RequestMapping(value = "/findpw")
+		@ResponseBody
+		public void findPwPOST(@RequestParam HashMap<String, String> params, Model model) throws Exception{
+			logger.info("params : " + params);
+			service.findPw(params);
+		}
+		
+		@RequestMapping(value="/userdelete.go")
+	      public String userdelete(HttpSession session) {  
+	         
+	         String page = "redirect:/";
+	         
+	         if(session.getAttribute("nickName") != null) {
+	            page = "userDelete";
+	         }
+	         
+	      return page;
+	      }
+	      
+	      @RequestMapping(value="/userdelete.do")
+	      public String userdeletetrue(HttpSession session) {  
+	         
+	         String page = "redirect:/";
+	         
+	         if(session.getAttribute("nickName") != null) {
+	            service.userdeletetrue(session.getAttribute("nickName"));
+	            session.removeAttribute("nickName");
+	            page = "userDeleteComplete";
+	         }
+	         
+	      return page;
+	      }
+	      
+	      @RequestMapping(value = "/userinfo")
+		    public String userInfo(Model model) {
+
+		        return "userInfo";
+		    }
 
 }

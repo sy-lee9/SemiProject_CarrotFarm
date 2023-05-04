@@ -111,11 +111,11 @@
         <tr>
         	<td>
         		<button type="button" onclick="join()">회원가입</button>
-        		<button onclick="location.href='./'">돌아가기</button>
         	<td>
         </tr>
         </table>
         </form>
+        <button type="button" onclick="location.href='./'">돌아가기</button>
 </body>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>

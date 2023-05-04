@@ -14,8 +14,8 @@
    </select>
    
    <insert id="join" parameterType="kr.co.cf.main.dto.JoinDTO">
-      INSERT INTO user(userId,nickName,userPw,userName,birthday,email) 
-         VALUES(#{userId},#{nickName},#{userPw},#{userName},#{birthday},#{email})
+      INSERT INTO user(userId,nickName,userPw,userName,birthday,email,userBlind) 
+         VALUES(#{userId},#{nickName},#{userPw},#{userName},#{birthday},#{email},false)
    </insert>
    
    <insert id="joinData" parameterType="kr.co.cf.main.dto.JoinDTO">
@@ -32,8 +32,28 @@
       SELECT locationIdx FROM location WHERE gu = #{param1}
    </select>
    
-   <select id="login" resultType="int">
-		SELECT COUNT(userId) FROM user WHERE
-			userId = #{param1} AND userPw = #{param2}	
+   <select id="login" resultType="kr.co.cf.main.dto.JoinDTO">
+		SELECT nickName FROM user WHERE
+			userId = #{param1} AND userPw = #{param2} AND userBlind = false	
 	</select>
+	
+	<select id="findId" resultType="kr.co.cf.main.dto.JoinDTO">
+		select * from user where EMAIL = #{email}
+	</select>
+	
+	<select id="findIdCheck" resultType="int">
+		select count(*) from user where Email = #{memberEmail}
+	</select>
+	
+	<!-- 비밀번호 변경 -->
+	<update id="updatePw" >
+		update user set userPw = #{pw} where userId = #{id}
+	</update>
+	
+	<!-- 유저 블라인드 -->
+	<update id="userdelete">
+      UPDATE user SET userBlind = true  WHERE nickName = #{param1}
+   </update>
+	
+	
 </mapper>
