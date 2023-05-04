@@ -75,6 +75,13 @@ public interface MatchingDAO {
 	ArrayList<MatchingDTO> listAll(HashMap<String, Object> params);
 
 	ArrayList<MatchingDTO> listSearch(HashMap<String, Object> params);
+	
+	
+	// 게임신청
+	void applyGame(String matchingIdx, String userId);
+	
+	// 모집 중 -> 모집 완료 상태 변경
+	void matchigStateUpdate(String matchingIdx, String matchigState);
 
 		
 

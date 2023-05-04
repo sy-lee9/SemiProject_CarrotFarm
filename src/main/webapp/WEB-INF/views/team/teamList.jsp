@@ -7,7 +7,7 @@
 <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
-<script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
+<script src="./resources/js/twbsPagination.js" type="text/javascript"></script>
 <style>	
 	table, th, td{
 		border: 1px solid black;

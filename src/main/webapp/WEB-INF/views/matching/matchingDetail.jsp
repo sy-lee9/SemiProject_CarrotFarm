@@ -55,15 +55,48 @@ table, th, td{
 	     		<th colspan="3">
 	     			<button>신청자 목록</button>	
 	     		</th>
-	     		<th>
-	     			<button>모집하기</button>
-	     		</th>
+	     		
+	     		
+	     		<!--matchigState가 matching 상태일 시  -->
+	     		<c:if test="${dto.matchigState eq 'matching'}">
+		     		<c:if test="${dto.writerId eq loginId }">
+			     		<th>
+		     				<button onclick="location.href='matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}'">모집종료</button>
+		     			</th>
+		     		</c:if>
+		     		
+		     		<c:if test="${dto.writerId ne loginId }">
+			     		<th>
+		     				<button onclick="location.href='applyGame?matchingIdx=${dto.matchingIdx}'">신청하기</button>
+		     			</th>
+		     		</c:if>
+	     		</c:if>
+	     		
+	     		
+	     		<!--matchigState가 finish 상태일 시  -->
+	     		<c:if test="${dto.matchigState eq 'finish'}">
+	     			<c:if test="${dto.writerId eq loginId }">
+			     		<th>
+		     				<button>경기종료</button>
+		     			</th>
+		     		</c:if>
+		     		
+		     		<c:if test="${dto.writerId ne loginId }">
+			     		<th>
+		     				<button>모집종료</button>
+		     			</th>
+		     		</c:if>
+	     		</c:if>
+	     		
+	     		
 	     		<c:if test="${dto.writerId eq loginId }">
 		     		<th colspan="3">
 		     			<button onclick="location.href='update.go?matchingIdx=${dto.matchingIdx}'">수정하기</button>
 		     			<button onclick="location.href='delete.do?matchingIdx=${dto.matchingIdx}'">삭제하기</button>
 		     		</th>
 	     		</c:if>
+	     		
+	     		
 	     		<c:if test="${dto.writerId ne loginId }">
 		     		
 	     		</c:if>
@@ -116,7 +149,7 @@ table, th, td{
 		  </body>
 		  
 	<script>
-
+	
 	var container = document.getElementById('map');
     var options = {
         center: new kakao.maps.LatLng(${dto.courtLatitude},${dto.courtLongitude}),
