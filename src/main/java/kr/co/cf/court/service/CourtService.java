@@ -1,5 +1,6 @@
 package kr.co.cf.court.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -111,5 +112,36 @@ public class CourtService {
 	public ArrayList<CourtDTO> reviewPhotoList(String courtIdx) {
 		return courtdao.reviewPhotoList(courtIdx);
 	}
+
+	public void courtReviewDelete(HashMap<String, String> params) {
+		// 1. photo 에 해당 idx 값이 있는지?
+		String photoName = courtdao.findFile(params.get("courtReviewIdx"));
+		logger.info("file name : "+photoName);
+		// 2. 없다면?
+		int row = courtdao.courtReviewDelete(params.get("courtReviewIdx"));
+		logger.info("delete data : "+row);
+		courtdao.courtPhotoDelete(params.get("courtReviewIdx"));
+				
+		if(photoName != null && row >0) {// 3. 있다면? AND bbs 와  photo 가 확실히 삭제 되었는지?			
+			File file = new File("C:/img/upload/"+photoName);
+			if(file.exists()) {// 2. 해당 파일이 존재 하는지?
+				file.delete();// 3. 삭제
+			}			
+		}
+		
+	}
+
+	public ArrayList<CourtDTO> guList() {
+		return courtdao.guList();
+	}
+
+	public ArrayList<CourtDTO> selectList(String gu) {
+		return courtdao.selectList(gu);
+	}
+
+	public ArrayList<CourtDTO> courtList(String gu) {
+		return courtdao.courtList(gu);
+	}
+
 
 }
