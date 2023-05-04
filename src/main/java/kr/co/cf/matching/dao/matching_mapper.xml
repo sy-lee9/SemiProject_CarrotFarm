@@ -10,6 +10,7 @@
 	
  	<select id="matchingDetail" resultType="kr.co.cf.matching.dto.MatchingDTO">
  		SELECT
+ 			matchigState,
  			matchingIdx,
  			gamePlay,
  			matchingNum,
@@ -232,7 +233,15 @@
 		ORDER By matchingIdx DESC 
 		LIMIT 10 OFFSET #{offset}
 	</select>
+	
+	
+	<insert id="applyGame">
+		INSERT INTO game(categoryId,matchingIdx,userId,gameAppState) values('m01',#{param1},#{param2},'신청')
+	</insert>
+	
+	<update id="matchigStateUpdate">
+		UPDATE matching SET matchigState = 'finish' WHERE matchingIdx=#{param1}
+	</update>
 </mapper>
-
 
 
