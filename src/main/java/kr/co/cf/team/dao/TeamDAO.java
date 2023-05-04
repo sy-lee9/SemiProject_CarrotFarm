@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import kr.co.cf.team.dto.TeamDTO;
 
+
 public interface TeamDAO {
 
 	int overlay(String teamName);
@@ -12,12 +13,17 @@ public interface TeamDAO {
 
 	int locationFind(String location);
 
-	int photoWrite(String photoName, int teamIdx);
+	void photoWrite(String photoName, int teamIdx);
 
-	ArrayList<TeamDTO> list();
+	ArrayList<TeamDTO> list(int cnt, int offset);
 
-	//ArrayList<TeamDTO> teamProfilePhotoFind();
+	int totalCount();
 	
-	int userCount();
+	TeamDTO teamInfo(int parseInt);
+
+	ArrayList<TeamDTO> tagReview(int parseInt);
+
+	TeamDTO teamPageUpdate(String teamIdx);
+
 
 }
