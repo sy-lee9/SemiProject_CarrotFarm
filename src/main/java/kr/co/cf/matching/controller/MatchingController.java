@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.co.cf.matching.dto.MatchingDTO;
 import kr.co.cf.matching.service.MatchingService;
@@ -28,16 +30,16 @@ public class MatchingController {
 	public String matchingList(Model model, HttpSession session) {
 
 		logger.info("session" + session.getAttribute("loginId"));
-
 		logger.info("모집글 리스트 불러오기");
-
-		ArrayList<MatchingDTO> matchingList = new ArrayList<MatchingDTO>();
-
-		matchingList = matchingService.basicList();
-
-		model.addAttribute("list", matchingList);
-
-		return "matchingList";
+		
+		// 지역 리스트 가져오기
+		ArrayList<MatchingDTO> locationList = new ArrayList<MatchingDTO>();
+		locationList = matchingService.locationList();
+		model.addAttribute("locationList", locationList);
+		
+		MatchingDTO userDto = new MatchingDTO();
+		userDto = matchingService.userData((String)session.getAttribute("loginId"));
+		return "/matching/matchingList";
 	}
 
 	@RequestMapping(value = "/matching/detail.go")
@@ -55,7 +57,7 @@ public class MatchingController {
 		commentList = matchingService.commentList(matchingIdx);
 		model.addAttribute("commentList", commentList);
 		logger.info("모집글 commentList : " + commentList);
-		return "matchingDetail";
+		return "/matching/matchingDetail";
 	}
 
 	@RequestMapping(value = "/matching/write.go")
@@ -88,7 +90,7 @@ public class MatchingController {
 		logger.info("locationIdx : " + courtList);
 		model.addAttribute("courtList", courtList);
 
-		return "matchingWriteForm";
+		return "/matching/matchingWriteForm";
 	}
 
 	@RequestMapping(value = "/matching/write.do")
@@ -128,7 +130,7 @@ public class MatchingController {
 
 		model.addAttribute("dto", matchingDto);
 
-		return "matchingUpdateForm";
+		return "/matching/matchingUpdateForm";
 	}
 
 	@RequestMapping(value = "/matching/update.do")
@@ -197,7 +199,7 @@ public class MatchingController {
 		logger.info("수정할 코멘트 내용"+commentDto.getCommentContent());
 		model.addAttribute("commentDto", commentDto);
 				
-		return "matchingCommentUpdate" ;
+		return "/matching/matchingCommentUpdate" ;
 	}
 	
 	@RequestMapping(value = "/matching/commentUpdate.do")
@@ -208,4 +210,13 @@ public class MatchingController {
 		logger.info("matchingIdx"+matchingIdx);		
 		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx ;
 	}
+	
+	@RequestMapping(value ="/matching/list.ajax")
+	@ResponseBody
+	public HashMap<String, Object> list(@RequestParam HashMap<String, Object> params) {
+		logger.info("params : " + params);
+		return matchingService.list(params);
+	}
+	
+	
 }

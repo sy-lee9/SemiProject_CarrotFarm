@@ -7,7 +7,7 @@ import kr.co.cf.matching.dto.MatchingDTO;
 
 public interface MatchingDAO {
 
-	ArrayList<MatchingDTO> basicList();
+	
 
 	MatchingDTO matchingDetail(String matchingIdx);
 
@@ -38,6 +38,47 @@ public interface MatchingDAO {
 	MatchingDTO commentGet(String commentIdx);
 
 	void commentUpdate(HashMap<String, String> params);
+
+	MatchingDTO userData(String loginId);
+	
+	// =========================================================
+	// 모집글 페이징 관련 처리
+	// =========================================================
+	
+	// 기본 
+	int totalCount(String categoryId);
+	
+	// 게임 방식만 선택 된 경우 
+	int totalCountGamePlay(HashMap<String, Object> params);
+	
+	// 선호 지역만 선택 된 경우
+	int totalCountLocationIdx(HashMap<String, Object> params);
+	
+	// 게임 방식, 선호지역 모두 선택된 경우
+	int totalCountAll(HashMap<String, Object> params);
+	
+	// 검색 기능
+	int totalCountSearch(String categoryId, String search);
+	
+	// =========================================================
+	
+	// 기본
+	ArrayList<MatchingDTO> list(int offset,String categoryId);
+
+	// 게임 방식만 선택 된 경우 
+	ArrayList<MatchingDTO> listGamePlay(HashMap<String, Object> params);
+
+	// 선호 지역만 선택 된 경우
+	ArrayList<MatchingDTO> listLocationIdx(HashMap<String, Object> params);
+
+	// 게임 방식, 선호지역 모두 선택된 경구
+	ArrayList<MatchingDTO> listAll(HashMap<String, Object> params);
+
+	ArrayList<MatchingDTO> listSearch(HashMap<String, Object> params);
+
+		
+
+	
 
 
 }
