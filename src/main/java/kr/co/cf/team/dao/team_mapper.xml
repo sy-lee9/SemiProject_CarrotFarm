@@ -7,7 +7,7 @@
 
 	<select id="list" resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT 
-			t.teamIdx,t.teamMatchState,t.locationIdx,t.teamName,t.teamIntroduce,t.teamManner,t.teamDisband,
+			t.teamIdx,t.teamMatchState,t.locationIdx,t.teamName,t.teamIntroduce,t.teamDisband,
 			(SELECT COUNT(userId) FROM teamUser WHERE teamIdx = t.teamIdx) AS teamUser
 		FROM team t ORDER BY teamIdx DESC
 			LIMIT #{param1} OFFSET #{param2};
