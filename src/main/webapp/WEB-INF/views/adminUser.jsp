@@ -55,6 +55,8 @@
 		</tbody>
 	</table>
 	<button>초기화</button>
+	<button onclick="location.href='logout'">로그아웃</button>
+	<button onclick="location.href='userdelete.go'">회원탈퇴</button>
 </body>
 <script>
 function nicknameChange(userId){
@@ -76,6 +78,11 @@ function nicknameChange(userId){
 			console.log(e);
 		}
 	});	
+}
+
+var msg = "${msg}";
+if(msg != ""){
+	alert(msg);
 }
 </script>
 </html>

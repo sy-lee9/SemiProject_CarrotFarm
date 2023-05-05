@@ -29,4 +29,16 @@ public interface CourtDAO {
 
 	ArrayList<CourtDTO> reviewPhotoList(String courtIdx);
 
+	String findFile(String string);
+
+	int courtReviewDelete(String string);
+
+	void courtPhotoDelete(String string);
+
+	ArrayList<CourtDTO> guList();
+
+	ArrayList<CourtDTO> selectList(String gu);
+
+	ArrayList<CourtDTO> courtList(String gu);
+
 }

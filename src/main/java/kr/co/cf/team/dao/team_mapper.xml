@@ -7,18 +7,26 @@
 
 	<select id="list" resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT 
-			t.teamIdx,t.teamMatchState,t.locationIdx,t.teamName,t.teamIntroduce,t.teamManner,t.teamDisband
-		FROM team t left join photo p on t.teamIdx = p.photoId
-	</select>
-<!-- 	
-	<select id="teamProfilePhotoFind" resultType="kr.co.cf.team.dto.TeamDTO">
-		SELECT photoName,photoId FROM photo WHERE categoryId = 't01'
-	</select>
- -->	
-	<select id="userCount" resultType="int">
-		SELECT COUNT(userId) FROM teamUser;
+			t.teamIdx,t.teamMatchState,t.locationIdx,t.teamName,t.teamIntroduce,t.teamDisband,
+			(SELECT COUNT(userId) FROM teamUser WHERE teamIdx = t.teamIdx) AS teamUser
+		FROM team t ORDER BY teamIdx DESC
+			LIMIT #{param1} OFFSET #{param2};
 	</select>
 	
+	<select id="totalCount" resultType="int">
+		SELECT COUNT(teamIdx) FROM team
+	</select>
+	
+<!-- 
+	<select id="checkMatchState" resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			t.teamIdx,t.teamMatchState,t.locationIdx,t.teamName,t.teamIntroduce,t.teamManner,t.teamDisband,
+			(SELECT COUNT(userId) FROM teamUser WHERE teamIdx = t.teamIdx) AS teamUser,
+			(select photoName from photo where photoId = t.teamIdx) as photoName 
+		FROM team t WHERE t.teamMatchState = #{checkMatchState} ORDER BY teamIdx DESC
+	</select>
+ -->
+
 	<select id="overlay" resultType="int">
 		SELECT COUNT(teamName) FROM team WHERE teamName = #{param1}
 	</select>
@@ -38,7 +46,36 @@
 	</select>
 	
 	<insert id="photoWrite">
-		INSERT INTO photo(categoryId,photoName,photoId) VALUES('t01',#{photoName},#{teamIdx})
+		INSERT INTO photo(categoryId,photoName,photoId) VALUES('t01',#{param1},#{param2})
 	</insert>
+	
+	<select id="teamInfo"	resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			t.teamIdx,t.teamMatchState,t.locationIdx,t.teamName,t.teamIntroduce,t.teamManner,t.teamDisband,teamFavTime,
+			(SELECT COUNT(userId) FROM teamUser WHERE teamIdx = t.teamIdx) AS teamUser,
+			(select photoName from photo where photoId = t.teamIdx) as photoName 
+		FROM team t WHERE t.teamIdx = #{param1} ORDER BY teamIdx DESC
+	</select>
+	
+	<select id="tagReview" resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT tagContent FROM tag WHERE tagIdx in (SELECT tagIdx FROM tagReview WHERE teamId = #{param1})
+	</select>
+	
+	<select id="teamPageUpdate"	resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			t.teamIdx,t.teamMatchState,t.locationIdx,t.teamName,t.teamIntroduce,teamFavTime,teamFavNum,
+			(select photoName from photo where photoId = t.teamIdx) as photoName 
+		FROM team t WHERE t.teamIdx = #{param1}
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 </mapper>

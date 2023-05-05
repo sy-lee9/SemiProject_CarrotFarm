@@ -106,7 +106,7 @@
 		
 		<input type="hidden" name="courtIdx" value="${courtInfo.courtIdx}"/>
 		<input type="hidden" name="courtName" value="${courtInfo.courtName}"/>
-		<input type="hidden" name="userId" value="test2"/>
+		<input type="hidden" name="userId" value="test3"/>
 		리뷰작성<input type="text" name="courtOneLineReview" style="display: inline-block;"/>
 		<input type="file" name="photo" style="display: inline-block;"/>
 		<label>별점</label>

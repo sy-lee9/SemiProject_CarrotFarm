@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.co.cf.matching.dao.MatchingDAO;
 import kr.co.cf.matching.dto.MatchingDTO;
 import kr.co.cf.matching.service.MatchingService;
 
@@ -41,6 +42,14 @@ public class MatchingController {
 		userDto = matchingService.userData((String)session.getAttribute("loginId"));
 		return "/matching/matchingList";
 	}
+	
+	@RequestMapping(value ="/matching/list.ajax")
+	@ResponseBody
+	public HashMap<String, Object> list(@RequestParam HashMap<String, Object> params) {
+		logger.info("params : " + params);
+		return matchingService.list(params);
+	}
+	
 
 	@RequestMapping(value = "/matching/detail.go")
 	public String matchingDetail(Model model, HttpSession session, @RequestParam String matchingIdx) {
@@ -211,11 +220,26 @@ public class MatchingController {
 		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx ;
 	}
 	
-	@RequestMapping(value ="/matching/list.ajax")
-	@ResponseBody
-	public HashMap<String, Object> list(@RequestParam HashMap<String, Object> params) {
-		logger.info("params : " + params);
-		return matchingService.list(params);
+	@RequestMapping(value="/matching/applyGame")
+	public String applyGame(@RequestParam String matchingIdx, HttpSession session) {
+		
+		String userId = (String)session.getAttribute("loginId");
+		
+		matchingService.applyGame(matchingIdx,userId);
+		
+		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx;
+	}
+	
+	
+	//matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}
+	
+	@RequestMapping(value="/matching/matchigStateUpdate")
+	public String matchigStateUpdate(@RequestParam String matchingIdx, @RequestParam String matchigState) {
+		
+		
+		matchingService.matchigStateUpdate(matchingIdx,matchigState);
+		
+		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx;
 	}
 	
 	

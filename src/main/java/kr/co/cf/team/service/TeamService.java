@@ -56,20 +56,16 @@ public class TeamService {
 			teamIdx = TeamDTO.getTeamIdx();
 			logger.info("teamIdx :"+teamIdx);
 		}
-
-		String page = "redirect:/team/detail.do?teamIdx="+teamIdx;
 		
 		if(!teamProfilePhoto.getOriginalFilename().equals("")) {
 			logger.info("파일 업로드 작업");
-			if(photoSave(teamProfilePhoto,teamIdx) == 1) {
-				photoSave = 1;
-			}
+			photoSave(teamProfilePhoto,teamIdx);
+			logger.info("파일 업로드 성공");
 		}
-		return page;
+		return "redirect:/team/teamPage.go?teamIdx="+teamIdx;
 	}
 
-	private int photoSave(MultipartFile teamProfilePhoto,int teamIdx) {
-		int photoWrite = 0;
+	private void photoSave(MultipartFile teamProfilePhoto,int teamIdx) {
 		
 		// 1. 파일을 C:/carrot_farm/t01/ 에 저장
 				//1-1. 원본 이름 추출
@@ -85,13 +81,12 @@ public class TeamService {
 					logger.info(photoName+" save OK");
 					// 2. 저장 정보를 DB 에 저장
 					//2-1. teamProfilePhoto, photoName insert
-					photoWrite = TeamDAO.photoWrite(photoName,teamIdx);
-					logger.info("프로필 사진 업로드 여부: "+photoWrite);
+					TeamDAO.photoWrite(photoName,teamIdx);
+					logger.info("photoName 저장완료");
 								
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-		return photoWrite;
 	}
 
 	//경기방식 데이터를 int로 바꾸는 메서드
@@ -117,29 +112,50 @@ public class TeamService {
 		return locationIdx;
 	}
 
-	public ArrayList<TeamDTO> list() {
+	public HashMap<String, Object> list(int page, int cnt) {
+		logger.info(page+" 페이지 보여줘");
+		logger.info("한 페이지에 "+cnt+" 개씩 보여줄거야");
+		HashMap<String, Object> map = new HashMap<String, Object>();		
+
+		//총 페이지 수 
+		int offset = (page-1)*cnt;
 		
-		ArrayList<TeamDTO> list = TeamDAO.list();
-		logger.info("service list size "+list.size());
+		// 만들 수 있는 총 페이지 수 
+		// 전체 게시물 / 페이지당 보여줄 수
+		int total = TeamDAO.totalCount();
+		int range = total%cnt == 0 ? total/cnt : (total/cnt)+1;
+		logger.info("전체 게시물 수 : "+total);
+		logger.info("총 페이지 수 : "+range);
 		
-		list.iterator();
+		page = page > range ? range : page;
 		
-/*		list.addAll(TeamDAO.teamProfilePhotoFind());
-		logger.info("proPhoto add list size "+list.size());
-*/		
-		int teamUser = TeamDAO.userCount();
-		logger.info("userCount : "+teamUser);
-		
-		TeamDTO TeamDTO = new TeamDTO();
-		TeamDTO.setTeamUser(teamUser);
-		
-		list.add(TeamDTO);
-		logger.info("teamUser add list size :"+list.size());
-		
-		return list;
+		map.put("currPage", page);
+		map.put("pages", range);
+				
+		ArrayList<TeamDTO> list = TeamDAO.list(cnt, offset);
+		map.put("list", list);
+		return map;
 	}
-	
-	
+/*
+	public ArrayList<TeamDTO> checkMatchState(String checkMatchState) {
+		HashMap<String, Object> map = new HashMap<String, Object>();		
+		return TeamDAO.checkMatchState(checkMatchState);
+	}
+*/
+
+	public TeamDTO teamInfo(int teamIdx) {
+		return TeamDAO.teamInfo(teamIdx);
+	}
+
+	public ArrayList<TeamDTO> tagReview(int teamIdx) {
+		return TeamDAO.tagReview(teamIdx);
+	}
+
+	public TeamDTO teamPageUpdate(String teamIdx) {		
+		return TeamDAO.teamPageUpdate(teamIdx);
+	}
+
+
 	
 	
 	

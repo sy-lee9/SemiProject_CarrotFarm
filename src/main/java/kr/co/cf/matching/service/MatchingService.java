@@ -182,6 +182,14 @@ public class MatchingService {
 	public MatchingDTO userData(String loginId) {
 		return matchingDAO.userData(loginId);
 	}
+
+	public void applyGame(String matchingIdx, String userId) {
+		matchingDAO.applyGame(matchingIdx,userId);
+	}
+
+	public void matchigStateUpdate(String matchingIdx, String matchigState) {
+		matchingDAO.matchigStateUpdate(matchingIdx,matchigState);
+	}
 	
 	
 	
