@@ -32,7 +32,7 @@
 	<select id="pagePerNum">
 		<option value="10">10</option>
 	</select>
-	<button id="registerBtn" onclick="location.href='noticeboardWrite.go'">등록</button>
+	<button id="registerBtn" onclick="location.href='inquiryboardWrite.go'">등록</button>
 	<table>
 		<thead>
 			<tr>
@@ -60,7 +60,7 @@
 <script>
 $.ajax({
 	type:'post',
-	url:'userRight.ajax',
+	url:'iuserRight.ajax',
 	data:{},
 	dataType:'json',
 	success:function(data){
@@ -87,7 +87,7 @@ $('#pagePerNum').change(function(){
 function listCall(page){
 	$.ajax({
 		type:'post',
-		url:'nlist.ajax',
+		url:'ilist.ajax',
 		data:{
 			'page':page,
 			'cnt':$('#pagePerNum').val()	
@@ -95,8 +95,8 @@ function listCall(page){
 		dataType:'json',
 		success:function(data){
 			console.log(data);
-			console.log(data.noticeboardList);
-			listPrint(data.noticeboardList);
+			console.log(data.inquiryboardList);
+			listPrint(data.inquiryboardList);
 			
 			$('#pagination').twbsPagination({
 				startPage:data.currPage, 
@@ -117,13 +117,13 @@ function listCall(page){
 	});
 }
 
-function listPrint(nalist){
+function listPrint(ialist){
 	var content = '';
 
-	nalist.forEach(function(item,idx){
+	ialist.forEach(function(item,idx){
 		content +='<tr>';
 		content +='<td>'+item.boardIdx+'</td>';
-		content +='<td><a href="noticeboardDetail.do?bidx='+item.boardIdx+'">'+item.subject+'</a></td>';
+		content +='<td><a href="inquiryboardDetail.do?bidx='+item.boardIdx+'">'+item.subject+'</a></td>';
 		content +='<td>'+item.userId+'</td>';
 		
 
