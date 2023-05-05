@@ -14,6 +14,28 @@ table, th, td{
 		padding : 5px 10px;
 	}
 	
+#playerListPopup, #gameApplyListPopup {
+        display: none;
+        position: fixed;
+        top: 10%;
+        left: 40%;
+        width: 200px;
+        height: 200px;
+        background-color: white;
+        border: 1px solid black;
+        z-index: 9999;
+        
+      }
+
+	h3 {
+	text-align:center;
+	}
+	
+	#closePlayerListBtn, #closeGameApplyListBtn{
+		margin:auto;
+        display:block;
+	}
+	
 </style>
 </head>
 <body>
@@ -33,34 +55,49 @@ table, th, td{
 		
 	    <tbody>
 	     	<tr>
-	     		<td colspan="3">
+	     		<th colspan="2">
 	     			<div id="map" style="width:200px;height:200px;"></div>
-	     		</td>
-	     		<td colspan="4">
+	     		</th>
+	     		<td colspan="5">
 	     			</br>🏀 경기 일시 : ${dto.gameDate} 
 	     			</br>🏀 경기 장소 : ${dto.courtName}
 	     			</br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 주소: ${dto.courtAddress}
 	     			</br>🏀 모집 인원 :	 &#128100 ${dto.matchingNumforSure}/${dto.matchingNum} 
-					<button> 참가자 목록</button>	
-
-	     		
-						     			
-	     			
-	     			</br>🏀 경기 방식 : ${dto.gamePlay} : ${dto.gamePlay}
+	     			<button id="playerList">참가자 목록</button>
+				    </br>🏀 경기 방식 : ${dto.gamePlay} : ${dto.gamePlay}
 	     			</br>🏀 ${dto.content}
 	     		</td>
 	     	</tr>
-	     	
+   		
+	     	<div id="playerListPopup">
+				<h3>참가자 목록</h3>
+				<hr>
+				<ul>
+					<c:forEach items="${playerList}" var="playerList">
+						<li> ${playerList.userId} 
+						<c:if test="${dto.writerId eq loginId }">
+							<c:if test="${dto.writerId ne playerList.userId }">
+								<button onclick="location.href='playerDelete?userId=${playerList.userId}&matchingIdx=${dto.matchingIdx}'">삭제</button>
+							</c:if>
+						</c:if>
+						</br>
+						</li>
+					</c:forEach>
+				</ul>
+				<button id="closePlayerListBtn">닫기</button>
+			</div>
+			
+			
+				    
 	     	<tr>
-	     		<th colspan="3">
-	     			<button>신청자 목록</button>	
-	     		</th>
-	     		
-	     		
 	     		<!--matchigState가 matching 상태일 시  -->
 	     		<c:if test="${dto.matchigState eq 'matching'}">
+	     			<th colspan="2">
+	     				<button id="gameApplyList">신청자 목록</button>	
+	     			</th>
+	     		
 		     		<c:if test="${dto.writerId eq loginId }">
-			     		<th>
+			     		<th colspan="2">
 		     				<button onclick="location.href='matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}'">모집종료</button>
 		     			</th>
 		     		</c:if>
@@ -72,11 +109,31 @@ table, th, td{
 		     		</c:if>
 	     		</c:if>
 	     		
+	     		<div id="gameApplyListPopup">
+				<h3>신청자 목록</h3>
+				<hr>
+				<ul>
+					<c:forEach items="${gameApplyList}" var="gameApplyList">
+						<li> ${gameApplyList.userId} 
+						<c:if test="${dto.writerId eq loginId }">
+							<button onclick="location.href='gameApplyAccept?userId=${gameApplyList.userId}&matchingIdx=${dto.matchingIdx}'">수락</button> / 
+							<button onclick="location.href='gameApplyReject?userId=${gameApplyList.userId}&matchingIdx=${dto.matchingIdx}'">거절</button>
+						</c:if>
+						</br>
+						</li>
+					</c:forEach>
+				</ul>
+				<button id="closeGameApplyListBtn">닫기</button>
+			</div>
+			
 	     		
 	     		<!--matchigState가 finish 상태일 시  -->
 	     		<c:if test="${dto.matchigState eq 'finish'}">
+	     			<th colspan="2">
+	     			
+	     			</th>
 	     			<c:if test="${dto.writerId eq loginId }">
-			     		<th>
+			     		<th colspan="2">
 		     				<button>경기종료</button>
 		     			</th>
 		     		</c:if>
@@ -88,19 +145,20 @@ table, th, td{
 		     		</c:if>
 	     		</c:if>
 	     		
-	     		
+	     		<th colspan="4">
 	     		<c:if test="${dto.writerId eq loginId }">
-		     		<th colspan="3">
+		     		
 		     			<button onclick="location.href='update.go?matchingIdx=${dto.matchingIdx}'">수정하기</button>
 		     			<button onclick="location.href='delete.do?matchingIdx=${dto.matchingIdx}'">삭제하기</button>
-		     		</th>
+						<button onclick="location.href='./list.do'">목록으로</button>
+		     		
 	     		</c:if>
 	     		
 	     		
 	     		<c:if test="${dto.writerId ne loginId }">
-		     		
+		     		<button onclick="location.href='./list.do'">목록으로</button>
 	     		</c:if>
-	     		
+	     		</th>
 	     	</tr>
 	     	<tr>
 	     		<th colspan="7">
@@ -176,10 +234,34 @@ table, th, td{
     });
 
 	
+    var playerListBtn = document.getElementById('playerList');
+    var playerListPopup = document.getElementById('playerListPopup');
+    var closePlayerListBtn = document.getElementById('closePlayerListBtn');
+
+    playerListBtn.addEventListener('click', function() {
+      playerListPopup.style.display = 'block';
+    });
+
+    closePlayerListBtn.addEventListener('click', function() {
+      playerListPopup.style.display = 'none';
+    });
 	
-	
-	
-	
+    
+    var gameApplyListBtn = document.getElementById('gameApplyList');
+    var gameApplyListPopup = document.getElementById('gameApplyListPopup');
+    var closeGameApplyListBtn = document.getElementById('closeGameApplyListBtn');
+
+    gameApplyListBtn.addEventListener('click', function() {
+    	gameApplyListPopup.style.display = 'block';
+    });
+
+    closeGameApplyListBtn.addEventListener('click', function() {
+    	gameApplyListPopup.style.display = 'none';
+    });
+    
+    
+    
+
 	
 	
 	

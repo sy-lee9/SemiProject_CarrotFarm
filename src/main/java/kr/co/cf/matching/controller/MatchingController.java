@@ -66,6 +66,18 @@ public class MatchingController {
 		commentList = matchingService.commentList(matchingIdx);
 		model.addAttribute("commentList", commentList);
 		logger.info("모집글 commentList : " + commentList);
+		
+		// 해당 경기 참가자 정보
+		ArrayList<MatchingDTO> playerList = new ArrayList<MatchingDTO>();
+		playerList = matchingService.playerList(matchingIdx);
+		model.addAttribute("playerList", playerList);
+		
+		
+		// 해당 경기 신청자 목록
+		ArrayList<MatchingDTO> gameApplyList = new ArrayList<MatchingDTO>();
+		gameApplyList = matchingService.gameApplyList(matchingIdx);
+		model.addAttribute("gameApplyList", gameApplyList);
+		
 		return "/matching/matchingDetail";
 	}
 
@@ -242,5 +254,30 @@ public class MatchingController {
 		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx;
 	}
 	
+	@RequestMapping(value="/matching/playerDelete")
+	public String playerDelete(@RequestParam String matchingIdx, @RequestParam String userId) {
+		
+		matchingService.playerDelete(matchingIdx,userId);
+		
+		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx;
+	}
+	
+	@RequestMapping(value="/matching/gameApplyAccept")
+	public String gameApplyAccept(@RequestParam String matchingIdx, @RequestParam String userId) {
+		
+		matchingService.gameApplyAccept(matchingIdx,userId);
+		
+		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx;
+	}
+	
+	@RequestMapping(value="/matching/gameApplyReject")
+	public String gameApplyReject(@RequestParam String matchingIdx, @RequestParam String userId) {
+		
+		matchingService.gameApplyReject(matchingIdx,userId);
+		
+		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx;
+	}
+
+
 	
 }

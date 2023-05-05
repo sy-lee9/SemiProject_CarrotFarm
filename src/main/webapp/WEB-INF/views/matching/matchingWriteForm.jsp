@@ -103,6 +103,14 @@
     		$('#locationIdx').replaceWith(content);
 	    	content='';
 	    	
+	    	content += '<select name="courtIdx" id="courtIdx">';
+	        content += '<option value="none">경기장</option>';
+	        content += '<c:forEach items="${courtList}" var="court">';
+	        content += '<option value="${court.courtIdx}">${court.courtName}</option>';
+	        content += '</c:forEach>';
+	        content += '</select>';
+	        $('#courtIdx').replaceWith(content);
+	    	content='';
 	    	
 	    }
 	    

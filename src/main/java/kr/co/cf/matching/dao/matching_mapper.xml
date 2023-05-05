@@ -233,8 +233,8 @@
 		ORDER By matchingIdx DESC 
 		LIMIT 10 OFFSET #{offset}
 	</select>
-	
-	
+
+
 	<insert id="applyGame">
 		INSERT INTO game(categoryId,matchingIdx,userId,gameAppState) values('m01',#{param1},#{param2},'신청')
 	</insert>
@@ -242,6 +242,28 @@
 	<update id="matchigStateUpdate">
 		UPDATE matching SET matchigState = 'finish' WHERE matchingIdx=#{param1}
 	</update>
+	
+		<select id="playerList" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT userId FROM game WHERE matchingIdx=#{param1} AND gameAppState='확정' ORDER BY gameAppDate
+	</select>
+	
+	
+	<delete id="playerDelete">
+		DELETE FROM game WHERE matchingIdx=#{param1} AND userId=#{param2}
+	</delete>
+	
+	<select id="gameApplyList" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT userId FROM game WHERE matchingIdx=#{param1} AND gameAppState='신청' ORDER BY gameAppDate
+	</select>
+	
+	<update id="gameApplyAccept">
+		UPDATE game SET gameAppState='확정' WHERE matchingIdx=#{param1} AND userId=#{param2}
+	</update>
+	
+	<delete id="gameApplyReject">
+		DELETE FROM game WHERE matchingIdx=#{param1} AND userId=#{param2}
+	</delete>
+	
 </mapper>
 
 

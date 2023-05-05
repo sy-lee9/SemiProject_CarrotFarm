@@ -183,6 +183,8 @@ public class MatchingService {
 		return matchingDAO.userData(loginId);
 	}
 
+
+	
 	public void applyGame(String matchingIdx, String userId) {
 		matchingDAO.applyGame(matchingIdx,userId);
 	}
@@ -190,9 +192,26 @@ public class MatchingService {
 	public void matchigStateUpdate(String matchingIdx, String matchigState) {
 		matchingDAO.matchigStateUpdate(matchingIdx,matchigState);
 	}
+
+		public ArrayList<MatchingDTO> playerList(String matchingIdx) {
+		return matchingDAO.playerList(matchingIdx);
+	}
+		
+	public void playerDelete(String matchingIdx, String userId) {
+		matchingDAO.playerDelete(matchingIdx,userId);		
+	}
+
+	public ArrayList<MatchingDTO> gameApplyList(String matchingIdx) {
+		return matchingDAO.gameApplyList(matchingIdx);
+	}
+
+	public void gameApplyAccept(String matchingIdx, String userId) {
+		matchingDAO.gameApplyAccept(matchingIdx,userId);	
+	}
 	
-	
-	
+	public void gameApplyReject(String matchingIdx, String userId) {
+		matchingDAO.gameApplyReject(matchingIdx,userId);	
+	}
 	
 
 	
