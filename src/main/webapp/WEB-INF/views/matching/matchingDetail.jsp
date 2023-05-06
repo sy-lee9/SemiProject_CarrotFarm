@@ -14,24 +14,27 @@ table, th, td{
 		padding : 5px 10px;
 	}
 	
-#playerListPopup, #gameApplyListPopup {
+#playerListPopup, #gameApplyListPopup,#gameInviteListPopup {
         display: none;
         position: fixed;
         top: 10%;
         left: 40%;
         width: 200px;
-        height: 200px;
+        height: 300px;
         background-color: white;
         border: 1px solid black;
         z-index: 9999;
         
       }
+      
+     #scroll{}
+     
 
 	h3 {
 	text-align:center;
 	}
 	
-	#closePlayerListBtn, #closeGameApplyListBtn{
+	#closePlayerListBtn, #closeGameApplyListBtn, #closeGameInviteListBtn{
 		margin:auto;
         display:block;
 	}
@@ -77,7 +80,7 @@ table, th, td{
 						<li> ${playerList.userId} 
 						<c:if test="${dto.writerId eq loginId }">
 							<c:if test="${dto.writerId ne playerList.userId }">
-								<button onclick="location.href='playerDelete?userId=${playerList.userId}&matchingIdx=${dto.matchingIdx}'">삭제</button>
+								<button onclick="location.href='playerDelete?userId=${playerList.userId}&matchingIdx=${dto.matchingIdx}'">취소</button>
 							</c:if>
 						</c:if>
 						</br>
@@ -93,7 +96,10 @@ table, th, td{
 	     		<!--matchigState가 matching 상태일 시  -->
 	     		<c:if test="${dto.matchigState eq 'matching'}">
 	     			<th colspan="2">
-	     				<button id="gameApplyList">신청자 목록</button>	
+	     				<button id="gameApplyList">신청자 목록</button>
+	     				<c:if test="${dto.writerId eq loginId }">
+	     				<button id="gameInviteList">초대하기</button>
+	     				</c:if>	
 	     			</th>
 	     		
 		     		<c:if test="${dto.writerId eq loginId }">
@@ -110,21 +116,47 @@ table, th, td{
 	     		</c:if>
 	     		
 	     		<div id="gameApplyListPopup">
-				<h3>신청자 목록</h3>
-				<hr>
-				<ul>
-					<c:forEach items="${gameApplyList}" var="gameApplyList">
-						<li> ${gameApplyList.userId} 
-						<c:if test="${dto.writerId eq loginId }">
-							<button onclick="location.href='gameApplyAccept?userId=${gameApplyList.userId}&matchingIdx=${dto.matchingIdx}'">수락</button> / 
-							<button onclick="location.href='gameApplyReject?userId=${gameApplyList.userId}&matchingIdx=${dto.matchingIdx}'">거절</button>
-						</c:if>
-						</br>
-						</li>
-					</c:forEach>
-				</ul>
-				<button id="closeGameApplyListBtn">닫기</button>
-			</div>
+					<h3>신청자 목록</h3>
+					<hr>
+					<ul>
+						<c:forEach items="${gameApplyList}" var="gameApplyList">
+							<li> ${gameApplyList.userId} 
+							<c:if test="${dto.writerId eq loginId }">
+								<button onclick="location.href='gameApplyAccept?userId=${gameApplyList.userId}&matchingIdx=${dto.matchingIdx}'">수락</button> / 
+								<button onclick="location.href='gameApplyReject?userId=${gameApplyList.userId}&matchingIdx=${dto.matchingIdx}'">거절</button>
+							</c:if>
+							</br>
+							</li>
+						</c:forEach>
+					</ul>
+					<button id="closeGameApplyListBtn">닫기</button>
+				</div>
+				
+				<div id="gameInviteListPopup">
+					<h3>초대하기</h3>
+					<hr>
+					<div id="scroll" style="height: 200px; overflow: auto;">
+						<ul>
+							<c:if test="${gameInviteList !=null}">
+								<p>초대한 회원</p>
+								<c:forEach items="${gameInviteList}" var="gameInviteList">
+									<li> 
+									${gameInviteList.userId}
+									<button id="inviteBtn_${gameInviteList.userId}" onclick="cancelInvite('${gameInviteList.userId}', '${dto.matchingIdx}')">취소</button>
+									</li>
+								</c:forEach>
+							</c:if>
+							<hr>
+							<c:forEach items="${userList}" var="userList">
+								<li> 
+									${userList.userId}
+									<button id="inviteBtn_${userList.userId}" onclick="inviteUser('${userList.userId}', '${dto.matchingIdx}')">초대</button>
+								</li>
+							</c:forEach>
+						</ul>
+					</div>
+					<button id="closeGameInviteListBtn">닫기</button>
+				</div>
 			
 	     		
 	     		<!--matchigState가 finish 상태일 시  -->
@@ -259,7 +291,59 @@ table, th, td{
     	gameApplyListPopup.style.display = 'none';
     });
     
+    var gameInviteListBtn = document.getElementById('gameInviteList');
+    var gameInviteListPopup = document.getElementById('gameInviteListPopup');
+    var closeGameInviteListBtn = document.getElementById('closeGameInviteListBtn');
+
+    gameInviteListBtn.addEventListener('click', function() {
+    	gameInviteListPopup.style.display = 'block';
+    });
+
+    closeGameInviteListBtn.addEventListener('click', function() {
+    	gameInviteListPopup.style.display = 'none';
+    });
     
+function inviteUser(userId, matchingIdx) {
+        
+        $.ajax({
+            url: 'gameInvite.ajax',
+            type: 'POST',
+            data: {
+                userId: userId,
+                matchingIdx: matchingIdx
+            },
+            success: function(data) {
+                // 버튼 변경
+                console.log(data);
+                var inviteBtn = document.getElementById('inviteBtn_' + userId);
+                inviteBtn.textContent = '취소';
+                inviteBtn.onclick = function() {
+                    cancelInvite(userId, '${dto.matchingIdx}');
+                };
+            }
+        });
+    }
+
+    function cancelInvite(userId,matchingIdx) {
+        
+        $.ajax({
+            url: 'cancelGameInvite.ajax',
+            type: 'POST',
+            data: {
+                userId: userId,
+                matchingIdx: matchingIdx
+            },
+            success: function(data) {
+                // 버튼 변경
+                console.log(data);
+                var inviteBtn = document.getElementById('inviteBtn_' + userId);
+                inviteBtn.textContent = '초대';
+                inviteBtn.onclick = function() {
+                    inviteUser(userId, '${dto.matchingIdx}');
+                };
+            }
+        });
+    }
     
 
 	

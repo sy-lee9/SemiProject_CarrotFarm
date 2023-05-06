@@ -212,6 +212,23 @@ public class MatchingService {
 	public void gameApplyReject(String matchingIdx, String userId) {
 		matchingDAO.gameApplyReject(matchingIdx,userId);	
 	}
+
+	public ArrayList<MatchingDTO> userList(String matchingIdx) {
+		return matchingDAO.userList(matchingIdx);
+	}
+
+	public void gameInvite(HashMap<String, Object> params) {
+		matchingDAO.gameInvite(params);
+	}
+
+	public void cancelGameInvite(HashMap<String, Object> params) {
+		matchingDAO.cancelGameInvite(params);
+		
+	}
+
+	public ArrayList<MatchingDTO> gameInviteList(String matchingIdx) {
+		return matchingDAO.gameInviteList(matchingIdx);
+	}
 	
 
 	

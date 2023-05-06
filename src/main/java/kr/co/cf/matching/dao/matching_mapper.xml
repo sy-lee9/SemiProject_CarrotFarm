@@ -264,6 +264,23 @@
 		DELETE FROM game WHERE matchingIdx=#{param1} AND userId=#{param2}
 	</delete>
 	
+	<select id="userList" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT userId
+		FROM user
+		WHERE userId NOT IN ( SELECT userId FROM game WHERE matchingIdx = #{param1} AND gameAppState IN ('신청', '확정')	);
+	</select>
+	
+	<insert id="gameInvite" parameterType="hashmap">
+		INSERT INTO game(categoryId,matchingIdx,userId,gameAppState) VALUES('m01',#{matchingIdx},#{userId},'초대')
+	</insert>
+	
+	<insert id="cancelGameInvite" parameterType="hashmap">
+		DELETE FROM game WHERE matchingIdx=#{matchingIdx} AND userId=#{userId} AND gameAppState='초대'
+	</insert>
+	
+	<select id="gameInviteList" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT userId FROM game WHERE matchingIdx=#{param1} AND gameAppState='초대'
+	</select>
 </mapper>
 
 

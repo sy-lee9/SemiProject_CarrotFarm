@@ -78,6 +78,16 @@ public class MatchingController {
 		gameApplyList = matchingService.gameApplyList(matchingIdx);
 		model.addAttribute("gameApplyList", gameApplyList);
 		
+		// 전체 회원 목록 (신청자 목록, 경기 참가자 목록에 있는 사람 제외)
+		ArrayList<MatchingDTO> userList = new ArrayList<MatchingDTO>();
+		userList = matchingService.userList(matchingIdx);
+		model.addAttribute("userList", userList);
+		
+		// 해당 경기 초대 목록
+		ArrayList<MatchingDTO> gameInviteList = new ArrayList<MatchingDTO>();
+		gameInviteList = matchingService.gameInviteList(matchingIdx);
+		model.addAttribute("gameInviteList", gameInviteList);
+		
 		return "/matching/matchingDetail";
 	}
 
@@ -277,7 +287,27 @@ public class MatchingController {
 		
 		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx;
 	}
-
-
+	
+	
+	@RequestMapping(value ="/matching/gameInvite.ajax")
+	@ResponseBody
+	public HashMap<String, Object> gameInvite(@RequestParam HashMap<String, Object> params) {
+		logger.info("params : " + params);
+		matchingService.gameInvite(params);
+		HashMap<String, Object> data = new HashMap<String, Object>();
+		data.put("msg", "초대 성공");
+		return data;
+	}
+	
+	@RequestMapping(value ="/matching/cancelGameInvite.ajax")
+	@ResponseBody
+	public HashMap<String, Object> cancelGameInvite(@RequestParam HashMap<String, Object> params) {
+		logger.info("params : " + params);
+		matchingService.cancelGameInvite(params);
+		HashMap<String, Object> data = new HashMap<String, Object>();
+		data.put("msg", "초대 취소 성공");
+		return data;
+	}
+	
 	
 }

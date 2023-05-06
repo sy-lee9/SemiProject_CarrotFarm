@@ -94,7 +94,15 @@ public interface MatchingDAO {
 
 	void gameApplyAccept(String matchingIdx, String userId);
 			
-	void gameApplyReject(String matchingIdx, String userId);	
+	void gameApplyReject(String matchingIdx, String userId);
+
+	ArrayList<MatchingDTO> userList(String matchingIdx);
+
+	void gameInvite(HashMap<String, Object> params);
+
+	void cancelGameInvite(HashMap<String, Object> params);
+
+	ArrayList<MatchingDTO> gameInviteList(String matchingIdx);	
 
 
 }
