@@ -189,10 +189,14 @@ public class MatchingService {
 		matchingDAO.applyGame(matchingIdx,userId);
 	}
 
-	public void matchigStateUpdate(String matchingIdx, String matchigState) {
-		matchingDAO.matchigStateUpdate(matchingIdx,matchigState);
+	public void matchigStateToFinish(String matchingIdx, String matchigState) {
+		matchingDAO.matchigStateToFinish(matchingIdx,matchigState);
 	}
-
+	
+	public void matchigStateToReview(String matchingIdx, String matchigState) {
+			matchingDAO.matchigStateToReview(matchingIdx,matchigState);
+	}
+	
 		public ArrayList<MatchingDTO> playerList(String matchingIdx) {
 		return matchingDAO.playerList(matchingIdx);
 	}
@@ -229,6 +233,33 @@ public class MatchingService {
 	public ArrayList<MatchingDTO> gameInviteList(String matchingIdx) {
 		return matchingDAO.gameInviteList(matchingIdx);
 	}
+
+	public void mvp(HashMap<String, Object> params) {
+		matchingDAO.mvp(params);
+		
+	}
+
+	public void mannerUp(HashMap<String, Object> params) {
+		matchingDAO.mannerUp(params);	
+	}
+	
+	public void mannerDown(HashMap<String, Object> params) {
+		matchingDAO.mannerDown(params);	
+	}
+
+	public int review(String matchingIdx, String writerId) {
+		return matchingDAO.review(matchingIdx,writerId);
+	}
+
+	public float mannerPoint(String loginId) {
+		return matchingDAO.mannerPoint(loginId);
+	}
+
+	public int cntReview(String userId, String matchingIdx) {
+		return matchingDAO.cntReview(userId,matchingIdx);
+	}
+
+	
 	
 
 	

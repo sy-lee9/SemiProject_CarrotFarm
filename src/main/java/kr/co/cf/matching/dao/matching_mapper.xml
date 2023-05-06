@@ -239,12 +239,16 @@
 		INSERT INTO game(categoryId,matchingIdx,userId,gameAppState) values('m01',#{param1},#{param2},'신청')
 	</insert>
 	
-	<update id="matchigStateUpdate">
+	<update id="matchigStateToFinish">
 		UPDATE matching SET matchigState = 'finish' WHERE matchingIdx=#{param1}
 	</update>
 	
-		<select id="playerList" resultType="kr.co.cf.matching.dto.MatchingDTO">
-		SELECT userId FROM game WHERE matchingIdx=#{param1} AND gameAppState='확정' ORDER BY gameAppDate
+	<update id="matchigStateToReview">
+		UPDATE matching SET matchigState = 'review' WHERE matchingIdx=#{param1}
+	</update>
+	
+	<select id="playerList" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT userId,matchingIdx FROM game WHERE matchingIdx=#{param1} AND gameAppState='확정' ORDER BY gameAppDate
 	</select>
 	
 	
@@ -280,6 +284,30 @@
 	
 	<select id="gameInviteList" resultType="kr.co.cf.matching.dto.MatchingDTO">
 		SELECT userId FROM game WHERE matchingIdx=#{param1} AND gameAppState='초대'
+	</select>
+	
+	<insert id="mvp" parameterType="hashmap">
+		INSERT INTO mvp(matchingIdx,writerId,receiveId) Values(#{matchingIdx},#{writerId},#{receiveId})
+	</insert>
+	
+	<insert id="mannerUp" parameterType="hashmap">
+		INSERT INTO review(matchingIdx,writerId,receiveId,userMannerScore) Values(#{matchingIdx},#{writerId},#{receiveId},0.1)
+	</insert>
+	
+	<insert id="mannerDown" parameterType="hashmap">
+		INSERT INTO review(matchingIdx,writerId,receiveId,userMannerScore) Values(#{matchingIdx},#{writerId},#{receiveId},-0.1)
+	</insert>
+	
+	<select id="review" resultType="int">
+		SELECT COUNT(writerId) FROM mvp WHERE matchingIdx=${param1} AND writerId=#{param2}
+	</select>
+	
+	<select id="mannerPoint" resultType="float">
+		SELECT SUM(userMannerScore) FROM review WHERE receiveId=#{param1}
+	</select>
+	
+	<select id="cntReview" resultType="int">
+		SELECT COUNT(matchingIdx) FROM mvp WHERE receiveId=#{param1} AND matchingIdx =#{param2} 
 	</select>
 </mapper>
 

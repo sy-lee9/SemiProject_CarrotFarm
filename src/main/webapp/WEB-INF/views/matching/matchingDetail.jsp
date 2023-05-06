@@ -27,10 +27,9 @@ table, th, td{
         
       }
       
-     #scroll{}
-     
+   
 
-	h3 {
+	h2,h3 {
 	text-align:center;
 	}
 	
@@ -166,18 +165,23 @@ table, th, td{
 	     			</th>
 	     			<c:if test="${dto.writerId eq loginId }">
 			     		<th colspan="2">
-		     				<button>경기종료</button>
+			     			<button onclick="location.href='matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}'">경기종료</button>
 		     			</th>
 		     		</c:if>
 		     		
 		     		<c:if test="${dto.writerId ne loginId }">
-			     		<th>
-		     				<button>모집종료</button>
-		     			</th>
+			     		
 		     		</c:if>
 	     		</c:if>
 	     		
-	     		<th colspan="4">
+	     		<!--matchigState가 review 상태일 시  -->
+	     		<c:if test="${dto.matchigState eq 'review'}">
+	     			<th colspan="4">
+	     				
+	     			</th>
+	     		</c:if>
+	     		
+	     		<th colspan="3">
 	     		<c:if test="${dto.writerId eq loginId }">
 		     		
 		     			<button onclick="location.href='update.go?matchingIdx=${dto.matchingIdx}'">수정하기</button>
@@ -192,6 +196,81 @@ table, th, td{
 	     		</c:if>
 	     		</th>
 	     	</tr>
+	     	
+	     	
+	     	<!-- 리뷰 영역 -->
+	     	<c:if test="${dto.matchigState eq 'review'}">
+	     	<c:if test="${review == 'no'}">
+	     		
+	     		<form action="review?matchingIdx=${dto.matchingIdx}" method="post">
+	     		<tr>
+	     			<td colspan="7">
+	     				
+	     					<h2>REVIEW</h2>
+	     					
+	     			</td>
+	     		</tr>
+	     		<tr>
+	     			<td colspan="3">		
+	     				<c:forEach items="${playerList}" var="playerList" varStatus="status">
+	     				<c:if test="${status.index % 2 == 0}"> 
+	     					<input type="radio" name="receiveId" value="${playerList.userId}"> ${playerList.userId} 
+	     					<c:if test="${playerList.userId ne loginId}">
+		     					<input type="radio" name="manner_${playerList.userId} " value="${playerList.userId}_up"> 👍
+		     					<input type="radio" name="manner_${playerList.userId} " value="${playerList.userId}_down"> 👎
+	     					</c:if></br>
+	     				</c:if>	
+	     				</c:forEach>		
+	     			</td>
+	     			
+	     			<td colspan="4">		
+	     				<c:forEach items="${playerList}" var="playerList" varStatus="status">
+	     				<c:if test="${status.index % 2 != 0}"> 
+	     					<input type="radio" name="receiveId" value="${playerList.userId}"> ${playerList.userId} 
+	     					<c:if test="${playerList.userId ne loginId}">
+		     					<input type="radio" name="manner_${playerList.userId} " value="${playerList.userId}_up"> 👍
+		     					<input type="radio" name="manner_${playerList.userId} " value="${playerList.userId}_down"> 👎
+	     					</c:if></br>
+	     				</c:if>	
+	     				</c:forEach>		
+	     			</td>
+	     		</tr>
+	     		<tr>
+	     			<th colspan="7"><button id="review_btn">제출하기</button></th>
+	     		</tr>	
+	     		</form>
+	     	</c:if>
+	     	<c:if test="${review == 'yes'}">
+	     		<tr>
+	     			<td colspan="7">
+	     				
+	     					<h2>REVIEW</h2>
+	     					
+	     			</td>
+	     		</tr>
+	     		<tr>
+	     			<th colspan="3">
+	     				
+	     					<h2>MVP</h2>
+	     					${mvp}
+	     			</th>
+	     			<th colspan="4">
+	     				
+	     					<h2>MANNER</h2>
+	     					${mannerPoint}
+	     			</th>
+	     		</tr>
+	     	</c:if>
+	     	</c:if>
+	     	</table>
+	     	
+	     	
+	     	</br>
+	     	
+	     	
+	     	
+	     	<!-- 댓글 -->
+	     	<table>
 	     	<tr>
 	     		<th colspan="7">
 		     		<table>
@@ -264,7 +343,18 @@ table, th, td{
     kakao.maps.event.addListener(marker, 'click', function() {
         infowindow.open(map, marker);
     });
+	
+    
+    
+    
+    
 
+
+    
+    
+    
+    
+    
 	
     var playerListBtn = document.getElementById('playerList');
     var playerListPopup = document.getElementById('playerListPopup');

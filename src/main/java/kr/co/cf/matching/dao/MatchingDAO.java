@@ -84,8 +84,10 @@ public interface MatchingDAO {
 	void applyGame(String matchingIdx, String userId);
 			
 	// 모집 중 -> 모집 완료 상태 변경
-	void matchigStateUpdate(String matchingIdx, String matchigState);
-
+	void matchigStateToFinish(String matchingIdx, String matchigState);
+	
+	void matchigStateToReview(String matchingIdx, String matchigState);
+	
 	ArrayList<MatchingDTO> playerList(String matchingIdx);
 
 	void playerDelete(String matchingIdx, String userId);
@@ -102,7 +104,19 @@ public interface MatchingDAO {
 
 	void cancelGameInvite(HashMap<String, Object> params);
 
-	ArrayList<MatchingDTO> gameInviteList(String matchingIdx);	
+	ArrayList<MatchingDTO> gameInviteList(String matchingIdx);
+
+	void mvp(HashMap<String, Object> params);
+
+	void mannerUp(HashMap<String, Object> params);
+
+	void mannerDown(HashMap<String, Object> params);
+
+	int review(String matchingIdx, String writerId);
+
+	float mannerPoint(String loginId);
+
+	int cntReview(String userId, String matchingIdx);	
 
 
 }

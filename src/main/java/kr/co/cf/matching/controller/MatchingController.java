@@ -88,6 +88,36 @@ public class MatchingController {
 		gameInviteList = matchingService.gameInviteList(matchingIdx);
 		model.addAttribute("gameInviteList", gameInviteList);
 		
+		// 리뷰 작성 여부 
+		String review = "no";
+		int num = matchingService.review(matchingIdx,(String)session.getAttribute("loginId"));
+		if (num != 0) {
+			review = "yes";
+		}
+		model.addAttribute("review", review);
+		
+		// 리뷰 작성 후 경기 mvp
+		model.addAttribute("mvp", "mvp는 50% 이상의 투표를 받았을 때만 공개 됩니다.");
+		int mvpChk = playerList.size()/2;
+		logger.info("mvpChk : "+mvpChk);
+		int cntReview = 0;
+		
+		//MVP 선정
+		for (MatchingDTO dto : playerList) {
+			logger.info("userId : "+dto.getUserId()+"matchingIdx : "+dto.getMatchingIdx());
+			cntReview = matchingService.cntReview(dto.getUserId(),String.valueOf(dto.getMatchingIdx()));
+			logger.info(dto.getUserId()+"의 투표수 : "+cntReview);
+			if(cntReview>mvpChk) {
+				model.addAttribute("mvp", dto.getUserId());
+			}
+		}
+		
+				
+		// 리뷰 작성 후 개인 매너 점수
+		float mannerPoint = matchingService.mannerPoint((String)session.getAttribute("loginId"));
+		mannerPoint += 50;
+		model.addAttribute("mannerPoint", mannerPoint);
+		
 		return "/matching/matchingDetail";
 	}
 
@@ -258,8 +288,13 @@ public class MatchingController {
 	@RequestMapping(value="/matching/matchigStateUpdate")
 	public String matchigStateUpdate(@RequestParam String matchingIdx, @RequestParam String matchigState) {
 		
+		if(matchigState.equals("matching")) {
+			matchingService.matchigStateToFinish(matchingIdx,matchigState);
+		}
+		if(matchigState.equals("finish")) {
+			matchingService.matchigStateToReview(matchingIdx,matchigState);
+		}
 		
-		matchingService.matchigStateUpdate(matchingIdx,matchigState);
 		
 		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx;
 	}
@@ -307,6 +342,34 @@ public class MatchingController {
 		HashMap<String, Object> data = new HashMap<String, Object>();
 		data.put("msg", "초대 취소 성공");
 		return data;
+	}
+	
+	@RequestMapping(value ="/matching/review")
+	public String review(@RequestParam HashMap<String, Object> params, HttpSession session) {
+		
+		params.put("writerId", session.getAttribute("loginId"));
+		logger.info("params : " + params);
+		
+		matchingService.mvp(params);
+		
+		for (String key : params.keySet()) {
+		    if (key.startsWith("manner")) {
+			if(params.get(key).toString().endsWith("_up")){
+				String receiveId = params.get(key).toString().split("_")[0];
+				params.put("receiveId", receiveId);
+				logger.info("params : " + params);
+				matchingService.mannerUp(params);
+			}
+		      if(params.get(key).toString().endsWith("_down")){
+		    	  String receiveId = params.get(key).toString().split("_")[0];
+		    	  params.put("receiveId", receiveId);
+		    	  logger.info("params : " + params);
+		    	  matchingService.mannerDown(params);
+			}
+		    }
+		}
+			
+		return "redirect:/matching/detail.go?matchingIdx=" + params.get("matchingIdx");
 	}
 	
 	
