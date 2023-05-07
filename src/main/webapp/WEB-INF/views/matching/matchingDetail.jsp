@@ -14,6 +14,7 @@ table, th, td{
 		padding : 5px 10px;
 	}
 	
+
 #playerListPopup, #gameApplyListPopup,#gameInviteListPopup {
         display: none;
         position: fixed;
@@ -42,6 +43,7 @@ table, th, td{
 </head>
 <body>
 	<table>
+		<!-- 기본 글 정보 : 로그인 하지 않아도 볼 수 있어야 함 -->
 		<thead>
 			<tr>
 				<th>${dto.gamePlay}:${dto.gamePlay}</th>
@@ -65,11 +67,17 @@ table, th, td{
 	     			</br>🏀 경기 장소 : ${dto.courtName}
 	     			</br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 주소: ${dto.courtAddress}
 	     			</br>🏀 모집 인원 :	 &#128100 ${dto.matchingNumforSure}/${dto.matchingNum} 
-	     			<button id="playerList">참가자 목록</button>
+	     			<c:if test="${loginId != 'guest' }"><button id="playerList">참가자 목록</button></c:if>
+	     			
 				    </br>🏀 경기 방식 : ${dto.gamePlay} : ${dto.gamePlay}
 	     			</br>🏀 ${dto.content}
 	     		</td>
 	     	</tr>
+	     	<c:if test="${loginId == 'guest' }">
+	     	<tr>
+	     		<th colspan="7"> 경기 참여는 로그인 후 가능 합니다.</th>
+	     	</tr>
+	     	</c:if>
    		
 	     	<div id="playerListPopup">
 				<h3>참가자 목록</h3>
@@ -108,7 +116,7 @@ table, th, td{
 		     		</c:if>
 		     		
 		     		<c:if test="${dto.writerId ne loginId }">
-			     		<th>
+			     		<th colspan="2">
 		     				<button onclick="location.href='applyGame?matchingIdx=${dto.matchingIdx}'">신청하기</button>
 		     			</th>
 		     		</c:if>
@@ -262,7 +270,7 @@ table, th, td{
 	     		</tr>
 	     	</c:if>
 	     	</c:if>
-	     	</table>
+	     	
 	     	
 	     	
 	     	</br>
@@ -270,46 +278,47 @@ table, th, td{
 	     	
 	     	
 	     	<!-- 댓글 -->
-	     	<table>
-	     	<tr>
-	     		<th colspan="7">
-		     		<table>
-			     		<c:forEach items="${commentList}" var="commentList">
-			     			<tr>
-			     				<th>${commentList.userId} </th>
-			     				<td >${commentList.commentContent}</td>
-			     				<td>${commentList.commentWriteTime}</td>
-			     				<td>
-			     					<c:if test="${commentList.userId eq loginId}">
-			     						<a  href="commentUpdate.go?commentIdx=${commentList.commentIdx}&matchingIdx=${dto.matchingIdx}" >수정</a> 
-			     						/ 
-			     						<a href="commentDelete.do?commentIdx=${commentList.commentIdx}&matchingIdx=${dto.matchingIdx}">삭제</a>
-			     					</c:if>
-			     					<c:if test="${commentList.userId ne loginId}">
-			     						<a href="#">신고</a>
-			     					</c:if>
-			     					
-			     				</td>
-			     			</tr>
-			     		</c:forEach>
-		     		</table>
-		     		
-		     	</th>
-		     	
-		     </tr>
+	     	
+			<c:forEach items="${commentList}" var="commentList">
+				<tr>
+			    	<th>${commentList.userId} </th>
+			     	<td colspan="3">${commentList.commentContent}</td>
+			     	<td>${commentList.commentWriteTime}</td>
+			     	<td colspan="2">
+			     		<c:if test="${commentList.userId eq loginId}">
+			     			<a  href="commentUpdate.go?commentIdx=${commentList.commentIdx}&matchingIdx=${dto.matchingIdx}" >수정</a> 
+			     			/ 
+			     			<a href="commentDelete.do?commentIdx=${commentList.commentIdx}&matchingIdx=${dto.matchingIdx}">삭제</a>
+			     		</c:if>
+			     		<c:if test="${commentList.userId ne loginId}">
+				     		<c:if test="${loginId != 'guest' }"><button id="playerList">
+				     			<a href="#">신고</a>
+				     		</c:if>	 
+			     		</c:if>	     					
+			     	</td>
+			     </tr>
+			</c:forEach>
 		     
 		     <tr>
 
 			     <form method="post" action="commentWrite.do?categoryId=m01&comentId=${dto.matchingIdx}" >
 			     		<th >
-			     			<input type="text" name="userId" value="${loginId}" style= "border:none;" readonly>
+			     			<input type="text" name="userId" value="${loginId}" style= "border:none; width:40px;" readonly>
 			     		</th>
-			     		<th colspan="5">
-			     			<input type="text" name="commentContent">
-			     		</th>
-			     		<th>
-			     			<button>작성</button>
-			     		</th>
+			     		<c:if test="${loginId != 'guest' }">
+				     		<th colspan="5">
+				     			<input type="text" name="commentContent">
+				     		</th>
+				     		<th>
+				     			<button>작성</button>
+				     		</th>
+			     		</c:if>
+			     		<c:if test="${loginId == 'guest' }">
+				     		<th colspan="6">
+				     			<input type="text" name="commentContent" style= "border:none; width:400px;" placeholder="댓글 작성은 로그인 후 가능합니다. ">
+				     		</th>
+				     		
+			     		</c:if>
 			     </form>
 			     			     
 		     </tr>

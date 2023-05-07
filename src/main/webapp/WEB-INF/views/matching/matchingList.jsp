@@ -44,8 +44,10 @@
 	
 	<input type="text" id="searchInput" placeholder="제목 또는 작성자를 입력">
 	<button id="searchButton">검색</button>
+	<c:if test="${loginId != 'guest' }">
+		<button onclick="location.href='write.go?categoryId=m01'">글쓰기</button>
+	</c:if>
 	
-	<button onclick="location.href='write.go?categoryId=m01'">글쓰기</button>
 	<hr>
 	
 	<table>
