@@ -19,7 +19,7 @@
 		
 		<input type="text" name="subject" placeholder="제목을 입력해주세요" value="${dto.subject}">
 		<input type="datetime" name="gameDate" id="date" placeholder="경기 일시" value="${dto.gameDate}">
-		<input type="text" name="writerId" value="${session.loginId}" style="border:none;" readonly>
+		<input type="text" name="writerId" value="${loginId}" style="border:none;" readonly>
 
 		<br>
 
@@ -29,11 +29,28 @@
 			<option id="3" value="3">3:3</option>
 			<option id="5" value="5">5:5</option>
 		</select>
+
 		<select name="courtListType" id="courtListType">
-			<option value="none">경기장</option>
+		  	<option value="none">경기장</option>
+		  	<option value="loc">선호지역</option>
+		  	<option value="searchLoc">위치 선택</option>
+		  	<option value="listAll">전체보기</option>
 		</select>
-		<input type="text" name="courtName" id="location" value="${dto.courtName}" style="border:none;" readonly>
-		👤<input type="text" name="matchingNum" id="matchingNum" placeholder="모집인원" value ="${dto.matchingNum}" readonly><br>
+		
+		<select name="locationIdx" id="locationIdx">
+		  	<option value="none">지역구</option>
+		</select>
+		
+		<select name="courtIdx" id="courtIdx">
+			<option value="${dto.courtIdx}">${dto.courtName}</option>
+			<c:forEach items="${courtList}" var="court">
+				<c:if test="${court.locationIdx == writerData.locationIdx}">
+					<option value="${court.courtIdx}">${court.courtName}</option>
+				</c:if>
+			</c:forEach>
+		</select>
+
+		👤<input type="text" name="matchingNum" id="matchingNum" style="border:none;" value ="${dto.matchingNum}" readonly><br>
 		<textarea name="content" rows="10" cols="50" style="width: 555px; height: 228px;" placeholder="경기모집에 관련된 설명을 작성해주세요">${dto.content}</textarea><br>
 		<input type="submit" value="수정">
 	</form>
@@ -44,6 +61,87 @@
 
 
 <script>
+
+/* 경기장 선택 방법 선택(선호위치, 선택, 전체 보기) */
+	
+	var content='';
+	var listType = '';
+	
+	$('#courtListType').on('change', function() {
+		
+	    listType = $(this).val();
+	    
+	    if(listType=='loc'){
+	    	content += '<select name="locationList" id="locationIdx">';
+    		content += '<option value="${writerData.locationIdx}">${writerData.gu}</option>';
+	    	content += '</select>';	    	
+	    	$('#locationIdx').replaceWith(content);
+	    	content='';
+	    	
+	    	
+	    }else if(listType=='searchLoc'){
+	    	content += '<select name="locationList" id="locationIdx">';
+	    	content += '<option value="none">지역구</option>';
+	    	content += '<c:forEach items="${locationList}" var="list">';
+    		content += '<option value="${list.locationIdx}">${list.gu}</option>';
+    		content +=	'</c:forEach>';
+	    	
+    		$('#locationIdx').replaceWith(content);
+	    	content='';
+	    	
+	    	
+	    	
+	    }else if(listType=='listAll'){
+	    	content += '<select name="locationList" id="locationIdx">';
+    		content += '<option value="none">전체</option>';
+    		content += '</select>';	
+    		$('#locationIdx').replaceWith(content);
+	    	content='';
+	    	
+	    	content += '<select name="courtIdx" id="courtIdx">';
+	        content += '<option value="none">경기장</option>';
+	        content += '<c:forEach items="${courtList}" var="court">';
+	        content += '<option value="${court.courtIdx}">${court.courtName}</option>';
+	        content += '</c:forEach>';
+	        content += '</select>';
+	        $('#courtIdx').replaceWith(content);
+	    	content='';
+	    	
+	    }
+	    
+	    $('#locationIdx').on('change', function(){
+	    	
+	    	var locIdx = $(this).val();
+	       console.log(locIdx);
+
+	       for(var i = 1; i<26; i++){
+	    	    if(locIdx==i){
+		    	content += '<select name="courtIdx" id="courtIdx">';
+		        content += '<option value="none">경기장</option>';
+		        content += '<c:forEach items="${courtList}" var="court">';
+		        var locIdxchk = '${court.locationIdx}';
+		        if(locIdx==locIdxchk){ 
+		        	content += '<option value="${court.courtIdx}">${court.courtName}</option>';
+		        }
+		        content += '</c:forEach>';
+		        content += '</select>';
+		        $('#courtIdx').replaceWith(content);
+		    	content='';
+		       }
+	    	}
+	           
+	    });
+	    
+	   
+
+	    
+	    
+	});
+
+	
+	
+	
+
 
 		var gamePlaySelected = document.getElementById("gamePlay");
 		var matchingNum = document.getElementById("matchingNum");
