@@ -222,7 +222,7 @@ table, th, td{
 							</c:forEach>
 						</ul>
 					</div>
-					<button id="closeGameInviteListBtn">닫기</button>
+					<button id="closeGameInviteListBtn" onclick="location.href='detail.go?matchingIdx='+${dto.matchingIdx}">닫기</button>
 				</div>
 			
 	     		
@@ -506,10 +506,6 @@ function inviteUser(userId, matchingIdx) {
     }
     
 
-	
-	
-	
-	
         
     </script>
 </html>

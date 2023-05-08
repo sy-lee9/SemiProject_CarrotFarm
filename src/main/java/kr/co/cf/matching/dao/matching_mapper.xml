@@ -4,6 +4,7 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.cf.matching.dao.MatchingDAO">
+
 	<select id="userData" resultType="kr.co.cf.matching.dto.MatchingDTO">
 		SELECT locationIdx FROM userdata WHERE userId=#{param1}
 	</select>
@@ -45,6 +46,11 @@
 		VALUES(#{categoryId},#{matchingIdx},#{writerId},#{gameAppState})
  	</insert>
  	
+ 	
+ 	<insert id="matchingDeleteAlarm">
+		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES('m01',#{param1},'삭제',#{param2})
+	</insert> 
+	
  	<delete id="deleteGame">
  		DELETE FROM game WHERE matchingIdx = #{param1};
  	</delete>
@@ -65,9 +71,17 @@
 		SELECT courtIdx, locationIdx, courtName, courtTel, courtInOut, courtState, courtLatitude, courtLongitude, courtAddress FROM court
 	</select>
 	
+	
 	<update id="matchingUpdate" parameterType="hashmap">
 		UPDATE matching SET subject=#{subject},gameDate=#{gameDate}, gamePlay=#{gamePlay},matchingNum=#{matchingNum},content=#{content},courtIdx=#{courtIdx} WHERE matchingIdx=#{matchingIdx}
 	</update>
+
+	<insert id="matchingUpdateAlarm" parameterType="hashmap">
+		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES('m01',#{userId},'수정',#{matchingIdx})
+	</insert> 
+	
+	
+	
 	
 	<select id="commentList" resultType="kr.co.cf.matching.dto.MatchingDTO">
 		SELECT
@@ -84,7 +98,7 @@
 	</insert>
 	
 	<delete id="commentDelete">
-		DELETE FROM comment WHERE commentIdx = #{param1};
+		DELETE FROM comment WHERE commentIdx = #{param1}
 	</delete>
 	
 	<select id="commentGet" resultType="kr.co.cf.matching.dto.MatchingDTO">
@@ -243,6 +257,14 @@
 		UPDATE matching SET matchigState = 'finish' WHERE matchingIdx=#{param1}
 	</update>
 	
+	<delete id="matchigStateToFinishDelete">
+		DELETE FROM game WHERE matchingIdx=#{param1} AND (gameAppState='초대' OR gameAppState='신청')
+	</delete>
+	
+	<delete id="matchigStateToFinishDeleteAlarm">
+		DELETE FROM alarm WHERE alarmKind=#{param1} AND (alarmcontent='초대' OR alarmcontent='신청')
+	</delete>
+	
 	<update id="matchigStateToReview">
 		UPDATE matching SET matchigState = 'review' WHERE matchingIdx=#{param1}
 	</update>
@@ -271,7 +293,7 @@
 	<select id="userList" resultType="kr.co.cf.matching.dto.MatchingDTO">
 		SELECT userId
 		FROM user
-		WHERE userId NOT IN ( SELECT userId FROM game WHERE matchingIdx = #{param1} AND gameAppState IN ('신청', '확정')	);
+		WHERE userId NOT IN ( SELECT userId FROM game WHERE matchingIdx = #{param1} AND gameAppState IN ('신청', '확정','초대')	);
 	</select>
 	
 	<insert id="gameInvite" parameterType="hashmap">
@@ -309,6 +331,31 @@
 	<select id="cntReview" resultType="int">
 		SELECT COUNT(matchingIdx) FROM mvp WHERE receiveId=#{param1} AND matchingIdx =#{param2} 
 	</select>
+	
+	<delete id="deleteAlarm">
+		DELETE FROM alarm WHERE alarmKind=#{param1}
+	</delete>
+	
+	<insert id="gameInviteAlarm" parameterType="hashmap">
+		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES('m01',#{userId},'초대',#{matchingIdx})
+	</insert>
+	
+	<delete id="gameInviteCancelAlarm" parameterType="hashmap">
+		DELETE FROM alarm WHERE userId=#{userId} AND alarmKind=#{matchingIdx} AND alarmcontent='초대'
+	</delete>
+		
+	<insert id="playerDeleteAlarm">
+		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES('m01',#{param2},'참가취소',#{param1})
+	</insert>
+	
+	<insert id="gameApplyAcceptAlarm">
+		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES('m01',#{param2},'신청수락',#{param1})
+	</insert>
+
+	<insert id="gameApplyRejectAlarm">
+		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES('m01',#{param2},'신청거절',#{param1})
+	</insert>
+	
 </mapper>
 
 
