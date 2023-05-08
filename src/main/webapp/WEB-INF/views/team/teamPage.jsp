@@ -40,17 +40,21 @@
 </head>
 <body>
 	<div id="inline"><p id="teamMatchState">${team.teamMatchState}</p></div> 
-	<div><button onclick="location.href='team/teamJoin.do'">가입신청</button></div>
-	<div><button onclick="location.href='team/teamPageUpdate.go?teamIdx=${team.teamIdx}'">팀정보 수정</button></div>
+	<div id="inline"><button onclick="location.href='team/teamJoin.do'">가입신청</button></div>
+	<div id="inline"><button onclick="location.href='teamPageUpdate.go?teamIdx=${team.teamIdx}'">팀정보 수정</button></div>
+	<div><button onclick="location.href='teamDisbanding.go?teamIdx=${team.teamIdx}'">팀 해체</button></div>
+	
 	
 	<div id="inline">
-		<p><img width="600" src="/photo/${team.photoName}"/></p>
-			<%-- <c:if test="${dto.newFileName ne null}">
-				
-			</c:if> --%>
+		<c:if test="${team.photoName eq null}">
+			<img width="400" src="/photo/팀이미지.png"/>
+		</c:if>
+		<c:if test="${team.photoName ne null}">
+			<img width="400" src="/photo/${team.photoName}"/>
+		</c:if>
 	</div>
 	
-	<div>
+	<div id="inline">
 		<table>
 			<tr>
 				<th colspan="2">${team.teamName}</th>
@@ -65,7 +69,7 @@
 			</tr>
 			<tr>
 				<th>활동 지역</th>
-				<td>${team.locationIdx}</td>
+				<td>${team.gu}</td>
 			</tr>
 			<tr>
 				<th>주 활동 시간</th>
@@ -78,7 +82,7 @@
 		</table>
 	</div>
 	
-	<div id="inline">		
+	<div>		
 		<table>
 			<tr>
 				<th height="15%">팀 소개글</th>				
@@ -88,7 +92,7 @@
 			</tr>
 		</table>
 	</div>
-	
+
 	<div>
 		<table>
 			<tr>
