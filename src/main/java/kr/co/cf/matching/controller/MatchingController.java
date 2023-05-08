@@ -26,6 +26,7 @@ public class MatchingController {
 	MatchingService matchingService;
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 
 	@RequestMapping(value = "/matching/list.do")
 	public String matchingList(Model model, HttpSession session) {
