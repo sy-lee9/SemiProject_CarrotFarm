@@ -36,6 +36,7 @@
 		AND teamDisband = 0
 		ORDER BY teamIdx DESC		
 		LIMIT 10 OFFSET #{offset};
+
 	</select>
 	
 	<select id="totalCount" resultType="int">

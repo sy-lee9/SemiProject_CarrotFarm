@@ -33,8 +33,8 @@ textarea{
 </style>
 </head>
 <body>
-	<form action="noticeboardWrite.do" method="post" enctype="multipart/form-data">
-	<input type="hidden" name="categoryId" value="b002"/>
+	<form action="inquiryboardWrite.do" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="categoryId" value="b003"/>
 		<table>
 			<tr>
 				<th>제목</th>
@@ -56,7 +56,7 @@ textarea{
 			</tr>
 			<tr>
 				<th colspan="2">
-					<input type = "button" onclick="location.href='./noticeboardList.do'" value="리스트"/>
+					<input type = "button" onclick="location.href='./inquiryboardList.do'" value="리스트"/>
 					<button>저장</button>
 				</th>
 			</tr>

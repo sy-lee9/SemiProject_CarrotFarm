@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class GameService {
 	
+	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+
 
 }

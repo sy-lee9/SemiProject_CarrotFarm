@@ -9,7 +9,7 @@
 <style></style>
 </head>
 <body>
-	<form action="noticeboardUpdate.do" method="post" enctype="multipart/form-data">
+	<form action="inquiryboardUpdate.do" method="post" enctype="multipart/form-data">
 		<input type = "hidden" name="bidx" value="${dto.boardIdx}"/>
 		<table>
 			<tr>
@@ -37,7 +37,7 @@
 			</tr>
 			<tr>
 				<th colspan="2">
-					<input type = "button" onclick="location.href='./noticeboardList.do'" value="리스트"/>
+					<input type = "button" onclick="location.href='./inquiryboardList.do'" value="리스트"/>
 					<button>저장</button>
 				</th>
 			</tr>	

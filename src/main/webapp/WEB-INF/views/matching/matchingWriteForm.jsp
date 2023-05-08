@@ -103,6 +103,14 @@
     		$('#locationIdx').replaceWith(content);
 	    	content='';
 	    	
+	    	content += '<select name="courtIdx" id="courtIdx">';
+	        content += '<option value="none">경기장</option>';
+	        content += '<c:forEach items="${courtList}" var="court">';
+	        content += '<option value="${court.courtIdx}">${court.courtName}</option>';
+	        content += '</c:forEach>';
+	        content += '</select>';
+	        $('#courtIdx').replaceWith(content);
+	    	content='';
 	    	
 	    }
 	    
@@ -110,21 +118,7 @@
 	    	
 	    	var locIdx = $(this).val();
 	       console.log(locIdx);
-	      
-	       
-	       /* if(locIdx==1){
-		    	content += '<select name="courtIdx" id="courtIdx">';
-		        content += '<option value="none">경기장</option>';
-		        content += '<c:forEach items="${courtList}" var="court">';
-		        content += '<c:if test="${court.locationIdx eq 1}">';
-		        content += '<option value="${court.courtIdx}">${court.courtName}</option>';
-		        content += '</c:if>';
-		        content += '</c:forEach>';
-		        content += '</select>';
-		        $('#courtIdx').replaceWith(content);
-		    	content='';
-		       }
-	        */
+
 	       for(var i = 1; i<26; i++){
 	    	    if(locIdx==i){
 		    	content += '<select name="courtIdx" id="courtIdx">';

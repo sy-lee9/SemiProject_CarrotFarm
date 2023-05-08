@@ -6,7 +6,9 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class GameController {
-	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	
+	
 
 }

@@ -40,7 +40,7 @@ textarea{
 			</tr>
 			<tr>
 				<th>작성자</th>
-				<td>${dto.userId}</td>
+				<td>${loginId}</td>
 			</tr>
 			<tr>
 				<th>작성일</th>

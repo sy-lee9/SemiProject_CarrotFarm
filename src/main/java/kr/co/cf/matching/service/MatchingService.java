@@ -182,8 +182,83 @@ public class MatchingService {
 	public MatchingDTO userData(String loginId) {
 		return matchingDAO.userData(loginId);
 	}
+
+
 	
+	public void applyGame(String matchingIdx, String userId) {
+		matchingDAO.applyGame(matchingIdx,userId);
+	}
+
+	public void matchigStateToFinish(String matchingIdx, String matchigState) {
+		matchingDAO.matchigStateToFinish(matchingIdx,matchigState);
+	}
 	
+	public void matchigStateToReview(String matchingIdx, String matchigState) {
+			matchingDAO.matchigStateToReview(matchingIdx,matchigState);
+	}
+	
+		public ArrayList<MatchingDTO> playerList(String matchingIdx) {
+		return matchingDAO.playerList(matchingIdx);
+	}
+		
+	public void playerDelete(String matchingIdx, String userId) {
+		matchingDAO.playerDelete(matchingIdx,userId);		
+	}
+
+	public ArrayList<MatchingDTO> gameApplyList(String matchingIdx) {
+		return matchingDAO.gameApplyList(matchingIdx);
+	}
+
+	public void gameApplyAccept(String matchingIdx, String userId) {
+		matchingDAO.gameApplyAccept(matchingIdx,userId);	
+	}
+	
+	public void gameApplyReject(String matchingIdx, String userId) {
+		matchingDAO.gameApplyReject(matchingIdx,userId);	
+	}
+
+	public ArrayList<MatchingDTO> userList(String matchingIdx) {
+		return matchingDAO.userList(matchingIdx);
+	}
+
+	public void gameInvite(HashMap<String, Object> params) {
+		matchingDAO.gameInvite(params);
+	}
+
+	public void cancelGameInvite(HashMap<String, Object> params) {
+		matchingDAO.cancelGameInvite(params);
+		
+	}
+
+	public ArrayList<MatchingDTO> gameInviteList(String matchingIdx) {
+		return matchingDAO.gameInviteList(matchingIdx);
+	}
+
+	public void mvp(HashMap<String, Object> params) {
+		matchingDAO.mvp(params);
+		
+	}
+
+	public void mannerUp(HashMap<String, Object> params) {
+		matchingDAO.mannerUp(params);	
+	}
+	
+	public void mannerDown(HashMap<String, Object> params) {
+		matchingDAO.mannerDown(params);	
+	}
+
+	public int review(String matchingIdx, String writerId) {
+		return matchingDAO.review(matchingIdx,writerId);
+	}
+
+	public float mannerPoint(String loginId) {
+		return matchingDAO.mannerPoint(loginId);
+	}
+
+	public int cntReview(String userId, String matchingIdx) {
+		return matchingDAO.cntReview(userId,matchingIdx);
+	}
+
 	
 	
 
