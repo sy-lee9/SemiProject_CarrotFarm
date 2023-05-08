@@ -5,7 +5,6 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<link rel="stylesheet" href="resources/css/commons.css">
 <style>
 @charset "UTF-8";
 
@@ -65,6 +64,43 @@ textarea{
 					<input type = "button" value="신고"/>
 				</th>
 			</tr>
+			<tr>
+	     		<th colspan="7">
+		     		<table>
+			     		<c:forEach items="${commentList}" var="commentList">
+			     			<tr>
+			     				<th>${commentList.userId} </th>
+			     				<td >${commentList.commentContent}</td>
+			     				<td>${commentList.commentWriteTime}</td>
+			     				<td>
+			     					<c:if test="${commentList.userId eq loginId}">
+			     						<a  href="commentUpdate.go?commentIdx=${commentList.commentIdx}&matchingIdx=${dto.boardIdx}" >수정</a> 
+			     						/ 
+			     						<a href="commentDelete.do?commentIdx=${commentList.commentIdx}&matchingIdx=${dto.boardIdx}">삭제</a>
+			     					</c:if>
+			     					<c:if test="${commentList.userId ne loginId}">
+			     						<a href="#">신고</a>
+			     					</c:if>
+			     					
+			     				</td>
+			     			</tr>
+			     		</c:forEach>
+		     		</table>
+		     	</th>	     	
+		     </tr>
+		     <tr>
+			     <form method="post" action="freeboardcommentWrite.do?categoryId=m01&comentId=${dto.boardIdx}" >
+			     		<th >
+			     			<input type="text" name="userId" value="${loginId}" style= "border:none;" readonly>
+			     		</th>
+			     		<th colspan="5">
+			     			<input type="text" name="commentContent">
+			     		</th>
+			     		<th>
+			     			<button>작성</button>
+			     		</th>
+			     </form>  
+		     </tr>
 		</table>
 </body>
 <script>

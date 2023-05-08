@@ -1,5 +1,6 @@
 package kr.co.cf.board.controller;
 
+import java.awt.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.cf.board.dto.BoardDTO;
 import kr.co.cf.board.service.BoardService;
+import kr.co.cf.matching.dto.MatchingDTO;
 
 @Controller
 public class BoardController {
@@ -28,14 +31,18 @@ public class BoardController {
 	
 	@RequestMapping(value="/flist.ajax", method = RequestMethod.POST)
 	@ResponseBody
-	public HashMap<String, Object> falist(@RequestParam String page, @RequestParam String cnt){
+	public HashMap<String, Object> falist(@RequestParam String page, @RequestParam String cnt, @RequestParam String search){
+		logger.info("search : " + search);
 		
-		return service.falist(Integer.parseInt(page),Integer.parseInt(cnt));
+		
+		return service.falist(Integer.parseInt(page),Integer.parseInt(cnt), search);
+		
 	}
 	
 	
 	@RequestMapping(value = "/freeboardList.do")
-	public String flist(Model model) {
+	public String flist(Model model, HttpSession session) {
+		logger.info("session" + session.getAttribute("loginId"));
 		logger.info("flist 불러오기");
 		ArrayList<BoardDTO> flist = service.flist();
 		logger.info("flist cnt : " + flist.size());
@@ -44,7 +51,7 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="/freeboardWrite.go")
-	public String fwriteForm() {
+	public String fwriteForm(HttpSession session) {
 		logger.info("글쓰기로 이동");
 		return "freeboardWriteForm";
 	}
@@ -66,6 +73,13 @@ public class BoardController {
 			model.addAttribute("dto", dto);
 			logger.info("사진이름" +dto.getPhotoName());
 		}
+		
+		ArrayList<BoardDTO> fcommentList = new ArrayList<BoardDTO>();
+		//fcommentList = service.fcommentList(bidx);
+		model.addAttribute("fcommentList", fcommentList);
+		logger.info("모집글 fcommentList : " + fcommentList);
+		//return "/freeboardDetail";
+		
 		return page;
 	}
 	
@@ -95,7 +109,67 @@ public class BoardController {
 		return service.fupdate(photo, params);
 	}
 	
+	@RequestMapping(value="/fuserRight.ajax")
+	@ResponseBody
+	public String fuserRight(HttpSession session){
+		String loginId = String.valueOf(session.getAttribute("loginId"));
+		logger.info(loginId);
+		logger.info("통신성공");
+		
+		return service.fuserRight(loginId);
+	}	
 	
+	
+	@RequestMapping(value = "freeboardcommentWrite.do")
+	public String fcommentWrite(@RequestParam HashMap<String, String> params) {
+
+		logger.info("댓글 작성" + params);
+
+		service.fcommentWrite(params);
+		return "redirect:/detail.go?bidx=" + params.get("comentId");
+	}
+	
+	/*@RequestMapping(value = "freeboardcommentDelete.do")
+	public String fcommentDelete(@RequestParam String commentIdx,@RequestParam String bidx) {
+
+		logger.info("댓글 지우기 commentIdx : " + commentIdx);
+		service.fcommentDelete(commentIdx);
+		return "redirect:/detail.go?bidx=" + bidx ;
+	}
+	
+	@RequestMapping(value = "freeboardcommentUpdate.go")
+	public String fcommentUpdateGo(@RequestParam String commentIdx,@RequestParam String bidx, Model model) {
+
+		logger.info("댓글 수정 commentIdx : " + commentIdx);
+		
+		BoardDTO dto = new BoardDTO();
+		matchingDto = service.matchingDetail(bidx);
+		model.addAttribute("dto", matchingDto);
+
+		// 해당 모집글의 댓글 불러 오기
+		ArrayList<MatchingDTO> commentList = new ArrayList<MatchingDTO>();
+		commentList = service.commentList(matchingIdx);
+		model.addAttribute("commentList", commentList);
+		logger.info("모집글 commentList : " + commentList);
+		
+		
+		// 수정할 댓글 commentIdx
+		MatchingDTO commentDto = new MatchingDTO();
+		commentDto = service.commentGet(commentIdx);
+		logger.info("수정할 코멘트 내용"+commentDto.getCommentContent());
+		model.addAttribute("commentDto", commentDto);
+				
+		return "/freeboardCommentUpdate" ;
+	}
+	
+	@RequestMapping(value = "freeboardcommentUpdate.do")
+	public String fcommentUpdateGo(@RequestParam HashMap<String, String> params) {
+		
+		service.fcommentUpdate(params);
+		String bidx = params.get("bidx");
+		logger.info("bidx"+bidx);		
+		return "redirect:/detail.go?bidx="+bidx ;
+	}*/
 	
 	
 	

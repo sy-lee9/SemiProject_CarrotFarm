@@ -1,5 +1,6 @@
 package kr.co.cf.board.service;
 
+import java.awt.List;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.cf.board.dao.BoardDAO;
 import kr.co.cf.board.dto.BoardDTO;
+import kr.co.cf.matching.dto.MatchingDTO;
 
 @Service
 public class BoardService {
@@ -28,9 +30,13 @@ public class BoardService {
 		return dao.flist();
 	}
 	
-	public HashMap<String, Object> falist(int page, int cnt) {
+	public HashMap<String, Object> falist(int page, int cnt, String search) {
+		
 		logger.info(page + "페이지 보여줘");
 		logger.info("한 페이지에 " + cnt + "개씩 보여줄거야");
+		
+		
+		
 		HashMap<String, Object> map = new HashMap<String, Object>();	
 
 		int offset =(page-1) * cnt;
@@ -136,6 +142,32 @@ public class BoardService {
 		logger.info("update => " + page);
 		return page;
 	}
+	
+	public String fuserRight(String loginId) {
+
+		return dao.fuserRight(loginId);
+	}
+		
+	
+	public ArrayList<BoardDTO> fcommentList(String bidx) {
+		return dao.fcommentList(bidx);
+	}
+
+	public void fcommentWrite(HashMap<String, String> params) {
+		dao.fcommentWrite(params);
+	}
+
+	/*public void fcommentDelete(String commentIdx) {
+		BoardDAO.fcommentDelete(commentIdx);
+	}
+
+	public BoardDTO fcommentGet(String commentIdx) {
+		return BoardDAO.fcommentGet(commentIdx);
+	}
+
+	public void fcommentUpdate(HashMap<String, String> params) {
+		BoardDAO.fcommentUpdate(params);
+	}*/
 
 	
 	
@@ -386,9 +418,8 @@ public class BoardService {
 	public String iuserRight(String loginId) {
 		return dao.iuserRight(loginId);
 	}
-	
-	
 
-	
+
+
 	
 }	

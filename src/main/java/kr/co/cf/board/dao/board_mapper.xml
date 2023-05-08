@@ -63,6 +63,45 @@
 		WHERE boardIdx = #{bidx}
 	</update>
 	
+	<select id="fuserRight" resultType="String">
+		SELECT userRight FROM user WHERE userId = #{param1}
+	</select>
+	
+	<select id="fcommentList" resultType="kr.co.cf.board.dto.BoardDTO">
+		SELECT
+			commentIdx,
+			userId,
+			commentWriteTime,
+			commentContent
+		FROM comment
+		WHERE categoryId='b001' AND comentId=#{param1}
+	</select>
+	
+	<insert id="fcommentWrite" parameterType="hashmap">
+		INSERT INTO comment(userId, categoryId,comentId,commentContent) VALUES(#{userId},#{categoryId},#{comentId},#{commentContent})
+	</insert>
+	
+	<delete id="fcommentDelete">
+		DELETE FROM comment WHERE commentIdx = #{param1};
+	</delete>
+	
+	<select id="fcommentGet" resultType="kr.co.cf.board.dto.BoardDTO">
+		SELECT
+			commentIdx,
+			userId,
+			commentWriteTime,
+			commentContent
+		FROM comment
+		WHERE commentIdx=#{param1}
+	</select>
+	
+	<update id="fcommentUpdate" parameterType="hashmap">
+		UPDATE comment SET commentContent=#{commentContent} WHERE commentIdx=#{commentIdx}
+	</update>
+	
+	
+	
+	
 	
 	
 	

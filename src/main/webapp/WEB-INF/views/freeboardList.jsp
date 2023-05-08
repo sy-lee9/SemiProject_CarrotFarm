@@ -28,11 +28,25 @@
 </style>
 </head>
 <body>
-	게시물 갯수 : 
+
+	<select id="freeboardSort">
+		<option selected value = "">검색 내용 선택</option>
+		<option value="freeboardSubject">제목</option>
+		<option value="freeboardNickname">닉네임</option>
+	</select>
+	<input type ="text" id="freeboardSearchInput" placeholder="제목 또는 닉네임을 입력">
+	
+	<button id ="freeboardSearchButton">검색</button>
+
+
+	
+	<br><br/>
 	<select id="pagePerNum">
 		<option value="10">10</option>
 	</select>
-	<button onclick="location.href='freeboardWrite.go'">등록</button>
+	
+	<br><br/>
+	<button onclick="location.href='freeboardWrite.go'">글쓰기 등록</button>
 	<table>
 		<thead>
 			<tr>
@@ -58,8 +72,17 @@
 	</table>
 </body>
 <script>
+var searchText = 'default';
 var showPage = 1;
 listCall(showPage);
+
+$('#freeboardSearchButton').click(function(){
+	searchText = $('#freeboardSearchInput').val();
+	listCall(showPage);
+	$('#pagination').twbsPagination('destroy');
+});
+
+
 
 $('#pagePerNum').change(function(){
 	listCall(showPage);
@@ -72,7 +95,8 @@ function listCall(page){
 		url:'flist.ajax',
 		data:{
 			'page':page,
-			'cnt':$('#pagePerNum').val()	
+			'cnt':$('#pagePerNum').val(),
+			'search':searchText
 		},
 		dataType:'json',
 		success:function(data){
