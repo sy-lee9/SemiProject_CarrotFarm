@@ -66,7 +66,7 @@
 	</select>
 	
 	<update id="matchingUpdate" parameterType="hashmap">
-		UPDATE matching SET subject=#{subject},gameDate=#{gameDate}, gamePlay=#{gamePlay},matchingNum=#{matchingNum},content=#{content} WHERE matchingIdx=#{matchingIdx}
+		UPDATE matching SET subject=#{subject},gameDate=#{gameDate}, gamePlay=#{gamePlay},matchingNum=#{matchingNum},content=#{content},courtIdx=#{courtIdx} WHERE matchingIdx=#{matchingIdx}
 	</update>
 	
 	<select id="commentList" resultType="kr.co.cf.matching.dto.MatchingDTO">
@@ -141,7 +141,7 @@
 		  matchigState,
 		  bHit 
 		FROM matching m
-		WHERE categoryId=#{param2}
+		WHERE categoryId=#{param2} AND matchigState='matching'
 		ORDER By matchingIdx DESC 
 		LIMIT 10 OFFSET #{param1}
 	</select>
@@ -233,15 +233,82 @@
 		ORDER By matchingIdx DESC 
 		LIMIT 10 OFFSET #{offset}
 	</select>
-	
-	
+
+
 	<insert id="applyGame">
 		INSERT INTO game(categoryId,matchingIdx,userId,gameAppState) values('m01',#{param1},#{param2},'신청')
 	</insert>
 	
-	<update id="matchigStateUpdate">
+	<update id="matchigStateToFinish">
 		UPDATE matching SET matchigState = 'finish' WHERE matchingIdx=#{param1}
 	</update>
+	
+	<update id="matchigStateToReview">
+		UPDATE matching SET matchigState = 'review' WHERE matchingIdx=#{param1}
+	</update>
+	
+	<select id="playerList" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT userId,matchingIdx FROM game WHERE matchingIdx=#{param1} AND gameAppState='확정' ORDER BY gameAppDate
+	</select>
+	
+	
+	<delete id="playerDelete">
+		DELETE FROM game WHERE matchingIdx=#{param1} AND userId=#{param2}
+	</delete>
+	
+	<select id="gameApplyList" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT userId FROM game WHERE matchingIdx=#{param1} AND gameAppState='신청' ORDER BY gameAppDate
+	</select>
+	
+	<update id="gameApplyAccept">
+		UPDATE game SET gameAppState='확정' WHERE matchingIdx=#{param1} AND userId=#{param2}
+	</update>
+	
+	<delete id="gameApplyReject">
+		DELETE FROM game WHERE matchingIdx=#{param1} AND userId=#{param2}
+	</delete>
+	
+	<select id="userList" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT userId
+		FROM user
+		WHERE userId NOT IN ( SELECT userId FROM game WHERE matchingIdx = #{param1} AND gameAppState IN ('신청', '확정')	);
+	</select>
+	
+	<insert id="gameInvite" parameterType="hashmap">
+		INSERT INTO game(categoryId,matchingIdx,userId,gameAppState) VALUES('m01',#{matchingIdx},#{userId},'초대')
+	</insert>
+	
+	<insert id="cancelGameInvite" parameterType="hashmap">
+		DELETE FROM game WHERE matchingIdx=#{matchingIdx} AND userId=#{userId} AND gameAppState='초대'
+	</insert>
+	
+	<select id="gameInviteList" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT userId FROM game WHERE matchingIdx=#{param1} AND gameAppState='초대'
+	</select>
+	
+	<insert id="mvp" parameterType="hashmap">
+		INSERT INTO mvp(matchingIdx,writerId,receiveId) Values(#{matchingIdx},#{writerId},#{receiveId})
+	</insert>
+	
+	<insert id="mannerUp" parameterType="hashmap">
+		INSERT INTO review(matchingIdx,writerId,receiveId,userMannerScore) Values(#{matchingIdx},#{writerId},#{receiveId},0.1)
+	</insert>
+	
+	<insert id="mannerDown" parameterType="hashmap">
+		INSERT INTO review(matchingIdx,writerId,receiveId,userMannerScore) Values(#{matchingIdx},#{writerId},#{receiveId},-0.1)
+	</insert>
+	
+	<select id="review" resultType="int">
+		SELECT COUNT(writerId) FROM mvp WHERE matchingIdx=${param1} AND writerId=#{param2}
+	</select>
+	
+	<select id="mannerPoint" resultType="float">
+		SELECT SUM(userMannerScore) FROM review WHERE receiveId=#{param1}
+	</select>
+	
+	<select id="cntReview" resultType="int">
+		SELECT COUNT(matchingIdx) FROM mvp WHERE receiveId=#{param1} AND matchingIdx =#{param2} 
+	</select>
 </mapper>
 
 
