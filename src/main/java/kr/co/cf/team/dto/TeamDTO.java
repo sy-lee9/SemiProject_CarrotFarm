@@ -14,6 +14,8 @@ public class TeamDTO {
 	private int teamUser;
 	private String photoName;
 	private String tagContent;
+	private String gu;
+	private String userId;
 	
 	public int getTeamIdx() {
 		return teamIdx;
@@ -86,5 +88,17 @@ public class TeamDTO {
 	}
 	public void setTagContent(String tagContent) {
 		this.tagContent = tagContent;
+	}
+	public String getGu() {
+		return gu;
+	}
+	public void setGu(String gu) {
+		this.gu = gu;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 }
