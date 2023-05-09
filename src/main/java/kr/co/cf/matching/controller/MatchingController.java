@@ -376,7 +376,6 @@ public class MatchingController {
 	}
 	
 	
-	//matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}
 	
 	@RequestMapping(value="/matching/matchigStateUpdate")
 	public String matchigStateUpdate(@RequestParam String matchingIdx, @RequestParam String matchigState) {
@@ -463,6 +462,49 @@ public class MatchingController {
 		}
 			
 		return "redirect:/matching/detail.go?matchingIdx=" + params.get("matchingIdx");
+	}
+	
+	
+	@RequestMapping(value ="/matching/matchingReport.go")
+	public String matchingReportGo(Model model,@RequestParam String matchingIdx, HttpSession session) {
+		
+		MatchingDTO dto = new MatchingDTO();
+		dto.setMatchingIdx(Integer.parseInt(matchingIdx));
+		
+		model.addAttribute("dto", dto);
+		
+		return "/matching/matchingReport";
+	}
+	
+	@RequestMapping(value ="/matching/matchingReport.do")
+	public String matchingReport(@RequestParam HashMap<String, String> params) {
+		logger.info("params"+params);
+		
+		params.put("reportContent", params.get("report")+params.get("content"));
+		matchingService.matchingReport(params);
+		
+		return "/matching/matchingReportDone";
+	}
+	
+	@RequestMapping(value ="/matching/commentReport.go")
+	public String commentReportGo(Model model,@RequestParam String commentIdx, HttpSession session) {
+		
+		MatchingDTO dto = new MatchingDTO();
+		dto.setCommentIdx(commentIdx);
+		
+		model.addAttribute("dto", dto);
+		
+		return "/matching/commentReport";
+	}
+	
+	@RequestMapping(value ="/matching/commentReport.do")
+	public String commentReport(@RequestParam HashMap<String, String> params) {
+		logger.info("params"+params);
+		
+		params.put("reportContent", params.get("report")+params.get("content"));
+		matchingService.commentReport(params);
+		
+		return "/matching/matchingReportDone";
 	}
 	
 	

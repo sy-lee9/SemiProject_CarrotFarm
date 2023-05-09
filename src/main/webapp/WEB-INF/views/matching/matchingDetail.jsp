@@ -260,6 +260,9 @@ table, th, td{
 	     		
 	     		
 	     		<c:if test="${dto.writerId ne loginId }">
+	     		<c:if test="${loginId != 'guest' }">
+	     			<button onclick="window.open('matchingReport.go?matchingIdx=${dto.matchingIdx}','모집글 신고하기','width=600px,height=400px')">신고하기</button>
+	     		</c:if>
 		     		<button onclick="location.href='./list.do'">목록으로</button>
 	     		</c:if>
 	     		</th>
@@ -351,8 +354,8 @@ table, th, td{
 			     			<a href="commentDelete.do?commentIdx=${commentList.commentIdx}&matchingIdx=${dto.matchingIdx}">삭제</a>
 			     		</c:if>
 			     		<c:if test="${commentList.userId ne loginId}">
-				     		<c:if test="${loginId != 'guest' }"><button id="playerList">
-				     			<a href="#">신고</a>
+				     		<c:if test="${loginId != 'guest' }">
+				     			<a href="#" onclick="window.open('commentReport.go?commentIdx=${commentList.commentIdx}','댓글 신고하기','width=600px,height=400px')">신고</a>				     			
 				     		</c:if>	 
 			     		</c:if>	     					
 			     	</td>
@@ -361,21 +364,21 @@ table, th, td{
 		     
 		     <tr>
 
-			     <form method="post" action="commentWrite.do?categoryId=m01&comentId=${dto.matchingIdx}" >
+			     <form method="post" action="commentWrite.do?categoryId=m01&comentId=${dto.matchingIdx}" id="commentForm">
 			     		<th >
 			     			<input type="text" name="userId" value="${loginId}" style= "border:none; width:40px;" readonly>
 			     		</th>
 			     		<c:if test="${loginId != 'guest' }">
 				     		<th colspan="5">
-				     			<input type="text" name="commentContent">
+				     			<input type="text" name="commentContent" id="commentContent">
 				     		</th>
 				     		<th>
-				     			<button>작성</button>
+				     			<input type="button" value="작성" onclick="subChk()" style="background-color: #f8f9fa;"/>
 				     		</th>
 			     		</c:if>
 			     		<c:if test="${loginId == 'guest' }">
 				     		<th colspan="6">
-				     			<input type="text" name="commentContent" style= "border:none; width:400px;" placeholder="댓글 작성은 로그인 후 가능합니다. ">
+				     			<input type="text" name="commentContent" style= "border:none; width:400px; background-color: #f8f9fa;" placeholder="댓글 작성은 로그인 후 가능합니다. " readonly />
 				     		</th>
 				     		
 			     		</c:if>
@@ -415,7 +418,15 @@ table, th, td{
     });
 	
     
-    
+    function subChk(){
+		
+		if($('#commentContent').val() == ''){
+			alert('댓글내용을 입력해주세요.');
+			return false;
+		}else{
+			$('#commentForm').submit();
+		}	
+	}
     
     
 

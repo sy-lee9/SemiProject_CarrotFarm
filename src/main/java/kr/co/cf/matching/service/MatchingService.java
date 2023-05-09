@@ -327,6 +327,15 @@ public class MatchingService {
 		return matchingDAO.cntReview(userId,matchingIdx);
 	}
 
+	public void matchingReport(HashMap<String, String> params) {
+		matchingDAO.matchingReport(params);
+	}
+
+	public void commentReport(HashMap<String, String> params) {
+		matchingDAO.commentReport(params);
+		
+	}
+
 	
 	
 	

@@ -138,6 +138,10 @@ public interface MatchingDAO {
 
 	void gameApplyRejectAlarm(String matchingIdx, String userId);
 
+	void matchingReport(HashMap<String, String> params);
+
+	void commentReport(HashMap<String, String> params);
+
 	
 
 	

@@ -356,6 +356,14 @@
 		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES('m01',#{param2},'신청거절',#{param1})
 	</insert>
 	
+	<insert id="matchingReport" parameterType="hashmap">
+		INSERT INTO report(categoryId, userId, reportContent, reportState, reportId) VALUES('rm',#{userId},#{reportContent},'미처리',#{matchingIdx})
+	</insert>
+	
+	<insert id="commentReport" parameterType="hashmap">
+		INSERT INTO report(categoryId, userId, reportContent, reportState, reportId) VALUES('rc',#{userId},#{reportContent},'미처리',#{commentIdx})
+	</insert>
+	
 </mapper>
 
 
