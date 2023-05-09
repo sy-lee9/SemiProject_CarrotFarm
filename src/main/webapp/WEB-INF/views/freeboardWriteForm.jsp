@@ -41,7 +41,7 @@ textarea{
 			</tr>
 			<tr>
 				<th>작성자</th>
-				<td>${loginId}</td>
+				<td><input type="text" name="userId" value="${userId}" style="border:none;"readonly/> </td>
 			</tr>
 			<tr>
 				<th>내용</th>

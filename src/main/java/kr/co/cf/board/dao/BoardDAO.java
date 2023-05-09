@@ -2,12 +2,7 @@ package kr.co.cf.board.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-
-import org.apache.ibatis.session.SqlSession;
-
 import kr.co.cf.board.dto.BoardDTO;
-import kr.co.cf.matching.dto.MatchingDTO;
 
 public interface BoardDAO {
 
@@ -15,7 +10,11 @@ public interface BoardDAO {
 
 	ArrayList<BoardDTO> falist(int cnt, int offset);
 	
+	ArrayList<BoardDTO> falistSearch(String search);
+	
 	int fatotalCount();
+	
+	int fatotalCountSearch(String search);
 	
 	int fwrite(BoardDTO dto);
 
@@ -31,8 +30,6 @@ public interface BoardDAO {
 
 	int fupdate(HashMap<String, String> params);
 	
-	String fuserRight(String loginId);
-	
 	ArrayList<BoardDTO> fcommentList(String bidx);
 
 	void fcommentWrite(HashMap<String, String> params);
@@ -42,8 +39,10 @@ public interface BoardDAO {
 	BoardDTO fcommentGet(String commentIdx);
 
 	void fcommentUpdate(HashMap<String, String> params);
+	
+	
 
-
+	
 	
 	
 
@@ -101,5 +100,9 @@ public interface BoardDAO {
 	int iupdate(HashMap<String, String> params);
 
 	String iuserRight(String loginId);
+
+	
+
+	
 
 }

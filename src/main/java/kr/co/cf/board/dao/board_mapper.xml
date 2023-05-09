@@ -17,8 +17,24 @@
 		FROM board WHERE categoryId = 'b001' ORDER BY boardIdx DESC LIMIT #{param1} OFFSET #{param2}
 	</select>
 	
+	<select id="falistSearch" resultType="kr.co.cf.board.dto.BoardDTO">
+		SELECT
+			boardIdx, userId, subject, writeTime, bHit
+		FROM board WHERE categoryId = 'b001' 
+		AND (subject LIKE CONCAT('%' #{search} '%') OR 
+			userId 
+		LIKE CONCAT('%' #{search} '%'))
+	</select>
+	
+	
+	
 	<select id="fatotalCount" resultType="int">
 		SELECT COUNT(boardIdx) FROM board
+	</select>
+	
+	<select id="fatotalCountSearch" resultType="int">
+		SELECT COUNT(boardIdx) FROM board
+			WHERE subject LIKE CONCAT('%' #{param1} '%') OR userId LIKE CONCAT('%' #{param1} '%')
 	</select>
 	
 	<insert 
@@ -27,7 +43,7 @@
 		keyProperty="boardIdx"
 		id="fwrite" parameterType="kr.co.cf.board.dto.BoardDTO">
 		INSERT INTO board(subject, userId, content, categoryId)
-			VALUES(#{subject}, #{userId}, #{content}, #{categoryId})
+			VALUES(#{subject}, #{userId}, #{content}, 'b001')
 	</insert>
 	
 	<insert id = "ffileWrite">
@@ -63,9 +79,7 @@
 		WHERE boardIdx = #{bidx}
 	</update>
 	
-	<select id="fuserRight" resultType="String">
-		SELECT userRight FROM user WHERE userId = #{param1}
-	</select>
+
 	
 	<select id="fcommentList" resultType="kr.co.cf.board.dto.BoardDTO">
 		SELECT

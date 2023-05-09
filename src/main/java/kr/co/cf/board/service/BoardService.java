@@ -1,6 +1,5 @@
 package kr.co.cf.board.service;
 
-import java.awt.List;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.cf.board.dao.BoardDAO;
 import kr.co.cf.board.dto.BoardDTO;
-import kr.co.cf.matching.dto.MatchingDTO;
 
 @Service
 public class BoardService {
@@ -30,28 +28,46 @@ public class BoardService {
 		return dao.flist();
 	}
 	
-	public HashMap<String, Object> falist(int page, int cnt, String search) {
+	public HashMap<String, Object> falist(int page, String search) {
 		
 		logger.info(page + "페이지 보여줘");
-		logger.info("한 페이지에 " + cnt + "개씩 보여줄거야");
-		
-		
-		
-		HashMap<String, Object> map = new HashMap<String, Object>();	
+		logger.info("search : " + search);
 
-		int offset =(page-1) * cnt;
-
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
+		int offset =(page-1) * 10;
+		
 		int total = dao.fatotalCount();
-		int range = total%cnt == 0 ? total/cnt : (total/cnt)+1;
+		
+		if (search.equals("default") || search.equals("")) {
+			total = dao.fatotalCount();
+			
+		} else {
+			total = dao.fatotalCountSearch(search);
+		};
+		
+		
+
+		int range = total%10 == 0 ? total/10 : (total/10)+1;
 		logger.info("전체 게시물 수 : " + total);
 		logger.info("총 페이지 수 : " + range);
 		
 		page = page >range ? range : page;
 		
+		ArrayList<BoardDTO> falist = dao.falist(10, offset);
+		
+		//params.put("offset", offset);
+		
+		if (search.equals("default") || search.equals("")) {
+			falist = dao.falist(10, offset);
+			
+		} else {
+			falist = dao.falistSearch(search);
+		}
+		
 		map.put("currPage", page);
 		map.put("pages", range);
 		
-		ArrayList<BoardDTO> falist = dao.falist(cnt, offset);
 		map.put("freeboardList", falist);
 		return map;
 	}
@@ -61,9 +77,11 @@ public class BoardService {
 		String page = "redirect:/freeboardList.do";
 		BoardDTO dto = new BoardDTO();
 		dto.setSubject(params.get("subject"));
-		dto.setContent(params.get("content"));
 		dto.setUserId(params.get("userId"));
+		dto.setContent(params.get("content"));
 		dto.setCategoryId(params.get("categoryId"));
+		
+		
 		
 		int row = dao.fwrite(dto);
 		logger.info("업데이트 row : " + row);
@@ -143,11 +161,6 @@ public class BoardService {
 		return page;
 	}
 	
-	public String fuserRight(String loginId) {
-
-		return dao.fuserRight(loginId);
-	}
-		
 	
 	public ArrayList<BoardDTO> fcommentList(String bidx) {
 		return dao.fcommentList(bidx);
@@ -157,17 +170,17 @@ public class BoardService {
 		dao.fcommentWrite(params);
 	}
 
-	/*public void fcommentDelete(String commentIdx) {
-		BoardDAO.fcommentDelete(commentIdx);
+	public void fcommentDelete(String commentIdx) {
+		dao.fcommentDelete(commentIdx);
 	}
 
 	public BoardDTO fcommentGet(String commentIdx) {
-		return BoardDAO.fcommentGet(commentIdx);
+		return dao.fcommentGet(commentIdx);
 	}
 
 	public void fcommentUpdate(HashMap<String, String> params) {
-		BoardDAO.fcommentUpdate(params);
-	}*/
+		dao.fcommentUpdate(params);
+	}
 
 	
 	
