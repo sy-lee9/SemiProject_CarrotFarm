@@ -41,12 +41,12 @@ table, th, td{
         position: fixed;
         top: 10%;
         left: 40%;
-        width: 200px;
+        width: 250px;
         height: 300px;
-        background-color: white;
+        background-color: #f8f9fa;
         border: 1px solid black;
         z-index: 9999;
-        
+        padding: 20;
       }
       
    
@@ -127,7 +127,7 @@ table, th, td{
 	     			</br>🏀 경기 장소 : ${dto.courtName}
 	     			</br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 주소: ${dto.courtAddress}
 	     			</br>🏀 모집 인원 :	 &#128100 ${dto.matchingNumforSure}/${dto.matchingNum} 
-	     			<c:if test="${loginId != 'guest' }"><button id="playerList">참가자 목록</button></c:if>
+	     			<c:if test="${loginId != 'guest' }"><button id="playerList">참가자</button></c:if>
 	     			
 				    </br>🏀 경기 방식 : ${dto.gamePlay} : ${dto.gamePlay}
 	     			</br>🏀 ${dto.content}
@@ -163,21 +163,21 @@ table, th, td{
 	     		<!--matchigState가 matching 상태일 시  -->
 	     		<c:if test="${dto.matchigState eq 'matching'}">
 	     			<th colspan="2">
-	     				<button id="gameApplyList">신청자 목록</button>
+	     				<button id="gameApplyList">신청자</button>
 	     				<c:if test="${dto.writerId eq loginId }">
-	     				<button id="gameInviteList">초대하기</button>
+	     				<button id="gameInviteList">초대</button>
 	     				</c:if>	
 	     			</th>
 	     		
 		     		<c:if test="${dto.writerId eq loginId }">
 			     		<th colspan="2">
-		     				<button onclick="location.href='matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}'">모집종료</button>
+		     				<button id="matchingChk" onclick="location.href='matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}'">모집종료</button>
 		     			</th>
 		     		</c:if>
 		     		
 		     		<c:if test="${dto.writerId ne loginId }">
 			     		<th colspan="2">
-		     				<button onclick="location.href='applyGame?matchingIdx=${dto.matchingIdx}'">신청하기</button>
+		     				<button id="applyChk" onclick="location.href='applyGame?matchingIdx=${dto.matchingIdx}'">신청</button>
 		     			</th>
 		     		</c:if>
 	     		</c:if>
@@ -202,10 +202,9 @@ table, th, td{
 				<div id="gameInviteListPopup">
 					<h3>초대하기</h3>
 					<hr>
-					<div id="scroll" style="height: 200px; overflow: auto;">
+					<div id="scroll" style="height: 150px; overflow: auto;">
 						<ul>
 							<c:if test="${gameInviteList !=null}">
-								<p>초대한 회원</p>
 								<c:forEach items="${gameInviteList}" var="gameInviteList">
 									<li> 
 									${gameInviteList.userId}
@@ -213,7 +212,7 @@ table, th, td{
 									</li>
 								</c:forEach>
 							</c:if>
-							<hr>
+							
 							<c:forEach items="${userList}" var="userList">
 								<li> 
 									${userList.userId}
@@ -233,7 +232,7 @@ table, th, td{
 	     			</th>
 	     			<c:if test="${dto.writerId eq loginId }">
 			     		<th colspan="2">
-			     			<button onclick="location.href='matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}'">경기종료</button>
+			     			<button id="finishChk" onclick="location.href='matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}'">경기종료</button>
 		     			</th>
 		     		</c:if>
 		     		
@@ -252,15 +251,18 @@ table, th, td{
 	     		<th colspan="3">
 	     		<c:if test="${dto.writerId eq loginId }">
 		     		
-		     			<button onclick="location.href='update.go?matchingIdx=${dto.matchingIdx}'">수정하기</button>
-		     			<button onclick="location.href='delete.do?matchingIdx=${dto.matchingIdx}'">삭제하기</button>
+		     			<button onclick="location.href='update.go?matchingIdx=${dto.matchingIdx}'">수정</button>
+		     			<button id="delChk" onclick="location.href='delete.do?matchingIdx=${dto.matchingIdx}'" >삭제</button>
 						<button onclick="location.href='./list.do'">목록으로</button>
 		     		
 	     		</c:if>
 	     		
 	     		
 	     		<c:if test="${dto.writerId ne loginId }">
-		     		<button onclick="location.href='./list.do'">목록으로</button>
+	     		<c:if test="${loginId != 'guest' }">
+	     			<button onclick="window.open('matchingReport.go?matchingIdx=${dto.matchingIdx}','모집글 신고하기','width=600px,height=400px')">신고</button>
+	     		</c:if>
+		     		<button onclick="location.href='./list.do'">목록</button>
 	     		</c:if>
 	     		</th>
 	     	</tr>
@@ -284,8 +286,8 @@ table, th, td{
 	     				<c:if test="${status.index % 2 == 0}"> 
 	     					<input type="radio" name="receiveId" value="${playerList.userId}"> ${playerList.userId} 
 	     					<c:if test="${playerList.userId ne loginId}">
-		     					<input type="radio" name="manner_${playerList.userId} " value="${playerList.userId}_up"> 👍
-		     					<input type="radio" name="manner_${playerList.userId} " value="${playerList.userId}_down"> 👎
+		     					<input type="radio" name="manner_${playerList.userId}" id="manner_${playerList.userId}" value="${playerList.userId}_up"> 👍
+		     					<input type="radio" name="manner_${playerList.userId}" id="manner_${playerList.userId}" value="${playerList.userId}_down"> 👎
 	     					</c:if></br>
 	     				</c:if>	
 	     				</c:forEach>		
@@ -304,7 +306,9 @@ table, th, td{
 	     			</td>
 	     		</tr>
 	     		<tr>
-	     			<th colspan="7"><button id="review_btn">제출하기</button></th>
+	     			<th colspan="7">
+	     				<input type="submit" value="제출" />
+	     			</th>
 	     		</tr>	
 	     		</form>
 	     	</c:if>
@@ -348,11 +352,12 @@ table, th, td{
 			     		<c:if test="${commentList.userId eq loginId}">
 			     			<a  href="commentUpdate.go?commentIdx=${commentList.commentIdx}&matchingIdx=${dto.matchingIdx}" >수정</a> 
 			     			/ 
-			     			<a href="commentDelete.do?commentIdx=${commentList.commentIdx}&matchingIdx=${dto.matchingIdx}">삭제</a>
+			     			<a href="commentDelete.do?commentIdx=${commentList.commentIdx}&matchingIdx=${dto.matchingIdx}" id="delCommentChk" >삭제</a>
+
 			     		</c:if>
 			     		<c:if test="${commentList.userId ne loginId}">
-				     		<c:if test="${loginId != 'guest' }"><button id="playerList">
-				     			<a href="#">신고</a>
+				     		<c:if test="${loginId != 'guest' }">
+				     			<a href="#" onclick="window.open('commentReport.go?commentIdx=${commentList.commentIdx}','댓글 신고하기','width=600px,height=400px')">신고</a>				     			
 				     		</c:if>	 
 			     		</c:if>	     					
 			     	</td>
@@ -361,23 +366,22 @@ table, th, td{
 		     
 		     <tr>
 
-			     <form method="post" action="commentWrite.do?categoryId=m01&comentId=${dto.matchingIdx}" >
+			     <form method="post" action="commentWrite.do?categoryId=m01&comentId=${dto.matchingIdx}" id="commentForm">
 			     		<th >
-			     			<input type="text" name="userId" value="${loginId}" style= "border:none; width:40px;" readonly>
+			     			<input type="text" name="userId" value="${loginId}" style= "border:none; width:50px; background-color: #f8f9fa;" readonly>
 			     		</th>
 			     		<c:if test="${loginId != 'guest' }">
 				     		<th colspan="5">
-				     			<input type="text" name="commentContent">
+				     			<input type="text" name="commentContent" id="commentContent" style="background-color: #f8f9fa; border:none;width:400px;">
 				     		</th>
 				     		<th>
-				     			<button>작성</button>
+				     			<input type="button" value="작성" onclick="subCommentChk()" />
 				     		</th>
 			     		</c:if>
 			     		<c:if test="${loginId == 'guest' }">
 				     		<th colspan="6">
-				     			<input type="text" name="commentContent" style= "border:none; width:400px;" placeholder="댓글 작성은 로그인 후 가능합니다. ">
+				     			<input type="text" name="commentContent" style= "border:none; width:400px; background-color: #f8f9fa;" placeholder="댓글 작성은 로그인 후 가능합니다. " readonly />
 				     		</th>
-				     		
 			     		</c:if>
 			     </form>
 			     			     
@@ -415,14 +419,54 @@ table, th, td{
     });
 	
     
-    
-    
-    
+    //=============================================================
+    // comfirm 창 모음
+    //=============================================================
+    $('#delChk').click(function(){
+        confirm('삭제하시면 복구할수 없습니다. \n 정말로 삭제하시겠습니까??');
+   });
+ 
 
-
+    $(function(){
+        $('#delOk').click(function(){
+            if(!confirm('삭제하시면 복구할수 없습니다. \n 정말로 삭제하시겠습니까??')){
+                return false;
+            }
+        });
+    });
+    
+    $('#matchingChk').click(function(){
+        confirm('모집을 종료하면 경기 참가 신청은 자동으로 거절 됩니다. \n정말 종료하시겠습니까?');
+   });
+   
+   $('#finishChk').click(function(){
+        confirm('경기를 종료하고 리뷰를 작성하시겠습니까?');
+   });
+    
+   $('#delCommentChk').click(function(){
+        confirm('삭제하시면 복구할수 없습니다. \n 정말로 삭제하시겠습니까??');
+   });
     
     
-    
+   $('#applyChk').click(function(){
+        confirm('해당 경기에 참가 신청 하시겠습니까?');
+   });
+   
+   
+  function subCommentChk(){
+		console.log($('#commentContent').val());
+		
+		if($('#commentContent').val() == ''){
+			alert('댓글을 입력해주세요.');
+			return false;
+		}else{
+			$('#commentForm').submit();
+		}
+		
+		
+	}
+  
+ 
     
     
 	

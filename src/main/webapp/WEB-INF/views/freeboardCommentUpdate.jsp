@@ -8,9 +8,6 @@
 <style>
 @charset "UTF-8";
 
-<table frame=void>
-
-
 table{
 	width : 100%;
 }
@@ -102,6 +99,50 @@ textarea{
 			     			<button>작성</button>
 			     		</th>
 			     </form> 
+		     </tr>
+		     
+		     <c:forEach items="${fcommentList}" var="fcommentList">
+				<tr>
+			    	<th>${fcommentList.userId} </th>
+			     	<td colspan="3">${fcommentList.commentContent}</td>
+			     	<td>${fcommentList.commentWriteTime}</td>
+			     	<td colspan="2">
+			     		<c:if test="${fcommentList.userId eq loginId}">
+			     			<a  href="fcommentUpdate.go?commentIdx=${fcommentList.commentIdx}&bidx=${dto.bidx}" >수정</a> 
+			     			/ 
+			     			<a href="fcommentDelete.do?commentIdx=${fcommentList.commentIdx}&bidx=${dto.bidx}">삭제</a>
+			     		</c:if>
+			     		<c:if test="${fcommentList.userId ne loginId}">
+				     		<c:if test="${loginId != 'guest' }"><button id="playerList"></button>
+				     			<a href="#">신고</a>
+				     		</c:if>	 
+			     		</c:if>	     					
+			     	</td>
+			     </tr>
+			</c:forEach>
+		     
+		     <tr>
+
+			     <form method="post" action="freeboardcommentUpdate.do?">
+					<th>
+						<input type="hidden" name="commentIdx" value="${fcommentDto.commentIdx}">
+						<input type="hidden" name="bidx" value="${dto.boardIdx}" style= "border:none;">
+						<input type="text" name="userId" value="${loginId}" style= "border:none;" readonly>
+					</th>
+					<c:if test="${loginId != 'guest' }">
+						<th colspan="5">
+							<input type="text" name="commentContent" value="${fcommentDto.commentContent}">
+						</th>
+						<th>
+							<button>작성</button>
+						</th>
+					</c:if>
+					<c:if test="${loginId == 'guest' }">
+						<th colspan="6">
+							<input type="text" name="commentContent" style= "border:none; width:400px;" placeholder="댓글 작성은 로그인 후 가능합니다. ">
+						</th>     		
+					</c:if>
+				</form>  
 		     </tr>
 		</table>
 </body>

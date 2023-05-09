@@ -240,8 +240,11 @@ public class MatchingService {
 	public MatchingDTO userData(String loginId) {
 		return matchingDAO.userData(loginId);
 	}
-
-
+	
+	// 참가 신청 여부 확인
+	public int applyGameChk(String matchingIdx, String userId) {
+		return matchingDAO.applyGameChk(matchingIdx,userId);
+	}
 	
 	public void applyGame(String matchingIdx, String userId) {
 		matchingDAO.applyGame(matchingIdx,userId);
@@ -326,6 +329,21 @@ public class MatchingService {
 	public int cntReview(String userId, String matchingIdx) {
 		return matchingDAO.cntReview(userId,matchingIdx);
 	}
+
+	public void matchingReport(HashMap<String, String> params) {
+		matchingDAO.matchingReport(params);
+	}
+
+	public void commentReport(HashMap<String, String> params) {
+		matchingDAO.commentReport(params);
+		
+	}
+	
+	public void downHit(String matchingIdx) {
+		matchingDAO.downHit(matchingIdx);
+	}
+
+	
 
 	
 	

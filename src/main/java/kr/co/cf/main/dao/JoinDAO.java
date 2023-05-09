@@ -32,5 +32,15 @@ public interface JoinDAO {
 	
 	int userdelete(Object attribute);
 
+	JoinDTO userInfo(Object attribute);
+
+	int userInfoUpdate(HashMap<String, String> params);
+
+	int userInfoUpdatedata(HashMap<String, String> params);
+
+	int userInfoUpdateloc(int locationIdx, String userId);
+
+
+
 
 }

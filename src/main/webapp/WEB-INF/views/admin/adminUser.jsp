@@ -57,6 +57,7 @@
 	<button>초기화</button>
 	<button onclick="location.href='logout'">로그아웃</button>
 	<button onclick="location.href='userdelete.go'">회원탈퇴</button>
+	<button onclick="location.href='userinfo.go'">회원정보</button>
 </body>
 <script>
 function nicknameChange(userId){

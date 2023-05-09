@@ -44,13 +44,13 @@ function login(){
 			console.log(data);
 			if(data.user != null){
 				alert('로그인에 성공 했습니다.');
-				location.href='/cf/';
+				location.href='/cf/admin';
 			}else{
 				alert('아이디 또는 비밀번호를 확인해 주세요!');
 			}			
 		},
 		error:function(e){
-			consol.log(e);
+			console.log(e);
 			alert('아이디 또는 비밀번호를 확인해 주세요!');
 		}		
 	});
