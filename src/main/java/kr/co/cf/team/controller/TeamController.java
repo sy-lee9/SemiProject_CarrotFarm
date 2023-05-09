@@ -172,11 +172,35 @@ public class TeamController {
 		return TeamService.gameMatchingRequest(params);
 	}
 	
+	@RequestMapping(value="/team/teamAlarm.go")
+	public String teamJionAppAlarm(Model model, @RequestParam String teamIdx) {
+		logger.info("teamAlarm : "+teamIdx);		
+		model.addAttribute("teamIdx", teamIdx);		
+		return "/team/teamAlarm";
+	}
 	
+	@RequestMapping(value="/team/gameAppAlarm.go")
+	public String gameAppAlarm(Model model, @RequestParam String teamIdx) {
+		logger.info("gameAppAlarm : "+teamIdx);		
+		model.addAttribute("teamIdx", teamIdx);		
+		
+		ArrayList<TeamDTO> list = TeamService.gameAppAlarm(teamIdx);
+		logger.info("list size : "+list.size());
+		model.addAttribute("list", list);
+		
+		return "/team/gameAppAlarm";
+	}
 	
-	
-	
-	
+	@RequestMapping(value="/team/writeMatchingList.go")
+	public String writeMatchingList(Model model, @RequestParam String teamIdx) {
+		logger.info("writeMatchingList : "+teamIdx);		
+		
+		ArrayList<TeamDTO> list = TeamService.writeMatchingList(teamIdx);
+		logger.info("list size : "+list.size());
+		model.addAttribute("list", list);
+		
+		return "/team/writeMatchingList";
+	}
 	
 	
 	

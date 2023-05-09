@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -363,7 +364,7 @@ public class TeamService {
 		String selectedGameDate = String.valueOf(params.get("selectedGameDate"));
 		
 		String teamIdx = (String) params.get("teamIdx");
-		ArrayList<TeamDTO> teamLeaderList = TeamDAO.getTeamLeader(teamIdx);
+		ArrayList<TeamDTO> teamLeaderList = TeamDAO.getTeamLeaders(teamIdx);
 		logger.info("getTeamLeader : "+teamLeaderList);
 		
 		ArrayList<TeamDTO> list = null;	
@@ -403,6 +404,24 @@ public class TeamService {
 		map.put("list", newList);
 		logger.info("map : "+ map);
 		return map;
+	}
+
+	public ArrayList<TeamDTO> gameAppAlarm(String teamIdx) {
+		
+		String userId = TeamDAO.getTeamLeader(teamIdx);
+		logger.info("getTeamLeader : "+userId);
+		
+		return TeamDAO.gameAppAlarm(userId);
+	}
+
+	public ArrayList<TeamDTO> writeMatchingList(String teamIdx) {
+		
+		String userId = TeamDAO.getTeamLeader(teamIdx);
+		logger.info("getTeamLeader : "+userId);
+		
+		ArrayList<TeamDTO> list = TeamDAO.writeMatchingList(userId);
+
+		return list;
 	}
 
 	

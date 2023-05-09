@@ -59,13 +59,23 @@ public interface TeamDAO {
 	ArrayList<TeamDTO> GameDateListAsc(HashMap<String, Object> params);
 	
 
-	ArrayList<TeamDTO> getTeamLeader(String teamIdx);
+	ArrayList<TeamDTO> getTeamLeaders(String teamIdx);
 
 	ArrayList<TeamDTO> matchingRequestList(String userId);
 
 	ArrayList<TeamDTO> matchingRequestListDesc(String userId);
 
 	ArrayList<TeamDTO> matchingRequestListAsc(String userId);
+	
+
+	ArrayList<TeamDTO> gameAppAlarm(String teamIdx);
+	
+	
+	String getTeamLeader(String teamIdx);
+
+	ArrayList<TeamDTO> writeMatchingList(String userId);
+
+	
 
 
 	
