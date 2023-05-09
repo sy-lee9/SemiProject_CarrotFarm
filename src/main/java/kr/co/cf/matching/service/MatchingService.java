@@ -165,7 +165,7 @@ public class MatchingService {
 		// 만들 수 있는 총 페이지 수 : 전체 게시글의 수 / 페이지당 보여줄 수 있는 수
 		int total = 0;
 		
-		if(search.equals("default") ||search.equals("")) {
+		if(search.equals("default") || search.equals("")) {
 			if(gamePlay.equals("default") && locationIdx.equals("default")) {
 			// 전체 보여주기
 			total = matchingDAO.totalCount(categoryId);
@@ -341,6 +341,10 @@ public class MatchingService {
 	
 	public void downHit(String matchingIdx) {
 		matchingDAO.downHit(matchingIdx);
+	}
+
+	public ArrayList<MatchingDTO> teamName() {
+		return matchingDAO.teamName();
 	}
 
 	

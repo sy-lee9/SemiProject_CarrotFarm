@@ -2,8 +2,7 @@ package kr.co.cf.matching.dto;
 
 import java.sql.Date;
 
-public class MatchingDTO {
-	
+public class TeamMatchingDTO {
 	private int matchingIdx;
 	private String categoryId;
 	private String writerId;
@@ -31,17 +30,10 @@ public class MatchingDTO {
 	private String commentIdx;
 	private String alarmcontent;
 	private String alarmKind;
-	private String teamName;
 	
 	
 	
 	
-	public String getTeamName() {
-		return teamName;
-	}
-	public void setTeamName(String teamName) {
-		this.teamName = teamName;
-	}
 	public String getAlarmcontent() {
 		return alarmcontent;
 	}
@@ -205,6 +197,5 @@ public class MatchingDTO {
 	public void setCourtLongitude(float courtLongitude) {
 		this.courtLongitude = courtLongitude;
 	}
-	
 	
 }

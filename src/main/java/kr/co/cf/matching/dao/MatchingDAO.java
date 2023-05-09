@@ -145,6 +145,8 @@ public interface MatchingDAO {
 
 	void downHit(String matchingIdx);
 
+	ArrayList<MatchingDTO> teamName();
+
 	
 
 	

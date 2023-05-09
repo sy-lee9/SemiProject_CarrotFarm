@@ -144,6 +144,7 @@
 	
 	<select id="list" resultType="kr.co.cf.matching.dto.MatchingDTO">
 		SELECT 
+		  (SELECT teamName FROM team WHERE teamIdx=(SELECT teamIdx FROM teamuser WHERE userId=(SELECT writerId FROM matching WHERE categoryId=#{param2} AND matchigState='matching'))) AS teamName,	
 		  categoryId,
 		  matchingIdx, 
 		  writerId, 
@@ -166,6 +167,7 @@
 
 	<select id="listGamePlay" parameterType="hashmap" resultType="kr.co.cf.matching.dto.MatchingDTO">
 		SELECT 
+		   (SELECT teamName FROM team WHERE teamIdx=(SELECT teamIdx FROM teamuser WHERE userId=(SELECT writerId FROM matching WHERE categoryId=#{categoryId} AND matchigState='matching'))) AS teamName,
 		  categoryId,
 		  matchingIdx, 
 		  (SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx) AS locationIdx,
@@ -188,6 +190,7 @@
 	
 	<select id="listLocationIdx" parameterType="hashmap" resultType="kr.co.cf.matching.dto.MatchingDTO">
 		SELECT 
+		   (SELECT teamName FROM team WHERE teamIdx=(SELECT teamIdx FROM teamuser WHERE userId=(SELECT writerId FROM matching WHERE categoryId= #{categoryId} AND matchigState='matching'))) AS teamName,
 		  categoryId,
 		  matchingIdx, 
 		  (SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx) AS locationIdx,
@@ -210,6 +213,7 @@
 	
 	<select id="listAll" parameterType="hashmap" resultType="kr.co.cf.matching.dto.MatchingDTO">
 		SELECT 
+		(SELECT teamName FROM team WHERE teamIdx=(SELECT teamIdx FROM teamuser WHERE userId=(SELECT writerId FROM matching WHERE categoryId= #{categoryId} AND matchigState='matching'))) AS teamName,
 		  categoryId,
 		  matchingIdx, 
 		  writerId,
@@ -232,8 +236,9 @@
 	
 	<select id="listSearch" resultType="kr.co.cf.matching.dto.MatchingDTO">
 		SELECT 
+		  (SELECT teamName FROM team WHERE teamIdx=(SELECT teamIdx FROM teamuser WHERE userId=(SELECT writerId FROM matching WHERE categoryId= #{categoryId} AND matchigState='matching'))) AS teamName,
 		  categoryId,
-		  matchingIdx, 
+		  matchingIdx,
 		  writerId, 
 		  (SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx) AS locationIdx,
 		  (SELECT gu FROM location WHERE locationIdx = (SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu, 
@@ -371,6 +376,13 @@
 		INSERT INTO report(categoryId, userId, reportContent, reportState, reportId) VALUES('rc',#{userId},#{reportContent},'미처리',#{commentIdx})
 	</insert>
 	
+	
+	<select id="teamName" resultType="kr.co.cf.matching.dto.MatchingDTO">
+	SELECT 
+		userId,
+		(SELECT teamName FROM team WHERE teamIdx= m.teamIdx) AS teamName 
+	FROM teamuser m WHERE teamGrade='leader'
+	</select>
 </mapper>
 
 

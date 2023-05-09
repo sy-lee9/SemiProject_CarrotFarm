@@ -22,8 +22,7 @@ import kr.co.cf.matching.service.MatchingService;
 @Controller
 public class MatchingController {
 
-	@Autowired
-	MatchingService matchingService;
+	@Autowired MatchingService matchingService;
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -41,16 +40,20 @@ public class MatchingController {
 		locationList = matchingService.locationList();
 		model.addAttribute("locationList", locationList);
 		
-		MatchingDTO userDto = new MatchingDTO();
-		userDto = matchingService.userData((String)session.getAttribute("loginId"));
 		return "/matching/matchingList";
 	}
+	
+	
 	
 	@RequestMapping(value ="/matching/list.ajax")
 	@ResponseBody
 	public HashMap<String, Object> list(@RequestParam HashMap<String, Object> params) {
 		logger.info("params : " + params);
-		return matchingService.list(params);
+		
+		HashMap<String, Object> list =   matchingService.list(params);
+	
+		return list;	
+		
 	}
 	
 
