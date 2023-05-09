@@ -7,7 +7,28 @@
 <title>🏀 당근농장</title>
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8eccc3d59df46746494af9204ba90019"></script>
+
+<!-- 부트스트랩 JavaScript 파일 불러오기 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <style>
+
+body {
+	  min-width: 1200px;
+	}
+	
+
+#content {
+		width : 776px;
+		height : 500px;
+		background-color: #f8f9fa;
+		vertical-align: top; /* 위쪽 정렬 */
+		margin: 0 0 0 10;
+   	 	padding: 0 0 0 70;
+	}
+	
+	
 table, th, td{
 		border : 1px solid black;
 		border-collapse: collapse;
@@ -39,9 +60,48 @@ table, th, td{
         display:block;
 	}
 	
+	#LNB nav.navbar {
+	    width: 200px;
+	    height: 500px;
+	    background-color: #f8f9fa;
+	}
+	#LNB  .navbar-nav {
+			text-align:center;
+		  	padding-left: 0px;
+		}
+		
+
+	div {
+	  display: inline-block;
+	}
+	
+
+	
 </style>
 </head>
 <body>
+
+	<%@ include file="../GNB.jsp" %>
+	
+	</br>
+	
+	<div id="LNB">
+	  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-left " style="padding-bottom: 200px;">
+	    <ul class="navbar-nav flex-column">
+	      <li class="nav-item active">
+	        <div style="width: 180px; height: 150px; border : 1px solid black; border-collapse: collapse;">프로필</div>
+	      </li>
+	      <li class="nav-item active">
+	        <a class="nav-link" href="/cf/matching/list.do">개인 모집글</a>
+	      </li>
+	      <li class="nav-item">
+	        <a class="nav-link" href="#">팀 모집글</a>
+	      </li>
+	    </ul>
+	  </nav>
+	</div>
+	
+	<div id="content">
 	<table>
 		<!-- 기본 글 정보 : 로그인 하지 않아도 볼 수 있어야 함 -->
 		<thead>
@@ -162,7 +222,7 @@ table, th, td{
 							</c:forEach>
 						</ul>
 					</div>
-					<button id="closeGameInviteListBtn">닫기</button>
+					<button id="closeGameInviteListBtn" onclick="location.href='detail.go?matchingIdx='+${dto.matchingIdx}">닫기</button>
 				</div>
 			
 	     		
@@ -324,6 +384,7 @@ table, th, td{
 		     </tr>
 		    </tbody>
 		   </table>
+		   </div>
 		  </body>
 		  
 	<script>
@@ -445,10 +506,6 @@ function inviteUser(userId, matchingIdx) {
     }
     
 
-	
-	
-	
-	
         
     </script>
 </html>

@@ -240,17 +240,12 @@ public class MatchingController {
 	}
 
 	@RequestMapping(value = "/matching/delete.do")
-	public String matchingDelete(@RequestParam String matchingIdx) {
+	public String matchingDelete(@RequestParam String matchingIdx, HttpSession session) {
 
 		logger.info(matchingIdx + "번 모집글 삭제");
-
-		// game 테이블의 matchingIdx가 일치하는 것을 먼저 삭제 후 matching 테이블에서도 삭제해야됨
-		// 그러므로 추후 알람을 보내는 기능은 삭제 전에 해야함
-
-		// game 테이블의 matchingIdx가 일치하는 user에게 알람 보내기
-
-		// 삭제
-		matchingService.delete(matchingIdx);
+		String writerId = (String)session.getAttribute("loginId");
+		logger.info("writerId" + writerId);
+		matchingService.delete(matchingIdx,writerId);
 
 		return "redirect:/matching/list.do";
 	}
@@ -350,7 +345,7 @@ public class MatchingController {
 			}
 			
 					
-			// 리뷰 작성 후 개인 매너 점수
+			// 리뷰 작성 후 개인 매너 점수 
 			float mannerPoint = matchingService.mannerPoint((String)session.getAttribute("loginId"));
 			mannerPoint += 50;
 			model.addAttribute("mannerPoint", mannerPoint);

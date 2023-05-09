@@ -4,23 +4,15 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>🏀 당근농장</title>
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 <style>
-
+   
 </style>
 </head>
 <body>
-	<p>당근농장<p>
-	<p>당근농부1-Lee</p>
-	<p>당근농부1-Park</p>
-	<p>당근농부1-Jeong</p>
-	<p>현동현입니다만?</p>
-	<p>문제라도?</p>
+	
 </body>
 <script>
-
-
-
 </script>
 </html>
