@@ -34,11 +34,15 @@
 		height: 100%;
 		resize: none;
 	}
+	button{
+		margin: 10;
+	}
 </style>
 </head>
-<body>
-	<form action="team/teamPageUpdate.do" method="post" enctype="multipart/form-data">
+<body>	
+	<form action="teamPageUpdate.do" method="post" enctype="multipart/form-data">	
 		<input type="hidden" name="teamIdx" value="${team.teamIdx}"/>
+		<button type="button" onclick="update()">저장</button>
 		<table>
 			<thead>
 				<colgroup>
@@ -59,30 +63,34 @@
 					<th>팀 프로필 사진</th>
 					<td>
 						<c:if test="${team.photoName eq null}">
-							<input type="file" name="photo"/>
+							<input type="file" name="teamProfilePhoto"/>
 						</c:if>
 						<c:if test="${team.photoName ne null}">
-							<img src="/photo/${photoName}"/>
+							<p>프로필 사진은 한장만 업로드 할 수 있습니다.</p>
+							<input type="file" name="teamProfilePhoto" />
+							<img width="300" src="/photo/${team.photoName}"/>
+							<div hidden="true"><input type="text" name="photoName" value="${team.photoName}"/></div>							
 						</c:if>		
 					</td>
 				</tr>
 				<tr>
 					<th>주 활동지역</th>
 					<td>
-						<input type="text" id="location" name="location" value="${team.locationIdx}" readonly/> &nbsp;&nbsp;
+						<input type="text" id="location" name="location" value="${team.gu}" readonly/> &nbsp;&nbsp;
 						<input type="button" id="address_kakao" value="검색"/>
+						<div hidden="true"><input type="text" name="locationIdx" value="${team.locationIdx}"/></div>
 					</td>
 				</tr>
 				<tr>
 					<th>주 활동시간</th>
 					<td>
-						<select id="teamFavTime" name="teamFavTime" value="${team.teamFavTime}">
-					        <option id="평일/오전" value="평일/오전">평일/오전</option>
-					        <option id="평일/오후" value="평일/오후">평일/오후</option>
-					        <option id="평일/저녁" value="평일/저녁">평일/저녁</option>
-					        <option id="주말/오전" value="주말/오전">주말/오전</option>
-					        <option id="주말/오후" value="주말/오후">주말/오후</option>
-					        <option id="주말/저녁" value="주말/저녁">주말/저녁</option>
+						<select id="teamFavTime" name="teamFavTime">
+					        <option id="평일오전" value="평일/오전">평일/오전</option>
+					        <option id="평일오후" value="평일/오후">평일/오후</option>
+					        <option id="평일저녁" value="평일/저녁">평일/저녁</option>
+					        <option id="주말오전" value="주말/오전">주말/오전</option>
+					        <option id="주말오후" value="주말/오후">주말/오후</option>
+					        <option id="주말저녁" value="주말/저녁">주말/저녁</option>
 					        <option id="상관없음" value="상관없음">상관없음</option>
 					    </select>
 	    			</td>
@@ -91,16 +99,16 @@
 					<th>선호하는 경기종목</th>
 					<td>
 						<select name="teamFavNum">
-					        <option value="3:3">3:3</option>
-					        <option value="5:5">5:5</option>
-					        <option value="상관없음">상관없음</option>
+					        <option value="3">3:3</option>
+					        <option value="5">5:5</option>
+					        <option value="0">상관없음</option>
 					    </select>
 					</td>
 				</tr>
 				<tr>
 					<th>소개글</th>
 					<td>
-						<textarea id="teamIntroduce" name="teamIntroduce" value="{team.teamIntroduce}" placeholder="팀소개글 및 구하는 포지션 등을 자유롭게 작성해주세요."></textarea>
+						<textarea id="teamIntroduce" name="teamIntroduce" placeholder="팀소개글 및 구하는 포지션 등을 자유롭게 작성해주세요.">${team.teamIntroduce}</textarea>
 					</td>
 				</tr>
 			</tbody>
@@ -110,22 +118,31 @@
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
 	
-	$('#teamFavTime').change(function(){
+	function gps(){
 		var selectedTeamFavTime = '${team.teamFavTime}';
 		// 선택한 요소 확인 okay
 		console.log(selectedTeamFavTime);
 		
-		var teamFavTime = ['평일/오전','평일/오후','평일/저녁','주말/오전','주말/오후','주말/저녁','상관없음'];
-		
-		if (teamFavTime.indexOf(selectedTeamFavTime) !== -1){
-			if (selectedTeamFavTime == teamFavTime) {
-			    $('#teamFavTime').val('selectedTeamFavTime').prop('selected',true);
-			  }
-		}
-	});
-
-
-
+		if (selectedTeamFavTime == '평일/오전') {
+		    $('#평일오전').prop('selected',true);
+		  }else if(selectedTeamFavTime == '평일/오후') {
+		    $('#평일오후').prop('selected',true);
+		  }else if(selectedTeamFavTime == '평일/저녁') {
+		    $('#평일저녁').prop('selected',true);
+		  }else if(selectedTeamFavTime == '주말/오전') {
+		    $('#주말오전').prop('selected',true);
+		  }else if(selectedTeamFavTime == '주말/오후') {
+		    $('#주말오후').prop('selected',true);
+		  }else if(selectedTeamFavTime == '주말/저녁') {
+		    $('#주말저녁').prop('selected',true);
+		  }else if(selectedTeamFavTime == '상관없음') {
+		    $('#상관없음').prop('selected',true);
+		  }
+	};
+	
+	$(document).ready(function() {
+		gps();
+});
 
 	document.getElementById('teamName').addEventListener('keyup',checkByte);
 	var countSpan = document.getElementById('count');
@@ -170,8 +187,25 @@
 	
 	var overlayChk = false;	
 	
-	function teamRegist(){
-		if(overlayChk == true){
+	function update(){
+		if($('#teamName').val() != '${team.teamName}'){
+			if(overlayChk == true){
+				if($('#teamName').val()==''){
+					alert('팀이름을 입력해주세요!');
+					$('#teamName').focus();
+				}else if($('#teamIntroduce').val()==''){
+					alert('팀 소개글을 입력해주세요!');
+					$('#teamIntroduce').focus();
+				}else if($('#location').val()==''){
+					alert('주 활동지역을 입력해주세요!');
+					$('#teamIntroduce').focus();
+				}else{				
+						$('button').attr('type','submit');				
+				}
+			}else{
+				alert('이미 사용 중인 팀이름 입니다.');				
+			}
+		}else{
 			if($('#teamName').val()==''){
 				alert('팀이름을 입력해주세요!');
 				$('#teamName').focus();
@@ -184,8 +218,6 @@
 			}else{				
 					$('button').attr('type','submit');				
 			}
-		}else{
-			alert('이미 사용 중인 팀이름 입니다.');				
 		}
 	}
 

@@ -16,10 +16,12 @@ public interface MatchingDAO {
 	void game(MatchingDTO matchingDto);
 
 	void upHit(String matchingIdx);
-
+	
+	//매칭글 삭제 전 알림
+	void matchingDeleteAlarm(String userId, String matchingIdx);
 	void deleteGame(String matchingIdx);
-
 	void deleteMatching(String matchingIdx);
+	
 
 	ArrayList<MatchingDTO> locationList();
 
@@ -27,8 +29,12 @@ public interface MatchingDAO {
 
 	ArrayList<MatchingDTO> courtList();
 
+	// 매칭글 수정 이후 수정 관련 알림
 	void matchingUpdate(HashMap<String, String> params);
+	void matchingUpdateAlarm(HashMap<String, String> params);	
 
+	
+	
 	ArrayList<MatchingDTO> commentList(String matchingIdx);
 
 	void commentWrite(HashMap<String, String> params);
@@ -75,8 +81,69 @@ public interface MatchingDAO {
 	ArrayList<MatchingDTO> listAll(HashMap<String, Object> params);
 
 	ArrayList<MatchingDTO> listSearch(HashMap<String, Object> params);
-
+	
+	
+	
 		
+
+	// 게임신청
+	void applyGame(String matchingIdx, String userId);
+			
+	// 모집 중 -> 모집 완료 상태 변경 
+	void matchigStateToFinish(String matchingIdx, String matchigState);
+	void matchigStateToFinishDelete(String matchingIdx);
+	void matchigStateToFinishDeleteAlarm(String matchingIdx);
+	
+	void matchigStateToReview(String matchingIdx, String matchigState);
+	
+	ArrayList<MatchingDTO> playerList(String matchingIdx);
+
+	void playerDelete(String matchingIdx, String userId);
+
+	ArrayList<MatchingDTO> gameApplyList(String matchingIdx);
+
+	void gameApplyAccept(String matchingIdx, String userId);
+			
+	void gameApplyReject(String matchingIdx, String userId);
+
+	ArrayList<MatchingDTO> userList(String matchingIdx);
+
+	void gameInvite(HashMap<String, Object> params);
+
+	void cancelGameInvite(HashMap<String, Object> params);
+
+	ArrayList<MatchingDTO> gameInviteList(String matchingIdx);
+
+	void mvp(HashMap<String, Object> params);
+
+	void mannerUp(HashMap<String, Object> params);
+
+	void mannerDown(HashMap<String, Object> params);
+
+	int review(String matchingIdx, String writerId);
+
+	float mannerPoint(String loginId);
+
+	int cntReview(String userId, String matchingIdx);
+
+	void deleteAlarm(String matchingIdx);
+
+	void gameInviteAlarm(HashMap<String, Object> params);
+
+	void gameInviteCancelAlarm(HashMap<String, Object> params);
+
+	void playerDeleteAlarm(String matchingIdx, String userId);
+
+	void gameApplyAcceptAlarm(String matchingIdx, String userId);
+
+	void gameApplyRejectAlarm(String matchingIdx, String userId);
+
+	
+
+	
+
+
+	
 
 	
 

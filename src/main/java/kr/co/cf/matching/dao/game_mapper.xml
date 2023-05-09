@@ -6,5 +6,4 @@
 <mapper namespace="kr.co.cf.matching.dao.GameDAO">
 	
 
-
 </mapper>

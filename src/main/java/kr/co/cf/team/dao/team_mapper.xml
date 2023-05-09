@@ -7,26 +7,53 @@
 
 	<select id="list" resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT 
-			t.teamIdx,t.teamMatchState,t.locationIdx,t.teamName,t.teamIntroduce,t.teamManner,t.teamDisband,
-			(SELECT COUNT(userId) FROM teamUser WHERE teamIdx = t.teamIdx) AS teamUser
-		FROM team t ORDER BY teamIdx DESC
-			LIMIT #{param1} OFFSET #{param2};
+			t.teamIdx,t.teamMatchState,t.locationIdx,t.teamName,t.teamIntroduce,t.teamDisband,
+			(SELECT COUNT(userId) FROM teamUser WHERE teamIdx = t.teamIdx) AS teamUser,
+			(SELECT gu FROM location WHERE locationIdx = t.locationIdx) AS gu
+		FROM team t WHERE teamDisband = 0 ORDER BY teamIdx DESC
+			LIMIT 10 OFFSET #{offset};
+	</select>
+	
+	<select id="MatchStateList" resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			t.teamIdx,t.teamMatchState,t.locationIdx,t.teamName,t.teamIntroduce,t.teamDisband,
+			(SELECT COUNT(userId) FROM teamUser WHERE teamIdx = t.teamIdx) AS teamUser,
+			(SELECT gu FROM location WHERE locationIdx = t.locationIdx) AS gu
+		FROM team t 
+		WHERE teamMatchState = #{matchState} 
+		AND teamDisband = 0
+		ORDER BY teamIdx DESC		
+		LIMIT 10 OFFSET #{offset};
+	</select>
+	
+	<select id="SearchList" resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			t.teamIdx,t.teamMatchState,t.locationIdx,t.teamName,t.teamIntroduce,t.teamDisband,
+			(SELECT COUNT(userId) FROM teamUser WHERE teamIdx = t.teamIdx) AS teamUser,
+			(SELECT gu FROM location WHERE locationIdx = t.locationIdx) AS gu
+		FROM team t 
+		WHERE teamName LIKE CONCAT(#{searchText})
+		AND teamDisband = 0
+		ORDER BY teamIdx DESC		
+		LIMIT 10 OFFSET #{offset};
+
 	</select>
 	
 	<select id="totalCount" resultType="int">
-		SELECT COUNT(teamIdx) FROM team
+		SELECT COUNT(teamIdx) FROM team WHERE teamDisband = 0
 	</select>
 	
-<!-- 
-	<select id="checkMatchState" resultType="kr.co.cf.team.dto.TeamDTO">
-		SELECT 
-			t.teamIdx,t.teamMatchState,t.locationIdx,t.teamName,t.teamIntroduce,t.teamManner,t.teamDisband,
-			(SELECT COUNT(userId) FROM teamUser WHERE teamIdx = t.teamIdx) AS teamUser,
-			(select photoName from photo where photoId = t.teamIdx) as photoName 
-		FROM team t WHERE t.teamMatchState = #{checkMatchState} ORDER BY teamIdx DESC
+	<select id="totalCountMatchState" resultType="int">
+		SELECT COUNT(teamIdx) FROM team 
+			WHERE teamMatchState = #{matchState} AND teamDisband = 0
 	</select>
- -->
-
+	
+	<select id="totalCountSearch" resultType="int">
+		SELECT COUNT(teamIdx) FROM team 
+			WHERE (teamName LIKE CONCAT(#{searchText})) AND teamDisband = 0
+	</select>	
+	
+	
 	<select id="overlay" resultType="int">
 		SELECT COUNT(teamName) FROM team WHERE teamName = #{param1}
 	</select>
@@ -36,9 +63,9 @@
 		keyColumn="teamIdx"
 		keyProperty="teamIdx"
 	id="teamRegist" parameterType="kr.co.cf.team.dto.TeamDTO">
-		INSERT INTO team(teamName,teamFavTime,teamFavNum,teamIntroduce,teamMatchState,teamDisband,locationIdx,teamManner) 
+		INSERT INTO team(teamName,teamFavTime,teamFavNum,teamIntroduce,teamMatchState,teamDisband,locationIdx) 
 			VALUES(#{teamName},#{teamFavTime},#{teamFavNum},#{teamIntroduce},#{teamMatchState},
-			#{teamDisband},#{locationIdx},#{teamManner})
+			#{teamDisband},#{locationIdx})
 	</insert>
 	
 	<select id="locationFind" resultType="int">
@@ -51,9 +78,10 @@
 	
 	<select id="teamInfo"	resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT 
-			t.teamIdx,t.teamMatchState,t.locationIdx,t.teamName,t.teamIntroduce,t.teamManner,t.teamDisband,teamFavTime,
+			t.teamIdx,t.teamMatchState,t.locationIdx,t.teamName,t.teamIntroduce,t.teamDisband,teamFavTime,
 			(SELECT COUNT(userId) FROM teamUser WHERE teamIdx = t.teamIdx) AS teamUser,
-			(select photoName from photo where photoId = t.teamIdx) as photoName 
+			(select photoName from photo where photoId = t.teamIdx) as photoName,
+			(SELECT gu FROM location WHERE locationIdx = t.locationIdx) AS gu
 		FROM team t WHERE t.teamIdx = #{param1} ORDER BY teamIdx DESC
 	</select>
 	
@@ -61,12 +89,194 @@
 		SELECT tagContent FROM tag WHERE tagIdx in (SELECT tagIdx FROM tagReview WHERE teamId = #{param1})
 	</select>
 	
-	<select id="teamPageUpdate"	resultType="kr.co.cf.team.dto.TeamDTO">
+	<select id="updateForm"	resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT 
 			t.teamIdx,t.teamMatchState,t.locationIdx,t.teamName,t.teamIntroduce,teamFavTime,teamFavNum,
-			(select photoName from photo where photoId = t.teamIdx) as photoName 
+			(select photoName from photo where photoId = #{param1}) as photoName, 
+			(SELECT gu FROM location WHERE locationIdx = t.locationIdx) AS gu
 		FROM team t WHERE t.teamIdx = #{param1}
 	</select>
+	
+	<update id="teamPageUpdate" parameterType="kr.co.cf.team.dto.TeamDTO">
+		UPDATE team SET 
+			teamName = #{teamName}
+			,locationIdx = #{locationIdx}
+			,teamFavTime = #{teamFavTime}
+			,teamFavNum = #{teamFavNum}
+			,teamIntroduce = #{teamIntroduce}
+		WHERE teamIdx = #{teamIdx}
+	</update>
+	
+	<update id="teamProfilePhotoUpdate">
+		UPDATE photo SET 
+			photoName = #{param1}
+		WHERE photoId = #{param2}
+	</update>
+	
+	<update id="disband">
+		UPDATE team SET disbandAppDate = NOW() WHERE teamIdx = #{param1}
+	</update>
+	
+	<update id="disbandCancle">
+		UPDATE team SET disbandAppDate = null WHERE teamIdx = #{param1}
+	</update>
+	
+	<select id="getTeamUser"	resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT userId
+			FROM teamUser WHERE teamIdx = #{param1}
+			AND teamUserState = 'join'
+	</select>
+	
+	<insert id="disbandAlarm" parameterType="String">
+		insert into alarm(catecoryId,userId,alarmContent) 
+		values(
+		'ta01',
+		#{param1},
+		'팀장의 팀해체 요청으로 일주일 후 팀이 해체됩니다.')
+	</insert>
+	
+
+	<select id="gameList" resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			m.matchingIdx,
+			(SELECT gu FROM location WHERE locationIdx = 
+				(SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu,
+			m.subject,
+			m.gameDate,
+			m.gamePlay
+		FROM matching m 
+		INNER JOIN game g ON m.matchingIdx = g.matchingIdx
+		WHERE m.categoryId = 'm02'
+			AND m.matchigState = 'review'
+			AND g.userId = #{userId}
+			AND g.gameAppState = '확정'
+		ORDER BY m.matchingIdx DESC
+		LIMIT 10 OFFSET #{offset}
+	</select>
+	
+	<select id="GameDateListDesc" resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			m.matchingIdx,
+			(SELECT gu FROM location WHERE locationIdx = 
+				(SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu,
+			m.subject,
+			m.gameDate,
+			m.gamePlay
+		FROM matching m 
+		INNER JOIN game g ON m.matchingIdx = g.matchingIdx
+		WHERE m.categoryId = 'm02'
+			AND m.matchigState = 'review'
+			AND g.userId = #{userId}
+			AND g.gameAppState = '확정'
+		ORDER BY m.gameDate DESC
+		LIMIT 10 OFFSET #{offset}
+	</select>
+	
+	<select id="GameDateListAsc" resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			m.matchingIdx,
+			(SELECT gu FROM location WHERE locationIdx = 
+				(SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu,
+			m.subject,
+			m.gameDate,
+			m.gamePlay
+		FROM matching m 
+		INNER JOIN game g ON m.matchingIdx = g.matchingIdx
+		WHERE m.categoryId = 'm02'
+			AND m.matchigState = 'review'
+			AND g.userId = #{userId}
+			AND g.gameAppState = '확정'
+		ORDER BY m.gameDate ASC	
+		LIMIT 10 OFFSET #{offset}
+	</select>
+	
+	<select id="SearchGameList" resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			m.matchingIdx,
+			(SELECT gu FROM location WHERE locationIdx = 
+				(SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu,
+			m.subject,
+			m.gameDate,
+			m.gamePlay
+		FROM matching m
+		INNER JOIN game g ON m.matchingIdx = g.matchingIdx
+		WHERE m.categoryId = 'm02'
+			AND m.matchigState = 'review'
+			AND g.userId = #{userId}
+			AND g.gameAppState = '확정'
+			AND subject LIKE CONCAT(#{searchText})
+		ORDER BY m.matchingIdx DESC		
+		LIMIT 10 OFFSET #{offset}
+	</select>
+	
+	
+	<select id="getTeamLeader"	resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT userId
+		FROM teamUser WHERE teamIdx = #{param1}
+			AND teamUserState = 'join'
+			AND teamGrade IN ('leader','deputyLeader')
+	</select>
+	
+		<select id="matchingRequestList" resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			m.matchingIdx,
+			(SELECT gu FROM location WHERE locationIdx = 
+				(SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu,
+			m.subject,
+			m.gameDate,
+			m.gamePlay,
+			m.matchigState,
+			g.gameAppState
+		FROM matching m 
+		INNER JOIN game g ON m.matchingIdx = g.matchingIdx
+		WHERE m.categoryId = 'm02'
+			AND m.matchigState IN ('matching','finish')
+			AND g.userId = #{userId}
+			AND g.gameAppState IN ('신청','확정')
+		ORDER BY m.matchingIdx DESC
+	</select>
+	
+	<select id="matchingRequestListDesc" resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			m.matchingIdx,
+			(SELECT gu FROM location WHERE locationIdx = 
+				(SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu,
+			m.subject,
+			m.gameDate,
+			m.gamePlay,
+			m.matchigState,
+			g.gameAppState
+		FROM matching m 
+		INNER JOIN game g ON m.matchingIdx = g.matchingIdx
+		WHERE m.categoryId = 'm02'
+			AND m.matchigState IN ('matching','finish')
+			AND g.userId = #{userId}
+			AND g.gameAppState IN ('신청','확정')
+		ORDER BY m.gameDate DESC
+	</select>
+	
+	<select id="matchingRequestListAsc" resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			m.matchingIdx,
+			(SELECT gu FROM location WHERE locationIdx = 
+				(SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu,
+			m.subject,
+			m.gameDate,
+			m.gamePlay,
+			m.matchigState,
+			g.gameAppState
+		FROM matching m 
+		INNER JOIN game g ON m.matchingIdx = g.matchingIdx
+		WHERE m.categoryId = 'm02'
+			AND m.matchigState IN ('matching','finish')
+			AND g.userId = #{userId}
+			AND g.gameAppState IN ('신청','확정')
+		ORDER BY m.gameDate ASC	
+	</select>
+	
+	
+	
+	
 	
 	
 	

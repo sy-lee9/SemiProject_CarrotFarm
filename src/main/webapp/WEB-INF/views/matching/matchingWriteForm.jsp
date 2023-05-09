@@ -10,11 +10,68 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
 
+<!-- 부트스트랩 JavaScript 파일 불러오기 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+
 <style>
+
+body {
+	  min-width: 1200px;
+	}
+	#content {
+		width : 776px;
+		height : 500px;
+		background-color: #f8f9fa;
+		vertical-align: top; /* 위쪽 정렬 */
+		margin: 0 0 0 10;
+   	 	padding: 50 0 0 70;
+	}
+	
+	
+	#LNB nav.navbar {
+	    width: 200px;
+	    height: 500px;
+	    background-color: #f8f9fa;
+	}
+	#LNB  .navbar-nav {
+			text-align:center;
+		  	padding-left: 0px;
+		}
+		
+
+	div {
+	  display: inline-block;
+	}
+	
 
 </style>
 </head>
 <body>
+
+	<%@ include file="../GNB.jsp" %>
+	
+	</br>
+	
+	
+	<div id="LNB">
+	  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-left" style="padding-bottom: 200px;">
+	    <ul class="navbar-nav flex-column">
+	      <li class="nav-item active">
+	        <div style="width: 180px; height: 150px; border : 1px solid black; border-collapse: collapse;">프로필</div>
+	      </li>
+	      <li class="nav-item active">
+	        <a class="nav-link" href="/cf/matching/list.do">개인 모집글</a>
+	      </li>
+	      <li class="nav-item">
+	        <a class="nav-link" href="#">팀 모집글</a>
+	      </li>
+	    </ul>
+	  </nav>
+	</div>
+	
+	<div id="content">
 	<form method="post" action="write.do?categoryId=m01">
 				
 		<input type="text" name="subject" placeholder="제목을 입력해주세요">
@@ -58,6 +115,7 @@
 		<textarea name="content"rows="10" cols="50" style="width: 555px; height: 228px;" placeholder="경기모집에 관련된 설명을 작성해주세요"></textarea><br>
 		<input type="submit" value="작성">
 	</form>
+	</div>
 </body>
 
 
@@ -103,6 +161,14 @@
     		$('#locationIdx').replaceWith(content);
 	    	content='';
 	    	
+	    	content += '<select name="courtIdx" id="courtIdx">';
+	        content += '<option value="none">경기장</option>';
+	        content += '<c:forEach items="${courtList}" var="court">';
+	        content += '<option value="${court.courtIdx}">${court.courtName}</option>';
+	        content += '</c:forEach>';
+	        content += '</select>';
+	        $('#courtIdx').replaceWith(content);
+	    	content='';
 	    	
 	    }
 	    
@@ -110,21 +176,7 @@
 	    	
 	    	var locIdx = $(this).val();
 	       console.log(locIdx);
-	      
-	       
-	       /* if(locIdx==1){
-		    	content += '<select name="courtIdx" id="courtIdx">';
-		        content += '<option value="none">경기장</option>';
-		        content += '<c:forEach items="${courtList}" var="court">';
-		        content += '<c:if test="${court.locationIdx eq 1}">';
-		        content += '<option value="${court.courtIdx}">${court.courtName}</option>';
-		        content += '</c:if>';
-		        content += '</c:forEach>';
-		        content += '</select>';
-		        $('#courtIdx').replaceWith(content);
-		    	content='';
-		       }
-	        */
+
 	       for(var i = 1; i<26; i++){
 	    	    if(locIdx==i){
 		    	content += '<select name="courtIdx" id="courtIdx">';

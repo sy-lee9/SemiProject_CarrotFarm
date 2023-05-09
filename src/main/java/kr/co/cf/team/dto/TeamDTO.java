@@ -14,6 +14,13 @@ public class TeamDTO {
 	private int teamUser;
 	private String photoName;
 	private String tagContent;
+	private String gu;
+	private String userId;
+	private String subject;
+	private String gameDate;
+	private String gamePlay;
+	private String gameAppState;
+	private String matchigState;
 	
 	public int getTeamIdx() {
 		return teamIdx;
@@ -86,5 +93,47 @@ public class TeamDTO {
 	}
 	public void setTagContent(String tagContent) {
 		this.tagContent = tagContent;
+	}
+	public String getGu() {
+		return gu;
+	}
+	public void setGu(String gu) {
+		this.gu = gu;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	public String getSubject() {
+		return subject;
+	}
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+	public String getGameDate() {
+		return gameDate;
+	}
+	public void setGameDate(String gameDate) {
+		this.gameDate = gameDate;
+	}
+	public String getGamePlay() {
+		return gamePlay;
+	}
+	public void setGamePlay(String gamePlay) {
+		this.gamePlay = gamePlay;
+	}
+	public String getGameAppState() {
+		return gameAppState;
+	}
+	public void setGameAppState(String gameAppState) {
+		this.gameAppState = gameAppState;
+	}
+	public String getMatchigState() {
+		return matchigState;
+	}
+	public void setMatchigState(String matchigState) {
+		this.matchigState = matchigState;
 	}
 }

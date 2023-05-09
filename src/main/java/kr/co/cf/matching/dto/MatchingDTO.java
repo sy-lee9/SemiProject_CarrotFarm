@@ -29,10 +29,24 @@ public class MatchingDTO {
 	private Date commentWriteTime;
 	private String commentContent;
 	private String commentIdx;
+	private String alarmcontent;
+	private String alarmKind;
 	
 	
 	
 	
+	public String getAlarmcontent() {
+		return alarmcontent;
+	}
+	public void setAlarmcontent(String alarmcontent) {
+		this.alarmcontent = alarmcontent;
+	}
+	public String getAlarmKind() {
+		return alarmKind;
+	}
+	public void setAlarmKind(String alarmKind) {
+		this.alarmKind = alarmKind;
+	}
 	public String getCommentIdx() {
 		return commentIdx;
 	}
