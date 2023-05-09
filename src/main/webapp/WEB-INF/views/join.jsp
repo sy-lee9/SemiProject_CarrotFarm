@@ -75,10 +75,10 @@
         	<th>포지션</th>
             <td>
             	<select name="position" id="position">
-            	 <option value="center">센터</option>
-		         <option value="forward">포워드</option>
-		         <option value="guard">가드</option>
-		         <option value="none">미정</option>
+            	 <option value="센터">센터</option>
+		         <option value="포워드">포워드</option>
+		         <option value="가드">가드</option>
+		         <option value="무관">무관</option>
       			</select>
             </td>
             <th>생년월일</th>
@@ -99,10 +99,10 @@
         	<th>선호 경기 시간</th>
             <td>
             	<select name="favTime" id="favTime">
-            	 <option value="wdam">평일 오전</option>
-		         <option value="wdpm">평일 오후</option>
-		         <option value="weam">주말 오전</option>
-		         <option value="wepm">주말 오후</option>
+            	 <option value="평일 오전">평일 오전</option>
+		         <option value="평일 오후">평일 오후</option>
+		         <option value="주말 오전">주말 오전</option>
+		         <option value="주말 오후">주말 오후</option>
       			</select>
             </td>
             <td></td>
