@@ -23,9 +23,6 @@ public class TeamController {
 	@Autowired TeamService TeamService;
 	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
-	
-
-
 
 	@RequestMapping(value = "/team")
 	public String list() {
@@ -148,7 +145,9 @@ public class TeamController {
 	}
 	
 	@RequestMapping(value="/team/teamGame.go")
-	public String teamGameList() {
+	public String teamGameList(Model model, @RequestParam String teamIdx) {
+		logger.info("teamGameList : "+teamIdx);		
+		model.addAttribute("teamIdx", teamIdx);		
 		return "/team/teamGame";
 	}
 	
@@ -159,9 +158,19 @@ public class TeamController {
 		return TeamService.gameList(params);
 	}
 	
+	@RequestMapping(value="/team/gameMatchingRequest.go")
+	public String gameMatchingRequest(Model model, @RequestParam String teamIdx) {
+		logger.info("teamGameList : "+teamIdx);		
+		model.addAttribute("teamIdx", teamIdx);		
+		return "/team/gameMatchingRequest";
+	}
 	
-	
-	
+	@RequestMapping(value="/team/gameMatchingRequest.ajax", method = RequestMethod.POST)
+	@ResponseBody
+	public HashMap<String, Object> gameMatchingRequest(@RequestParam HashMap<String, Object> params){
+		logger.info("list params : "+params);
+		return TeamService.gameMatchingRequest(params);
+	}
 	
 	
 	

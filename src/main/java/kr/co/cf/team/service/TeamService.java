@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,79 +100,6 @@ public class TeamService {
 		int locationIdx = TeamDAO.locationFind(location);
 		logger.info("locationIdx : "+locationIdx);
 		return locationIdx;
-	}
-	
-	public HashMap<String, Object> gameList(HashMap<String, Object> params) { 
-		
-		int page = Integer.parseInt((String) params.get("page"));
-		String selectedGameDate = String.valueOf(params.get("selectedGameDate"));
-		String searchText = String.valueOf(params.get("searchText"));
-		logger.info(page+" 페이지 보여줘");
-		logger.info("한 페이지에 "+10+" 개씩 보여줄거야");
-		
-		HashMap<String, Object> map = new HashMap<String, Object>();		
-
-		//총 페이지 수 
-		int offset = (page-1)*10;
-		
-		// 만들 수 있는 총 페이지 수 
-		// 전체 게시물 / 페이지당 보여줄 수
-		int total = 0;
-		
-		if(searchText.equals("default") || searchText.equals("")) {
-			if(selectedGameDate.equals("default")) {
-				// 전체 보여주기
-				total = TeamDAO.totalCountGameList();
-				logger.info("totalCountGameList :"+total);
-			}else {				
-				// 경기순을 선택한 경우
-				if(selectedGameDate.equals("DESC")) {
-					total = TeamDAO.totalCountGameDate("DESC");
-				}else {
-					total = TeamDAO.totalCountGameDate("ASC");
-				}
-				logger.info("totalCountGameDate :"+total);
-			}		
-		}else {
-			// 검색어 입력한 경우
-			total = TeamDAO.totalCountGameListSearch(params);		
-			logger.info("totalCountGameListSearch :"+total);		
-		}
-		
-		int range = total%10 == 0 ? total/10 : (total/10)+1;
-		logger.info("전체 게시물 수 : "+total);
-		logger.info("총 페이지 수 : "+range);
-		
-		page = page > range ? range : page;
-		
-		map.put("currPage", page);
-		map.put("pages", range);
-				
-		ArrayList<TeamDTO> list = null;		
-		params.put("offset", offset);
-		
-		if(searchText.equals("default") || searchText.equals("")) {
-			if(selectedGameDate.equals("default")) {
-				// 전체 보여주기
-				list = TeamDAO.gameList(params);
-				logger.info("gameList size : "+list.size());
-			}else{
-				// 경기순을 선택한 경우
-				if(selectedGameDate.equals("DESC")) {
-					list = TeamDAO.GameDateList("DESC");
-				}else {
-					list = TeamDAO.GameDateList("ASC");
-				}
-				logger.info("GameDateList size : "+list.size());
-			}		
-		}else {
-			// 검색어 입력한 경우
-			list = TeamDAO.SearchGameList(params);		
-			logger.info("SearchGameList size : "+list.size());
-		}
-		
-		map.put("list", list);
-		return map;
 	}
 
 	public HashMap<String, Object> list(HashMap<String, Object> params) {
@@ -347,6 +276,133 @@ public class TeamService {
 			row += 1;			
 		}
 		logger.info("sendAlarmCount : "+row);		
+	}
+	
+	public HashMap<String, Object> gameList(HashMap<String, Object> params) { 
+		
+		int page = Integer.parseInt((String) params.get("page"));
+		String selectedGameDate = String.valueOf(params.get("selectedGameDate"));
+		String searchText = String.valueOf(params.get("searchText"));
+		logger.info(page+" 페이지 보여줘");
+		logger.info("한 페이지에 "+10+" 개씩 보여줄거야");
+		
+		String teamIdx = (String) params.get("teamIdx");
+		ArrayList<TeamDTO> teamUserList = TeamDAO.getTeamUser(teamIdx);
+		logger.info("teamUserList : "+teamUserList);
+		
+		ArrayList<TeamDTO> list = null;	
+		ArrayList<TeamDTO> newList = null;		
+		Set<TeamDTO> set = new HashSet<TeamDTO>();		
+		HashMap<String, Object> map = new HashMap<String, Object>();	
+
+		//총 페이지 수 
+		int offset = (page-1)*10;
+		
+		params.put("offset", offset);
+		
+		if(teamUserList != null) {
+			for (int i = 0; i < teamUserList.size(); i++) {
+				
+				String userId = (teamUserList.get(i).getUserId());			
+				logger.info("userID : "+userId);
+				params.put("userId", userId);
+				
+				if(searchText.equals("default") || searchText.equals("")) {
+					if(selectedGameDate.equals("default")) {
+						// 전체 보여주기
+							list = TeamDAO.gameList(params);
+							logger.info("gameList size : "+list.size());					
+					}else{
+						// 경기순을 선택한 경우
+						if(selectedGameDate.equals("DESC")) {
+								list = TeamDAO.GameDateListDesc(params);
+								logger.info("GameDateList size : "+list.size());		
+						}else {
+							params.put("range", "ASC");
+							list = TeamDAO.GameDateListAsc(params);
+								logger.info("GameDateList size : "+list.size());					
+						}
+					}
+				}else {
+					// 검색어 입력한 경우
+						list = TeamDAO.SearchGameList(params);		
+						logger.info("SearchGameList size : "+list.size());
+				}
+				
+				// 중복 list 값 제거 과정
+				set.addAll(list);
+			}
+			newList = new ArrayList<TeamDTO>(set);
+		}
+		
+		
+		logger.info("totalGameList size : "+newList.size());
+		
+		// 만들 수 있는 총 페이지 수 
+		// 전체 게시물 / 페이지당 보여줄 수
+		int total = newList.size();
+		logger.info("total "+total);
+		int range = total%10 == 0 ? total/10 : (total/10)+1;
+		logger.info("전체 게시물 수 : "+total);
+		logger.info("총 페이지 수 : "+range);
+		
+		page = page > range ? range : page;
+		
+		map.put("currPage", page);
+		map.put("pages", range);
+				
+		logger.info("list : "+ newList);
+		map.put("list", newList);
+		logger.info("map : "+ map);
+		return map;
+	}
+
+	public HashMap<String, Object> gameMatchingRequest(HashMap<String, Object> params) {
+		logger.info("service 도착");
+		logger.info("params : "+params);
+		String selectedGameDate = String.valueOf(params.get("selectedGameDate"));
+		
+		String teamIdx = (String) params.get("teamIdx");
+		ArrayList<TeamDTO> teamLeaderList = TeamDAO.getTeamLeader(teamIdx);
+		logger.info("getTeamLeader : "+teamLeaderList);
+		
+		ArrayList<TeamDTO> list = null;	
+		ArrayList<TeamDTO> newList = null;		
+		Set<TeamDTO> set = new HashSet<TeamDTO>();		
+		HashMap<String, Object> map = new HashMap<String, Object>();	
+		
+		if(teamLeaderList != null) {
+			for (int i = 0; i < teamLeaderList.size(); i++) {
+				
+				String userId = (teamLeaderList.get(i).getUserId());			
+				logger.info("userID : "+userId);
+				params.put("userId", userId);
+				
+					if(selectedGameDate.equals("default")) {
+						// 전체 보여주기
+							list = TeamDAO.matchingRequestList(userId);
+							logger.info("matchingRequestList size : "+list.size());					
+					}else{
+						// 경기순을 선택한 경우
+						if(selectedGameDate.equals("DESC")) {
+								list = TeamDAO.matchingRequestListDesc(userId);
+								logger.info("matchingRequestListDesc size : "+list.size());		
+						}else {
+							params.put("range", "ASC");
+							list = TeamDAO.matchingRequestListAsc(userId);
+								logger.info("matchingRequestListAsc size : "+list.size());					
+						}
+					}				
+				// 중복 list 값 제거 과정
+				set.addAll(list);
+			}
+			newList = new ArrayList<TeamDTO>(set);
+		}
+		logger.info("totalMatchingRequestList size : "+newList.size());
+
+		map.put("list", newList);
+		logger.info("map : "+ map);
+		return map;
 	}
 
 	

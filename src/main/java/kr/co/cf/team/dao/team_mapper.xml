@@ -124,6 +124,7 @@
 	<select id="getTeamUser"	resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT userId
 			FROM teamUser WHERE teamIdx = #{param1}
+			AND teamUserState = 'join'
 	</select>
 	
 	<insert id="disbandAlarm" parameterType="String">
@@ -134,52 +135,156 @@
 		'팀장의 팀해체 요청으로 일주일 후 팀이 해체됩니다.')
 	</insert>
 	
-	
-	<select id="totalCountGameList" resultType="int">
-		SELECT COUNT(matchingIdx) FROM matching 
-	</select>
-	
-	<select id="totalCountGameDate" resultType="int">
-		SELECT COUNT(matchingIdx) FROM matching ORDER BY #{param1}
-	</select>
-	
-	<select id="totalCountGameListSearch" resultType="int">
-		SELECT COUNT(matchingIdx) FROM matching 
-			WHERE (subject LIKE CONCAT(#{searchText}))
-	</select>	
-	
+
 	<select id="gameList" resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT 
-			(SELECT l.gu FROM location l WHERE l.locationIdx = 
-			(SELECT c.locationId FROM court c WHERE c.courtIdx = 
-			(SELECT m.courtId FROM matching m))) AS gu
-		FROM matching m WHERE ORDER BY matchingIdx {param1}
-			LIMIT 10 OFFSET #{offset};
+			m.matchingIdx,
+			(SELECT gu FROM location WHERE locationIdx = 
+				(SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu,
+			m.subject,
+			m.gameDate,
+			m.gamePlay
+		FROM matching m 
+		INNER JOIN game g ON m.matchingIdx = g.matchingIdx
+		WHERE m.categoryId = 'm02'
+			AND m.matchigState = 'review'
+			AND g.userId = #{userId}
+			AND g.gameAppState = '확정'
+		ORDER BY m.matchingIdx DESC
+		LIMIT 10 OFFSET #{offset}
 	</select>
 	
-	<select id="GameDateList" resultType="kr.co.cf.team.dto.TeamDTO">
+	<select id="GameDateListDesc" resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT 
-			t.teamIdx,t.teamMatchState,t.locationIdx,t.teamName,t.teamIntroduce,t.teamDisband,
-			(SELECT COUNT(userId) FROM teamUser WHERE teamIdx = t.teamIdx) AS teamUser,
-			(SELECT gu FROM location WHERE locationIdx = t.locationIdx) AS gu
-		FROM team t 
-		WHERE teamMatchState = #{matchState} 
-		AND teamDisband = 0
-		ORDER BY teamIdx DESC		
-		LIMIT 10 OFFSET #{offset};
+			m.matchingIdx,
+			(SELECT gu FROM location WHERE locationIdx = 
+				(SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu,
+			m.subject,
+			m.gameDate,
+			m.gamePlay
+		FROM matching m 
+		INNER JOIN game g ON m.matchingIdx = g.matchingIdx
+		WHERE m.categoryId = 'm02'
+			AND m.matchigState = 'review'
+			AND g.userId = #{userId}
+			AND g.gameAppState = '확정'
+		ORDER BY m.gameDate DESC
+		LIMIT 10 OFFSET #{offset}
+	</select>
+	
+	<select id="GameDateListAsc" resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			m.matchingIdx,
+			(SELECT gu FROM location WHERE locationIdx = 
+				(SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu,
+			m.subject,
+			m.gameDate,
+			m.gamePlay
+		FROM matching m 
+		INNER JOIN game g ON m.matchingIdx = g.matchingIdx
+		WHERE m.categoryId = 'm02'
+			AND m.matchigState = 'review'
+			AND g.userId = #{userId}
+			AND g.gameAppState = '확정'
+		ORDER BY m.gameDate ASC	
+		LIMIT 10 OFFSET #{offset}
 	</select>
 	
 	<select id="SearchGameList" resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT 
-			t.teamIdx,t.teamMatchState,t.locationIdx,t.teamName,t.teamIntroduce,t.teamDisband,
-			(SELECT COUNT(userId) FROM teamUser WHERE teamIdx = t.teamIdx) AS teamUser,
-			(SELECT gu FROM location WHERE locationIdx = t.locationIdx) AS gu
-		FROM team t 
-		WHERE teamName LIKE CONCAT(#{searchText})
-		AND teamDisband = 0
-		ORDER BY teamIdx DESC		
-		LIMIT 10 OFFSET #{offset};
+			m.matchingIdx,
+			(SELECT gu FROM location WHERE locationIdx = 
+				(SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu,
+			m.subject,
+			m.gameDate,
+			m.gamePlay
+		FROM matching m
+		INNER JOIN game g ON m.matchingIdx = g.matchingIdx
+		WHERE m.categoryId = 'm02'
+			AND m.matchigState = 'review'
+			AND g.userId = #{userId}
+			AND g.gameAppState = '확정'
+			AND subject LIKE CONCAT(#{searchText})
+		ORDER BY m.matchingIdx DESC		
+		LIMIT 10 OFFSET #{offset}
 	</select>
+	
+	
+	<select id="getTeamLeader"	resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT userId
+		FROM teamUser WHERE teamIdx = #{param1}
+			AND teamUserState = 'join'
+			AND teamGrade IN ('leader','deputyLeader')
+	</select>
+	
+		<select id="matchingRequestList" resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			m.matchingIdx,
+			(SELECT gu FROM location WHERE locationIdx = 
+				(SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu,
+			m.subject,
+			m.gameDate,
+			m.gamePlay,
+			m.matchigState,
+			g.gameAppState
+		FROM matching m 
+		INNER JOIN game g ON m.matchingIdx = g.matchingIdx
+		WHERE m.categoryId = 'm02'
+			AND m.matchigState IN ('matching','finish')
+			AND g.userId = #{userId}
+			AND g.gameAppState IN ('신청','확정')
+		ORDER BY m.matchingIdx DESC
+	</select>
+	
+	<select id="matchingRequestListDesc" resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			m.matchingIdx,
+			(SELECT gu FROM location WHERE locationIdx = 
+				(SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu,
+			m.subject,
+			m.gameDate,
+			m.gamePlay,
+			m.matchigState,
+			g.gameAppState
+		FROM matching m 
+		INNER JOIN game g ON m.matchingIdx = g.matchingIdx
+		WHERE m.categoryId = 'm02'
+			AND m.matchigState IN ('matching','finish')
+			AND g.userId = #{userId}
+			AND g.gameAppState IN ('신청','확정')
+		ORDER BY m.gameDate DESC
+	</select>
+	
+	<select id="matchingRequestListAsc" resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			m.matchingIdx,
+			(SELECT gu FROM location WHERE locationIdx = 
+				(SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu,
+			m.subject,
+			m.gameDate,
+			m.gamePlay,
+			m.matchigState,
+			g.gameAppState
+		FROM matching m 
+		INNER JOIN game g ON m.matchingIdx = g.matchingIdx
+		WHERE m.categoryId = 'm02'
+			AND m.matchigState IN ('matching','finish')
+			AND g.userId = #{userId}
+			AND g.gameAppState IN ('신청','확정')
+		ORDER BY m.gameDate ASC	
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 
