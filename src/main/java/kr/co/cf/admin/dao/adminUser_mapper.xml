@@ -5,7 +5,9 @@
 
 <mapper namespace="kr.co.cf.admin.dao.AdminUserDAO">
 	<select id="list" resultType="kr.co.cf.admin.dto.AdminUserDTO">
-		select u.userId,u.nickname,u.userName,u.userJoinDate,u.email,u.userIdx,p.photoName from user u,photo p
-where p.photoId =u.userId;
+		select u.userId,u.nickname,u.userName,u.userJoinDate,u.email,u.userIdx,p.photoName, p.photoId 
+		from user u 
+		left join photo p
+ 		on u.userId =p.photoId
 	</select>
 </mapper>

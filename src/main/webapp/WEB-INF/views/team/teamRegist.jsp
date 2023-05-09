@@ -85,9 +85,9 @@
 				<th>선호하는 경기종목</th>
 				<td>
 					<select name="teamFavNum">
-				        <option value="3:3">3:3</option>
-				        <option value="5:5">5:5</option>
-				        <option value="상관없음">상관없음</option>
+				        <option value="3">3:3</option>
+				        <option value="5">5:5</option>
+				        <option value="0">상관없음</option>
 				    </select>
 				</td>
 			</tr>

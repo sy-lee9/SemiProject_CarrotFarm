@@ -6,27 +6,76 @@
 <meta charset="UTF-8">
 <title>🏀 당근농장</title>
 
+
 	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
 	<script src="../resources/js/twbsPagination.js" type="text/javascript"></script>
+	
+	<!-- 부트스트랩 JavaScript 파일 불러오기 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+	
+	
 <style>
-
+	body {
+	  min-width: 1200px;
+	}
+	
+	
 	table, th, td{
 		border : 1px solid black;
 		border-collapse: collapse;
 		padding : 5px 10px;
 	}
 	
+	#content {
+		width : 776px;
+		height : 500px;
+		background-color: #f8f9fa;
+		vertical-align: top; /* 위쪽 정렬 */
+		padding: 10 30 10;
+	}
 	
+	#LNB nav.navbar {
+	    width: 200px;
+	    height: 500px;
+	    background-color: #f8f9fa;
+	}
+	#LNB  .navbar-nav {
+			text-align:center;
+		  	padding-left: 0px;
+		}
+		
 
+	div {
+	  display: inline-block;
+	}
 </style>
 </head>
 <body>
 
+	<%@ include file="../GNB.jsp" %>
 	
-
-	<select id="gamePlay">
+	<div id="LNB">
+	  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-left " style="padding-bottom: 200px;">
+	    <ul class="navbar-nav flex-column">
+	      <li class="nav-item active">
+	        <div style="width: 180px; height: 150px; border : 1px solid black; border-collapse: collapse;">프로필</div>
+	      </li>
+	      <li class="nav-item active">
+	        <a class="nav-link" href="/cf/matching/list.do">개인 모집글</a>
+	      </li>
+	      <li class="nav-item">
+	        <a class="nav-link" href="#">팀 모집글</a>
+	      </li>
+	    </ul>
+	  </nav>
+	</div>
+	
+	<div id="content">
+		<select id="gamePlay">
 	  <option value="default">경기방식</option>
 	  <option value="1">1:1</option>
 	  <option value="3">3:3</option>
@@ -44,8 +93,10 @@
 	
 	<input type="text" id="searchInput" placeholder="제목 또는 작성자를 입력">
 	<button id="searchButton">검색</button>
+	<c:if test="${loginId != 'guest' }">
+		<button onclick="location.href='write.go?categoryId=m01'">글쓰기</button>
+	</c:if>
 	
-	<button onclick="location.href='write.go?categoryId=m01'">글쓰기</button>
 	<hr>
 	
 	<table>
@@ -74,20 +125,24 @@
 			
 			
 			<tr>
-				<td colspan="7" id="paging">	
-					<!-- 	플러그인 사용	(twbsPagination)	-->
-					<div class="container">									
-						<nav aria-label="Page navigation" style="text-align:center">
-							<ul class="pagination" id="pagination"></ul>
-						</nav>
-					</div>
-				</td>
+			  <th colspan="7" id="paging" style="text-align:center">  
+			    <div class="container">                  
+			      <nav aria-label="Page navigation">
+			        <ul class="pagination justify-content-center" id="pagination"></ul>
+			      </nav>
+			    </div>
+			  </th>
 			</tr>
+
 
 
 			
 		</tbody>		
+		
+		
 	</table>
+	</div>
+	
 </body>
 
 <script>
@@ -185,27 +240,6 @@ function listPrint(list){
 }
 	
 
-
-	
-/* //검색어에 따른 출력 
-$('#searchButton').click(function(){
-	//검색어 확인 
-	var searchText = $('#searchInput').val();
-	console.log(searchText);
-	
-	$('tbody tr').each(function() {
-		var subject = $(this).find('#subject').text();
-		var writerId = $(this).find('#writerId').text();
-		
-		if (subject.includes(searchText) || writerId.includes(searchText)){
-			$(this).show();
-		} else {
-	        $(this).hide();
-	    }
-	});
-}); */
-
-	
 
 
 </script>

@@ -39,13 +39,15 @@
 .rating:not(:checked) label:hover ~ label {
   color: #deb217;
 }
-}
+
+
+
 </style>
 </head>
 <body>
 	
 	<div id="map" style="width:600px;height:350px;float:left;"></div>
-	<div">
+	<div>
 		<table>
 			<tr>
 				<th>${courtInfo.courtName}</th>
@@ -73,18 +75,25 @@
 	</div>
 	<div>경기장 리뷰
 		<table>
+		<a herf="#" onclick="window.open('courtReviews.do?courtIdx=${courtInfo.courtIdx}','리뷰 모아보기','width=600px,height=400px')">더보기</a>
 			<c:forEach items="${courtReviewList}" var="courtReview">
 			<tr>
 				<th>${courtReview.userId}</th>
-				<th>${courtReview.courtOneLineReview}</th>				
+				<th><input class="userCourtReview" type="text" disabled value="${courtReview.courtOneLineReview}"/></th>				
 				<th>☆${courtReview.courtStar}</th>
+				
+				<c:if test="${courtReview.photoName ne null}">
+					<th><img width="100" src="/photo/${courtReview.photoName}"/></th>
+				</c:if>
+				<th><a href="#" onclick ="window.open('courtReviewUpdate.go?courtReviewIdx=${courtReview.courtReviewIdx}&courtIdx=${courtInfo.courtIdx}','리뷰 모아보기','width=800px,height=400px')">수정</a></th>
 				<th><a href="courtReviewDelete.do?courtReviewIdx=${courtReview.courtReviewIdx}&courtIdx=${courtInfo.courtIdx}">삭제</a></th>
 			</tr>
 		</c:forEach>
 		</table>
 	</div>
-	<div>
+	<div class="image-grid">
 		사진 모아보기
+		<a herf="#" onclick="window.open('courtReviewPhoto.do?courtIdx=${courtInfo.courtIdx}','사진 모아보기','width=400px,height=400px')">더보기</a>
 		<table>
 			<c:if test="${reviewPhotoList eq null}">
 			</c:if>
@@ -101,13 +110,13 @@
 
 	</div>
 	<hr/>
-	<form action="courtReviewWrite.do" method="post" enctype="multipart/form-data">
+	<form action="courtReviewWrite.do" method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
 	<div>
 		
 		<input type="hidden" name="courtIdx" value="${courtInfo.courtIdx}"/>
 		<input type="hidden" name="courtName" value="${courtInfo.courtName}"/>
-		<input type="hidden" name="userId" value="test3"/>
-		리뷰작성<input type="text" name="courtOneLineReview" style="display: inline-block;"/>
+		<input type="hidden" name="userId" value="test1"/>
+		리뷰작성<input id="courtOneLineReview" type="text" name="courtOneLineReview" style="display: inline-block;"/>
 		<input type="file" name="photo" style="display: inline-block;"/>
 		<label>별점</label>
 		<div class="rating" style="display: inline-block;">
@@ -115,7 +124,7 @@
 		  <label for="star5"></label>
 		  <input type="radio" id="star4" name="courtStar" value="4">
 		  <label for="star4"></label>
-		  <input type="radio" id="star3" name="courtStar" value="3">
+		  <input type="radio" id="star3" name="courtStar" value="3" checked>
 		  <label for="star3"></label>
 		  <input type="radio" id="star2" name="courtStar" value="2">
 		  <label for="star2"></label>
@@ -147,13 +156,21 @@
 	
 	//마커가 지도 위에 표시되도록 설정합니다
 	marker.setMap(map);
-	
+
 	//아래 코드는 지도 위의 마커를 제거하는 코드입니다
 	//marker.setMap(null); 
 	var msg = "${msg}";
 	if(msg != ""){
 		alert(msg);
 	}
+	function validateForm() {
+		  var review = $("#courtOneLineReview").val();
+		  console.log(review);
+		  if (review == "") {
+		    alert("리뷰를 작성해주세요.");
+		    return false;
+		  }
+		}
 </script>
 </html>
 

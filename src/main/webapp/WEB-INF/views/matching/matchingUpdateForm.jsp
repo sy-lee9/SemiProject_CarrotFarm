@@ -10,16 +10,71 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
 
-<style>
+!-- 부트스트랩 JavaScript 파일 불러오기 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 
+<style>
+body {
+	  min-width: 1200px;
+	}
+	#content {
+		width : 776px;
+		height : 500px;
+		background-color: #f8f9fa;
+		vertical-align: top; /* 위쪽 정렬 */
+		margin: 0 0 0 10;
+   	 	padding: 50 0 0 70;
+	}
+	
+	
+	#LNB nav.navbar {
+	    width: 200px;
+	    height: 500px;
+	    background-color: #f8f9fa;
+	}
+	#LNB  .navbar-nav {
+			text-align:center;
+		  	padding-left: 0px;
+		}
+		
+
+	div {
+	  display: inline-block;
+	}
 </style>
 </head>
 <body>
+
+	<%@ include file="../GNB.jsp" %>
+	
+	</br>
+	
+	
+	<div id="LNB">
+	  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-left" style="padding-bottom: 200px;">
+	    <ul class="navbar-nav flex-column">
+	      <li class="nav-item active">
+	        <div style="width: 180px; height: 150px; border : 1px solid black; border-collapse: collapse;">프로필</div>
+	      </li>
+	      <li class="nav-item active">
+	        <a class="nav-link" href="/cf/matching/list.do">개인 모집글</a>
+	      </li>
+	      <li class="nav-item">
+	        <a class="nav-link" href="#">팀 모집글</a>
+	      </li>
+	    </ul>
+	  </nav>
+	</div>
+	
+	<div id="content">
+	
 	<form method="post" action="update.do?matchingIdx=${dto.matchingIdx}">
 		
 		<input type="text" name="subject" placeholder="제목을 입력해주세요" value="${dto.subject}">
 		<input type="datetime" name="gameDate" id="date" placeholder="경기 일시" value="${dto.gameDate}">
-		<input type="text" name="writerId" value="${session.loginId}" style="border:none;" readonly>
+		<input type="text" name="writerId" value="${loginId}" style="border:none;" readonly>
 
 		<br>
 
@@ -29,21 +84,119 @@
 			<option id="3" value="3">3:3</option>
 			<option id="5" value="5">5:5</option>
 		</select>
+
 		<select name="courtListType" id="courtListType">
-			<option value="none">경기장</option>
+		  	<option value="none">경기장</option>
+		  	<option value="loc">선호지역</option>
+		  	<option value="searchLoc">위치 선택</option>
+		  	<option value="listAll">전체보기</option>
 		</select>
-		<input type="text" name="courtName" id="location" value="${dto.courtName}" style="border:none;" readonly>
-		👤<input type="text" name="matchingNum" id="matchingNum" placeholder="모집인원" value ="${dto.matchingNum}" readonly><br>
+		
+		<select name="locationIdx" id="locationIdx">
+		  	<option value="none">지역구</option>
+		</select>
+		
+		<select name="courtIdx" id="courtIdx">
+			<option value="${dto.courtIdx}">${dto.courtName}</option>
+			<c:forEach items="${courtList}" var="court">
+				<c:if test="${court.locationIdx == writerData.locationIdx}">
+					<option value="${court.courtIdx}">${court.courtName}</option>
+				</c:if>
+			</c:forEach>
+		</select>
+
+		👤<input type="text" name="matchingNum" id="matchingNum" style="border:none;" value ="${dto.matchingNum}" readonly><br>
 		<textarea name="content" rows="10" cols="50" style="width: 555px; height: 228px;" placeholder="경기모집에 관련된 설명을 작성해주세요">${dto.content}</textarea><br>
 		<input type="submit" value="수정">
 	</form>
-	
+	</div>
 </body>
 
 
 
 
 <script>
+
+/* 경기장 선택 방법 선택(선호위치, 선택, 전체 보기) */
+	
+	var content='';
+	var listType = '';
+	
+	$('#courtListType').on('change', function() {
+		
+	    listType = $(this).val();
+	    
+	    if(listType=='loc'){
+	    	content += '<select name="locationList" id="locationIdx">';
+    		content += '<option value="${writerData.locationIdx}">${writerData.gu}</option>';
+	    	content += '</select>';	    	
+	    	$('#locationIdx').replaceWith(content);
+	    	content='';
+	    	
+	    	
+	    }else if(listType=='searchLoc'){
+	    	content += '<select name="locationList" id="locationIdx">';
+	    	content += '<option value="none">지역구</option>';
+	    	content += '<c:forEach items="${locationList}" var="list">';
+    		content += '<option value="${list.locationIdx}">${list.gu}</option>';
+    		content +=	'</c:forEach>';
+	    	
+    		$('#locationIdx').replaceWith(content);
+	    	content='';
+	    	
+	    	
+	    	
+	    }else if(listType=='listAll'){
+	    	content += '<select name="locationList" id="locationIdx">';
+    		content += '<option value="none">전체</option>';
+    		content += '</select>';	
+    		$('#locationIdx').replaceWith(content);
+	    	content='';
+	    	
+	    	content += '<select name="courtIdx" id="courtIdx">';
+	        content += '<option value="none">경기장</option>';
+	        content += '<c:forEach items="${courtList}" var="court">';
+	        content += '<option value="${court.courtIdx}">${court.courtName}</option>';
+	        content += '</c:forEach>';
+	        content += '</select>';
+	        $('#courtIdx').replaceWith(content);
+	    	content='';
+	    	
+	    }
+	    
+	    $('#locationIdx').on('change', function(){
+	    	
+	    	var locIdx = $(this).val();
+	       console.log(locIdx);
+
+	       for(var i = 1; i<26; i++){
+	    	    if(locIdx==i){
+		    	content += '<select name="courtIdx" id="courtIdx">';
+		        content += '<option value="none">경기장</option>';
+		        content += '<c:forEach items="${courtList}" var="court">';
+		        var locIdxchk = '${court.locationIdx}';
+		        if(locIdx==locIdxchk){ 
+		        	content += '<option value="${court.courtIdx}">${court.courtName}</option>';
+		        }
+		        content += '</c:forEach>';
+		        content += '</select>';
+		        $('#courtIdx').replaceWith(content);
+		    	content='';
+		       }
+	    	}
+	           
+	    });
+	    
+	   
+
+	    
+	    
+	});
+
+	
+	
+	
+
 
 		var gamePlaySelected = document.getElementById("gamePlay");
 		var matchingNum = document.getElementById("matchingNum");

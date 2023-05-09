@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 public class GameDTO {
 	
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> origin/master
 
 }

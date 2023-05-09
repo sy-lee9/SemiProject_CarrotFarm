@@ -27,7 +27,9 @@ public class CourtController {
 	@RequestMapping("/court")
 	public String court(Model model) {
 		
+		
 		ArrayList<CourtDTO> list = courtService.list();
+		model.addAttribute("totalPages",list.size());
 		model.addAttribute("courtList",list);
 		ArrayList<CourtDTO> guList = courtService.guList();
 		model.addAttribute("guList",guList);
@@ -98,16 +100,90 @@ public class CourtController {
 	
 	@RequestMapping(value="/courtList.ajax")
 	@ResponseBody
-	public HashMap<String, Object> courtList(@RequestParam String gu) {
+	public HashMap<String, Object> courtList(@RequestParam HashMap<String,String> params) {
+		String gu=params.get("gu");
+		String inOut=params.get("inOut");
+		String type=params.get("type");
+		String searchCourt=params.get("searchCourt");
+		String page=params.get("page");
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		if(gu.equals("서울특별시")||gu.equals("none")) {
+		if(params.get("type").equals("courtSearch")){
+			int totalList = courtService.searchTotalList(searchCourt);
+			map.put("totalList",totalList);
+			ArrayList<CourtDTO> courtSearch = courtService.courtSearch(searchCourt,page);
+			map.put("courtList",courtSearch);
+		}else {
+			if(gu.equals("서울특별시")||gu.equals("none")) {
+				gu = "";
+			}
+			if(inOut.equals("none")) {
+				inOut="";
+			}
+			int totalList = courtService.sortTotalList(gu,inOut);
+			map.put("totalList", totalList);
+			ArrayList<CourtDTO> courtList = courtService.courtList(gu,inOut,page);
+			map.put("courtList",courtList);
+		}
+		
+		/*if(gu.equals("서울특별시")||gu.equals("none")) {
 			ArrayList<CourtDTO> courtList = courtService.list();
 			map.put("courtList", courtList);
 		}else {
 			ArrayList<CourtDTO> courtList = courtService.courtList(gu);
 			map.put("courtList", courtList);
-		}
+		}*/
 		
 		return map;
+	}
+	@RequestMapping(value="/courtPage.ajax")
+	@ResponseBody
+	public HashMap<String, Object> courtPage(@RequestParam HashMap<String,String> params) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		ArrayList<CourtDTO> paging = courtService.paging(params.get("page"));
+		map.put("courtList", paging);
+		return map;
+		
+	}
+	
+	@RequestMapping(value="/courtReviewUpdate.go")
+	public String courtReviewUpdate(@RequestParam String courtReviewIdx, @RequestParam String courtIdx,Model model) {
+		CourtDTO userCourtReview = courtService.userCourtReview(courtReviewIdx);
+		model.addAttribute("userCourtReview",userCourtReview);
+		CourtDTO userCourtReviewPhoto = courtService.userCourtReviewPhoto(courtReviewIdx);
+		if(userCourtReviewPhoto!=null) {
+			model.addAttribute("userCourtReviewPhoto",userCourtReviewPhoto);
+		}
+		return "courtReviewUpdate";
+	}
+	@RequestMapping(value="/courtReviewUpdate.do")
+	public String userCourtReviewUpdate(@RequestParam HashMap<String, String> params, MultipartFile photo) {
+		logger.info(params.get("courtStar"));
+		courtService.reviewUpdate(params,photo);
+		return "redirect:/courtReviewUpdate.go?courtReviewIdx="+params.get("courtReviewIdx")+"&courtIdx="+params.get("courtIdx");
+	}
+	@RequestMapping(value="/courtReviewPhoto.do")
+	public String courtReviewPhoto(@RequestParam String courtIdx, Model model) {
+		ArrayList<CourtDTO> courtReviewPhoto= courtService.reviewPhotoList(courtIdx);
+		model.addAttribute("courtReviewPhoto",courtReviewPhoto);
+		return "courtReviewPhoto";
+		
+	}
+	@RequestMapping(value="/courtReviews.do")
+	public String courtReviews(@RequestParam String courtIdx, Model model) {
+		ArrayList<CourtDTO> courtReviews= courtService.courtReviewList(courtIdx);
+		model.addAttribute("courtReviews",courtReviews);
+		model.addAttribute("courtIdx",courtIdx);
+		return "courtReviews";
+		
+	}
+	@RequestMapping(value="/courtTipOff.go")
+	public String courtTipOff() {
+		return "courtTipOff";
+	}
+	@RequestMapping(value="/courtTipOff.do")
+	public String courtTipOff(@RequestParam HashMap<String, String> params) {
+		logger.info("경기장 제보에서 넘어온 값: "+params);
+		courtService.courtTipOff(params);
+		return "courtTipOff";
 	}
 }
