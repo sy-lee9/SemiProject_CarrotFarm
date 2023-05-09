@@ -54,6 +54,34 @@
 	<update id="userdelete">
       UPDATE user SET userBlind = true  WHERE nickName = #{param1}
    </update>
+   
+   <!-- 회원 정보 -->
+   <select id="userInfo" resultType="kr.co.cf.main.dto.JoinDTO">
+		SELECT u.userId, u.nickName, u.userPw, u.userName, u.birthday, u.email,
+		d.height, d.position, d.favTime, l.si, l.gu 
+		FROM user u JOIN userData d ON u.userId = d.userId JOIN location l ON d.locationIdx = l.locationIdx
+		WHERE u.nickName = #{param1} AND u.userBlind = false;
+	</select>
 	
+	<!-- 회원정보 수정 -->
+	<update id="userInfoUpdate" parameterType="hashmap">
+		UPDATE user SET nickName = #{nickName}
+			,userPw = #{userPw}
+			,email = #{email}
+		WHERE userId = #{userId}
+	</update>
+	
+	<update id="userInfoUpdatedata" parameterType="hashmap">
+		UPDATE userData SET height = #{height}
+			,position = #{position}
+			,favTime = #{favTime}
+		WHERE userId = #{userId}
+	</update>
+	
+	<update id="userInfoUpdateloc">
+		UPDATE userData SET locationIdx = #{param1}
+		WHERE userId = #{param2}
+	</update>
+
 	
 </mapper>

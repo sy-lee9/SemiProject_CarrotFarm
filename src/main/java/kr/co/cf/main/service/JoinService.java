@@ -24,68 +24,69 @@ import org.springframework.web.multipart.MultipartFile;
 import kr.co.cf.main.dao.JoinDAO;
 import kr.co.cf.main.dto.JoinDTO;
 
+
 @Service
 public class JoinService {
-	
-	@Autowired JoinDAO dao;
-	
-	Logger logger = LoggerFactory.getLogger(getClass());
-	
-	public HashMap<String, Object> idChk(String userId) {
-	      
-	      HashMap<String, Object> map = new HashMap<String, Object>();
-	      logger.info("service userId");
-	      int idChk = dao.idChk(userId);
-	      map.put("idChk", idChk);
-	      return map;
-	   }
-	
-	public HashMap<String, Object> nickChk(String nickName) {
-	      
-	      HashMap<String, Object> map = new HashMap<String, Object>();
-	      logger.info("service nickName");
-	      map.put("nickChk", dao.nickChk(nickName));
+   
+   @Autowired JoinDAO dao;
+   
+   Logger logger = LoggerFactory.getLogger(getClass());
+   
+   public HashMap<String, Object> idChk(String userId) {
+         
+         HashMap<String, Object> map = new HashMap<String, Object>();
+         logger.info("service userId");
+         int idChk = dao.idChk(userId);
+         map.put("idChk", idChk);
+         return map;
+      }
+   
+   public HashMap<String, Object> nickChk(String nickName) {
+         
+         HashMap<String, Object> map = new HashMap<String, Object>();
+         logger.info("service nickName");
+         map.put("nickChk", dao.nickChk(nickName));
 
-	      return map;
-	   }
-	
-	
+         return map;
+      }
+   
+   
 public String write(MultipartFile userProfile, HashMap<String, String> params) {
-		logger.info("join service");
-	    String msg = "È¸¿ø°¡ÀÔ¿¡ ½ÇÆĞÇÏ¿´½À´Ï´Ù.";
-	    int locationIdx = locationconf(params);
-	    
-	    int photoSave = 0;
+      logger.info("join service");
+       String msg = "íšŒì›ê°€ì…ì— ì‹¤íŒ¨í•˜ì˜€ìŠµë‹ˆë‹¤.";
+       int locationIdx = locationconf(params);
+       
+       int photoSave = 0;
 
-		JoinDTO dto = new JoinDTO();
-		dto.setUserId(params.get("userId"));
-		dto.setNickName(params.get("nickName"));
-		dto.setUserPw(params.get("userPw"));
-		dto.setHeight((params.get("height")));
-		dto.setUserName(params.get("userName"));
-		dto.setPosition(params.get("position"));
-		dto.setLocationIdx(locationIdx);
-		Date birthday = Date.valueOf(params.get("birthday"));
-		dto.setBirthday(birthday);
-		dto.setEmail(params.get("email"));
-		dto.setFavTime(params.get("favTime"));
-		
-		if(!userProfile.getOriginalFilename().equals("")) {
-	         logger.info("ÆÄÀÏ ¾÷·Îµå ÀÛ¾÷");
-	         if(photoSave(userProfile,params) == 1) {
-	            photoSave = 1;
-	         }
-	      }
-		
-		if(dao.join(dto) == 1) {
-			dao.joinData(dto);
-	         msg = "È¸¿ø°¡ÀÔ¿¡ ¼º°øÇÏ¿´½À´Ï´Ù.";
-	      }
-	      
-	      return msg;
-	   }
+      JoinDTO dto = new JoinDTO();
+      dto.setUserId(params.get("userId"));
+      dto.setNickName(params.get("nickName"));
+      dto.setUserPw(params.get("userPw"));
+      dto.setHeight((params.get("height")));
+      dto.setUserName(params.get("userName"));
+      dto.setPosition(params.get("position"));
+      dto.setLocationIdx(locationIdx);
+      Date birthday = Date.valueOf(params.get("birthday"));
+      dto.setBirthday(birthday);
+      dto.setEmail(params.get("email"));
+      dto.setFavTime(params.get("favTime"));
+      
+      if(!userProfile.getOriginalFilename().equals("")) {
+            logger.info("íŒŒì¼ ì—…ë¡œë“œ ì‘ì—…");
+            if(photoSave(userProfile,params) == 1) {
+               photoSave = 1;
+            }
+         }
+      
+      if(dao.join(dto) == 1) {
+         dao.joinData(dto);
+            msg = "íšŒì›ê°€ì…ì— ì„±ê³µí•˜ì˜€ìŠµë‹ˆë‹¤.";
+         }
+         
+         return msg;
+      }
 
-//»ç¿ëÀÚ°¡ ÀÔ·ÂÇÑ locationÀÇ idx¸¦ ¹Ş¾Æ¿À´Â ¸Ş¼­µå
+//ì‚¬ìš©ìê°€ ì…ë ¥í•œ locationì˜ idxë¥¼ ë°›ì•„ì˜¤ëŠ” ë©”ì„œë“œ
 private int locationconf(HashMap<String, String> params) {
    String location = params.get("location");
    logger.info(location);
@@ -98,22 +99,22 @@ private int locationconf(HashMap<String, String> params) {
 private int photoSave(MultipartFile userProfile,HashMap<String, String> params) {
     int photoWrite = 0;
     
-    // 1. ÆÄÀÏÀ» C:/img/upload/ ¿¡ ÀúÀå
-          //1-1. ¿øº» ÀÌ¸§ ÃßÃâ
+    // 1. íŒŒì¼ì„ C:/img/upload/ ì— ì €ì¥
+          //1-1. ì›ë³¸ ì´ë¦„ ì¶”ì¶œ
           String oriFileName = userProfile.getOriginalFilename();
-          //1-2. »õÀÌ¸§ »ı¼º
+          //1-2. ìƒˆì´ë¦„ ìƒì„±
           String photoName = params.get("userId")+oriFileName;
           logger.info(photoName);
           try {
-             byte[] bytes = userProfile.getBytes();//1-3. ¹ÙÀÌÆ® ÃßÃâ
-             //1-5. ÃßÃâÇÑ ¹ÙÀÌÆ® ÀúÀå
+             byte[] bytes = userProfile.getBytes();//1-3. ë°”ì´íŠ¸ ì¶”ì¶œ
+             //1-5. ì¶”ì¶œí•œ ë°”ì´íŠ¸ ì €ì¥
              Path path = Paths.get("C:/img/upload/"+photoName);
              Files.write(path, bytes);
              logger.info(photoName+" save OK");
-             // 2. ÀúÀå Á¤º¸¸¦ DB ¿¡ ÀúÀå
+             // 2. ì €ì¥ ì •ë³´ë¥¼ DB ì— ì €ì¥
              //2-1. userProfile, photoName insert
              photoWrite = dao.photoWrite(photoName);
-             logger.info("ÇÁ·ÎÇÊ »çÁø ¾÷·Îµå ¿©ºÎ: "+photoWrite);
+             logger.info("í”„ë¡œí•„ ì‚¬ì§„ ì—…ë¡œë“œ ì—¬ë¶€: "+photoWrite);
                       
           } catch (IOException e) {
              e.printStackTrace();
@@ -121,88 +122,108 @@ private int photoSave(MultipartFile userProfile,HashMap<String, String> params) 
     return photoWrite;
  }
 
-	public JoinDTO login(String id, String pw) {
-		
-		return dao.login(id,pw);
-	}
+   public JoinDTO login(String id, String pw) {
+      
+      return dao.login(id,pw);
+   }
 
-	public ArrayList<JoinDTO> findId(String email)throws Exception{
-		return dao.findId(email);
-	}
-	
-	public int findIdCheck(String email)throws Exception{
-		return dao.findIdCheck(email);
-	}
-	
-	// ºñ¹Ğ¹øÈ£ Ã£±â
-	public void sendEmail(@RequestParam HashMap<String, String> params, String div) throws Exception {
-		// Mail Server ¼³Á¤
-		String charSet = "utf-8";
-		String hostSMTP = "smtp.naver.com"; //³×ÀÌ¹ö ÀÌ¿ë½Ã smtp.naver.com / ±¸±Û »ç¿ë½Ã smtp.gmail.com
-		String hostSMTPid = "jumpxhtna@naver.com";
-		String hostSMTPpwd = "ehdgus~9256";
+   public ArrayList<JoinDTO> findId(String email)throws Exception{
+      return dao.findId(email);
+   }
+   
+   public int findIdCheck(String email)throws Exception{
+      return dao.findIdCheck(email);
+   }
+   
+   // ë¹„ë°€ë²ˆí˜¸ ì°¾ê¸°
+   public void sendEmail(@RequestParam HashMap<String, String> params, String div) throws Exception {
+      // Mail Server ì„¤ì •
+      String charSet = "utf-8";
+      String hostSMTP = "smtp.naver.com"; //ë„¤ì´ë²„ ì´ìš©ì‹œ smtp.naver.com / êµ¬ê¸€ ì‚¬ìš©ì‹œ smtp.gmail.com
+      String hostSMTPid = "jumpxhtna@naver.com";
+      String hostSMTPpwd = "ehdgus~9256";
 
-		// º¸³»´Â »ç¶÷ EMail, Á¦¸ñ, ³»¿ë
-		String fromEmail = "jumpxhtna@naver.com";
-		String fromName = "´ç±Ù³óÀå";
-		String subject = "";
-		String msg = "";
+      // ë³´ë‚´ëŠ” ì‚¬ëŒ EMail, ì œëª©, ë‚´ìš©
+      String fromEmail = "jumpxhtna@naver.com";
+      String fromName = "ë‹¹ê·¼ë†ì¥";
+      String subject = "";
+      String msg = "";
 
-		if(div.equals("findpw")) {
-			subject = "´ç±Ù³óÀå ÀÓ½Ã ºñ¹Ğ¹øÈ£ ÀÔ´Ï´Ù.";
-			msg += "<div align='center' style='border:1px solid black; font-family:verdana'>";
-			msg += "<h3 style='color: orange;'>";
-			msg += params.get("email") + "´ÔÀÇ ÀÓ½Ã ºñ¹Ğ¹øÈ£ ÀÔ´Ï´Ù. ºñ¹Ğ¹øÈ£¸¦ º¯°æÇÏ¿© »ç¿ëÇÏ¼¼¿ä.</h3>";
-			msg += "<p>ÀÓ½Ã ºñ¹Ğ¹øÈ£ : ";
-			msg += params.get("pw") + "</p></div>";
-		}
+      if(div.equals("findpw")) {
+         subject = "ë‹¹ê·¼ë†ì¥ ì„ì‹œ ë¹„ë°€ë²ˆí˜¸ ì…ë‹ˆë‹¤.";
+         msg += "<div align='center' style='border:1px solid black; font-family:verdana'>";
+         msg += "<h3 style='color: orange;'>";
+         msg += params.get("email") + "ë‹˜ì˜ ì„ì‹œ ë¹„ë°€ë²ˆí˜¸ ì…ë‹ˆë‹¤. ë¹„ë°€ë²ˆí˜¸ë¥¼ ë³€ê²½í•˜ì—¬ ì‚¬ìš©í•˜ì„¸ìš”.</h3>";
+         msg += "<p>ì„ì‹œ ë¹„ë°€ë²ˆí˜¸ : ";
+         msg += params.get("pw") + "</p></div>";
+      }
 
-		// ¹Ş´Â »ç¶÷ E-Mail ÁÖ¼Ò
-		String mail = params.get("email");
-		try {
-			HtmlEmail email = new HtmlEmail();
-			email.setDebug(true);
-			email.setCharset(charSet);
-			email.setSSL(true);
-			email.setHostName(hostSMTP);
-			email.setSmtpPort(587); //³×ÀÌ¹ö ÀÌ¿ë½Ã 587 / ±¸±Û ÀÌ¿ë½Ã 465
+      // ë°›ëŠ” ì‚¬ëŒ E-Mail ì£¼ì†Œ
+      String mail = params.get("email");
+      try {
+         HtmlEmail email = new HtmlEmail();
+         email.setDebug(true);
+         email.setCharset(charSet);
+         email.setSSL(true);
+         email.setHostName(hostSMTP);
+         email.setSmtpPort(587); //ë„¤ì´ë²„ ì´ìš©ì‹œ 587 / êµ¬ê¸€ ì´ìš©ì‹œ 465
 
-			email.setAuthentication(hostSMTPid, hostSMTPpwd);
-			email.setTLS(true);
-			email.addTo(mail, charSet);
-			email.setFrom(fromEmail, fromName, charSet);
-			email.setSubject(subject);
-			email.setHtmlMsg(msg);
-			email.send();
-		} catch (Exception e) {
-			System.out.println("¸ŞÀÏ¹ß¼Û ½ÇÆĞ : " + e);
-		}
-	}
-	
-	// ÀÓ½Ã ºñ¹Ğ¹øÈ£
-	public void findPw(@RequestParam HashMap<String, String> params) throws Exception {
-		// ÀÓ½Ã ºñ¹Ğ¹øÈ£ »ı¼º
-		
-		String pw = "";
-		for (int i = 0; i < 12; i++) {
-			pw += (char) ((Math.random() * 26) + 97);
-		}
-		params.put("pw",pw);
-		// ºñ¹Ğ¹øÈ£ º¯°æ
-		dao.updatePw(params);
-		// ºñ¹Ğ¹øÈ£ º¯°æ ¸ŞÀÏ ¹ß¼Û
-		sendEmail(params, "findpw");
-		
-		
-	}
-	
-	public int deleteuser(Object removeAttribute) {
+         email.setAuthentication(hostSMTPid, hostSMTPpwd);
+         email.setTLS(true);
+         email.addTo(mail, charSet);
+         email.setFrom(fromEmail, fromName, charSet);
+         email.setSubject(subject);
+         email.setHtmlMsg(msg);
+         email.send();
+      } catch (Exception e) {
+         System.out.println("ë©”ì¼ë°œì†¡ ì‹¤íŒ¨ : " + e);
+      }
+   }
+   
+   // ì„ì‹œ ë¹„ë°€ë²ˆí˜¸
+   public void findPw(@RequestParam HashMap<String, String> params) throws Exception {
+      // ì„ì‹œ ë¹„ë°€ë²ˆí˜¸ ìƒì„±
+      
+      String pw = "";
+      for (int i = 0; i < 12; i++) {
+         pw += (char) ((Math.random() * 26) + 97);
+      }
+      params.put("pw",pw);
+      // ë¹„ë°€ë²ˆí˜¸ ë³€ê²½
+      dao.updatePw(params);
+      // ë¹„ë°€ë²ˆí˜¸ ë³€ê²½ ë©”ì¼ ë°œì†¡
+      sendEmail(params, "findpw");
+      
+      
+   }
+   // íšŒì› íƒˆí‡´
+   public int deleteuser(Object removeAttribute) {
 
-	      return dao.userdelete(removeAttribute);
-	   }
+         return dao.userdelete(removeAttribute);
+      }
 
-	   public int userdeletetrue(Object attribute) {
+      public int userdeletetrue(Object attribute) {
 
-	      return dao.userdelete(attribute);
-	   }
+         return dao.userdelete(attribute);
+      }
+      
+      // íšŒì› ì •ë³´
+      public JoinDTO userInfo(Object attribute) {
+
+          return dao.userInfo(attribute);
+    }
+      
+      public String userInfoUpdate(HashMap<String, String> params) {		
+  		String userId = params.get("userId");
+  		int locationIdx = locationconf(params);
+  		int row = dao.userInfoUpdate(params);
+  		row = dao.userInfoUpdatedata(params);
+  		row = dao.userInfoUpdateloc(locationIdx,userId);
+  		String page = row>0 ? "redirect:/userinfo.go?userId="+userId : "redirect:/userinfo.go";
+  		logger.info("update => "+page);
+  		
+  		return page;
+  	}
+
+      
 }
