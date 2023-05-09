@@ -39,6 +39,31 @@ public interface CourtDAO {
 
 	ArrayList<CourtDTO> selectList(String gu);
 
-	ArrayList<CourtDTO> courtList(String gu);
+	//ArrayList<CourtDTO> courtList(String gu);
+
+	ArrayList<CourtDTO> courtSearch(String searchCourt,int offSet);
+
+	ArrayList<CourtDTO> courtList(String gu, String inOut, int offSet);
+
+
+	ArrayList<CourtDTO> paging(int limit, int offSet);
+
+	int sortTotalList(String gu, String inOut);
+
+	int searchTotalList(String searchCourt);
+
+	CourtDTO userCourtReview(String courtReviewIdx);
+
+	CourtDTO userCourtReviewPhoto(String courtReviewIdx);
+
+	void reviewUpdate(HashMap<String, String> params);
+
+	String findReviewPhoto(String courtReviewIdx);
+
+	void fileChange(int courtReviewIdx, String photoName);
+
+	void courtTipOff(HashMap<String, String> params);
+
+	
 
 }

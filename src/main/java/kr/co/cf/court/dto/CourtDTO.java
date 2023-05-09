@@ -19,7 +19,14 @@ public class CourtDTO {
 	private String courtOneLineReview;
 	private double courtStar;
 	private String photoName;
+	private int courtDelete;
 	 
+	public int getCourtDelete() {
+		return courtDelete;
+	}
+	public void setCourtDelete(int courtDelete) {
+		this.courtDelete = courtDelete;
+	}
 	public String getPhotoName() {
 		return photoName;
 	}

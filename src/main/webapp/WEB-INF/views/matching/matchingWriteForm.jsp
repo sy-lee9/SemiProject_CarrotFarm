@@ -74,7 +74,7 @@ body {
 	<div id="content">
 	<form method="post" action="write.do?categoryId=m01">
 				
-		<input type="text" name="subject" placeholder="제목을 입력해주세요">
+		<input type="text" name="subject" id="subject" placeholder="제목을 입력해주세요">
 		<input type="datetime" name="gameDate" id="date" placeholder="경기 일시">
 		<input type="text" name="writerId" value="${writerId}" style="border:none;" readonly>
 
@@ -112,8 +112,9 @@ body {
 		
 
 		👤<input type="text" name="matchingNum" id="matchingNum" placeholder="모집인원" style="border:none;" readonly><br>
-		<textarea name="content"rows="10" cols="50" style="width: 555px; height: 228px;" placeholder="경기모집에 관련된 설명을 작성해주세요"></textarea><br>
-		<input type="submit" value="작성">
+		<textarea name="content" id ="content" rows="10" cols="50" style="width: 555px; height: 228px;" placeholder="경기모집에 관련된 설명을 작성해주세요"></textarea><br>
+		<input type="button" value="작성" onclick="subChk()">
+
 	</form>
 	</div>
 </body>
@@ -195,14 +196,30 @@ body {
 	           
 	    });
 	    
-	   
-
-	    
-	    
 	});
 
-	
-	
+	function subChk(){
+		console.log($('#subject').val());
+		console.log($('#date').val());
+		console.log($('#gamePlay').val());
+		console.log($('#courtIdx').val());
+	if($('#subject').val()==''){
+		alert('제목을 입력해주세요.');
+		return false;
+	}else if($('#date').val()==''){
+		alert('경기 날짜와 시간을 선택해주세요.');
+		return false;
+	}else if($('#gamePlay').val()=='none'){
+		alert('경기 방식을 선택 해주세요.');
+		return false;
+	}else if($('#courtIdx').val()=='none'){
+		alert('경기장을 선택해주세요.');
+		return false;
+	}else{
+		$('form').submit();
+	}
+
+}
 	
 	
 		var gamePlaySelected = document.getElementById("gamePlay");

@@ -26,7 +26,7 @@ public class AdminUserController {
 		list=adminUserService.list();
 		logger.info("list" + list);
 		model.addAttribute("list",list);
-		return "adminUser";
+		return "/admin/adminUser";
 
 	}
 }

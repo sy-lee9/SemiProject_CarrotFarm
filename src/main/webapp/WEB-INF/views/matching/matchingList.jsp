@@ -161,6 +161,7 @@ $('#searchButton').click(function(){
 	//검색어 확인 
 	searchText = $('#searchInput').val();
 	listCall(showPage);
+	searchText = 'default';
 	$('#pagination').twbsPagination('destroy');
 });
 
@@ -240,27 +241,6 @@ function listPrint(list){
 }
 	
 
-
-	
-/* //검색어에 따른 출력 
-$('#searchButton').click(function(){
-	//검색어 확인 
-	var searchText = $('#searchInput').val();
-	console.log(searchText);
-	
-	$('tbody tr').each(function() {
-		var subject = $(this).find('#subject').text();
-		var writerId = $(this).find('#writerId').text();
-		
-		if (subject.includes(searchText) || writerId.includes(searchText)){
-			$(this).show();
-		} else {
-	        $(this).hide();
-	    }
-	});
-}); */
-
-	
 
 
 </script>

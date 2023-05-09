@@ -169,7 +169,7 @@ table, th, td{
 	     		
 		     		<c:if test="${dto.writerId eq loginId }">
 			     		<th colspan="2">
-		     				<button onclick="location.href='matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}'">모집종료</button>
+		     				<button id="matchingChk" onclick="location.href='matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}'">모집종료</button>
 		     			</th>
 		     		</c:if>
 		     		
@@ -231,7 +231,7 @@ table, th, td{
 	     			</th>
 	     			<c:if test="${dto.writerId eq loginId }">
 			     		<th colspan="2">
-			     			<button onclick="location.href='matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}'">경기종료</button>
+			     			<button id="finishChk" onclick="location.href='matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}'">경기종료</button>
 		     			</th>
 		     		</c:if>
 		     		
@@ -251,7 +251,7 @@ table, th, td{
 	     		<c:if test="${dto.writerId eq loginId }">
 		     		
 		     			<button onclick="location.href='update.go?matchingIdx=${dto.matchingIdx}'">수정하기</button>
-		     			<button onclick="location.href='delete.do?matchingIdx=${dto.matchingIdx}'">삭제하기</button>
+		     			<button id="delChk" onclick="location.href='delete.do?matchingIdx=${dto.matchingIdx}'">삭제하기</button>
 						<button onclick="location.href='./list.do'">목록으로</button>
 		     		
 	     		</c:if>
@@ -346,7 +346,7 @@ table, th, td{
 			     		<c:if test="${commentList.userId eq loginId}">
 			     			<a  href="commentUpdate.go?commentIdx=${commentList.commentIdx}&matchingIdx=${dto.matchingIdx}" >수정</a> 
 			     			/ 
-			     			<a href="commentDelete.do?commentIdx=${commentList.commentIdx}&matchingIdx=${dto.matchingIdx}">삭제</a>
+			     			<a href="commentDelete.do?commentIdx=${commentList.commentIdx}&matchingIdx=${dto.matchingIdx}" id="delCommentChk" >삭제</a>
 			     		</c:if>
 			     		<c:if test="${commentList.userId ne loginId}">
 				     		<c:if test="${loginId != 'guest' }"><button id="playerList">
@@ -359,18 +359,18 @@ table, th, td{
 		     
 		     <tr>
 
-			     <form method="post" action="commentUpdate.do?">
+			     <form method="post" action="commentUpdate.do?" id="commentForm">
 					<th >
 						<input type="text" name="commentIdx" value="${commentDto.commentIdx}" hidden>
 						<input type="text" name="matchingIdx" value="${dto.matchingIdx}" style= "border:none;" hidden>
-						<input type="text" name="userId" value="${loginId}" style= "border:none;" readonly>
+						<input type="text" name="userId" value="${loginId}" style= "border:none; width:50px; background-color: #f8f9fa;" readonly>
 					</th>
 					<c:if test="${loginId != 'guest' }">
 						<th colspan="5">
-							<input type="text" name="commentContent" value="${commentDto.commentContent}">
+							<input type="text" name="commentContent" id="commentContent" value="${commentDto.commentContent}" style="background-color: #f8f9fa; border:none;width:400px;">
 						</th>
 						<th>
-							<button>작성</button>
+							<input type="button" value="작성" onclick="subCommentChk()" />
 						</th>
 					</c:if>
 					<c:if test="${loginId == 'guest' }">
@@ -415,7 +415,48 @@ table, th, td{
     });
 	
     
+    //=============================================================
+    // comfirm 창 모음
+    //=============================================================
+    $('#delChk').click(function(){
+        confirm('삭제하시면 복구할수 없습니다. \n 정말로 삭제하시겠습니까??');
+   });
+ 
+
+    $(function(){
+        $('#delOk').click(function(){
+            if(!confirm('삭제하시면 복구할수 없습니다. \n 정말로 삭제하시겠습니까??')){
+                return false;
+            }
+        });
+    });
     
+    $('#matchingChk').click(function(){
+        confirm('모집을 종료하면 경기 참가 신청은 자동으로 거절 됩니다. \n정말 종료하시겠습니까?');
+   });
+   
+    $('#finishChk').click(function(){
+        confirm('경기를 종료하고 리뷰를 작성하시겠습니까?');
+   });
+   
+    
+    $('#delCommentChk').click(function(){
+        confirm('삭제하시면 복구할수 없습니다. \n 정말로 삭제하시겠습니까??');
+   });
+    
+  function subCommentChk(){
+		console.log($('#commentContent').val());
+		
+		if($('#commentContent').val() == ''){
+			alert('댓글을 입력해주세요.');
+			return false;
+		}else{
+			$('#commentForm').submit();
+		}
+		
+		
+	}
+  
     
     
 

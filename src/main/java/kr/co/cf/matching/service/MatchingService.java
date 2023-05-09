@@ -3,6 +3,8 @@ package kr.co.cf.matching.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +38,34 @@ public class MatchingService {
 		
 	}
 
-	public void delete(String matchingIdx) {
+	public void delete(String matchingIdx,String writerId) {
+		
+		// 삭제 전 해당 매칭글의 idx를 가진 알림을 모두 삭제 함
+		matchingDAO.deleteAlarm(matchingIdx);
+		
+		
+		// 삭제 전 해당 matchingIdx의 playerList에게 수정된 내용에 대한 알림을 보내야함
+		ArrayList<MatchingDTO> playerList =  matchingDAO.playerList(matchingIdx);
+		
+		for (int i = 0; i < playerList.size(); i++) {
+			String userId =playerList.get(i).getUserId();
+			logger.info("userId" + userId);
+			if(!(userId.equals(writerId))) {
+				matchingDAO.matchingDeleteAlarm(userId,matchingIdx);
+			}
+			
+		}
+		// 삭제 전 해당 matchingIdx의 gameApplyList에게 수정된 내용에 대한 알림을 보내야함
+		
+		ArrayList<MatchingDTO> gameApplyList = matchingDAO.gameApplyList(matchingIdx);
+		
+		for (int i = 0; i < gameApplyList.size(); i++) {
+			String userId =gameApplyList.get(i).getUserId();
+			if(!(userId.equals(writerId))) {
+				matchingDAO.matchingDeleteAlarm(userId,matchingIdx);
+			}	
+		}
+		
 		// game 테이블의 matchingIdx가 일치하는 것을 먼저 삭제 후 matching 테이블에서도 삭제해야됨
 		matchingDAO.deleteGame(matchingIdx);
 		matchingDAO.deleteMatching(matchingIdx);
@@ -61,9 +90,38 @@ public class MatchingService {
 	public void matchingUpdate(HashMap<String, String> params) {
 		
 		matchingDAO.matchingUpdate(params);
-	
+		
+		// 업데이트 후 해당 matchingIdx의 playerList에게 수정된 내용에 대한 알림을 보내야함
+		String matchingIdx = params.get("matchingIdx");
+		ArrayList<MatchingDTO> playerList =  matchingDAO.playerList(matchingIdx);
+		
+		for (int i = 0; i < playerList.size(); i++) {
+			
+			String userId =playerList.get(i).getUserId();
+			// 작성자 본인 제외
+			if(!(userId.equals(params.get("writerId")))){
+				params.put("userId", userId);
+				logger.info("알람 수신 아이디 params"  +params);
+				matchingDAO.matchingUpdateAlarm(params);
+			}
+			
+		}
+		// 업데이트 후 해당 matchingIdx의 gameApplyList에게 수정된 내용에 대한 알림을 보내야함
+		
+		ArrayList<MatchingDTO> gameApplyList = matchingDAO.gameApplyList(matchingIdx);
+		
+		for (int i = 0; i < gameApplyList.size(); i++) {
+			String userId =gameApplyList.get(i).getUserId();
+			if(!(userId.equals(params.get("writerId")))){
+				params.put("userId", userId);
+				logger.info("알람 수신 아이디 params"  +params);
+				matchingDAO.matchingUpdateAlarm(params);
+			}
+			
+		}
 	}
 
+	
 	public ArrayList<MatchingDTO> commentList(String matchingIdx) {
 		return matchingDAO.commentList(matchingIdx);
 	}
@@ -182,8 +240,11 @@ public class MatchingService {
 	public MatchingDTO userData(String loginId) {
 		return matchingDAO.userData(loginId);
 	}
-
-
+	
+	// 참가 신청 여부 확인
+	public int applyGameChk(String matchingIdx, String userId) {
+		return matchingDAO.applyGameChk(matchingIdx,userId);
+	}
 	
 	public void applyGame(String matchingIdx, String userId) {
 		matchingDAO.applyGame(matchingIdx,userId);
@@ -191,18 +252,23 @@ public class MatchingService {
 
 	public void matchigStateToFinish(String matchingIdx, String matchigState) {
 		matchingDAO.matchigStateToFinish(matchingIdx,matchigState);
+		// 모집글 상태가 모집 종료로 변경되었으므로 해당 경기의 신청, 초대 목록은 삭제
+		matchingDAO.matchigStateToFinishDelete(matchingIdx);
+		// 신청 초대 목록이 삭제 되었으므로 신청 초대 알림도 삭제
+		matchingDAO.matchigStateToFinishDeleteAlarm(matchingIdx);
 	}
 	
 	public void matchigStateToReview(String matchingIdx, String matchigState) {
 			matchingDAO.matchigStateToReview(matchingIdx,matchigState);
 	}
 	
-		public ArrayList<MatchingDTO> playerList(String matchingIdx) {
+	public ArrayList<MatchingDTO> playerList(String matchingIdx) {
 		return matchingDAO.playerList(matchingIdx);
 	}
 		
 	public void playerDelete(String matchingIdx, String userId) {
-		matchingDAO.playerDelete(matchingIdx,userId);		
+		matchingDAO.playerDelete(matchingIdx,userId);
+		matchingDAO.playerDeleteAlarm(matchingIdx,userId);
 	}
 
 	public ArrayList<MatchingDTO> gameApplyList(String matchingIdx) {
@@ -210,11 +276,13 @@ public class MatchingService {
 	}
 
 	public void gameApplyAccept(String matchingIdx, String userId) {
-		matchingDAO.gameApplyAccept(matchingIdx,userId);	
+		matchingDAO.gameApplyAccept(matchingIdx,userId);
+		matchingDAO.gameApplyAcceptAlarm(matchingIdx,userId);
 	}
 	
 	public void gameApplyReject(String matchingIdx, String userId) {
 		matchingDAO.gameApplyReject(matchingIdx,userId);	
+		matchingDAO.gameApplyRejectAlarm(matchingIdx,userId);
 	}
 
 	public ArrayList<MatchingDTO> userList(String matchingIdx) {
@@ -223,11 +291,14 @@ public class MatchingService {
 
 	public void gameInvite(HashMap<String, Object> params) {
 		matchingDAO.gameInvite(params);
+		logger.info("params"+params);
+		matchingDAO.gameInviteAlarm(params);
 	}
 
 	public void cancelGameInvite(HashMap<String, Object> params) {
 		matchingDAO.cancelGameInvite(params);
-		
+		logger.info("params"+params);
+		matchingDAO.gameInviteCancelAlarm(params);
 	}
 
 	public ArrayList<MatchingDTO> gameInviteList(String matchingIdx) {
@@ -259,6 +330,22 @@ public class MatchingService {
 		return matchingDAO.cntReview(userId,matchingIdx);
 	}
 
+	public void matchingReport(HashMap<String, String> params) {
+		matchingDAO.matchingReport(params);
+	}
+
+	public void commentReport(HashMap<String, String> params) {
+		matchingDAO.commentReport(params);
+		
+	}
+	
+	public void downHit(String matchingIdx) {
+		matchingDAO.downHit(matchingIdx);
+	}
+
+	
+
+	
 	
 	
 

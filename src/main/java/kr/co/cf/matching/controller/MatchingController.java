@@ -26,7 +26,6 @@ public class MatchingController {
 	MatchingService matchingService;
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
-	
 
 	@RequestMapping(value = "/matching/list.do")
 	public String matchingList(Model model, HttpSession session) {
@@ -241,17 +240,12 @@ public class MatchingController {
 	}
 
 	@RequestMapping(value = "/matching/delete.do")
-	public String matchingDelete(@RequestParam String matchingIdx) {
+	public String matchingDelete(@RequestParam String matchingIdx, HttpSession session) {
 
 		logger.info(matchingIdx + "번 모집글 삭제");
-
-		// game 테이블의 matchingIdx가 일치하는 것을 먼저 삭제 후 matching 테이블에서도 삭제해야됨
-		// 그러므로 추후 알람을 보내는 기능은 삭제 전에 해야함
-
-		// game 테이블의 matchingIdx가 일치하는 user에게 알람 보내기
-
-		// 삭제
-		matchingService.delete(matchingIdx);
+		String writerId = (String)session.getAttribute("loginId");
+		logger.info("writerId" + writerId);
+		matchingService.delete(matchingIdx,writerId);
 
 		return "redirect:/matching/list.do";
 	}
@@ -262,6 +256,7 @@ public class MatchingController {
 		logger.info("댓글 정보" + params);
 
 		matchingService.commentWrite(params);
+		matchingService.downHit(params.get("comentId"));
 		return "redirect:/matching/detail.go?matchingIdx=" + params.get("comentId");
 	}
 	
@@ -270,6 +265,7 @@ public class MatchingController {
 
 		logger.info("댓글 정보 commentIdx : " + commentIdx);
 		matchingService.commentDelete(commentIdx);
+		matchingService.downHit(matchingIdx);
 		return "redirect:/matching/detail.go?matchingIdx=" + matchingIdx ;
 	}
 	
@@ -351,7 +347,7 @@ public class MatchingController {
 			}
 			
 					
-			// 리뷰 작성 후 개인 매너 점수
+			// 리뷰 작성 후 개인 매너 점수 
 			float mannerPoint = matchingService.mannerPoint((String)session.getAttribute("loginId"));
 			mannerPoint += 50;
 			model.addAttribute("mannerPoint", mannerPoint);
@@ -375,14 +371,17 @@ public class MatchingController {
 	public String applyGame(@RequestParam String matchingIdx, HttpSession session) {
 		
 		String userId = (String)session.getAttribute("loginId");
+		int applyGameChk = matchingService.applyGameChk(matchingIdx,userId);
+		if(applyGameChk == 0) {
+			matchingService.applyGame(matchingIdx,userId);
+		}
 		
-		matchingService.applyGame(matchingIdx,userId);
 		
+		matchingService.downHit(matchingIdx);
 		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx;
 	}
 	
 	
-	//matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}
 	
 	@RequestMapping(value="/matching/matchigStateUpdate")
 	public String matchigStateUpdate(@RequestParam String matchingIdx, @RequestParam String matchigState) {
@@ -394,7 +393,7 @@ public class MatchingController {
 			matchingService.matchigStateToReview(matchingIdx,matchigState);
 		}
 		
-		
+		matchingService.downHit(matchingIdx);
 		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx;
 	}
 	
@@ -403,6 +402,7 @@ public class MatchingController {
 		
 		matchingService.playerDelete(matchingIdx,userId);
 		
+		matchingService.downHit(matchingIdx);
 		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx;
 	}
 	
@@ -411,6 +411,7 @@ public class MatchingController {
 		
 		matchingService.gameApplyAccept(matchingIdx,userId);
 		
+		matchingService.downHit(matchingIdx);
 		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx;
 	}
 	
@@ -419,6 +420,7 @@ public class MatchingController {
 		
 		matchingService.gameApplyReject(matchingIdx,userId);
 		
+		matchingService.downHit(matchingIdx);
 		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx;
 	}
 	
@@ -467,8 +469,52 @@ public class MatchingController {
 			}
 		    }
 		}
-			
+		
+		matchingService.downHit((String)params.get("matchingIdx"));
 		return "redirect:/matching/detail.go?matchingIdx=" + params.get("matchingIdx");
+	}
+	
+	
+	@RequestMapping(value ="/matching/matchingReport.go")
+	public String matchingReportGo(Model model,@RequestParam String matchingIdx, HttpSession session) {
+		
+		MatchingDTO dto = new MatchingDTO();
+		dto.setMatchingIdx(Integer.parseInt(matchingIdx));
+		
+		model.addAttribute("dto", dto);
+		
+		return "/matching/matchingReport";
+	}
+	
+	@RequestMapping(value ="/matching/matchingReport.do")
+	public String matchingReport(@RequestParam HashMap<String, String> params) {
+		logger.info("params"+params);
+		
+		params.put("reportContent", params.get("report")+params.get("content"));
+		matchingService.matchingReport(params);
+		
+		return "/matching/matchingReportDone";
+	}
+	
+	@RequestMapping(value ="/matching/commentReport.go")
+	public String commentReportGo(Model model,@RequestParam String commentIdx, HttpSession session) {
+		
+		MatchingDTO dto = new MatchingDTO();
+		dto.setCommentIdx(commentIdx);
+		
+		model.addAttribute("dto", dto);
+		
+		return "/matching/commentReport";
+	}
+	
+	@RequestMapping(value ="/matching/commentReport.do")
+	public String commentReport(@RequestParam HashMap<String, String> params) {
+		logger.info("params"+params);
+		
+		params.put("reportContent", params.get("report")+params.get("content"));
+		matchingService.commentReport(params);
+		
+		return "/matching/matchingReportDone";
 	}
 	
 	
