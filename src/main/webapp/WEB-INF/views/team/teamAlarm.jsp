@@ -7,37 +7,28 @@
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <style>
 	table{
-		width: 1000;
-		height: 300;
-		margin: 30;
+		width: 800;
+		height: 500;
 	}
 	th,td{
 		text-align: center;
-	}
-	td{
-		height: 10;
-	}
-	#gameDate{
-		margin: 30;
 	}
 </style>
 </head>
 <body>
 	<input type="hidden" name="teamIdx" value="${teamIdx}"/>
-	<select id="gameDate">
-	  <option value="default">모집일순</option>
-	  <option value="DESC">경기일 최신순</option>
-	  <option value="ASC">경기일 오래된순</option>
-	</select>
-
+	<a href="teamAlarm.go?teamIdx=${teamIdx}">팀 가입신청 알림</a>
+	<a href="#">경기 참가신청 알림</a>
+	<a href="gameAppAlarm.go?teamIdx=${teamIdx}">경기 변경사항 알림</a>
+	<br/>
+	<hr/>
+	<br/>
 	<table>
 		<colgroup>
-			<col width="10%"/>
+			<col width="15%"/>
+			<col width="40%"/>
 			<col width="30%"/>
-			<col width="30%"/>
-			<col width="10%"/>
-			<col width="10%"/>
-			<col width="10%"/>
+			<col width="15%"/>
 		</colgroup>
 		<thead>
 			<tr>
@@ -55,20 +46,7 @@
 	</table>
 </body>
 <script>
-	//var showPage = 1;
-	var selectedGameDate = 'default';
 	var teamIdx = ${teamIdx}
-	console.log(selectedGameDate);
-	console.log(teamIdx);
-	listCall();
-	
-	// 게임일시 선택에 따른 출력
-	$('#gameDate').change(function(){
-		selectedGameDate = $(this).val();
-		// 선택한 요소 확인 okay
-		console.log(selectedGameDate);
-		listCall();
-	});	
 	
 	function listCall(){
 		$.ajax({

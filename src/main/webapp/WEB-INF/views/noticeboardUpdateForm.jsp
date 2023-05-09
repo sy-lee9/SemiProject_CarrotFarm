@@ -5,7 +5,6 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<link rel="stylesheet" href="resources/css/commons.css">
 <style></style>
 </head>
 <body>

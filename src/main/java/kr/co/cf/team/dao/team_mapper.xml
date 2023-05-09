@@ -210,7 +210,7 @@
 	</select>
 	
 	
-	<select id="getTeamLeader"	resultType="kr.co.cf.team.dto.TeamDTO">
+	<select id="getTeamLeaders"	resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT userId
 		FROM teamUser WHERE teamIdx = #{param1}
 			AND teamUserState = 'join'
@@ -274,9 +274,44 @@
 		ORDER BY m.gameDate ASC	
 	</select>
 	
+	<select id="gameAppAlarm" resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+		    m.matchingIdx,
+		    m.subject,
+		    a.alarmContent
+		FROM 
+		    alarm a 
+		    INNER JOIN matching m ON a.alarmKind = m.matchingIdx
+		    INNER JOIN game g ON m.matchingIdx = g.matchingIdx
+		WHERE 
+		    a.categoryId = 'm02' 
+		    AND m.matchigState IN ('matching','finish')
+		    AND g.userId = #{param1}
+		    AND g.gameAppState IN ('신청', '확정')
+		ORDER BY m.gameDate DESC
+	</select>
 	
 	
+	<select id="getTeamLeader"	resultType="String">
+		SELECT userId
+		FROM teamUser WHERE teamIdx = #{param1}
+			AND teamUserState = 'join'
+			AND teamGrade = 'leader'
+	</select>
 	
+	<select id="writeMatchingList" resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			m.matchingIdx,
+			(SELECT l.gu FROM location l WHERE l.locationIdx = 
+				(SELECT c.locationIdx FROM court c WHERE c.courtIdx = m.courtIdx)) AS gu,
+			m.subject,
+			m.gameDate,	
+			m.writerId
+		FROM matching m
+		WHERE writerId = #{param1}
+		AND matchigState IN ('matching','finish')
+		ORDER BY m.gameDate DESC
+	</select>
 	
 	
 	

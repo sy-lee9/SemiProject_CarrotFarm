@@ -21,6 +21,10 @@ public class TeamDTO {
 	private String gamePlay;
 	private String gameAppState;
 	private String matchigState;
+	private String writerId;
+	private int alarmKind;
+	private String alarmContent;
+	private int matchingIdx;
 	
 	public int getTeamIdx() {
 		return teamIdx;
@@ -135,5 +139,29 @@ public class TeamDTO {
 	}
 	public void setMatchigState(String matchigState) {
 		this.matchigState = matchigState;
+	}
+	public String getWriterId() {
+		return writerId;
+	}
+	public void setWriterId(String writerId) {
+		this.writerId = writerId;
+	}
+	public int getAlarmKind() {
+		return alarmKind;
+	}
+	public void setAlarmKind(int alarmKind) {
+		this.alarmKind = alarmKind;
+	}
+	public String getAlarmContent() {
+		return alarmContent;
+	}
+	public void setAlarmContent(String alarmContent) {
+		this.alarmContent = alarmContent;
+	}
+	public int getMatchingIdx() {
+		return matchingIdx;
+	}
+	public void setMatchingIdx(int matchingIdx) {
+		this.matchingIdx = matchingIdx;
 	}
 }

@@ -28,11 +28,16 @@
 </style>
 </head>
 <body>
-	게시물 갯수 : 
-	<select id="pagePerNum">
-		<option value="10">10</option>
-	</select>
-	<button onclick="location.href='freeboardWrite.go'">등록</button>
+
+	<br><br/>
+	<input type ="text" id="freeboardSearchInput" placeholder="제목 또는 닉네임을 입력">
+	<button id ="freeboardSearchButton">검색</button>
+
+	<br><br/>
+	<c:if test="${loginId != 'guest' }">
+	<button onclick="location.href='freeboardWrite.go'">글쓰기 등록</button>
+	</c:if>
+	
 	<table>
 		<thead>
 			<tr>
@@ -58,10 +63,12 @@
 	</table>
 </body>
 <script>
+var searchText = 'default';
 var showPage = 1;
 listCall(showPage);
 
-$('#pagePerNum').change(function(){
+$('#freeboardSearchButton').click(function(){
+	searchText = $('#freeboardSearchInput').val();
 	listCall(showPage);
 	$('#pagination').twbsPagination('destroy');
 });
@@ -72,7 +79,7 @@ function listCall(page){
 		url:'flist.ajax',
 		data:{
 			'page':page,
-			'cnt':$('#pagePerNum').val()	
+			'search':searchText
 		},
 		dataType:'json',
 		success:function(data){
@@ -83,7 +90,7 @@ function listCall(page){
 			$('#pagination').twbsPagination({
 				startPage:data.currPage, 
 				totalPages:data.pages, 
-				visiblePages:10,
+				visiblePages:5,
 				onPageClick:function(event,page){
 					console.log(page,showPage);
 					if (page != showPage) {
