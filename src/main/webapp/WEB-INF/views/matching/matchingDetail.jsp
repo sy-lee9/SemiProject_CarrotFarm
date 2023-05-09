@@ -177,7 +177,7 @@ table, th, td{
 		     		
 		     		<c:if test="${dto.writerId ne loginId }">
 			     		<th colspan="2">
-		     				<button onclick="location.href='applyGame?matchingIdx=${dto.matchingIdx}'">신청</button>
+		     				<button id="applyChk" onclick="location.href='applyGame?matchingIdx=${dto.matchingIdx}'">신청</button>
 		     			</th>
 		     		</c:if>
 	     		</c:if>
@@ -439,14 +439,20 @@ table, th, td{
         confirm('모집을 종료하면 경기 참가 신청은 자동으로 거절 됩니다. \n정말 종료하시겠습니까?');
    });
    
-    $('#finishChk').click(function(){
+   $('#finishChk').click(function(){
         confirm('경기를 종료하고 리뷰를 작성하시겠습니까?');
    });
     
-    $('#delCommentChk').click(function(){
+   $('#delCommentChk').click(function(){
         confirm('삭제하시면 복구할수 없습니다. \n 정말로 삭제하시겠습니까??');
    });
     
+    
+   $('#applyChk').click(function(){
+        confirm('해당 경기에 참가 신청 하시겠습니까?');
+   });
+   
+   
   function subCommentChk(){
 		console.log($('#commentContent').val());
 		

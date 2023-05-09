@@ -161,6 +161,7 @@ $('#searchButton').click(function(){
 	//검색어 확인 
 	searchText = $('#searchInput').val();
 	listCall(showPage);
+	searchText = 'default';
 	$('#pagination').twbsPagination('destroy');
 });
 

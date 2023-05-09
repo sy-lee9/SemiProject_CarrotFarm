@@ -87,6 +87,7 @@ public interface MatchingDAO {
 		
 
 	// 게임신청
+	int applyGameChk(String matchingIdx, String userId);
 	void applyGame(String matchingIdx, String userId);
 			
 	// 모집 중 -> 모집 완료 상태 변경 
@@ -141,6 +142,10 @@ public interface MatchingDAO {
 	void matchingReport(HashMap<String, String> params);
 
 	void commentReport(HashMap<String, String> params);
+
+	void downHit(String matchingIdx);
+
+	
 
 	
 

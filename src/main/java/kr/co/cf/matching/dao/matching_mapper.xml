@@ -36,6 +36,10 @@
  		UPDATE matching SET bHit = bHit+1 WHERE matchingIdx=#{param1}
  	</update>
  	
+ 	<update id="downHit">
+ 		UPDATE matching SET bHit = bHit-1 WHERE matchingIdx=#{param1}
+ 	</update>
+ 	
  	<insert id="matchingWrite" useGeneratedKeys="true" keyColumn="matchingIdx" keyProperty="matchingIdx" parameterType="kr.co.cf.matching.dto.MatchingDTO">
  		INSERT INTO matching(categoryId,content,courtIdx,gameDate,gamePlay,matchingNum,subject,writerId)
  		VALUES(#{categoryId},#{content},#{courtIdx},#{gameDate},#{gamePlay},#{matchingNum},#{subject},#{writerId})
@@ -247,8 +251,11 @@
 		ORDER By matchingIdx DESC 
 		LIMIT 10 OFFSET #{offset}
 	</select>
-
-
+	
+	<select id="applyGameChk" resultType="int">
+		SELECT COUNT(userId) FROM game WHERE matchingIdx = #{param1} AND userId=#{param2} AND gameAppState='신청'
+	</select>
+	
 	<insert id="applyGame">
 		INSERT INTO game(categoryId,matchingIdx,userId,gameAppState) values('m01',#{param1},#{param2},'신청')
 	</insert>

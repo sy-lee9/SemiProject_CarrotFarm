@@ -256,6 +256,7 @@ public class MatchingController {
 		logger.info("댓글 정보" + params);
 
 		matchingService.commentWrite(params);
+		matchingService.downHit(params.get("comentId"));
 		return "redirect:/matching/detail.go?matchingIdx=" + params.get("comentId");
 	}
 	
@@ -264,6 +265,7 @@ public class MatchingController {
 
 		logger.info("댓글 정보 commentIdx : " + commentIdx);
 		matchingService.commentDelete(commentIdx);
+		matchingService.downHit(matchingIdx);
 		return "redirect:/matching/detail.go?matchingIdx=" + matchingIdx ;
 	}
 	
@@ -369,9 +371,13 @@ public class MatchingController {
 	public String applyGame(@RequestParam String matchingIdx, HttpSession session) {
 		
 		String userId = (String)session.getAttribute("loginId");
+		int applyGameChk = matchingService.applyGameChk(matchingIdx,userId);
+		if(applyGameChk == 0) {
+			matchingService.applyGame(matchingIdx,userId);
+		}
 		
-		matchingService.applyGame(matchingIdx,userId);
 		
+		matchingService.downHit(matchingIdx);
 		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx;
 	}
 	
@@ -387,7 +393,7 @@ public class MatchingController {
 			matchingService.matchigStateToReview(matchingIdx,matchigState);
 		}
 		
-		
+		matchingService.downHit(matchingIdx);
 		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx;
 	}
 	
@@ -396,6 +402,7 @@ public class MatchingController {
 		
 		matchingService.playerDelete(matchingIdx,userId);
 		
+		matchingService.downHit(matchingIdx);
 		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx;
 	}
 	
@@ -404,6 +411,7 @@ public class MatchingController {
 		
 		matchingService.gameApplyAccept(matchingIdx,userId);
 		
+		matchingService.downHit(matchingIdx);
 		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx;
 	}
 	
@@ -412,6 +420,7 @@ public class MatchingController {
 		
 		matchingService.gameApplyReject(matchingIdx,userId);
 		
+		matchingService.downHit(matchingIdx);
 		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx;
 	}
 	
@@ -460,7 +469,8 @@ public class MatchingController {
 			}
 		    }
 		}
-			
+		
+		matchingService.downHit((String)params.get("matchingIdx"));
 		return "redirect:/matching/detail.go?matchingIdx=" + params.get("matchingIdx");
 	}
 	
