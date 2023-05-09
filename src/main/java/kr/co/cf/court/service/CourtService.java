@@ -1,5 +1,6 @@
 package kr.co.cf.court.service;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -69,14 +70,15 @@ public class CourtService {
 		// 2. 파일도 업로드 한 경우
 		if(!photo.getOriginalFilename().equals("")) {
 			logger.info("파일 업로드 작업");
-			fileSave(courtReviewIdx, photo,userId);
+			String type="fileUpload";
+			fileSave(courtReviewIdx, photo,userId,type);
 		}
 		
 		return "redirect:/courtDetail.do?courtIdx="+params.get("courtIdx");
 		
 		
 	}
-	private void fileSave(int courtReviewIdx, MultipartFile file, String userId){
+	private void fileSave(int courtReviewIdx, MultipartFile file, String userId,String type){
 		// 1. 파일을 C:/img/upload/ 에 저장
 		//1-1. 원본 이름 추출
 		String oriFileName = file.getOriginalFilename();
@@ -91,10 +93,11 @@ public class CourtService {
 			Path path = Paths.get("C:/img/upload/"+photoName);
 			Files.write(path, bytes);
 			logger.info(photoName+" save OK");
-			// 2. 저장 정보를 DB 에 저장
-			//2-1. 가져온 idx, oriFileName, newFileName insert
-			courtdao.fileWrite(courtReviewIdx,photoName);
-						
+			if(type.equals("fileUpload")) {
+				courtdao.fileWrite(courtReviewIdx,photoName);
+			}else if(type.equals("fileChange")) {
+				courtdao.fileChange(courtReviewIdx,photoName);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -139,8 +142,69 @@ public class CourtService {
 		return courtdao.selectList(gu);
 	}
 
-	public ArrayList<CourtDTO> courtList(String gu) {
+	/*public ArrayList<CourtDTO> courtList(String gu) {
 		return courtdao.courtList(gu);
+	}*/
+
+	public ArrayList<CourtDTO> courtSearch(String searchCourt,String page) {
+		int offSet = (Integer.parseInt(page)-1)*10;
+		return courtdao.courtSearch(searchCourt,offSet);
+		
+	}
+
+	public ArrayList<CourtDTO> courtList(String gu, String inOut, String page) {
+		int offSet = (Integer.parseInt(page)-1)*10;
+		return courtdao.courtList(gu,inOut,offSet);
+	}
+
+	public ArrayList<CourtDTO> paging(String page) {
+		int offSet = (Integer.parseInt(page)-1)*10;
+		
+		return courtdao.paging(10,offSet);
+	}
+
+	public int sortTotalList(String gu, String inOut) {
+		return courtdao.sortTotalList(gu,inOut);
+	}
+
+	public int searchTotalList(String searchCourt) {
+		
+		return courtdao.searchTotalList(searchCourt);
+	}
+
+	public CourtDTO userCourtReview(String courtReviewIdx) {
+		return courtdao.userCourtReview(courtReviewIdx);
+	}
+
+	public CourtDTO userCourtReviewPhoto(String courtReviewIdx) {
+		return courtdao.userCourtReviewPhoto(courtReviewIdx);
+	}
+
+	public void reviewUpdate(HashMap<String, String> params, MultipartFile photo) {
+		int courtReviewIdx=Integer.parseInt(params.get("courtReviewIdx"));
+		String courtStar = params.get("courtStar");
+		String userId=params.get("userId");
+		if(!photo.getOriginalFilename().equals("")) {
+			String photoName = courtdao.findReviewPhoto(params.get("courtReviewIdx"));
+			if(photoName==null) {
+				String type = "fileUpload";
+				fileSave(courtReviewIdx,photo,userId,type);
+			}else {
+				String type="fileChange";
+				File file = new File("C:/img/upload/"+photoName);
+				if(file.exists()) {
+					file.delete();
+				}
+				fileSave(courtReviewIdx,photo,userId,type);
+			}
+		}
+		courtdao.reviewUpdate(params);
+		
+	}
+
+	public void courtTipOff(HashMap<String, String> params) {
+		courtdao.courtTipOff(params);
+		
 	}
 
 
