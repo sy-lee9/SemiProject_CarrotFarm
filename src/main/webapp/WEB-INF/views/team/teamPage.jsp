@@ -41,8 +41,11 @@
 <body>
 	<div id="inline"><p id="teamMatchState">${team.teamMatchState}</p></div> 
 	<div id="inline"><button onclick="location.href='team/teamJoin.do'">가입신청</button></div>
-	<div id="inline"><button onclick="location.href='teamPageUpdate.go?teamIdx=${team.teamIdx}'">팀정보 수정</button></div>
-	<div><button onclick="location.href='teamDisbanding.go?teamIdx=${team.teamIdx}'">팀 해체</button></div>
+	<div><button onclick="location.href='teamPageUpdate.go?teamIdx=${team.teamIdx}'">팀정보 수정</button></div>
+	<div id="inline"><button onclick="location.href='teamDisbanding.go?teamIdx=${team.teamIdx}'">팀 해체</button></div>
+	<div id="inline"><button onclick="location.href='teamGame.go?teamIdx=${team.teamIdx}'">경기기록 보기</button></div>
+	<div id="inline"><button onclick="location.href='gameMatchingRequest.go?teamIdx=${team.teamIdx}'">참가신청한 경기</button></div>
+	
 	
 	
 	<div id="inline">

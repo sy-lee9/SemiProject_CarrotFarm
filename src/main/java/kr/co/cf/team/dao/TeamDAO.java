@@ -48,17 +48,24 @@ public interface TeamDAO {
 	void disbandAlarm(String userId);
 	
 
-	int totalCountGameList();
-
-	int totalCountGameDate(String range);
-
-	int totalCountGameListSearch(HashMap<String, Object> params);
-
 	ArrayList<TeamDTO> gameList(HashMap<String, Object> params);
 
-	ArrayList<TeamDTO> GameDateList(String string);
+	ArrayList<TeamDTO> GameDateList(HashMap<String, Object> params);
 
 	ArrayList<TeamDTO> SearchGameList(HashMap<String, Object> params);
+
+	ArrayList<TeamDTO> GameDateListDesc(HashMap<String, Object> params);
+
+	ArrayList<TeamDTO> GameDateListAsc(HashMap<String, Object> params);
+	
+
+	ArrayList<TeamDTO> getTeamLeader(String teamIdx);
+
+	ArrayList<TeamDTO> matchingRequestList(String userId);
+
+	ArrayList<TeamDTO> matchingRequestListDesc(String userId);
+
+	ArrayList<TeamDTO> matchingRequestListAsc(String userId);
 
 
 	
