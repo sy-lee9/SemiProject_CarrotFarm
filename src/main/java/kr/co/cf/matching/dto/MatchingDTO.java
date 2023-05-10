@@ -32,10 +32,31 @@ public class MatchingDTO {
 	private String alarmcontent;
 	private String alarmKind;
 	private String teamName;
+	private String teamGrade;
 	
 	
+	public String getTeamGrade() {
+		return teamGrade;
+	}
+	public void setTeamGrade(String teamGrade) {
+		this.teamGrade = teamGrade;
+	}
+	private int teamIdx;
+	private int teamFavNum;
 	
 	
+	public int getTeamIdx() {
+		return teamIdx;
+	}
+	public void setTeamIdx(int teamIdx) {
+		this.teamIdx = teamIdx;
+	}
+	public int getTeamFavNum() {
+		return teamFavNum;
+	}
+	public void setTeamFavNum(int teamFavNum) {
+		this.teamFavNum = teamFavNum;
+	}
 	public String getTeamName() {
 		return teamName;
 	}

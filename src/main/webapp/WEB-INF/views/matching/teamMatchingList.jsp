@@ -92,8 +92,8 @@
 	
 	<input type="text" id="searchInput" placeholder="제목 또는 작성자를 입력">
 	<button id="searchButton">검색</button>
-	<c:if test="${loginId != 'guest' }">
-		<button onclick="location.href='write.go?categoryId=m02'">글쓰기</button>
+	<c:if test="${teamName != null }">
+		<button onclick="location.href='teamWrite.go?categoryId=m02&teamName=${teamName}'">글쓰기</button>
 	</c:if>
 	
 	<hr>
@@ -228,7 +228,7 @@ function listPrint(list){
 		content +='<td id="gamePlay">'+item.gamePlay+':'+item.gamePlay+'</td>';
 		content +='<td>'+item.gu +'</td>';
 		content +='<td id="gamePlayer"> ' + item.matchingNumforSure +'/'+ item.matchingNum+ '</td>';
-		content +='<td id="subject"><a href="detail.go?matchingIdx='+ item.matchingIdx+'">'+item.subject+'</a></td>';
+		content +='<td id="subject"><a href="teamDetail.go?matchingIdx='+ item.matchingIdx+'">'+item.subject+'</a></td>';
 		content +='<td>'+item.gameDate+'</td>';
 		content +='<td id="writerId">'+ item.teamName +'</td>';
 		content +='<td>'+item.bHit+'</td>';

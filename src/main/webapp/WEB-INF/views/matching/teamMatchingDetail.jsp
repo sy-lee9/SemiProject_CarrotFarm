@@ -41,7 +41,7 @@ table, th, td{
         position: fixed;
         top: 10%;
         left: 40%;
-        width: 250px;
+        width: 270px;
         height: 300px;
         background-color: #f8f9fa;
         border: 1px solid black;
@@ -112,7 +112,7 @@ table, th, td{
 				<th>${dto.subject}</th>
 				<th>${dto.gameDate}</th>
 				<th>&#128100</th>
-				<th>${dto.writerId}</th>
+				<th>${dto.teamName}</th>
 			</tr>
 		</thead>
 		
@@ -144,14 +144,28 @@ table, th, td{
 				<hr>
 				<ul>
 					<c:forEach items="${playerList}" var="playerList">
-						<li> ${playerList.userId} 
-						<c:if test="${dto.writerId eq loginId }">
-							<c:if test="${dto.writerId ne playerList.userId }">
-								<button onclick="location.href='playerDelete?userId=${playerList.userId}&matchingIdx=${dto.matchingIdx}'">취소</button>
+						<c:if test="${playerList.teamName eq dto.teamName}">
+							<li> ${playerList.teamName} ${playerList.userId} 
+							<c:if test="${dto.writerId eq loginId }">
+								<c:if test="${dto.writerId ne playerList.userId }">
+									<button onclick="location.href='playerDelete?userId=${playerList.userId}&matchingIdx=${dto.matchingIdx}'">취소</button>
+								</c:if>
 							</c:if>
+							</br>
+							</li>
 						</c:if>
-						</br>
-						</li>
+					</c:forEach>
+					<c:forEach items="${playerList}" var="playerList">
+						<c:if test="${playerList.teamName ne dto.teamName}">
+							<li> ${playerList.teamName} ${playerList.userId} 
+							<c:if test="${dto.writerId eq loginId }">
+								<c:if test="${dto.writerId ne playerList.userId }">
+									<button onclick="location.href='playerDelete?userId=${playerList.userId}&matchingIdx=${dto.matchingIdx}'">취소</button>
+								</c:if>
+							</c:if>
+							</br>
+							</li>
+						</c:if>
 					</c:forEach>
 				</ul>
 				<button id="closePlayerListBtn">닫기</button>
@@ -163,12 +177,12 @@ table, th, td{
 	     		<!--matchigState가 matching 상태일 시  -->
 	     		<c:if test="${dto.matchigState eq 'matching'}">
 	     			<th colspan="2">
-	     			<c:if test="${loginId != 'guest' }">
-	     				<button id="gameApplyList">신청자</button>
-	     				<c:if test="${dto.writerId eq loginId }">
-	     				<button id="gameInviteList">초대</button>
+	     				<c:if test="${loginId != 'guest' }">
+		     				<button id="gameApplyList">신청자</button>
+		     				<c:if test="${dto.writerId eq loginId }">
+		     					<button id="gameInviteList">초대</button>
+	     					</c:if>	
 	     				</c:if>	
-	     			</c:if>
 	     			</th>
 	     		
 		     		<c:if test="${dto.writerId eq loginId }">
@@ -178,20 +192,23 @@ table, th, td{
 		     		</c:if>
 		     		
 		     		<c:if test="${dto.writerId ne loginId }">
-				     	<th colspan="2">
-				     		<c:if test="${loginId != 'guest' }">
+			     		<th colspan="2">
+			     		<c:if test="${loginId != 'guest' }">
+				     		<c:if test="${myTeamDto.teamGrade eq 'leader'}">
 			     				<button id="applyChk" onclick="location.href='applyGame?matchingIdx=${dto.matchingIdx}'">신청</button>
 			     			</c:if>
-			     		</th>
+		     			</c:if>
+		     			</th>
 		     		</c:if>
 	     		</c:if>
 	     		
+	     		
 	     		<div id="gameApplyListPopup">
-					<h3>신청자 목록</h3>
+					<h3>신청팀 목록</h3>
 					<hr>
 					<ul>
-						<c:forEach items="${gameApplyList}" var="gameApplyList">
-							<li> ${gameApplyList.userId} 
+						<c:forEach items="${teamApplyList}" var="gameApplyList">
+							<li> ${gameApplyList.userId} ${gameApplyList.teamName} 
 							<c:if test="${dto.writerId eq loginId }">
 								<button onclick="location.href='gameApplyAccept?userId=${gameApplyList.userId}&matchingIdx=${dto.matchingIdx}'">수락</button> / 
 								<button onclick="location.href='gameApplyReject?userId=${gameApplyList.userId}&matchingIdx=${dto.matchingIdx}'">거절</button>
@@ -208,26 +225,28 @@ table, th, td{
 					<hr>
 					<div id="scroll" style="height: 150px; overflow: auto;">
 						<ul>
-							<c:if test="${gameInviteList !=null}">
-								<c:forEach items="${gameInviteList}" var="gameInviteList">
+							<c:if test="${teamInviteList !=null}">
+								<c:forEach items="${teamInviteList}" var="teamInviteList">
 									<li> 
-									${gameInviteList.userId}
-									<button id="inviteBtn_${gameInviteList.userId}" onclick="cancelInvite('${gameInviteList.userId}', '${dto.matchingIdx}')">취소</button>
+										${teamInviteList.teamName}
+										<button id="inviteBtn_${teamInviteList.userId}" onclick="cancelInvite('${teamInviteList.userId}', '${dto.matchingIdx}')">취소</button>
 									</li>
 								</c:forEach>
-							</c:if>
-							
-							<c:forEach items="${userList}" var="userList">
+							</c:if> 
+									
+											
+							<c:forEach items="${teamList}" var="teamList">
 								<li> 
-									${userList.userId}
-									<button id="inviteBtn_${userList.userId}" onclick="inviteUser('${userList.userId}', '${dto.matchingIdx}')">초대</button>
+									${teamList.teamName}
+									<button id="inviteBtn_${teamList.userId}" onclick="inviteTeam('${teamList.userId}', '${dto.matchingIdx}')">초대</button>
 								</li>
 							</c:forEach>
 						</ul>
 					</div>
-					<button id="closeGameInviteListBtn" onclick="location.href='detail.go?matchingIdx='+${dto.matchingIdx}">닫기</button>
+					<button id="closeGameInviteListBtn" onclick="location.href='teamDetail.go?matchingIdx='+${dto.matchingIdx}">닫기</button>
 				</div>
-			
+
+			 
 	     		
 	     		<!--matchigState가 finish 상태일 시  -->
 	     		<c:if test="${dto.matchigState eq 'finish'}">
@@ -255,9 +274,9 @@ table, th, td{
 	     		<th colspan="3">
 	     		<c:if test="${dto.writerId eq loginId }">
 		     		
-		     			<button onclick="location.href='update.go?matchingIdx=${dto.matchingIdx}'">수정</button>
+		     			<button onclick="location.href='teamUpdate.go?matchingIdx=${dto.matchingIdx}'">수정</button>
 		     			<button id="delChk" onclick="location.href='delete.do?matchingIdx=${dto.matchingIdx}'" >삭제</button>
-						<button onclick="location.href='./list.do'">목록으로</button>
+						<button onclick="location.href='./teamList.do'">목록으로</button>
 		     		
 	     		</c:if>
 	     		
@@ -272,80 +291,73 @@ table, th, td{
 	     	</tr>
 	     	
 	     	
-	     	<!-- 리뷰 영역 -->
+	     	<%-- <!-- 리뷰 영역 -->
 	     	<c:if test="${dto.matchigState eq 'review'}">
-	     	
-	     	<c:forEach  items="${playerList}" var="player">
-	     		<c:if test="${player.userId eq loginId}">
-	     			<c:if test="${review == 'no'}">
+	     	<c:if test="${review == 'no'}">
 	     		
-			     		<form action="review?matchingIdx=${dto.matchingIdx}" method="post">
-			     		<tr>
-			     			<td colspan="7">
-			     				
-			     					<h2>REVIEW</h2>
-			     					
-			     			</td>
-			     		</tr>
-			     		<tr>
-			     			<td colspan="3">		
-			     				<c:forEach items="${playerList}" var="playerList" varStatus="status">
-			     				<c:if test="${status.index % 2 == 0}"> 
-			     					<input type="radio" name="receiveId" value="${playerList.userId}"> ${playerList.userId} 
-			     					<c:if test="${playerList.userId ne loginId}">
-				     					<input type="radio" name="manner_${playerList.userId}" id="manner_${playerList.userId}" value="${playerList.userId}_up"> 👍
-				     					<input type="radio" name="manner_${playerList.userId}" id="manner_${playerList.userId}" value="${playerList.userId}_down"> 👎
-			     					</c:if></br>
-			     				</c:if>	
-			     				</c:forEach>		
-			     			</td>
-			     			
-			     			<td colspan="4">		
-			     				<c:forEach items="${playerList}" var="playerList" varStatus="status">
-			     				<c:if test="${status.index % 2 != 0}"> 
-			     					<input type="radio" name="receiveId" value="${playerList.userId}"> ${playerList.userId} 
-			     					<c:if test="${playerList.userId ne loginId}">
-				     					<input type="radio" name="manner_${playerList.userId} " value="${playerList.userId}_up"> 👍
-				     					<input type="radio" name="manner_${playerList.userId} " value="${playerList.userId}_down"> 👎
-			     					</c:if></br>
-			     				</c:if>	
-			     				</c:forEach>		
-			     			</td>
-			     		</tr>
-			     		<tr>
-			     			<th colspan="7">
-			     				<input type="submit" value="제출" />
-			     			</th>
-			     		</tr>	
-			     		</form>
-			     	</c:if>
-			     	<c:if test="${review == 'yes'}">
-			     		<tr>
-			     			<td colspan="7">
-			     				
-			     					<h2>REVIEW</h2>
-			     					
-			     			</td>
-			     		</tr>
-			     		<tr>
-			     			<th colspan="3">
-			     				
-			     					<h2>MVP</h2>
-			     					${mvp}
-			     			</th>
-			     			<th colspan="4">
-			     				
-			     					<h2>MANNER</h2>
-			     					${mannerPoint}
-			     			</th>
-			     		</tr>
-			     	</c:if>
-	     	
-	     		</c:if>
-	     	</c:forEach>
-	  
+	     		<form action="review?matchingIdx=${dto.matchingIdx}" method="post">
+	     		<tr>
+	     			<td colspan="7">
+	     				
+	     					<h2>REVIEW</h2>
+	     					
+	     			</td>
+	     		</tr>
+	     		<tr>
+	     			<td colspan="3">		
+	     				<c:forEach items="${playerList}" var="playerList" varStatus="status">
+	     				<c:if test="${status.index % 2 == 0}"> 
+	     					<input type="radio" name="receiveId" value="${playerList.userId}"> ${playerList.userId} 
+	     					<c:if test="${playerList.userId ne loginId}">
+		     					<input type="radio" name="manner_${playerList.userId}" id="manner_${playerList.userId}" value="${playerList.userId}_up"> 👍
+		     					<input type="radio" name="manner_${playerList.userId}" id="manner_${playerList.userId}" value="${playerList.userId}_down"> 👎
+	     					</c:if></br>
+	     				</c:if>	
+	     				</c:forEach>		
+	     			</td>
+	     			
+	     			<td colspan="4">		
+	     				<c:forEach items="${playerList}" var="playerList" varStatus="status">
+	     				<c:if test="${status.index % 2 != 0}"> 
+	     					<input type="radio" name="receiveId" value="${playerList.userId}"> ${playerList.userId} 
+	     					<c:if test="${playerList.userId ne loginId}">
+		     					<input type="radio" name="manner_${playerList.userId} " value="${playerList.userId}_up"> 👍
+		     					<input type="radio" name="manner_${playerList.userId} " value="${playerList.userId}_down"> 👎
+	     					</c:if></br>
+	     				</c:if>	
+	     				</c:forEach>		
+	     			</td>
+	     		</tr>
+	     		<tr>
+	     			<th colspan="7">
+	     				<input type="submit" value="제출" />
+	     			</th>
+	     		</tr>	
+	     		</form>
 	     	</c:if>
-	     	
+	     	<c:if test="${review == 'yes'}">
+	     		<tr>
+	     			<td colspan="7">
+	     				
+	     					<h2>REVIEW</h2>
+	     					
+	     			</td>
+	     		</tr>
+	     		<tr>
+	     			<th colspan="3">
+	     				
+	     					<h2>MVP</h2>
+	     					${mvp}
+	     			</th>
+	     			<th colspan="4">
+	     				
+	     					<h2>MANNER</h2>
+	     					${mannerPoint}
+	     			</th>
+	     		</tr>
+	     	</c:if>
+	     	</c:if>
+	     	 --%>
 	     	
 	     	
 	     	</br>
@@ -377,7 +389,7 @@ table, th, td{
 		     
 		     <tr>
 
-			     <form method="post" action="commentWrite.do?categoryId=m01&comentId=${dto.matchingIdx}" id="commentForm">
+			     <form method="post" action="commentWrite.do?categoryId=m02&comentId=${dto.matchingIdx}" id="commentForm">
 			     		<th >
 			     			<input type="text" name="userId" value="${loginId}" style= "border:none; width:50px; background-color: #f8f9fa;" readonly>
 			     		</th>
@@ -429,6 +441,18 @@ table, th, td{
         infowindow.open(map, marker);
     });
 	
+    function subCommentChk(){
+		console.log($('#commentContent').val());
+		
+		if($('#commentContent').val() == ''){
+			alert('댓글을 입력해주세요.');
+			return false;
+		}else{
+			$('#commentForm').submit();
+		}
+		
+		
+	}
     
     //=============================================================
     // comfirm 창 모음
@@ -464,24 +488,13 @@ table, th, td{
    });
    
    
-  function subCommentChk(){
-		console.log($('#commentContent').val());
-		
-		if($('#commentContent').val() == ''){
-			alert('댓글을 입력해주세요.');
-			return false;
-		}else{
-			$('#commentForm').submit();
-		}
-		
-		
-	}
+
   
  
     
     
 	
-    var playerListBtn = document.getElementById('playerList');
+ var playerListBtn = document.getElementById('playerList');
     var playerListPopup = document.getElementById('playerListPopup');
     var closePlayerListBtn = document.getElementById('closePlayerListBtn');
 
@@ -493,7 +506,7 @@ table, th, td{
       playerListPopup.style.display = 'none';
     });
 	
-    
+     
     var gameApplyListBtn = document.getElementById('gameApplyList');
     var gameApplyListPopup = document.getElementById('gameApplyListPopup');
     var closeGameApplyListBtn = document.getElementById('closeGameApplyListBtn');
@@ -505,7 +518,7 @@ table, th, td{
     closeGameApplyListBtn.addEventListener('click', function() {
     	gameApplyListPopup.style.display = 'none';
     });
-    
+   
     var gameInviteListBtn = document.getElementById('gameInviteList');
     var gameInviteListPopup = document.getElementById('gameInviteListPopup');
     var closeGameInviteListBtn = document.getElementById('closeGameInviteListBtn');
@@ -518,7 +531,8 @@ table, th, td{
     	gameInviteListPopup.style.display = 'none';
     });
     
-function inviteUser(userId, matchingIdx) {
+    
+function inviteTeam(userId, matchingIdx) {
         
         $.ajax({
             url: 'gameInvite.ajax',
@@ -554,7 +568,7 @@ function inviteUser(userId, matchingIdx) {
                 var inviteBtn = document.getElementById('inviteBtn_' + userId);
                 inviteBtn.textContent = '초대';
                 inviteBtn.onclick = function() {
-                    inviteUser(userId, '${dto.matchingIdx}');
+                    inviteUser('${gameInviteList.userId}', '${dto.matchingIdx}');
                 };
             }
         });

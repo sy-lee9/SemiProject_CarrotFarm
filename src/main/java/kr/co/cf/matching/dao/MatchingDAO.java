@@ -98,10 +98,13 @@ public interface MatchingDAO {
 	void matchigStateToReview(String matchingIdx, String matchigState);
 	
 	ArrayList<MatchingDTO> playerList(String matchingIdx);
-
+	ArrayList<MatchingDTO> playerTeamList(String matchingIdx);
+	
 	void playerDelete(String matchingIdx, String userId);
 
 	ArrayList<MatchingDTO> gameApplyList(String matchingIdx);
+
+	ArrayList<MatchingDTO> teamApplyList(String matchingIdx);
 
 	void gameApplyAccept(String matchingIdx, String userId);
 			
@@ -114,6 +117,8 @@ public interface MatchingDAO {
 	void cancelGameInvite(HashMap<String, Object> params);
 
 	ArrayList<MatchingDTO> gameInviteList(String matchingIdx);
+	
+	ArrayList<MatchingDTO> teamInviteList(String matchingIdx);
 
 	void mvp(HashMap<String, Object> params);
 
@@ -145,7 +150,17 @@ public interface MatchingDAO {
 
 	void downHit(String matchingIdx);
 
-	ArrayList<MatchingDTO> teamName();
+	String leaderChk(String userId);
+
+	MatchingDTO matchingTeamData(String teamName);
+
+	String categoryIdChk(String categoryId);
+
+	ArrayList<MatchingDTO> teamList(String matchingIdx);
+
+	MatchingDTO myTeam(String userId);
+
+
 
 	
 
