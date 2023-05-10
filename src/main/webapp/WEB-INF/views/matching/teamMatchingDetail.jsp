@@ -36,7 +36,7 @@ table, th, td{
 	}
 	
 
-#playerListPopup, #gameApplyListPopup,#gameInviteListPopup {
+#playerListPopup, #gameApplyListPopup,#gameInviteListPopup,#teamRegistPopup {
         display: none;
         position: fixed;
         top: 10%;
@@ -55,7 +55,7 @@ table, th, td{
 	text-align:center;
 	}
 	
-	#closePlayerListBtn, #closeGameApplyListBtn, #closeGameInviteListBtn{
+	#closePlayerListBtn, #closeGameApplyListBtn, #closeGameInviteListBtn, #closeTeamRegistBtn{
 		margin:auto;
         display:block;
 	}
@@ -127,8 +127,9 @@ table, th, td{
 	     			</br>🏀 경기 장소 : ${dto.courtName}
 	     			</br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 주소: ${dto.courtAddress}
 	     			</br>🏀 모집 인원 :	 &#128100 ${dto.matchingNumforSure}/${dto.matchingNum} 
-	     			<c:if test="${loginId != 'guest' }"><button id="playerList">참가자</button></c:if>
-	     			
+	     			<c:if test="${loginId != 'guest' }">
+	     				<button id="playerList">참가자</button><c:if test="${myTeamDto.teamGrade eq 'leader'}"><button id="teamRegist">팀원등록</button></c:if>
+	     			</c:if>
 				    </br>🏀 경기 방식 : ${dto.gamePlay} : ${dto.gamePlay}
 	     			</br>🏀 ${dto.content}
 	     		</td>
@@ -142,10 +143,11 @@ table, th, td{
 	     	<div id="playerListPopup">
 				<h3>참가자 목록</h3>
 				<hr>
+				<div id="scroll" style="height: 150px; overflow: auto;">
 				<ul>
 					<c:forEach items="${playerList}" var="playerList">
 						<c:if test="${playerList.teamName eq dto.teamName}">
-							<li> ${playerList.teamName} ${playerList.userId} 
+							<li> ${playerList.teamName} ${playerList.userId}
 							<c:if test="${dto.writerId eq loginId }">
 								<c:if test="${dto.writerId ne playerList.userId }">
 									<button onclick="location.href='playerDelete?userId=${playerList.userId}&matchingIdx=${dto.matchingIdx}'">취소</button>
@@ -155,6 +157,7 @@ table, th, td{
 							</li>
 						</c:if>
 					</c:forEach>
+					</br>
 					<c:forEach items="${playerList}" var="playerList">
 						<c:if test="${playerList.teamName ne dto.teamName}">
 							<li> ${playerList.teamName} ${playerList.userId} 
@@ -168,9 +171,30 @@ table, th, td{
 						</c:if>
 					</c:forEach>
 				</ul>
+				</div>
 				<button id="closePlayerListBtn">닫기</button>
 			</div>
 			
+			<div id="teamRegistPopup">
+					<h3>팀원등록</h3>
+					<hr>
+					<div id="scroll" style=" width:230px; height: 150px; overflow: auto;">
+						<c:if test="${teamMemberList ne null}">
+							<c:forEach items="${teamMemberList}" var="teamMemberList">
+								<c:if test="${teamMemberList.userId ne loginId}">
+									<li> 
+										${teamMemberList.userId}
+										<button id="registBtn_${teamMemberList.userId}" onclick="teamRegist('${teamMemberList.userId}', '${dto.matchingIdx}')">등록</button>
+									</li>
+								</c:if>
+							</c:forEach>
+						</c:if>
+						<c:if test="${teamMemberList eq null}">
+							<li> 등록할 수 있는 팀원이 없습니다. </li>
+						</c:if>
+					</div>
+					<button id="closeTeamRegistBtn" onclick="location.href='teamDetail.go?matchingIdx='+${dto.matchingIdx}">닫기</button>
+			</div>
 			
 				    
 	     	<tr>
@@ -187,7 +211,7 @@ table, th, td{
 	     		
 		     		<c:if test="${dto.writerId eq loginId }">
 			     		<th colspan="2">
-		     				<button id="matchingChk" onclick="location.href='matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}'">모집종료</button>
+		     				<button id="matchingChk">모집종료</button>
 		     			</th>
 		     		</c:if>
 		     		
@@ -255,7 +279,7 @@ table, th, td{
 	     			</th>
 	     			<c:if test="${dto.writerId eq loginId }">
 			     		<th colspan="2">
-			     			<button id="finishChk" onclick="location.href='matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}'">경기종료</button>
+			     			<button id="finishChk">경기종료</button>
 		     			</th>
 		     		</c:if>
 		     		
@@ -275,7 +299,7 @@ table, th, td{
 	     		<c:if test="${dto.writerId eq loginId }">
 		     		
 		     			<button onclick="location.href='teamUpdate.go?matchingIdx=${dto.matchingIdx}'">수정</button>
-		     			<button id="delChk" onclick="location.href='delete.do?matchingIdx=${dto.matchingIdx}'" >삭제</button>
+		     			<button id="delChk">삭제</button>
 						<button onclick="location.href='./teamList.do'">목록으로</button>
 		     		
 	     		</c:if>
@@ -457,35 +481,45 @@ table, th, td{
     //=============================================================
     // comfirm 창 모음
     //=============================================================
-    $('#delChk').click(function(){
-        confirm('삭제하시면 복구할수 없습니다. \n 정말로 삭제하시겠습니까??');
-   });
- 
+   $(function() {
+	   $('#delChk').click(function(event) {
+	     if (!confirm('삭제하시면 복구할수 없습니다. \n 정말로 삭제하시겠습니까??')) {
+	       event.preventDefault(); // 기본 이벤트 처리 중단
+	     } else {
+	       location.href = 'delete.do?matchingIdx=${dto.matchingIdx}'; // onclick 이벤트 처리
+	     }
+	   });
+	 });
 
-    $(function(){
-        $('#delOk').click(function(){
-            if(!confirm('삭제하시면 복구할수 없습니다. \n 정말로 삭제하시겠습니까??')){
-                return false;
-            }
-        });
-    });
-    
-    $('#matchingChk').click(function(){
-        confirm('모집을 종료하면 경기 참가 신청은 자동으로 거절 됩니다. \n정말 종료하시겠습니까?');
-   });
+
+   $(function() {
+	   $('#matchingChk').click(function(event) {
+	     var matchingNumforSure = parseInt('${dto.matchingNumforSure}');
+	     var matchingNum = parseInt('${dto.matchingNum}');
+	     if (matchingNumforSure > matchingNum) {
+	       alert('모집 인원 수 보다 경기 참여 인원이 많습니다. 참가자 목록을 확인해 주세요');
+	       event.preventDefault();
+	     } else if (matchingNumforSure == 1) {
+			 alert('경기는 최소 2명의 참가자가 존재할 때만 가능합니다. ');
+			 event.preventDefault();
+		}else if (!confirm('모집을 종료하면 경기 참가 신청은 자동으로 거절 됩니다.\n 정말로 종료하시겠습니까??')) {
+	       event.preventDefault(); 
+	     } else {
+	       location.href='matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}';
+	     }
+	   });
+	 });
    
-   $('#finishChk').click(function(){
-        confirm('경기를 종료하고 리뷰를 작성하시겠습니까?');
-   });
-    
-   $('#delCommentChk').click(function(){
-        confirm('삭제하시면 복구할수 없습니다. \n 정말로 삭제하시겠습니까??');
-   });
-    
-    
-   $('#applyChk').click(function(){
-        confirm('해당 경기에 참가 신청 하시겠습니까?');
-   });
+   
+   $(function() {
+	   $('#finishChk').click(function(event) {
+	     if (!confirm('경기를 종료하고 리뷰를 작성하시겠습니까?')) {
+	       event.preventDefault(); // 기본 이벤트 처리 중단
+	     } else {
+	    	location.href='matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}';
+	     }
+	   });
+	 });
    
    
 
@@ -519,7 +553,22 @@ table, th, td{
     	gameApplyListPopup.style.display = 'none';
     });
    
-    var gameInviteListBtn = document.getElementById('gameInviteList');
+   
+    
+    var teamRegistBtn = document.getElementById('teamRegist');
+    var teamRegistPopup = document.getElementById('teamRegistPopup');
+    var closeTeamRegistBtn = document.getElementById('closeTeamRegistBtn');
+
+    teamRegistBtn.addEventListener('click', function() {
+    	teamRegistPopup.style.display = 'block';
+    });
+
+    closeTeamRegistBtn.addEventListener('click', function() {
+    	teamRegistPopup.style.display = 'none';
+    });
+    
+    
+     var gameInviteListBtn = document.getElementById('gameInviteList');
     var gameInviteListPopup = document.getElementById('gameInviteListPopup');
     var closeGameInviteListBtn = document.getElementById('closeGameInviteListBtn');
 
@@ -530,8 +579,6 @@ table, th, td{
     closeGameInviteListBtn.addEventListener('click', function() {
     	gameInviteListPopup.style.display = 'none';
     });
-    
-    
 function inviteTeam(userId, matchingIdx) {
         
         $.ajax({
@@ -574,6 +621,49 @@ function inviteTeam(userId, matchingIdx) {
         });
     }
     
+
+    
+function teamRegist(userId, matchingIdx) {
+        
+        $.ajax({
+            url: 'teamRegist.ajax',
+            type: 'POST',
+            data: {
+                userId: userId,
+                matchingIdx: matchingIdx
+            },
+            success: function(data) {
+                // 버튼 변경
+                console.log(data);
+                var inviteBtn = document.getElementById('registBtn_' + userId);
+                inviteBtn.textContent = '취소';
+                inviteBtn.onclick = function() {
+                	cancelRegist(userId,matchingIdx);
+                };
+            }
+        });
+}
+
+function cancelRegist(userId,matchingIdx) {
+    
+    $.ajax({
+        url: 'cancelRegist.ajax',
+        type: 'POST',
+        data: {
+            userId: userId,
+            matchingIdx: matchingIdx
+        },
+        success: function(data) {
+            // 버튼 변경
+            console.log(data);
+            var inviteBtn = document.getElementById('registBtn_' + userId);
+            inviteBtn.textContent = '등록';
+            inviteBtn.onclick = function() {
+            	teamRegist(userId, matchingIdx);
+            };
+        }
+    });
+}
 
         
     </script>

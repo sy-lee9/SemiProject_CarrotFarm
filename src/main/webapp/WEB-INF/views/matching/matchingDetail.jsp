@@ -147,7 +147,9 @@ table, th, td{
 						<li> ${playerList.userId} 
 						<c:if test="${dto.writerId eq loginId }">
 							<c:if test="${dto.writerId ne playerList.userId }">
-								<button onclick="location.href='playerDelete?userId=${playerList.userId}&matchingIdx=${dto.matchingIdx}'">취소</button>
+							<c:if test="${dto.matchigState ne 'review'}">
+									<button onclick="location.href='playerDelete?userId=${playerList.userId}&matchingIdx=${dto.matchingIdx}'">취소</button>
+							</c:if>
 							</c:if>
 						</c:if>
 						</br>
@@ -173,7 +175,7 @@ table, th, td{
 	     		
 		     		<c:if test="${dto.writerId eq loginId }">
 			     		<th colspan="2">
-		     				<button id="matchingChk" onclick="location.href='matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}'">모집종료</button>
+		     				<button id="matchingChk" >모집종료</button>
 		     			</th>
 		     		</c:if>
 		     		
@@ -236,7 +238,7 @@ table, th, td{
 	     			</th>
 	     			<c:if test="${dto.writerId eq loginId }">
 			     		<th colspan="2">
-			     			<button id="finishChk" onclick="location.href='matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}'">경기종료</button>
+			     			<button id="finishChk" >경기종료</button>
 		     			</th>
 		     		</c:if>
 		     		
@@ -256,7 +258,7 @@ table, th, td{
 	     		<c:if test="${dto.writerId eq loginId }">
 		     		
 		     			<button onclick="location.href='update.go?matchingIdx=${dto.matchingIdx}'">수정</button>
-		     			<button id="delChk" onclick="location.href='delete.do?matchingIdx=${dto.matchingIdx}'" >삭제</button>
+		     			<button id="delChk" >삭제</button>
 						<button onclick="location.href='./list.do'">목록으로</button>
 		     		
 	     		</c:if>
@@ -274,9 +276,7 @@ table, th, td{
 	     	
 	     	<!-- 리뷰 영역 -->
 	     	<c:if test="${dto.matchigState eq 'review'}">
-	     	
-	     	<c:forEach  items="${playerList}" var="player">
-	     		<c:if test="${player.userId eq loginId}">
+	     	<c:if test="${playChk != 0}">
 	     			<c:if test="${review == 'no'}">
 	     		
 			     		<form action="review?matchingIdx=${dto.matchingIdx}" method="post">
@@ -341,9 +341,7 @@ table, th, td{
 			     		</tr>
 			     	</c:if>
 	     	
-	     		</c:if>
-	     	</c:forEach>
-	  
+	  		</c:if>
 	     	</c:if>
 	     	
 	     	
@@ -433,36 +431,53 @@ table, th, td{
     //=============================================================
     // comfirm 창 모음
     //=============================================================
-    $('#delChk').click(function(){
-        confirm('삭제하시면 복구할수 없습니다. \n 정말로 삭제하시겠습니까??');
-   });
- 
 
-    $(function(){
-        $('#delOk').click(function(){
-            if(!confirm('삭제하시면 복구할수 없습니다. \n 정말로 삭제하시겠습니까??')){
-                return false;
-            }
-        });
-    });
+
     
-    $('#matchingChk').click(function(){
-        confirm('모집을 종료하면 경기 참가 신청은 자동으로 거절 됩니다. \n정말 종료하시겠습니까?');
-   });
+   $(function() {
+	   $('#delChk').click(function(event) {
+	     if (!confirm('삭제하시면 복구할수 없습니다. \n 정말로 삭제하시겠습니까??')) {
+	       event.preventDefault(); // 기본 이벤트 처리 중단
+	     } else {
+	       location.href = 'delete.do?matchingIdx=${dto.matchingIdx}'; // onclick 이벤트 처리
+	     }
+	   });
+	 });
+
    
-   $('#finishChk').click(function(){
-        confirm('경기를 종료하고 리뷰를 작성하시겠습니까?');
-   });
-    
-   $('#delCommentChk').click(function(){
-        confirm('삭제하시면 복구할수 없습니다. \n 정말로 삭제하시겠습니까??');
-   });
-    
-    
-   $('#applyChk').click(function(){
-        confirm('해당 경기에 참가 신청 하시겠습니까?');
-   });
+   $(function() {
+	   $('#matchingChk').click(function(event) {
+	     var matchingNumforSure = parseInt('${dto.matchingNumforSure}');
+	     var matchingNum = parseInt('${dto.matchingNum}');
+	     if (matchingNumforSure > matchingNum) {
+	       alert('모집 인원 수 보다 경기 참여 인원이 많습니다. 참가자 목록을 확인해 주세요');
+	       event.preventDefault();
+	     } else if (matchingNumforSure == 1) {
+		   alert('경기는 최소 2명의 참가자가 존재할 때만 가능합니다. ');
+		    event.preventDefault();
+		 }else if (!confirm('모집을 종료하면 경기 참가 신청은 자동으로 거절 됩니다.\n 정말로 종료하시겠습니까??')) {
+	       event.preventDefault(); 
+	     } else {
+	       location.href='matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}';
+	     }
+	   });
+	 });
+
    
+   
+   $(function() {
+	   $('#finishChk').click(function(event) {
+	     if (!confirm('경기를 종료하고 리뷰를 작성하시겠습니까?')) {
+	       event.preventDefault(); // 기본 이벤트 처리 중단
+	     } else {
+	    	location.href='matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}';
+	     }
+	   });
+	 });
+   
+
+    
+
    
   function subCommentChk(){
 		console.log($('#commentContent').val());

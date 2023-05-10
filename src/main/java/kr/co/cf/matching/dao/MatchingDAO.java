@@ -161,6 +161,15 @@ public interface MatchingDAO {
 	MatchingDTO myTeam(String userId);
 
 
+	int playChk(String loginId, String matchingIdx);
+
+	ArrayList<MatchingDTO> teamMemberList(String userId, String matchingIdx);
+
+	void teamRegist(HashMap<String, Object> params);
+
+	void cancelRegist(HashMap<String, Object> params);
+
+
 
 	
 

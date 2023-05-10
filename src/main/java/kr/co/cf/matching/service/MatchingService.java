@@ -377,6 +377,23 @@ public class MatchingService {
 	}
 
 
+	public int playChk(String loginId, String matchingIdx) {
+		return matchingDAO.playChk(loginId,matchingIdx);
+	}
+
+	public ArrayList<MatchingDTO> teamMemberList(String userId, String matchingIdx) {
+		return matchingDAO.teamMemberList(matchingIdx, userId);
+	}
+
+	public void teamRegist(HashMap<String, Object> params) {
+		matchingDAO.teamRegist(params);
+	}
+
+	public void cancelRegist(HashMap<String, Object> params) {
+		matchingDAO.cancelRegist(params);
+	}
+
+
 	
 
 	

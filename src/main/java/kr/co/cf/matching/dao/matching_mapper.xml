@@ -301,6 +301,11 @@
 		SELECT userId,matchingIdx FROM game WHERE matchingIdx=#{param1} AND gameAppState='확정' ORDER BY gameAppDate
 	</select>
 	
+	<select id="playChk" resultType="int">
+		SELECT COUNT(userId) FROM game WHERE userId =#{param1} AND matchingIdx=#{param2} AND gameAppState='확정'
+	</select>
+	
+	
 	<select id="playerTeamList" resultType="kr.co.cf.matching.dto.MatchingDTO">
 		SELECT 
 			g.userId,
@@ -364,9 +369,18 @@
 		INSERT INTO game(categoryId,matchingIdx,userId,gameAppState) VALUES(#{categoryId},#{matchingIdx},#{userId},'초대')
 	</insert>
 	
+	<insert id="teamRegist" parameterType="hashmap">
+		INSERT INTO game(categoryId,matchingIdx,userId,gameAppState) VALUES('m02',#{matchingIdx},#{userId},'확정')
+	</insert>
+	
 	<insert id="cancelGameInvite" parameterType="hashmap">
 		DELETE FROM game WHERE matchingIdx=#{matchingIdx} AND userId=#{userId} AND gameAppState='초대'
 	</insert>
+	
+	<insert id="cancelRegist" parameterType="hashmap">
+		DELETE FROM game WHERE matchingIdx=#{matchingIdx} AND userId=#{userId} AND gameAppState='확정'
+	</insert>
+	
 	
 	<select id="gameInviteList" resultType="kr.co.cf.matching.dto.MatchingDTO">
 		SELECT userId FROM game WHERE matchingIdx=#{param1} AND gameAppState='초대'
@@ -387,7 +401,7 @@
 	<insert id="mvp" parameterType="hashmap">
 		INSERT INTO mvp(matchingIdx,writerId,receiveId) Values(#{matchingIdx},#{writerId},#{receiveId})
 	</insert>
-	
+
 	<insert id="mannerUp" parameterType="hashmap">
 		INSERT INTO review(matchingIdx,writerId,receiveId,userMannerScore) Values(#{matchingIdx},#{writerId},#{receiveId},0.1)
 	</insert>
@@ -458,6 +472,16 @@
 		JOIN team t ON tu.teamIdx = t.teamIdx 
 		WHERE tu.userId = #{param1} AND tu.teamUserState='join'
 	</select>
+	
+	<select id="teamMemberList" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT 
+			tu.teamIdx,
+			t.userId 
+		FROM teamuser tu
+		RIGHT JOIN teamuser t ON tu.teamIdx = t.teamIdx 
+		WHERE tu.userId=#{param1} AND t.userId NOT IN (SELECT userId FROM game WHERE matchingIdx=#{param2} AND gameAppState='확정')
+	</select>
+	
 </mapper>
 
 

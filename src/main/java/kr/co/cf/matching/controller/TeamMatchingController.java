@@ -131,6 +131,11 @@ public class TeamMatchingController {
 			MatchingDTO myTeamDto = new MatchingDTO();
 			myTeamDto = matchingService.myTeam(String.valueOf(session.getAttribute("loginId")));
 			model.addAttribute("myTeamDto", myTeamDto);
+			
+			// 팀원 리스트
+			ArrayList<MatchingDTO> teamMemberList = new ArrayList<MatchingDTO>();
+			teamMemberList = matchingService.teamMemberList(matchingIdx,String.valueOf(session.getAttribute("loginId")));
+			model.addAttribute("teamMemberList", teamMemberList);
 		}
 		
 
@@ -175,6 +180,27 @@ public class TeamMatchingController {
 		return "/matching/teamMatchingUpdateForm";
 	}
 	
+	@RequestMapping(value ="/matching/teamRegist.ajax")
+	@ResponseBody
+	public HashMap<String, Object> teamRegist(@RequestParam HashMap<String, Object> params) {
+		logger.info("params : " + params);
+		
+		matchingService.teamRegist(params);
+		
+		HashMap<String, Object> data = new HashMap<String, Object>();
+		data.put("msg", "등록 성공");
+		return data;
+	}
 
-
+	@RequestMapping(value ="/matching/cancelRegist.ajax")
+	@ResponseBody
+	public HashMap<String, Object> cancelRegist(@RequestParam HashMap<String, Object> params) {
+		logger.info("params : " + params);
+			
+		matchingService.cancelRegist(params);
+			
+		HashMap<String, Object> data = new HashMap<String, Object>();
+		data.put("msg", "등록 취소 성공");
+		return data;
+		}
 }
