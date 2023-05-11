@@ -121,11 +121,9 @@ public interface MatchingDAO {
 	ArrayList<MatchingDTO> teamInviteList(String matchingIdx);
 
 	void mvp(HashMap<String, Object> params);
-
-	void mannerUp(HashMap<String, Object> params);
-
-	void mannerDown(HashMap<String, Object> params);
-
+	
+	void manner(String matchingIdx, String writerId, String receiveId, String userMannerScore);
+	
 	int review(String matchingIdx, String writerId);
 
 	float mannerPoint(String loginId);
@@ -168,6 +166,15 @@ public interface MatchingDAO {
 	void teamRegist(HashMap<String, Object> params);
 
 	void cancelRegist(HashMap<String, Object> params);
+
+	ArrayList<HashMap<String, String>> mvpCnt(String matchingIdx);
+
+	int leaderQ(String userId);
+
+	ArrayList<MatchingDTO> tagList();
+
+
+	
 
 
 

@@ -325,14 +325,11 @@ public class MatchingService {
 		matchingDAO.mvp(params);
 		
 	}
-
-	public void mannerUp(HashMap<String, Object> params) {
-		matchingDAO.mannerUp(params);	
-	}
 	
-	public void mannerDown(HashMap<String, Object> params) {
-		matchingDAO.mannerDown(params);	
+	public void manner(String matchingIdx, String writerId, String receiveId, String userMannerScore) {
+		matchingDAO.manner(matchingIdx,writerId,receiveId,userMannerScore);		
 	}
+
 
 	public int review(String matchingIdx, String writerId) {
 		return matchingDAO.review(matchingIdx,writerId);
@@ -363,7 +360,12 @@ public class MatchingService {
 		// 본인이 리더인 (해체되지 않은)팀이 있는지
 		return matchingDAO.leaderChk(userId);
 	}
-
+	
+	public int leaderQ(String userId) {
+		// TODO Auto-generated method stub
+		return matchingDAO.leaderQ(userId);
+	}
+	
 	public MatchingDTO matchingTeamData(String teamName) {
 		return matchingDAO.matchingTeamData(teamName);
 	}
@@ -392,6 +394,19 @@ public class MatchingService {
 	public void cancelRegist(HashMap<String, Object> params) {
 		matchingDAO.cancelRegist(params);
 	}
+
+	public ArrayList<HashMap<String, String>> mvpCnt(String matchingIdx) {
+		return matchingDAO.mvpCnt(matchingIdx);
+	}
+
+	public ArrayList<MatchingDTO> tagList() {
+		return matchingDAO.tagList();
+	}
+
+
+	
+
+	
 
 
 	

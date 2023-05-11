@@ -36,7 +36,6 @@ public class MatchingController {
 			model.addAttribute("loginId", "guest");
 		}
 		
-		// 지역 리스트 가져오기
 		ArrayList<MatchingDTO> locationList = new ArrayList<MatchingDTO>();
 		locationList = matchingService.locationList();
 		model.addAttribute("locationList", locationList);
@@ -99,51 +98,47 @@ public class MatchingController {
 			// 해당 경기 초대 목록
 			ArrayList<MatchingDTO> gameInviteList = new ArrayList<MatchingDTO>();
 			gameInviteList = matchingService.gameInviteList(matchingIdx);
-			model.addAttribute("gameInviteList", gameInviteList);
-			
-			// 해당 경기에 참여했는지 여부
-			int playChk = matchingService.playChk(String.valueOf(session.getAttribute("loginId")),matchingIdx);
-			model.addAttribute("playChk", playChk);
-			
-			
-			
-			// 리뷰 작성 여부 
-						String review = "no";
-						int num = matchingService.review(matchingIdx,(String)session.getAttribute("loginId"));
-						if (num != 0) {
-							review = "yes";
-						}
-						model.addAttribute("review", review);
-						String mvp ="mvp는 50% 이상의 투표를 받았을 때만 공개 됩니다.";
-						// 리뷰 작성 후 경기 mvp
-						model.addAttribute("mvp", mvp);
-						int mvpChk = playerList.size()/2; 
-						logger.info("mvpChk : "+mvpChk);
-						int cntReview = 0;
-						
-						
-						//MVP 선정
-						for (MatchingDTO dto : playerList) {
-							logger.info("userId : "+dto.getUserId()+"matchingIdx : "+dto.getMatchingIdx());
-							cntReview = matchingService.cntReview(dto.getUserId(),String.valueOf(dto.getMatchingIdx()));
-							logger.info(dto.getUserId()+"의 투표수 : "+cntReview);
-							if(cntReview==mvpChk) {
-								
-								logger.info("선정된 mvp : " + dto.getUserId());
-								mvp =  dto.getUserId();
-							}
-							
-						}
-						
-						model.addAttribute("mvp", mvp);
-			
-							
-								
-			// 리뷰 작성 후 개인 매너 점수 
-			float mannerPoint = matchingService.mannerPoint((String)session.getAttribute("loginId"));
-			model.addAttribute("mannerPoint", mannerPoint);				
+			model.addAttribute("gameInviteList", gameInviteList);		
 		
 		}
+		
+		// MVP 결과 
+		ArrayList<MatchingDTO> playerList = new ArrayList<MatchingDTO>();
+		playerList = matchingService.playerList(matchingIdx);
+		int mvpChk = playerList.size()/2; 
+		logger.info("mvp  최소 득표수 : " + mvpChk);
+		String mvp = "mvp미정";
+		ArrayList<HashMap<String, String>> mvpCnt = matchingService.mvpCnt(matchingIdx);
+		
+		for (int i = 0; i < mvpCnt.size(); i++) {
+			HashMap<String, String> map = mvpCnt.get(i);
+			String realCnt = "";
+			String realId = "";
+			for(String key : map.keySet()){
+				String value = String.valueOf(map.get(key));
+				logger.info(key+" : "+value);
+				if(key.equals("cnt")) {
+					realCnt=String.valueOf(map.get(key));
+				}
+				if(key.equals("receiveId")) {
+					realId=String.valueOf(map.get(key));
+				}
+			}
+			if(Integer.parseInt(realCnt)>mvpChk) {
+				mvp = realId;
+			}
+			
+		}
+		
+		model.addAttribute("mvp",mvp);
+		
+		
+		
+		float mannerPoint = matchingService.mannerPoint((String)session.getAttribute("loginId"));
+		model.addAttribute("mannerPoint", mannerPoint);
+		
+		
+		
 		return "/matching/matchingDetail";
 	}
 	
@@ -313,7 +308,15 @@ public class MatchingController {
 		logger.info("댓글 정보 commentIdx : " + commentIdx);
 		matchingService.commentDelete(commentIdx);
 		matchingService.downHit(matchingIdx);
-		return "redirect:/matching/detail.go?matchingIdx=" + matchingIdx ;
+		
+		String categoryId = matchingService.categoryIdChk(matchingIdx);
+
+		String path = "redirect:/matching/detail.go?matchingIdx=" + matchingIdx ;
+		if(categoryId.equals("m02")) {
+			path = "redirect:/matching/teamDetail.go?matchingIdx=" + matchingIdx ;
+		}
+	
+		return path;
 	}
 	
 	@RequestMapping(value = "/matching/commentUpdate.go")
@@ -368,42 +371,47 @@ public class MatchingController {
 			logger.info("수정할 코멘트 내용"+commentDto.getCommentContent());
 			model.addAttribute("commentDto", commentDto);
 
-			
-			// 리뷰 작성 여부 
-			String review = "no";
-			int num = matchingService.review(matchingIdx,(String)session.getAttribute("loginId"));
-			if (num != 0) {
-				review = "yes";
-			}
-			model.addAttribute("review", review);
-			String mvp ="mvp는 50% 이상의 투표를 받았을 때만 공개 됩니다.";
-			// 리뷰 작성 후 경기 mvp
-			model.addAttribute("mvp", mvp);
-			int mvpChk = playerList.size()/2; 
-			logger.info("mvpChk : "+mvpChk);
-			int cntReview = 0;
-			
-			
-			//MVP 선정
-			for (MatchingDTO dto : playerList) {
-				logger.info("userId : "+dto.getUserId()+"matchingIdx : "+dto.getMatchingIdx());
-				cntReview = matchingService.cntReview(dto.getUserId(),String.valueOf(dto.getMatchingIdx()));
-				logger.info(dto.getUserId()+"의 투표수 : "+cntReview);
-				if(cntReview==mvpChk) {
-					
-					logger.info("선정된 mvp : " + dto.getUserId());
-					mvp =  dto.getUserId();
+		}
+		
+		// MVP 결과 
+				ArrayList<MatchingDTO> playerList = new ArrayList<MatchingDTO>();
+				playerList = matchingService.playerList(matchingIdx);
+				
+				int mvpChk = playerList.size()/2; 
+				logger.info("mvp  최소 득표수 : " + mvpChk);
+				String mvp = "mvp미정";
+				
+				ArrayList<HashMap<String, String>> mvpCnt = matchingService.mvpCnt(matchingIdx);
+				
+				for (int i = 0; i < mvpCnt.size(); i++) {
+					HashMap<String, String> map = mvpCnt.get(i);
+					String realCnt = "";
+					String realId = "";
+					for(String key : map.keySet()){
+						String value = String.valueOf(map.get(key));
+						logger.info(key+" : "+value);
+						if(key.equals("cnt")) {
+							realCnt=String.valueOf(map.get(key));
+						}
+						if(key.equals("receiveId")) {
+							realId=String.valueOf(map.get(key));
+						}
+					}
+					if(Integer.parseInt(realCnt)>mvpChk) {
+						mvp = realId;
+					}
 					
 				}
-			}
-			model.addAttribute("mvp", mvp);
-					
-			// 리뷰 작성 후 개인 매너 점수 
-			float mannerPoint = matchingService.mannerPoint((String)session.getAttribute("loginId"));
-			model.addAttribute("mannerPoint", mannerPoint);
-
-
-		}
+				
+				model.addAttribute("mvp",mvp);
+				
+				
+				
+				float mannerPoint = matchingService.mannerPoint((String)session.getAttribute("loginId"));
+				model.addAttribute("mannerPoint", mannerPoint);
+				
+				
+				
 					
 		return "/matching/matchingCommentUpdate" ;
 	}
@@ -428,7 +436,15 @@ public class MatchingController {
 		
 		
 		matchingService.downHit(matchingIdx);
-		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx;
+		
+		String categoryId = matchingService.categoryIdChk(matchingIdx);
+
+		String path = "redirect:/matching/detail.go?matchingIdx=" + matchingIdx ;
+		if(categoryId.equals("m02")) {
+			path = "redirect:/matching/teamDetail.go?matchingIdx=" + matchingIdx ;
+		}
+	
+		return path;
 	}
 	
 	
@@ -444,7 +460,15 @@ public class MatchingController {
 		}
 		
 		matchingService.downHit(matchingIdx);
-		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx;
+		
+		String categoryId = matchingService.categoryIdChk(matchingIdx);
+
+		String path = "redirect:/matching/detail.go?matchingIdx=" + matchingIdx ;
+		if(categoryId.equals("m02")) {
+			path = "redirect:/matching/teamDetail.go?matchingIdx=" + matchingIdx ;
+		}
+	
+		return path;
 	}
 	
 	@RequestMapping(value="/matching/playerDelete")
@@ -470,7 +494,15 @@ public class MatchingController {
 		matchingService.gameApplyAccept(matchingIdx,userId);
 		
 		matchingService.downHit(matchingIdx);
-		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx;
+		
+		String categoryId = matchingService.categoryIdChk(matchingIdx);
+
+		String path = "redirect:/matching/detail.go?matchingIdx=" + matchingIdx ;
+		if(categoryId.equals("m02")) {
+			path = "redirect:/matching/teamDetail.go?matchingIdx=" + matchingIdx ;
+		}
+	
+		return path;
 	}
 	
 	@RequestMapping(value="/matching/gameApplyReject")
@@ -479,7 +511,15 @@ public class MatchingController {
 		matchingService.gameApplyReject(matchingIdx,userId);
 		
 		matchingService.downHit(matchingIdx);
-		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx;
+		
+		String categoryId = matchingService.categoryIdChk(matchingIdx);
+
+		String path = "redirect:/matching/detail.go?matchingIdx=" + matchingIdx ;
+		if(categoryId.equals("m02")) {
+			path = "redirect:/matching/teamDetail.go?matchingIdx=" + matchingIdx ;
+		}
+	
+		return path;
 	}
 	
 
@@ -510,34 +550,7 @@ public class MatchingController {
 		return data;
 	}
 	
-	@RequestMapping(value ="/matching/review")
-	public String review(@RequestParam HashMap<String, Object> params, HttpSession session) {
-		
-		params.put("writerId", session.getAttribute("loginId"));
-		logger.info("params : " + params);
-		
-		matchingService.mvp(params);
-		
-		for (String key : params.keySet()) {
-		    if (key.startsWith("manner")) {
-			if(params.get(key).toString().endsWith("_up")){
-				String receiveId = params.get(key).toString().split("_")[0];
-				params.put("receiveId", receiveId);
-				logger.info("params : " + params);
-				matchingService.mannerUp(params);
-			}
-		      if(params.get(key).toString().endsWith("_down")){
-		    	  String receiveId = params.get(key).toString().split("_")[0];
-		    	  params.put("receiveId", receiveId);
-		    	  logger.info("params : " + params);
-		    	  matchingService.mannerDown(params);
-			}
-		    }
-		}
-		
-		matchingService.downHit((String)params.get("matchingIdx"));
-		return "redirect:/matching/detail.go?matchingIdx=" + params.get("matchingIdx");
-	}
+	
 	
 	
 	@RequestMapping(value ="/matching/matchingReport.go")

@@ -401,13 +401,13 @@
 	<insert id="mvp" parameterType="hashmap">
 		INSERT INTO mvp(matchingIdx,writerId,receiveId) Values(#{matchingIdx},#{writerId},#{receiveId})
 	</insert>
-
-	<insert id="mannerUp" parameterType="hashmap">
-		INSERT INTO review(matchingIdx,writerId,receiveId,userMannerScore) Values(#{matchingIdx},#{writerId},#{receiveId},0.1)
-	</insert>
 	
-	<insert id="mannerDown" parameterType="hashmap">
-		INSERT INTO review(matchingIdx,writerId,receiveId,userMannerScore) Values(#{matchingIdx},#{writerId},#{receiveId},-0.1)
+	<select id="mvpCnt" resultType="hashmap">
+		SELECT receiveId, count(receiveId) AS cnt FROM mvp WHERE matchingIdx=#{param1} GROUP BY receiveId ;
+	</select>
+		
+	<insert id="manner" parameterType="hashmap">
+		INSERT INTO review(matchingIdx,writerId,receiveId,userMannerScore) Values(#{param1},#{param2},#{param3},#{param4})
 	</insert>
 	
 	<select id="review" resultType="int">
@@ -458,6 +458,10 @@
 		SELECT teamName FROM team WHERE teamIdx=(SELECT teamIdx FROM teamuser WHERE userId=#{param1} AND teamGrade ='leader' AND teamUserState = 'join')
 	</select>
 	
+	<select id="leaderQ" resultType="int">
+		SELECT count(teamName) FROM team WHERE teamIdx=(SELECT teamIdx FROM teamuser WHERE userId=#{param1} AND teamGrade ='leader' AND teamUserState = 'join')
+	</select>
+	
 	<select id="matchingTeamData" resultType="kr.co.cf.matching.dto.MatchingDTO">
 		SELECT locationIdx , gu FROM location WHERE locationIdx = (SELECT locationIdx FROM team WHERE teamName =#{param1})
 	</select>
@@ -482,6 +486,10 @@
 		WHERE tu.userId=#{param1} AND t.userId NOT IN (SELECT userId FROM game WHERE matchingIdx=#{param2} AND gameAppState='확정')
 	</select>
 	
+	
+	<select id="tagList" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT tagIdx, tagContent FROM tag
+	</select>
 </mapper>
 
 
