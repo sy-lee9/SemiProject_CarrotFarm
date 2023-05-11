@@ -403,6 +403,14 @@ public class MatchingService {
 		return matchingDAO.tagList();
 	}
 
+	public void teamTagReview(String matchingIdx, String teamId, String tagIdx) {
+		matchingDAO.teamTagReview(matchingIdx,teamId,tagIdx);
+	}
+
+	public int tagChk(String matchingIdx, String teamId) {
+		return matchingDAO.tagChk(matchingIdx,teamId);
+	}
+
 
 	
 

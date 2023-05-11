@@ -486,9 +486,16 @@
 		WHERE tu.userId=#{param1} AND t.userId NOT IN (SELECT userId FROM game WHERE matchingIdx=#{param2} AND gameAppState='확정')
 	</select>
 	
+	<insert id="teamTagReview">
+		INSERT INTO tagreview(matchingIdx, teamId, tagIdx) VALUES(#{param1},#{param2},#{param3})
+	</insert>
 	
 	<select id="tagList" resultType="kr.co.cf.matching.dto.MatchingDTO">
 		SELECT tagIdx, tagContent FROM tag
+	</select>
+	
+	<select id="tagChk" resultType="int">
+		SELECT COUNT(tagIdx) FROM tagreview WHERE matchingIdx=#{param1} AND teamId=#{param2}
 	</select>
 </mapper>
 

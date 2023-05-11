@@ -173,6 +173,10 @@ public interface MatchingDAO {
 
 	ArrayList<MatchingDTO> tagList();
 
+	void teamTagReview(String matchingIdx, String teamId, String tagIdx);
+
+	int tagChk(String matchingIdx, String teamId);
+
 
 	
 

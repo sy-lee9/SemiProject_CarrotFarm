@@ -128,7 +128,16 @@ table, th, td{
 	     			</br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 주소: ${dto.courtAddress}
 	     			</br>🏀 모집 인원 :	 &#128100 ${dto.matchingNumforSure}/${dto.matchingNum} 
 	     			<c:if test="${loginId != 'guest' }">
-	     				<button id="playerList">참가자</button><c:if test="${myTeamDto.teamGrade eq 'leader'}"><button id="teamRegist">팀원등록</button></c:if>
+	     				<button id="playerList">참가자</button>
+	     				
+	     				<c:if test="${myTeamDto.teamGrade eq 'leader'}">
+	     					<c:forEach items="${playerList}" var="playerList">
+	     					<c:if test="${playerList.userId eq loginId}">
+	     						<button id="teamRegist">팀원등록</button>
+	     					</c:if>
+	     				</c:forEach>
+	     				
+	     				</c:if>
 	     			</c:if>
 				    </br>🏀 경기 방식 : ${dto.gamePlay} : ${dto.gamePlay}
 	     			</br>🏀 ${dto.content}

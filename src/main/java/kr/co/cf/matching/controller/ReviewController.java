@@ -84,15 +84,34 @@ public class ReviewController {
 				logger.info("teamIdx : " + teamIdx);
 				
 				if(playChk==1 && reviewChk==0) {
-					page = "/matching/teamReview";
 					
-					model.addAttribute("myTeamName", myTeamName);
-					model.addAttribute("yourTeamName", yourTeamName);
-					model.addAttribute("teamIdx", teamIdx);
 					
-					ArrayList<MatchingDTO> tagList = new ArrayList<MatchingDTO>();
-					tagList = matchingService.tagList();
-					model.addAttribute("tagList", tagList);
+					int tagChk = matchingService.tagChk(matchingIdx,String.valueOf(teamIdx));
+					
+					logger.info("tagChk" + tagChk);
+					
+					if(tagChk!=0) {
+						
+						page = "/matching/review";
+						// 경기 참여자 정보
+						ArrayList<MatchingDTO> playerList = new ArrayList<MatchingDTO>();
+						playerList = matchingService.playerList(matchingIdx);
+						model.addAttribute("playerList", playerList);
+						
+					}else {
+						page = "/matching/teamReview";
+						
+						model.addAttribute("myTeamName", myTeamName);
+						model.addAttribute("yourTeamName", yourTeamName);
+						model.addAttribute("teamIdx", teamIdx);
+						
+						ArrayList<MatchingDTO> tagList = new ArrayList<MatchingDTO>();
+						tagList = matchingService.tagList();
+						model.addAttribute("tagList", tagList);
+					}
+					
+		
+					
 					
 				}
 				
@@ -114,6 +133,8 @@ public class ReviewController {
 				ArrayList<MatchingDTO> playerList = new ArrayList<MatchingDTO>();
 				playerList = matchingService.playerList(matchingIdx);
 				model.addAttribute("playerList", playerList);
+				
+				model.addAttribute("matchingIdx", matchingIdx);
 				
 			}
 			
@@ -161,9 +182,22 @@ public class ReviewController {
 		
 		logger.info("팀 리뷰 정보 : " + params);
 		
+		String matchingIdx = params.get("matchingIdx");
+		String teamId = params.get("teamId");
+		
+		params.remove("matchingIdx");
+		params.remove("teamId");
+		
+		for(String key : params.keySet()){		    
+		    logger.info(key);
+		    matchingService.teamTagReview(matchingIdx,teamId,key);
+		}
+		
 		ArrayList<MatchingDTO> playerList = new ArrayList<MatchingDTO>();
-		playerList = matchingService.playerList(params.get("matchingIdx"));
+		playerList = matchingService.playerList(matchingIdx);
 		model.addAttribute("playerList", playerList);
+		
+		model.addAttribute("matchingIdx", matchingIdx);
 		
 		return "/matching/review";
 	}
