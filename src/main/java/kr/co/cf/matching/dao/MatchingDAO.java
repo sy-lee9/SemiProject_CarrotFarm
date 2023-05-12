@@ -18,7 +18,7 @@ public interface MatchingDAO {
 	void upHit(String matchingIdx);
 	
 	//매칭글 삭제 전 알림
-	void matchingDeleteAlarm(String userId, String matchingIdx);
+	void matchingDeleteAlarm(String userId, String matchingIdx, String categoryId);
 	void deleteGame(String matchingIdx);
 	void deleteMatching(String matchingIdx);
 	
@@ -130,17 +130,17 @@ public interface MatchingDAO {
 
 	int cntReview(String userId, String matchingIdx);
 
-	void deleteAlarm(String matchingIdx);
+	void deleteAlarm(String matchingIdx,String categoryId);
 
 	void gameInviteAlarm(HashMap<String, Object> params);
 
 	void gameInviteCancelAlarm(HashMap<String, Object> params);
 
-	void playerDeleteAlarm(String matchingIdx, String userId);
+	void playerDeleteAlarm(String matchingIdx, String userId, String categoryId);
 
-	void gameApplyAcceptAlarm(String matchingIdx, String userId);
+	void gameApplyAcceptAlarm(String matchingIdx, String userId, String categoryId);
 
-	void gameApplyRejectAlarm(String matchingIdx, String userId);
+	void gameApplyRejectAlarm(String matchingIdx, String userId, String categoryId);
 
 	void matchingReport(HashMap<String, String> params);
 

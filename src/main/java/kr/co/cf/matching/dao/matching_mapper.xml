@@ -55,7 +55,7 @@
  	
  	
  	<insert id="matchingDeleteAlarm">
-		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES('m01',#{param1},'삭제',#{param2})
+		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES('#{param3}',#{param1},'삭제',#{param2})
 	</insert> 
 	
  	<delete id="deleteGame">
@@ -87,7 +87,7 @@
 	</update>
 
 	<insert id="matchingUpdateAlarm" parameterType="hashmap">
-		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES('m01',#{userId},'수정',#{matchingIdx})
+		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES(#{categoryId},#{userId},'수정',#{matchingIdx})
 	</insert> 
 	
 	
@@ -423,11 +423,11 @@
 	</select>
 	
 	<delete id="deleteAlarm">
-		DELETE FROM alarm WHERE alarmKind=#{param1}
+		DELETE FROM alarm WHERE alarmKind=#{param1} AND categoryId=#{param2}
 	</delete>
 	
 	<insert id="gameInviteAlarm" parameterType="hashmap">
-		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES('m01',#{userId},'초대',#{matchingIdx})
+		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES(#{categoryId},#{userId},'초대',#{matchingIdx})
 	</insert>
 	
 	<delete id="gameInviteCancelAlarm" parameterType="hashmap">
@@ -435,15 +435,15 @@
 	</delete>
 		
 	<insert id="playerDeleteAlarm">
-		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES('m01',#{param2},'참가취소',#{param1})
+		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES(#{param3},#{param2},'참가취소',#{param1})
 	</insert>
 	
 	<insert id="gameApplyAcceptAlarm">
-		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES('m01',#{param2},'신청수락',#{param1})
+		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES(#{param3},#{param2},'신청수락',#{param1})
 	</insert>
 
 	<insert id="gameApplyRejectAlarm">
-		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES('m01',#{param2},'신청거절',#{param1})
+		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES(#{param3},#{param2},'신청거절',#{param1})
 	</insert>
 	
 	<insert id="matchingReport" parameterType="hashmap">
