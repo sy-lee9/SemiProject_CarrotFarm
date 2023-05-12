@@ -51,7 +51,7 @@ table, th, td{
       
    
 
-	h2,h3 {
+	h2,h3,p {
 	text-align:center;
 	}
 	
@@ -147,7 +147,7 @@ table, th, td{
 						<li> ${playerList.userId} 
 						<c:if test="${dto.writerId eq loginId }">
 							<c:if test="${dto.writerId ne playerList.userId }">
-							<c:if test="${dto.matchigState ne 'review'}">
+							<c:if test="${dto.matchigState eq 'matching'}">
 									<button onclick="location.href='playerDelete?userId=${playerList.userId}&matchingIdx=${dto.matchingIdx}'">취소</button>
 							</c:if>
 							</c:if>
@@ -159,36 +159,7 @@ table, th, td{
 				<button id="closePlayerListBtn">닫기</button>
 			</div>
 			
-			
-				    
-	     	<tr>
-	     		<!--matchigState가 matching 상태일 시  -->
-	     		<c:if test="${dto.matchigState eq 'matching'}">
-	     			<th colspan="2">
-	     			<c:if test="${loginId != 'guest' }">
-	     				<button id="gameApplyList">신청자</button>
-	     				<c:if test="${dto.writerId eq loginId }">
-	     				<button id="gameInviteList">초대</button>
-	     				</c:if>	
-	     			</c:if>
-	     			</th>
-	     		
-		     		<c:if test="${dto.writerId eq loginId }">
-			     		<th colspan="2">
-		     				<button id="matchingChk" >모집종료</button>
-		     			</th>
-		     		</c:if>
-		     		
-		     		<c:if test="${dto.writerId ne loginId }">
-				     	<th colspan="2">
-				     		<c:if test="${loginId != 'guest' }">
-			     				<button id="applyChk" onclick="location.href='applyGame?matchingIdx=${dto.matchingIdx}'">신청</button>
-			     			</c:if>
-			     		</th>
-		     		</c:if>
-	     		</c:if>
-	     		
-	     		<div id="gameApplyListPopup">
+			<div id="gameApplyListPopup">
 					<h3>신청자 목록</h3>
 					<hr>
 					<ul>
@@ -230,8 +201,36 @@ table, th, td{
 					<button id="closeGameInviteListBtn" onclick="location.href='detail.go?matchingIdx='+${dto.matchingIdx}">닫기</button>
 				</div>
 			
+			
+<!--matchigState : matching, finish, review  -->				    
+	     	<tr>
+<!--matchigState가 matching 상태일 시  -->
+	     		<c:if test="${dto.matchigState eq 'matching'}">
+	     			<th colspan="2">
+	     			<c:if test="${loginId != 'guest' }">
+	     				<button id="gameApplyList">신청자</button>
+	     				<c:if test="${dto.writerId eq loginId }">
+	     				<button id="gameInviteList">초대</button>
+	     				</c:if>	
+	     			</c:if>
+	     			</th>
 	     		
-	     		<!--matchigState가 finish 상태일 시  -->
+		     		<c:if test="${dto.writerId eq loginId }">
+			     		<th colspan="2">
+		     				<button id="matchingChk" >모집종료</button>
+		     			</th>
+		     		</c:if>
+		     		
+		     		<c:if test="${dto.writerId ne loginId }">
+				     	<th colspan="2">
+				     		<c:if test="${loginId != 'guest' }">
+			     				<button id="applyChk" onclick="location.href='applyGame?matchingIdx=${dto.matchingIdx}'">신청</button>
+			     			</c:if>
+			     		</th>
+		     		</c:if>
+	     		</c:if>
+	     		
+<!--matchigState가 finish 상태일 시  -->
 	     		<c:if test="${dto.matchigState eq 'finish'}">
 	     			<th colspan="2">
 	     			
@@ -247,106 +246,62 @@ table, th, td{
 		     		</c:if>
 	     		</c:if>
 	     		
-	     		<!--matchigState가 review 상태일 시  -->
+<!--matchigState가 review 상태일 시  -->
 	     		<c:if test="${dto.matchigState eq 'review'}">
-	     			<th colspan="4">
+	     			
+	     			<th colspan="2">
 	     				
+	     			</th>
+	     			<th colspan="2">
+	     				<button id="review" onclick="window.open('review.go?matchingIdx=${dto.matchingIdx}','당근농장 리뷰','width=600px,height=400px')">리뷰 작성</button>
 	     			</th>
 	     		</c:if>
 	     		
 	     		<th colspan="3">
-	     		<c:if test="${dto.writerId eq loginId }">
+		     		<c:if test="${dto.writerId eq loginId }">
+			     		
+			     			<button onclick="location.href='update.go?matchingIdx=${dto.matchingIdx}'">수정</button>
+			     			<button id="delChk" >삭제</button>
+							<button onclick="location.href='./list.do'">목록</button>
+			     		
+		     		</c:if>
 		     		
-		     			<button onclick="location.href='update.go?matchingIdx=${dto.matchingIdx}'">수정</button>
-		     			<button id="delChk" >삭제</button>
-						<button onclick="location.href='./list.do'">목록으로</button>
-		     		
-	     		</c:if>
 	     		
-	     		
-	     		<c:if test="${dto.writerId ne loginId }">
-	     		<c:if test="${loginId != 'guest' }">
-	     			<button onclick="window.open('matchingReport.go?matchingIdx=${dto.matchingIdx}','모집글 신고하기','width=600px,height=400px')">신고</button>
-	     		</c:if>
-		     		<button onclick="location.href='./list.do'">목록</button>
-	     		</c:if>
+		     		<c:if test="${dto.writerId ne loginId }">
+			     		<c:if test="${loginId != 'guest' }">
+			     			<button onclick="window.open('matchingReport.go?matchingIdx=${dto.matchingIdx}','당근농장 신고','width=600px,height=400px')">신고</button>
+			     		</c:if>
+			     		<button onclick="location.href='./list.do'">목록</button>
+		     		</c:if>
 	     		</th>
 	     	</tr>
 	     	
-	     	
-	     	<!-- 리뷰 영역 -->
+	     	<!-- 리뷰 결과 -->
 	     	<c:if test="${dto.matchigState eq 'review'}">
-	     	<c:if test="${playChk != 0}">
-	     			<c:if test="${review == 'no'}">
-	     		
-			     		<form action="review?matchingIdx=${dto.matchingIdx}" method="post">
-			     		<tr>
-			     			<td colspan="7">
-			     				
-			     					<h2>REVIEW</h2>
-			     					
-			     			</td>
-			     		</tr>
-			     		<tr>
-			     			<td colspan="3">		
-			     				<c:forEach items="${playerList}" var="playerList" varStatus="status">
-			     				<c:if test="${status.index % 2 == 0}"> 
-			     					<input type="radio" name="receiveId" value="${playerList.userId}"> ${playerList.userId} 
-			     					<c:if test="${playerList.userId ne loginId}">
-				     					<input type="radio" name="manner_${playerList.userId}" id="manner_${playerList.userId}" value="${playerList.userId}_up"> 👍
-				     					<input type="radio" name="manner_${playerList.userId}" id="manner_${playerList.userId}" value="${playerList.userId}_down"> 👎
-			     					</c:if></br>
-			     				</c:if>	
-			     				</c:forEach>		
-			     			</td>
-			     			
-			     			<td colspan="4">		
-			     				<c:forEach items="${playerList}" var="playerList" varStatus="status">
-			     				<c:if test="${status.index % 2 != 0}"> 
-			     					<input type="radio" name="receiveId" value="${playerList.userId}"> ${playerList.userId} 
-			     					<c:if test="${playerList.userId ne loginId}">
-				     					<input type="radio" name="manner_${playerList.userId} " value="${playerList.userId}_up"> 👍
-				     					<input type="radio" name="manner_${playerList.userId} " value="${playerList.userId}_down"> 👎
-			     					</c:if></br>
-			     				</c:if>	
-			     				</c:forEach>		
-			     			</td>
-			     		</tr>
-			     		<tr>
-			     			<th colspan="7">
-			     				<input type="submit" value="제출" />
-			     			</th>
-			     		</tr>	
-			     		</form>
-			     	</c:if>
-			     	<c:if test="${review == 'yes'}">
-			     		<tr>
-			     			<td colspan="7">
-			     				
-			     					<h2>REVIEW</h2>
-			     					
-			     			</td>
-			     		</tr>
-			     		<tr>
-			     			<th colspan="3">
-			     				
-			     					<h2>MVP</h2>
-			     					${mvp}
-			     			</th>
-			     			<th colspan="4">
-			     				
-			     					<h2>MANNER</h2>
-			     					${mannerPoint}
-			     			</th>
-			     		</tr>
-			     	</c:if>
-	     	
-	  		</c:if>
+		     	<tr>
+		     		<th colspan='7'>
+		     		 	<p>리뷰결과</p>
+		     		</th>
+		     	</tr>	
+		     	<tr>
+		     		<th colspan='3'>
+		     		 	<p>MVP</p>
+		     		 	<p>${mvp}</p>
+		     		</th>
+		     		<th colspan='4'>
+		     		 	<p>MANNER</p>
+		     		 	<p>${mannerPoint}</p>
+		     		</th>
+		     	</tr>
 	     	</c:if>
-	     	
+
 	     	
 	     	
 	     	</br>
+<!--matchigState : matching, finish, review  -->		     	
+	     	
+	     	
+	     	
 	     	
 	     	
 	     	
@@ -366,7 +321,7 @@ table, th, td{
 			     		</c:if>
 			     		<c:if test="${commentList.userId ne loginId}">
 				     		<c:if test="${loginId != 'guest' }">
-				     			<a href="#" onclick="window.open('commentReport.go?commentIdx=${commentList.commentIdx}','댓글 신고하기','width=600px,height=400px')">신고</a>				     			
+				     			<a href="#" onclick="window.open('commentReport.go?commentIdx=${commentList.commentIdx}','당근농장 신고','width=600px,height=400px')">신고</a>				     			
 				     		</c:if>	 
 			     		</c:if>	     					
 			     	</td>

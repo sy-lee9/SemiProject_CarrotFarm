@@ -33,8 +33,23 @@ public class MatchingDTO {
 	private String alarmKind;
 	private String teamName;
 	private String teamGrade;
+	private int tagIdx;
+	private String tagContent;
+
 	
 	
+	public int getTagIdx() {
+		return tagIdx;
+	}
+	public void setTagIdx(int tagIdx) {
+		this.tagIdx = tagIdx;
+	}
+	public String getTagContent() {
+		return tagContent;
+	}
+	public void setTagContent(String tagContent) {
+		this.tagContent = tagContent;
+	}
 	public String getTeamGrade() {
 		return teamGrade;
 	}

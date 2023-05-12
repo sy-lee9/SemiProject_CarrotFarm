@@ -138,6 +138,40 @@ public class TeamMatchingController {
 			model.addAttribute("teamMemberList", teamMemberList);
 		}
 		
+		// MVP 결과 
+				ArrayList<MatchingDTO> playerList = new ArrayList<MatchingDTO>();
+				playerList = matchingService.playerList(matchingIdx);
+				int mvpChk = playerList.size()/2; 
+				logger.info("mvp  최소 득표수 : " + mvpChk);
+				String mvp = "mvp미정";
+				ArrayList<HashMap<String, String>> mvpCnt = matchingService.mvpCnt(matchingIdx);
+				
+				for (int i = 0; i < mvpCnt.size(); i++) {
+					HashMap<String, String> map = mvpCnt.get(i);
+					String realCnt = "";
+					String realId = "";
+					for(String key : map.keySet()){
+						String value = String.valueOf(map.get(key));
+						logger.info(key+" : "+value);
+						if(key.equals("cnt")) {
+							realCnt=String.valueOf(map.get(key));
+						}
+						if(key.equals("receiveId")) {
+							realId=String.valueOf(map.get(key));
+						}
+					}
+					if(Integer.parseInt(realCnt)>mvpChk) {
+						mvp = realId;
+					}
+					
+				}
+				
+				model.addAttribute("mvp",mvp);
+				
+				
+				
+				float mannerPoint = matchingService.mannerPoint((String)session.getAttribute("loginId"));
+				model.addAttribute("mannerPoint", mannerPoint);
 
 		
 		return "/matching/teamMatchingDetail";

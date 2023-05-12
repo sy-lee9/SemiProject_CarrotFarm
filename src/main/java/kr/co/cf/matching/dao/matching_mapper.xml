@@ -55,7 +55,7 @@
  	
  	
  	<insert id="matchingDeleteAlarm">
-		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES('m01',#{param1},'삭제',#{param2})
+		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES('#{param3}',#{param1},'삭제',#{param2})
 	</insert> 
 	
  	<delete id="deleteGame">
@@ -87,7 +87,7 @@
 	</update>
 
 	<insert id="matchingUpdateAlarm" parameterType="hashmap">
-		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES('m01',#{userId},'수정',#{matchingIdx})
+		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES(#{categoryId},#{userId},'수정',#{matchingIdx})
 	</insert> 
 	
 	
@@ -401,13 +401,13 @@
 	<insert id="mvp" parameterType="hashmap">
 		INSERT INTO mvp(matchingIdx,writerId,receiveId) Values(#{matchingIdx},#{writerId},#{receiveId})
 	</insert>
-
-	<insert id="mannerUp" parameterType="hashmap">
-		INSERT INTO review(matchingIdx,writerId,receiveId,userMannerScore) Values(#{matchingIdx},#{writerId},#{receiveId},0.1)
-	</insert>
 	
-	<insert id="mannerDown" parameterType="hashmap">
-		INSERT INTO review(matchingIdx,writerId,receiveId,userMannerScore) Values(#{matchingIdx},#{writerId},#{receiveId},-0.1)
+	<select id="mvpCnt" resultType="hashmap">
+		SELECT receiveId, count(receiveId) AS cnt FROM mvp WHERE matchingIdx=#{param1} GROUP BY receiveId ;
+	</select>
+		
+	<insert id="manner" parameterType="hashmap">
+		INSERT INTO review(matchingIdx,writerId,receiveId,userMannerScore) Values(#{param1},#{param2},#{param3},#{param4})
 	</insert>
 	
 	<select id="review" resultType="int">
@@ -423,11 +423,11 @@
 	</select>
 	
 	<delete id="deleteAlarm">
-		DELETE FROM alarm WHERE alarmKind=#{param1}
+		DELETE FROM alarm WHERE alarmKind=#{param1} AND categoryId=#{param2}
 	</delete>
 	
 	<insert id="gameInviteAlarm" parameterType="hashmap">
-		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES('m01',#{userId},'초대',#{matchingIdx})
+		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES(#{categoryId},#{userId},'초대',#{matchingIdx})
 	</insert>
 	
 	<delete id="gameInviteCancelAlarm" parameterType="hashmap">
@@ -435,15 +435,15 @@
 	</delete>
 		
 	<insert id="playerDeleteAlarm">
-		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES('m01',#{param2},'참가취소',#{param1})
+		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES(#{param3},#{param2},'참가취소',#{param1})
 	</insert>
 	
 	<insert id="gameApplyAcceptAlarm">
-		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES('m01',#{param2},'신청수락',#{param1})
+		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES(#{param3},#{param2},'신청수락',#{param1})
 	</insert>
 
 	<insert id="gameApplyRejectAlarm">
-		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES('m01',#{param2},'신청거절',#{param1})
+		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES(#{param3},#{param2},'신청거절',#{param1})
 	</insert>
 	
 	<insert id="matchingReport" parameterType="hashmap">
@@ -456,6 +456,10 @@
 	
 	<select id="leaderChk" resultType="String">
 		SELECT teamName FROM team WHERE teamIdx=(SELECT teamIdx FROM teamuser WHERE userId=#{param1} AND teamGrade ='leader' AND teamUserState = 'join')
+	</select>
+	
+	<select id="leaderQ" resultType="int">
+		SELECT count(teamName) FROM team WHERE teamIdx=(SELECT teamIdx FROM teamuser WHERE userId=#{param1} AND teamGrade ='leader' AND teamUserState = 'join')
 	</select>
 	
 	<select id="matchingTeamData" resultType="kr.co.cf.matching.dto.MatchingDTO">
@@ -482,6 +486,17 @@
 		WHERE tu.userId=#{param1} AND t.userId NOT IN (SELECT userId FROM game WHERE matchingIdx=#{param2} AND gameAppState='확정')
 	</select>
 	
+	<insert id="teamTagReview">
+		INSERT INTO tagreview(matchingIdx, teamId, tagIdx) VALUES(#{param1},#{param2},#{param3})
+	</insert>
+	
+	<select id="tagList" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT tagIdx, tagContent FROM tag
+	</select>
+	
+	<select id="tagChk" resultType="int">
+		SELECT COUNT(tagIdx) FROM tagreview WHERE matchingIdx=#{param1} AND teamId=#{param2}
+	</select>
 </mapper>
 
 

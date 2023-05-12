@@ -41,7 +41,8 @@ public class MatchingService {
 	public void delete(String matchingIdx,String writerId) {
 		
 		// 삭제 전 해당 매칭글의 idx를 가진 알림을 모두 삭제 함
-		matchingDAO.deleteAlarm(matchingIdx);
+		String categoryId = matchingDAO.categoryIdChk(matchingIdx);
+		matchingDAO.deleteAlarm(matchingIdx,categoryId);
 		
 		
 		// 삭제 전 해당 matchingIdx의 playerList에게 수정된 내용에 대한 알림을 보내야함
@@ -51,7 +52,7 @@ public class MatchingService {
 			String userId =playerList.get(i).getUserId();
 			logger.info("userId" + userId);
 			if(!(userId.equals(writerId))) {
-				matchingDAO.matchingDeleteAlarm(userId,matchingIdx);
+				matchingDAO.matchingDeleteAlarm(userId,matchingIdx,categoryId);
 			}
 			
 		}
@@ -62,7 +63,7 @@ public class MatchingService {
 		for (int i = 0; i < gameApplyList.size(); i++) {
 			String userId =gameApplyList.get(i).getUserId();
 			if(!(userId.equals(writerId))) {
-				matchingDAO.matchingDeleteAlarm(userId,matchingIdx);
+				matchingDAO.matchingDeleteAlarm(userId,matchingIdx,categoryId);
 			}	
 		}
 		
@@ -271,8 +272,9 @@ public class MatchingService {
 	}
 		
 	public void playerDelete(String matchingIdx, String userId) {
+		String categoryId = matchingDAO.categoryIdChk(matchingIdx);
 		matchingDAO.playerDelete(matchingIdx,userId);
-		matchingDAO.playerDeleteAlarm(matchingIdx,userId);
+		matchingDAO.playerDeleteAlarm(matchingIdx,userId,categoryId);
 	}
 
 	public ArrayList<MatchingDTO> gameApplyList(String matchingIdx) {
@@ -285,13 +287,15 @@ public class MatchingService {
 	}
 
 	public void gameApplyAccept(String matchingIdx, String userId) {
+		String categoryId = matchingDAO.categoryIdChk(matchingIdx);
 		matchingDAO.gameApplyAccept(matchingIdx,userId);
-		matchingDAO.gameApplyAcceptAlarm(matchingIdx,userId);
+		matchingDAO.gameApplyAcceptAlarm(matchingIdx,userId,categoryId);
 	}
 	
 	public void gameApplyReject(String matchingIdx, String userId) {
+		String categoryId = matchingDAO.categoryIdChk(matchingIdx);
 		matchingDAO.gameApplyReject(matchingIdx,userId);	
-		matchingDAO.gameApplyRejectAlarm(matchingIdx,userId);
+		matchingDAO.gameApplyRejectAlarm(matchingIdx,userId,categoryId);
 	}
 
 	public ArrayList<MatchingDTO> userList(String matchingIdx) {
@@ -325,14 +329,11 @@ public class MatchingService {
 		matchingDAO.mvp(params);
 		
 	}
-
-	public void mannerUp(HashMap<String, Object> params) {
-		matchingDAO.mannerUp(params);	
-	}
 	
-	public void mannerDown(HashMap<String, Object> params) {
-		matchingDAO.mannerDown(params);	
+	public void manner(String matchingIdx, String writerId, String receiveId, String userMannerScore) {
+		matchingDAO.manner(matchingIdx,writerId,receiveId,userMannerScore);		
 	}
+
 
 	public int review(String matchingIdx, String writerId) {
 		return matchingDAO.review(matchingIdx,writerId);
@@ -363,7 +364,12 @@ public class MatchingService {
 		// 본인이 리더인 (해체되지 않은)팀이 있는지
 		return matchingDAO.leaderChk(userId);
 	}
-
+	
+	public int leaderQ(String userId) {
+		// TODO Auto-generated method stub
+		return matchingDAO.leaderQ(userId);
+	}
+	
 	public MatchingDTO matchingTeamData(String teamName) {
 		return matchingDAO.matchingTeamData(teamName);
 	}
@@ -392,6 +398,27 @@ public class MatchingService {
 	public void cancelRegist(HashMap<String, Object> params) {
 		matchingDAO.cancelRegist(params);
 	}
+
+	public ArrayList<HashMap<String, String>> mvpCnt(String matchingIdx) {
+		return matchingDAO.mvpCnt(matchingIdx);
+	}
+
+	public ArrayList<MatchingDTO> tagList() {
+		return matchingDAO.tagList();
+	}
+
+	public void teamTagReview(String matchingIdx, String teamId, String tagIdx) {
+		matchingDAO.teamTagReview(matchingIdx,teamId,tagIdx);
+	}
+
+	public int tagChk(String matchingIdx, String teamId) {
+		return matchingDAO.tagChk(matchingIdx,teamId);
+	}
+
+
+	
+
+	
 
 
 	
