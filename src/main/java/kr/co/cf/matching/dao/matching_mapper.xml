@@ -55,7 +55,7 @@
  	
  	
  	<insert id="matchingDeleteAlarm">
-		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES('#{param3}',#{param1},'삭제',#{param2})
+		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES(#{param3},#{param1},'삭제',#{param2})
 	</insert> 
 	
  	<delete id="deleteGame">
@@ -127,25 +127,25 @@
 	</update>
 	
 	<select id="totalCount" resultType="int">
-		SELECT COUNT(matchingIdx) FROM matching WHERE categoryId=#{param1}
+		SELECT COUNT(matchingIdx) FROM matching WHERE categoryId=#{param1} AND matchigState='matching'
 	</select>
 	
 	<select id="totalCountGamePlay" parameterType="hashmap" resultType="int">
-		SELECT COUNT(matchingIdx) FROM matching WHERE gamePlay=#{gamePlay} AND categoryId=#{categoryId}
+		SELECT COUNT(matchingIdx) FROM matching WHERE gamePlay=#{gamePlay} AND categoryId=#{categoryId} AND matchigState='matching'
 	</select>
 	
 	<select id="totalCountLocationIdx" parameterType="hashmap" resultType="int">
-		SELECT COUNT(matchingIdx) FROM matching WHERE courtIdx IN (SELECT courtIdx FROM court WHERE locationIdx =#{locationIdx}) AND categoryId=#{categoryId}
+		SELECT COUNT(matchingIdx) FROM matching WHERE courtIdx IN (SELECT courtIdx FROM court WHERE locationIdx =#{locationIdx}) AND categoryId=#{categoryId} AND matchigState='matching'
 	</select>
 	
 	<select id="totalCountSearch" resultType="int">
 		SELECT COUNT(matchingIdx) FROM matching 
-		WHERE categoryId=#{param1} AND (subject LIKE CONCAT('%' #{param2} '%') OR writerId LIKE CONCAT('%' #{param2} '%'))
+		WHERE categoryId=#{param1} AND matchigState='matching' AND (subject LIKE CONCAT('%' #{param2} '%') OR writerId LIKE CONCAT('%' #{param2} '%'))
 	</select>	
 	
 	
 	<select id="totalCountAll" parameterType="hashmap" resultType="int">
-		SELECT COUNT(matchingIdx) FROM matching WHERE courtIdx IN (SELECT courtIdx FROM court WHERE locationIdx =#{locationIdx}) AND categoryId=#{categoryId} AND gamePlay=#{gamePlay}
+		SELECT COUNT(matchingIdx) FROM matching WHERE courtIdx IN (SELECT courtIdx FROM court WHERE locationIdx =#{locationIdx}) AND categoryId=#{categoryId} AND gamePlay=#{gamePlay} AND matchigState='matching'
 	</select>
 	
 	<select id="list" resultType="kr.co.cf.matching.dto.MatchingDTO">
@@ -243,7 +243,7 @@
 		FROM matching m
 		LEFT JOIN teamuser tu ON m.writerId = tu.userId
 		INNER JOIN team t ON tu.teamIdx = t.teamIdx
-		WHERE gamePlay=#{gamePlay} AND courtIdx IN (SELECT courtIdx FROM court WHERE locationIdx =#{locationIdx}) AND categoryId =  #{categoryId}
+		WHERE gamePlay=#{gamePlay} AND courtIdx IN (SELECT courtIdx FROM court WHERE locationIdx =#{locationIdx}) AND categoryId =  #{categoryId} 
 		ORDER By matchingIdx DESC 
 		LIMIT 10 OFFSET #{offset}
 	</select>
@@ -373,6 +373,10 @@
 		INSERT INTO game(categoryId,matchingIdx,userId,gameAppState) VALUES('m02',#{matchingIdx},#{userId},'확정')
 	</insert>
 	
+	<insert id="teamRegistAlarm" parameterType="hashmap">
+		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES(#{categoryId},#{userId},'등록',#{matchingIdx})
+	</insert>
+	
 	<insert id="cancelGameInvite" parameterType="hashmap">
 		DELETE FROM game WHERE matchingIdx=#{matchingIdx} AND userId=#{userId} AND gameAppState='초대'
 	</insert>
@@ -436,6 +440,10 @@
 		
 	<insert id="playerDeleteAlarm">
 		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES(#{param3},#{param2},'참가취소',#{param1})
+	</insert>
+	
+	<insert id="applyGameAlarm">
+		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES(#{param1},#{param2},'신청',#{param3})
 	</insert>
 	
 	<insert id="gameApplyAcceptAlarm">

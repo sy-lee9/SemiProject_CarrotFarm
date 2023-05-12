@@ -103,6 +103,8 @@ public class MatchingService {
 			if(!(userId.equals(params.get("writerId")))){
 				params.put("userId", userId);
 				logger.info("알람 수신 아이디 params"  +params);
+				String categoryId = matchingDAO.categoryIdChk(matchingIdx);
+				params.put("categoryId", categoryId);
 				matchingDAO.matchingUpdateAlarm(params);
 			}
 			
@@ -248,6 +250,8 @@ public class MatchingService {
 	}
 	
 	public void applyGame(String matchingIdx, String userId) {
+		String categoryId = matchingDAO.categoryIdChk(matchingIdx);
+		matchingDAO.applyGameAlarm(categoryId,matchingIdx,userId);
 		matchingDAO.applyGame(matchingIdx,userId);
 	}
 
@@ -392,7 +396,11 @@ public class MatchingService {
 	}
 
 	public void teamRegist(HashMap<String, Object> params) {
+		String categoryId = matchingDAO.categoryIdChk(String.valueOf(params.get("matchingIdx")));
+		params.put("categoryId", categoryId);
+		
 		matchingDAO.teamRegist(params);
+		matchingDAO.teamRegistAlarm(params);
 	}
 
 	public void cancelRegist(HashMap<String, Object> params) {

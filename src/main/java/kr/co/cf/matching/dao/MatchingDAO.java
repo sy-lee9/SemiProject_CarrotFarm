@@ -177,6 +177,10 @@ public interface MatchingDAO {
 
 	int tagChk(String matchingIdx, String teamId);
 
+	void applyGameAlarm(String categoryId, String matchingIdx, String userId);
+
+	void teamRegistAlarm(HashMap<String, Object> params);
+
 
 	
 
