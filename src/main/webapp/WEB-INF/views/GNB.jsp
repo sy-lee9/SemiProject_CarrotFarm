@@ -6,50 +6,51 @@
 <meta charset="UTF-8">
 <title>🏀 당근농장</title>
 	
-	<style>
-	
-		/* 추가적인 스타일 시트 */
-		.navbar-brand {
-		
-			width: 150px;
-			height: 50px;
-			background-image: url("/photo/mainLogo.png"); /* 로고 이미지 추가 */
-			background-size: cover;
-			background-position: center;
-			background-repeat: no-repeat;
-		}
+	   <style>
+      /* 추가적인 스타일 시트 */
+      .navbar-brand {
+      
+         width: 150px;
+         height: 50px;
+         background-image: url("/photo/mainLogo.png"); /* 로고 이미지 추가 */
+         background-size: cover;
+         background-position: center;
+         background-repeat: no-repeat;
+      }
 
-		.navbar-light .navbar-nav .nav-link {
-			color: #000000; /* 네비게이션 바 텍스트 색상 */
-		}
+      .navbar-light .navbar-nav .nav-link {
+         color: #000000; /* 네비게이션 바 텍스트 색상 */
+      }
 
-		.navbar-light .navbar-nav .nav-link.active,
-		.navbar-light .navbar-nav .nav-link:hover {
-			color: #FFA500; /* 선택된 메뉴 텍스트 색상 */
-		}
-		
-		.navbar-nav {
-		  	padding-left: 100px;
-		}
-		
-		.navbar-nav > li:first-child {
-		  	margin-left: 0;
-		}
-		.navbar-nav > li > a {
-		 	font-weight: bold;
-		  	font-size: 18px;
-		}	
-		
-		.navbar-brand {
-		  	margin-left: 40px;
-		}
-		
-		.navbar {
-			width: 1000px; /* 네비게이션 바 가로 크기 */
-			
-			
-		}
-	</style>
+      .navbar-light .navbar-nav .nav-link.active,
+      .navbar-light .navbar-nav .nav-link:hover {
+         color: #FFA500; /* 선택된 메뉴 텍스트 색상 */
+      }
+      
+      .navbar-nav {
+           padding-left: 100px;
+      }
+      
+      .navbar-nav > li:first-child {
+           margin-left: 0;
+      }
+      .navbar-nav > li > a {
+          font-weight: bold;
+           font-size: 15px;
+      }   
+      
+      .navbar-brand {
+           margin-left: 40px;
+      }
+      
+      .navbar {
+      
+         width:100%;
+         position:relative;
+         
+      }
+   </style>
+
 </head>
 <body>
 
