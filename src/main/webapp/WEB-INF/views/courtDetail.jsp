@@ -40,6 +40,16 @@
   color: #deb217;
 }
 
+	.image-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.image-grid img {
+  width: calc(13% - 10px);
+  margin-bottom: 10px;
+}
 
 
 </style>
@@ -76,7 +86,7 @@
 	<div>경기장 리뷰
 		<table>
 		<a herf="#" onclick="window.open('courtReviews.do?courtIdx=${courtInfo.courtIdx}','리뷰 모아보기','width=600px,height=400px')">더보기</a>
-			<c:forEach items="${courtReviewList}" var="courtReview">
+			<c:forEach items="${courtReviewList}" var="courtReview" end="4">
 			<tr>
 				<th>${courtReview.userId}</th>
 				<th><input class="userCourtReview" type="text" disabled value="${courtReview.courtOneLineReview}"/></th>				
@@ -87,6 +97,7 @@
 				</c:if>
 				<th><a href="#" onclick ="window.open('courtReviewUpdate.go?courtReviewIdx=${courtReview.courtReviewIdx}&courtIdx=${courtInfo.courtIdx}','리뷰 모아보기','width=800px,height=400px')">수정</a></th>
 				<th><a href="courtReviewDelete.do?courtReviewIdx=${courtReview.courtReviewIdx}&courtIdx=${courtInfo.courtIdx}">삭제</a></th>
+				<th><a href="#" onclick="window.open('courtReviewReport.go?courtReviewIdx=${courtReview.courtReviewIdx}&reportUserId=${courtReview.userId}','리뷰 신고하기','width=600px,height=400px')">신고</a></th>
 			</tr>
 		</c:forEach>
 		</table>
@@ -94,20 +105,14 @@
 	<div class="image-grid">
 		사진 모아보기
 		<a herf="#" onclick="window.open('courtReviewPhoto.do?courtIdx=${courtInfo.courtIdx}','사진 모아보기','width=400px,height=400px')">더보기</a>
-		<table>
-			<c:if test="${reviewPhotoList eq null}">
+			<c:if test="${reviewPhotoList eq '[]'}">
+			등록된 사진이 없습니다.
 			</c:if>
-			
-			<c:if test="${reviewPhotoList ne null}">
-				<c:forEach items="${reviewPhotoList}" var="reviewPhotos">
-					<tr>
-						<td><img width="100" src="/photo/${reviewPhotos.photoName}"/></td>
-					</tr>			
+			<c:if test="${reviewPhotoList ne '[]'}">
+				<c:forEach items="${reviewPhotoList}" var="reviewPhotos" end="4">
+					<img width="100" src="/photo/${reviewPhotos.photoName}"/>			
 				</c:forEach>
 			</c:if>
-		</table>
-				
-
 	</div>
 	<hr/>
 	<form action="courtReviewWrite.do" method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
@@ -115,7 +120,7 @@
 		
 		<input type="hidden" name="courtIdx" value="${courtInfo.courtIdx}"/>
 		<input type="hidden" name="courtName" value="${courtInfo.courtName}"/>
-		<input type="hidden" name="userId" value="test1"/>
+		<input type="hidden" name="userId" value="test8"/>
 		리뷰작성<input id="courtOneLineReview" type="text" name="courtOneLineReview" style="display: inline-block;"/>
 		<input type="file" name="photo" style="display: inline-block;"/>
 		<label>별점</label>

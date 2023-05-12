@@ -18,21 +18,9 @@
 </head>
 <body>
 	<select name="stateCategory" id="stateCategory">
-		 <option value="default">회원상태</option>
-         <option value="사용중">사용중</option>
-         <option value="탈퇴">탈퇴</option>
-         <option value="이용제한1일">이용제한(1일)</option>
-         <option value="이용제한3일">이용제한(3일)</option>
-         <option value="이용제한5일">이용제한(7일)</option>
-         <option value="이용제한30일">이용제한(30일)</option>
-         <option value="영구제한">영구제한</option>
-      </select>
-      
-      <select name="searchCategory" id="searchCategory">
-		 <option value="default">검색조건</option>
-         <option value="userId">아이디</option>
-         <option value="nickname">닉네임</option>
-         <option value="email">이메일</option>
+		 <option value="default">팀상태</option>
+		 <option value="false">등록</option>
+		 <option value="true">해체</option>
       </select>
       
     <input type="text" id="searchInput">
@@ -42,15 +30,12 @@
 			<tr>
 				<th><input type="checkbox" id="all"/></th>
 				<th>NO</th>
-				<th>회원분류</th>
-				<th>아이디</th>
-				<th>이름</th>
+				<th>팀상태</th>
+				<th>팀 이름</th>
 				<th>프로필</th>
-				<th>닉네임</th>
-				<th>이메일</th>
-				<th>닉네임 변경</th>
+				<th>팀이름 변경</th>
 				<th>사진 변경</th>
-				<th>가입일</th>				
+				<th>팀 등록일</th>				
 			</tr>
 		</thead>
 		<tbody>
@@ -82,17 +67,15 @@
 
 
 			
-	<button onclick="nicknameChange()">닉네임 변경</button>
-	<button onclick="profileChange()">프로필 변경</button>
+	<button onclick="teamNameChange()">팀이름 변경</button>
+	<button onclick="teamProfileChange()">프로필 변경</button>
 	<button onclick="location.href='logout'">로그아웃</button>
 	<button onclick="location.href='userdelete.go'">회원탈퇴</button>
-	<button onclick="location.href='userinfo.go'">회원정보</button>
 </body>
 <script>
 
 var showPage = 1;
 var stateCategory = 'default';
-var searchCategory = 'default';
 var searchText = 'default';
 
 listCall(showPage);
@@ -117,17 +100,17 @@ $('#stateCategory').change(function(){
 function listCall(page){
    $.ajax({
       type:'post',
-      url:'adminUserList.ajax',
+      url:'adminTeamList.ajax',
       data:{
     	  'page':page,
     	  'stateCategory':stateCategory,
-    	  'searchCategory':searchCategory,
     	  'searchText':searchText,
       },
       dataType:'json',           
       success:function(data){
          console.log(data);
          listPrint(data.list);
+         console.log(data.totalList);
          $('#pagination').twbsPagination({
 			startPage:1, // 시작 페이지
 			totalPages:Math.ceil(data.totalList/10),// 총 페이지 수 
@@ -152,24 +135,26 @@ function listPrint(list){
 		
 		
 		content +='<tr>';
-		content +='<td><input type="checkbox" value="'+item.userId+'"</td>';
-		content +='<td>'+item.userIdx+'</td>';
-		content +='<td>'+item.userState+'</td>';
-		content +='<td>'+item.userId+'</td>';
-		content +='<td>'+item.userName+'</td>';
-		console.log(item.photoName);
+		content +='<td><input type="checkbox" value="'+item.teamIdx+'"</td>';
+		content +='<td>'+item.teamIdx+'</td>';
+		if(item.teamDisband==1){
+		content +='<td>해체</td>';
+		}else{
+			content +='<td>등록</td>';
+		}
+		content +='<td>'+item.teamName+'</td>';
 		if(item.photoName==null){
 			content+='<td>사진없음</td>';
 		}else{
 			content +='<td><img src="/photo/'+item.photoName+'" width="50px" alt="사진" /></td>';
 			
 		}
-		content +='<td>'+item.nickname+'</td>';
-		content +='<td>'+item.email+'</td>';
-		content +='<td><button onclick=location.href="adminNicknameChange.do?userIdx='+item.userIdx+'&userId='+item.userId+'">닉네임 변경</button></td>';
-		content +='<td><button onclick=location.href="adminprofileChange.do?userIdx='+item.userIdx+'&userId='+item.userId+'">프로필 변경</button></td>';
-		content +='<td>'+item.userJoinDate+'</td>';
+		
+		content +='<td><button onclick=location.href="adminTeamNameChange.do?teamIdx='+item.teamIdx+'">팀이름 변경</button></td>';
+		content +='<td><button onclick=location.href="adminTeamProfileChange.do?teamIdx='+item.teamIdx+'">프로필 변경</button></td>';
+		content +='<td>'+item.teamOpenDate+'</td>';
 		content +='</tr>';
+			
 		
 	});
 	$('#list').empty();
@@ -185,7 +170,7 @@ $('#all').click(function(e){
 	}
 });
 
-function nicknameChange(){
+function teamNameChange(){
 	var checkArr=[];
 	$('input[type="checkbox"]:checked').each(function(idx,item){
 		if($(this).val()!='on'){
@@ -195,9 +180,9 @@ function nicknameChange(){
 	console.log(checkArr);
 	$.ajax({
 		type : 'get',
-		url:'adminNicknamesChange.ajax',
+		url:'adminTeamNamesChange.ajax',
 		data:{
-			'nickChangeList':checkArr
+			'teamNameChangeList':checkArr
 		},
 		dataType:'json',
 		success:function(data){
@@ -210,7 +195,7 @@ function nicknameChange(){
 	});
 }
 
-function profileChange(){
+function teamProfileChange(){
 	var checkArr=[];
 	$('input[type="checkbox"]:checked').each(function(idx,item){
 		if($(this).val()!='on'){
@@ -220,9 +205,9 @@ function profileChange(){
 	console.log(checkArr);
 	$.ajax({
 		type : 'get',
-		url:'adminProfilesChange.ajax',
+		url:'adminTeamProfilesChange.ajax',
 		data:{
-			'profileChangeList':checkArr
+			'teamProfileChangeList':checkArr
 		},
 		dataType:'json',
 		success:function(data){
