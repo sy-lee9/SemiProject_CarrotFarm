@@ -381,37 +381,7 @@ public class MatchingController {
 			}
 			model.addAttribute("review", review);
 			
-			// 리뷰 작성 후 경기 mvp
-			model.addAttribute("mvp", "mvp는 50% 이상의 투표를 받았을 때만 공개 됩니다.");
-			int mvpChk = playerList.size()/2;
-			logger.info("mvpChk : "+mvpChk);
-			int cntReview = 0;
-			
-			//MVP 선정
-			for (MatchingDTO dto : playerList) {
-				logger.info("userId : "+dto.getUserId()+"matchingIdx : "+dto.getMatchingIdx());
-				cntReview = matchingService.cntReview(dto.getUserId(),String.valueOf(dto.getMatchingIdx()));
-				logger.info(dto.getUserId()+"의 투표수 : "+cntReview);
-				if(cntReview>mvpChk) {
-					model.addAttribute("mvp", dto.getUserId());
-					logger.info("살려줘");
-					matchingService.gameMvp(String.valueOf(dto.getMatchingIdx()),dto.getUserId());
-					
-					// 테이블에 데이터삽입 
-					// matchingIdx,dto.getUserId()
-					
-					// 
-					
-				}
-			}
-			
-					
-			// 리뷰 작성 후 개인 매너 점수 
-			float mannerPoint = matchingService.mannerPoint((String)session.getAttribute("loginId"));
-			mannerPoint += 50;
-			model.addAttribute("mannerPoint", mannerPoint);
-
-
+		
 
 		}
 		
@@ -449,8 +419,8 @@ public class MatchingController {
 				
 				
 				
-				float mannerPoint = matchingService.mannerPoint((String)session.getAttribute("loginId"));
-				model.addAttribute("mannerPoint", mannerPoint);
+				// float mannerPoint = matchingService.mannerPoint((String)session.getAttribute("loginId"));
+				// model.addAttribute("mannerPoint", mannerPoint);
 				
 				
 				
