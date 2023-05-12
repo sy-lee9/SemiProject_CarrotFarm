@@ -28,6 +28,11 @@ public class TeamService {
 	@Autowired TeamDAO TeamDAO;
 	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+
+	public int teamUserChk(String loginId) {
+		return TeamDAO.teamUserCount(loginId);
+	}
 
 	public HashMap<String, Object> overlay(String teamName) {
 		
@@ -38,7 +43,7 @@ public class TeamService {
 		return map;
 	}
 
-	public String teamRegist(MultipartFile teamProfilePhoto, HashMap<String, String> params) {
+	public String teamRegist(MultipartFile teamProfilePhoto, HashMap<String, String> params, String loginId) {
 		logger.info("teamRegist service");
 		
 		String msg = "팀생성에 실패하였습니다.";
@@ -56,9 +61,15 @@ public class TeamService {
 		TeamDTO.setLocationIdx(locationIdx);
 		
 		int teamIdx = 0;
+		//팀 개설 
 		if(TeamDAO.teamRegist(TeamDTO) == 1) {
+			//방금 개설한 teamIdx 가져오기 
 			teamIdx = TeamDTO.getTeamIdx();
 			logger.info("teamIdx :"+teamIdx);
+			
+			//팀 개설한 회원을 팀장으로 저장
+			TeamDAO.addTeamLeader(teamIdx,loginId);
+			
 		}
 		
 		if(!teamProfilePhoto.getOriginalFilename().equals("")) {
@@ -120,38 +131,13 @@ public class TeamService {
 		// 전체 게시물 / 페이지당 보여줄 수
 		int total = 0;
 		
-		if(searchText.equals("default") || searchText.equals("")) {
-			if(matchState.equals("default")) {
-				// 전체 보여주기
-				total = TeamDAO.totalCount();
-				logger.info("totalCount :"+total);
-			}else{
-				// 모집상태를 선택한 경우
-				total = TeamDAO.totalCountMatchState(params);
-				logger.info("totalCountMatchState :"+total);
-			}		
-		}else {
-			// 검색어 입력한 경우
-			total = TeamDAO.totalCountSearch(params);		
-			logger.info("totalCountSearch :"+total);		
-		}
-		
-		int range = total%10 == 0 ? total/10 : (total/10)+1;
-		logger.info("전체 게시물 수 : "+total);
-		logger.info("총 페이지 수 : "+range);
-		
-		page = page > range ? range : page;
-		
-		map.put("currPage", page);
-		map.put("pages", range);
-				
 		ArrayList<TeamDTO> list = null;		
 		params.put("offset", offset);
 		
 		if(searchText.equals("default") || searchText.equals("")) {
 			if(matchState.equals("default")) {
 				// 전체 보여주기
-				list = TeamDAO.list(params);
+				list = TeamDAO.teamList(params);
 				logger.info("list size : "+list.size());
 			}else{
 				// 모집상태를 선택한 경우
@@ -164,6 +150,17 @@ public class TeamService {
 			logger.info("SearchList size : "+list.size());
 		}
 		
+		total = list.size();
+		
+		int range = total%10 == 0 ? total/10 : (total/10)+1;
+		logger.info("전체 게시물 수 : "+total);
+		logger.info("총 페이지 수 : "+range);
+		
+		page = page > range ? range : page;
+		
+		map.put("currPage", page);
+		map.put("pages", range);
+
 		map.put("list", list);
 		return map;
 	}
@@ -278,7 +275,7 @@ public class TeamService {
 		}
 		logger.info("sendAlarmCount : "+row);		
 	}
-	
+
 	public HashMap<String, Object> gameList(HashMap<String, Object> params) { 
 		
 		int page = Integer.parseInt((String) params.get("page"));
@@ -298,8 +295,9 @@ public class TeamService {
 
 		//총 페이지 수 
 		int offset = (page-1)*10;
-		
 		params.put("offset", offset);
+		
+		int matchingIdx = 0;
 		
 		if(teamUserList != null) {
 			for (int i = 0; i < teamUserList.size(); i++) {
@@ -312,16 +310,25 @@ public class TeamService {
 					if(selectedGameDate.equals("default")) {
 						// 전체 보여주기
 							list = TeamDAO.gameList(params);
-							logger.info("gameList size : "+list.size());					
+							logger.info("gameList size : "+list.size());	
+							
+							list.get(i).getMatchingIdx();
+							logger.info("matcingIdx : "+matchingIdx);
 					}else{
 						// 경기순을 선택한 경우
 						if(selectedGameDate.equals("DESC")) {
 								list = TeamDAO.GameDateListDesc(params);
-								logger.info("GameDateList size : "+list.size());		
+								logger.info("GameDateList size : "+list.size());	
+
+								list.get(i).getMatchingIdx();
+								logger.info("matcingIdx : "+matchingIdx);
 						}else {
 							params.put("range", "ASC");
 							list = TeamDAO.GameDateListAsc(params);
-								logger.info("GameDateList size : "+list.size());					
+								logger.info("GameDateList size : "+list.size());	
+
+								list.get(i).getMatchingIdx();
+								logger.info("matcingIdx : "+matchingIdx);
 						}
 					}
 				}else {
@@ -354,10 +361,20 @@ public class TeamService {
 				
 		logger.info("list : "+ newList);
 		map.put("list", newList);
+		
+		logger.info("matchingIdx : "+ matchingIdx);
+		map.put("matchingIdx", matchingIdx);
+		
 		logger.info("map : "+ map);
 		return map;
 	}
 
+
+	
+	
+	
+	
+	
 	public HashMap<String, Object> gameMatchingRequest(HashMap<String, Object> params) {
 		logger.info("service 도착");
 		logger.info("params : "+params);
@@ -423,6 +440,86 @@ public class TeamService {
 
 		return list;
 	}
+
+	public String getTeamLeader(String teamIdx) {
+		return TeamDAO.getTeamLeader(teamIdx);
+	}
+
+	public int teamLeadersConf(String teamIdx, String loginId) {
+		return TeamDAO.teamLeadersConf(teamIdx, loginId);
+	}
+
+	public int teamJoinChk(String loginId) {
+		return TeamDAO.teamJoinChk(loginId);
+	}
+
+	public int teamJoinApp(int teamIdx, String loginId) {
+		return TeamDAO.teamJoinApp(teamIdx,loginId);
+	}
+
+	public int joinAppChk(int teamIdx, String loginId) {
+		return TeamDAO.joinAppChk(teamIdx,loginId);
+	}
+
+	public void joinCancel(int teamIdx, String loginId) {
+		TeamDAO.joinAppCancel(teamIdx,loginId);
+	}
+
+	public HashMap<String, Object> teamJoinAppList(int teamIdx) {
+		logger.info("teamJoinAppList call : "+teamIdx);
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();		
+		
+		ArrayList<TeamDTO> list = TeamDAO.teamJoinAppList(teamIdx);
+		logger.info("list size() : "+list.size());
+		
+		map.put("list", list);
+		logger.info("map size() : "+map.size());
+		
+		return map;
+	}
+
+	public HashMap<String, Object> teamJoinAccept(int teamIdx, String userId) {
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();  
+		
+		if(TeamDAO.teamJoinAccept(teamIdx,userId) == 1) {
+			logger.info("수락완료");
+			
+			if(TeamDAO.teamAppDel(userId) == 1) {
+				map.put("data","수락완료");
+			}
+		}
+		return map;
+	}
+
+	public HashMap<String, Object> teamJoinReject(int teamIdx, String userId) {
+
+		HashMap<String, Object> map = new HashMap<String, Object>();  
+		
+		if(TeamDAO.teamJoinReject(teamIdx,userId) == 1) {
+			logger.info("거절완료");
+			map.put("data","거절완료");
+		}
+		return map;
+	}
+
+	public int teamUserChk(int teamIdx, String userId) {
+		return TeamDAO.teamUserChk(teamIdx, userId);
+	}
+
+	public HashMap<String, Object> leaveTeam(int teamIdx, String userId) {
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();  
+		
+		int row = TeamDAO.leaveTeam(teamIdx, userId);
+		if(row == 1) {
+			map.put("liveTeam", row);
+		}
+		
+		return map;
+	}
+
 
 	
 	

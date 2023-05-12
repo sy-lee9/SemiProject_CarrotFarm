@@ -55,7 +55,6 @@
 	</table>
 </body>
 <script>
-	//var showPage = 1;
 	var selectedGameDate = 'default';
 	var teamIdx = ${teamIdx}
 	console.log(selectedGameDate);
@@ -95,7 +94,7 @@
 		list.forEach(function(list){		
 			content +='<tr>';
 			content +='<td>'+list.gu+'</td>';
-			content +='<td>'+list.subject+'</a></td>';
+			content +='<td><a href="../matching/detail.go?matchingIdx=${list.matchingIdx}">'+list.subject+'</a></td>';
 			content +='<td>'+list.gameDate+'</td>';
 			content +='<td>'+list.gamePlay+' : '+list.gamePlay+'</td>';
 			

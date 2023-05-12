@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -7,47 +7,56 @@
 <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
-<script src="../resources/js/twbsPagination.js" type="text/javascript"></script>
-<style>
-	table{
-		width: 800;
-		height: 500;
+<script src="resources/js/twbsPagination.js" type="text/javascript"></script>
+<style>	
+	table, th, td{
+		border: 1px solid black;
+		border-collapse: collapse;
+		padding : 5px 10px;	
 	}
 	th,td{
 		text-align: center;
 	}
+	table{
+		width: 800;
+		height: 500;
+	}
 </style>
 </head>
 <body>
-	<input type="hidden" name="teamIdx" value="${teamIdx}"/>
-	<select id="gameDate">
-	  <option value="default">모집일순</option>
-	  <option value="DESC">경기일 최신순</option>
-	  <option value="ASC">경기일 오래된순</option>
+	
+	<select id="teamJoinDate">
+	  <option value="default">가입일순</option>
+	  <option value="모집중">최근순</option>
+	  <option value="모집종료">오래된순</option>
 	</select>
 	
-	<input type="text" id="searchInput" placeholder="제목 검색">
+	<input type="text" id="searchInput" placeholder="팀원 검색">
 	<button id="searchButton">검색</button>
+	&nbsp;&nbsp;
+	<hr>
 	<table>
 		<colgroup>
 			<col width="15%"/>
-			<col width="40%"/>
-			<col width="30%"/>
 			<col width="15%"/>
+			<col width="20%"/>
+			<col width="40%"/>
+			<col width="10%"/>
 		</colgroup>
 		<thead>
 			<tr>
-				<th>장소</th>
-				<th>제목</th>
-				<th>경기일시</th>
-				<th>경기방식</th>
+				<th>직급</th>
+				<th>활동여부</th>
+				<th>아이디</th>
+				<th>가입일</th>
+				<th>경고</th>
 			</tr>
 		</thead>
 		<tbody id="list">
 			<!-- list 출력 영역 -->
 		</tbody>
 		<tr>
-			<td colspan="4" id="paging">	
+			<td colspan="5" id="paging">	
 				<!-- 	플러그인 사용	(twbsPagination)	-->
 				<div class="container">									
 					<nav aria-label="Page navigation" style="text-align:center">
@@ -60,18 +69,16 @@
 </body>
 <script>
 	var showPage = 1;
-	var selectedGameDate = 'default';
+	var teamJoinDate = 'default';
 	var searchText = 'default';
-	var teamIdx = ${teamIdx}
-	console.log(selectedGameDate);
-	console.log(teamIdx);
+	var teamIdx = $('teamIdx');
 	listCall(showPage);
-	
-	// 게임일시 선택에 따른 출력
-	$('#gameDate').change(function(){
-		selectedGameDate = $(this).val();
+
+	// 경기 방식 선택에 따른 출력
+	$('#teamJoinDate').change(function(){
+		teamJoinDate = $(this).val();
 		// 선택한 요소 확인 okay
-		console.log(selectedGameDate);
+		console.log(teamJoinDate);
 		listCall(showPage);
 		$('#pagination').twbsPagination('destroy');
 	});	
@@ -84,16 +91,16 @@
 		listCall(showPage);
 		$('#pagination').twbsPagination('destroy');
 	});
-	
+		
 	function listCall(page){
 		$.ajax({
 			type:'post',
-			url:'gameList.ajax',
+			url:'team/list.ajax',
 			data:{
 				'page':page,
-				'selectedGameDate':selectedGameDate,
-				'searchText':searchText,
 				'teamIdx':teamIdx
+				'teamJoinDate':teamJoinDate,
+				'searchText':searchText
 			},
 			dataType:'json',
 			success:function(data){
@@ -110,7 +117,7 @@
 						if(page != showPage){
 							showPage = page;	
 							listCall(page);							
-						}							
+						}				
 					}
 				});					
 			},
@@ -123,16 +130,23 @@
 	function listPrint(list){
 		var content = '';
 		
-		list.forEach(function(list, idx){
+		list.forEach(function(team, teamIdx){
 			content +='<tr>';
-			content +='<td>'+list.gu+'</td>';
-			content +='<td><a href="../matching/detail.go?matchingIdx=${list.matchingIdx}">'+list.subject+'</a></td>';
-			content +='<td>'+list.gameDate+'</td>';
-			content +='<td>'+list.gamePlay+' : '+list.gamePlay+'</td>';
+			content +='<td id="teamMatchState">'+team.teamMatchState+'</td>';
+			content +='<td>'+team.gu+'</td>';
+			content +='<td id="teamInfo"><a href="team/teamPage.go?teamIdx='+team.teamIdx+'">'+team.teamName+'</a></td>';
+			content +='<td>'+team.teamIntroduce.substring(0, 14)+'</td>';
+			content +='<td>'+team.teamUser+'</td>';
 			content +='</tr>';
 		});
 		$('#list').empty();
 		$('#list').append(content);
+	}
+	
+	var msg = "${msg}";
+	console.log(msg);
+	if(msg != ''){
+		alert(msg);
 	}
 </script>
 </html>

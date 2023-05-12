@@ -46,7 +46,7 @@
 			<c:forEach items="${list}" var="bbs">
 				<tr>
 					<td>${bbs.gu}</td>
-					<td>${bbs.subject}</td>
+					<td><a href="../matching/detail.go?matchingIdx=${bbs.matchingIdx}">${bbs.subject}</a></td>
 					<td>${bbs.gameDate}</td>
 					<td>${bbs.writerId}</td>
 				</tr>
