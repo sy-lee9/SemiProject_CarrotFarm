@@ -12,7 +12,6 @@
 </style>
 </head>
 <body>
-<jsp:include page="loginBox.jsp"></jsp:include>
    <h3>회원 정보</h3>
       <table>
       	<tr>

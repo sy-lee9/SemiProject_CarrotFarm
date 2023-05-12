@@ -96,7 +96,7 @@
 			url:'teamUserList.ajax',
 			data:{
 				'page':page,
-				'teamIdx':teamIdx
+				'teamIdx':teamIdx,
 				'teamJoinDate':teamJoinDate,
 				'searchText':searchText
 			},
