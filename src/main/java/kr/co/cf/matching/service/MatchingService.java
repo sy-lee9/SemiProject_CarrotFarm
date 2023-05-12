@@ -165,7 +165,7 @@ public class MatchingService {
 		// 만들 수 있는 총 페이지 수 : 전체 게시글의 수 / 페이지당 보여줄 수 있는 수
 		int total = 0;
 		
-		if(search.equals("default") ||search.equals("")) {
+		if(search.equals("default") || search.equals("")) {
 			if(gamePlay.equals("default") && locationIdx.equals("default")) {
 			// 전체 보여주기
 			total = matchingDAO.totalCount(categoryId);
@@ -265,6 +265,10 @@ public class MatchingService {
 	public ArrayList<MatchingDTO> playerList(String matchingIdx) {
 		return matchingDAO.playerList(matchingIdx);
 	}
+	
+	public ArrayList<MatchingDTO> playerTeamList(String matchingIdx) {
+		return matchingDAO.playerTeamList(matchingIdx);
+	}
 		
 	public void playerDelete(String matchingIdx, String userId) {
 		matchingDAO.playerDelete(matchingIdx,userId);
@@ -273,6 +277,11 @@ public class MatchingService {
 
 	public ArrayList<MatchingDTO> gameApplyList(String matchingIdx) {
 		return matchingDAO.gameApplyList(matchingIdx);
+	}
+	
+
+	public ArrayList<MatchingDTO> teamApplyList(String matchingIdx) {
+		return matchingDAO.teamApplyList(matchingIdx);
 	}
 
 	public void gameApplyAccept(String matchingIdx, String userId) {
@@ -303,6 +312,13 @@ public class MatchingService {
 
 	public ArrayList<MatchingDTO> gameInviteList(String matchingIdx) {
 		return matchingDAO.gameInviteList(matchingIdx);
+	}
+	
+	public ArrayList<MatchingDTO> teamInviteList(String matchingIdx) {
+		return matchingDAO.teamInviteList(matchingIdx);
+	}
+	public ArrayList<MatchingDTO> teamList(String matchingIdx) {
+		return matchingDAO.teamList(matchingIdx);
 	}
 
 	public void mvp(HashMap<String, Object> params) {
@@ -342,6 +358,47 @@ public class MatchingService {
 	public void downHit(String matchingIdx) {
 		matchingDAO.downHit(matchingIdx);
 	}
+
+	public String leaderChk(String userId) {
+		// 본인이 리더인 (해체되지 않은)팀이 있는지
+		return matchingDAO.leaderChk(userId);
+	}
+
+	public MatchingDTO matchingTeamData(String teamName) {
+		return matchingDAO.matchingTeamData(teamName);
+	}
+
+	public String categoryIdChk(String categoryId) {
+		return matchingDAO.categoryIdChk(categoryId);
+	}
+
+	public MatchingDTO myTeam(String userId) {
+		return matchingDAO.myTeam(userId);
+	}
+
+
+	public int playChk(String loginId, String matchingIdx) {
+		return matchingDAO.playChk(loginId,matchingIdx);
+	}
+
+	public ArrayList<MatchingDTO> teamMemberList(String userId, String matchingIdx) {
+		return matchingDAO.teamMemberList(matchingIdx, userId);
+	}
+
+	public void teamRegist(HashMap<String, Object> params) {
+		matchingDAO.teamRegist(params);
+	}
+
+	public void cancelRegist(HashMap<String, Object> params) {
+		matchingDAO.cancelRegist(params);
+	}
+
+
+	
+
+	
+
+	
 
 	
 

@@ -77,7 +77,6 @@
 	<div id="content">
 		<select id="gamePlay">
 	  <option value="default">경기방식</option>
-	  <option value="1">1:1</option>
 	  <option value="3">3:3</option>
 	  <option value="5">5:5</option>
 	</select>
@@ -93,8 +92,8 @@
 	
 	<input type="text" id="searchInput" placeholder="제목 또는 작성자를 입력">
 	<button id="searchButton">검색</button>
-	<c:if test="${loginId != 'guest' }">
-		<button onclick="location.href='write.go?categoryId=m01'">글쓰기</button>
+	<c:if test="${teamName != null }">
+		<button onclick="location.href='teamWrite.go?categoryId=m02&teamName=${teamName}'">글쓰기</button>
 	</c:if>
 	
 	<hr>
@@ -107,7 +106,7 @@
 				<th>모집인원수</th>
 				<th>제목</th>
 				<th>경기 일시</th>
-				<th>글쓴이</th>
+				<th>팀명</th>
 				<th>조회수</th>
 			</tr>
 		</thead>
@@ -151,7 +150,7 @@
 var showPage = 1;
 var selectedGamePlay = 'default';
 var selectedSort = 'default';
-var categoryId = 'm01';
+var categoryId = 'm02';
 var searchText = 'default';
 console.log(selectedGamePlay);
 listCall(showPage);
@@ -229,9 +228,9 @@ function listPrint(list){
 		content +='<td id="gamePlay">'+item.gamePlay+':'+item.gamePlay+'</td>';
 		content +='<td>'+item.gu +'</td>';
 		content +='<td id="gamePlayer"> ' + item.matchingNumforSure +'/'+ item.matchingNum+ '</td>';
-		content +='<td id="subject"><a href="detail.go?matchingIdx='+ item.matchingIdx+'">'+item.subject+'</a></td>';
+		content +='<td id="subject"><a href="teamDetail.go?matchingIdx='+ item.matchingIdx+'">'+item.subject+'</a></td>';
 		content +='<td>'+item.gameDate+'</td>';
-		content +='<td id="writerId">'+item.writerId+'</td>';
+		content +='<td id="writerId">'+ item.teamName +'</td>';
 		content +='<td>'+item.bHit+'</td>';
 		content +='</tr>';
 		
