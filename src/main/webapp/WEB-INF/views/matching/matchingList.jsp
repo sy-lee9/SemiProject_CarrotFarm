@@ -68,7 +68,7 @@
 	        <a class="nav-link" href="/cf/matching/list.do">개인 모집글</a>
 	      </li>
 	      <li class="nav-item">
-	        <a class="nav-link" href="#">팀 모집글</a>
+	        <a class="nav-link" href="/cf/matching/teamList.do">팀 모집글</a>
 	      </li>
 	    </ul>
 	  </nav>

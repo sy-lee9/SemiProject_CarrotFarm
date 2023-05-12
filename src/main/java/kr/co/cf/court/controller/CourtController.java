@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -185,5 +186,21 @@ public class CourtController {
 		logger.info("경기장 제보에서 넘어온 값: "+params);
 		courtService.courtTipOff(params);
 		return "courtTipOff";
+	}
+	
+	@RequestMapping(value="/courtReviewReport.go")
+	public String courtReviewReportGo(@RequestParam HashMap<String, String> params,Model model) {
+		logger.info("리뷰 신고 눌렀을 때 넘어오는 값들: "+params);
+		model.addAttribute("courtReviewIdx",params.get("courtReviewIdx"));
+		model.addAttribute("courtIdx",params.get("courtIdx"));
+		model.addAttribute("reportUserId",params.get("reportUserId"));
+		return "courtReviewReport";
+	}
+	@RequestMapping(value="/courtReviewReport.do")
+	public String courtReviewReport(@RequestParam HashMap<String, String> params,Model model) {
+		logger.info("리뷰 신고 제출 시 넘어오는 값들: "+params);
+		params.put("reportContent",params.get("report")+" "+params.get("content"));
+		courtService.courtReviewReport(params);
+		return "redirect:/courtReviewReport.go?courtReviewIdx="+params.get("courtReviewIdx")+"&reportUserId="+params.get("reportUserId");
 	}
 }

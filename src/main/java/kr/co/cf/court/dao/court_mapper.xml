@@ -48,14 +48,15 @@
 	
 	<insert id="fileWrite">
 		insert into photo(categoryId,photoId,photoName)
-			values('p',#{param1},#{param2})
+			values('p01',#{param1},#{param2})
 	</insert>
 	
 	<select id="courtReviewList" resultType="kr.co.cf.court.dto.CourtDTO">
-		select cr.userId,cr.courtOneLineReview,cr.courtStar,cr.courtReviewIdx,p.photoname 
-		from courtReview cr 
-		left join photo p on cr.courtReviewIdx =p.photoId
-		where cr.courtIdx=#{param1};
+		SELECT cr.userId, cr.courtOneLineReview, cr.courtStar, cr.courtReviewIdx, p.photoName
+		FROM courtReview cr 
+		LEFT JOIN photo p ON cr.courtReviewIdx = p.photoId AND p.categoryId = 'p01'
+		WHERE cr.courtIdx = #{parma1}
+		ORDER BY cr.courtReviewDate DESC
 	</select>
 	
 	<select id="reviewWriter" resultType="String" parameterType="hashmap">
@@ -63,15 +64,17 @@
 	</select>
 	
 	<select id="reviewPhotoList" resultType="kr.co.cf.court.dto.CourtDTO">
-		select photoName from photo where photoId in (select courtReviewIdx from courtreview where courtIdx=#{param1})
+		select photoName from photo 
+		where photoId in (select courtReviewIdx from courtreview where courtIdx=#{param1})
+		AND categoryId='p01'
 	</select>
 	
 	<select id="findFile" resultType="String" parameterType="hashmap">
-		select photoName from photo where photoId=#{courtReviewIdx}
+		select photoName from photo where photoId=#{courtReviewIdx} AND categoryId='p01'
 	</select>
 	
 	<delete id="courtPhotoDelete" parameterType="hashmap">
-		delete from photo where photoId=#{courtReviewIdx}
+		delete from photo where photoId=#{courtReviewIdx} AND categoryId='p01'
 	</delete>
 	
 	<delete id="courtReviewDelete" parameterType="hashmap">
@@ -136,7 +139,7 @@
 	</select>
 	
 	<select id="userCourtReviewPhoto" resultType="kr.co.cf.court.dto.CourtDTO">
-		select photoName  from photo where photoId=#{param1} 
+		select photoName  from photo where photoId=#{param1} AND categoryId='p01'
 	</select>
 	
 	<update id="reviewUpdate" parameterType="hashmap">
@@ -145,15 +148,20 @@
 	</update>
 	
 	<select id="findReviewPhoto" resultType="String">
-		select photoName from photo where photoId=#{param1}
+		select photoName from photo where photoId=#{param1} AND categoryId='p01'
 	</select>
 	
 	<update id="fileChange">
-		update photo set photoName=#{param2} where photoId=#{param1}
+		update photo set photoName=#{param2} where photoId=#{param1} AND categoryId='p01'
 	</update>
 	
 	<insert id="courtTipOff" parameterType="hashmap">
 		insert into courtTipOff(userId,courtName,courtAddress)
 			values(#{userId},#{courtName},#{courtAddress})
+	</insert>
+	
+	<insert id="courtReviewReport" parameterType="hashmap">
+		INSERT INTO report(categoryId,userId,reportContent,reportState,reportId,reportUserId)
+		VALUES('rr',#{userId},#{reportContent},'미처리',#{courtReviewIdx},#{reportUserId});
 	</insert>
 </mapper>

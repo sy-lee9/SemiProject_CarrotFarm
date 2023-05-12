@@ -89,14 +89,14 @@ function listCall(page){
 			courtListDraw(data.courtList);
 			//paging plugin
 			$('#pagination').twbsPagination({
-				startPage:page,	//시작페이지
+				startPage:1,	//시작페이지
 				totalPages:Math.ceil(data.courtListCnt/10),//총 페이지 수
 				visiblePages:5, //보여줄 페이지 [1][2][3][4][5]
 				onPageClick:function(event,page){// 페이지 클릭시 동작되는 함수(콜백)
 					console.log(page, showPage);
 					if(page != showPage){
 						showPage = page;
-						listCall(showPage,);
+						listCall(showPage);
 						
 					}				
 				}

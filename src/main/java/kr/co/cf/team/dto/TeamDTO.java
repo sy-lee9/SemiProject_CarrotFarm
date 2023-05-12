@@ -1,5 +1,7 @@
 package kr.co.cf.team.dto;
 
+import java.sql.Date;
+
 public class TeamDTO {
 	
 	private int teamIdx;
@@ -21,6 +23,15 @@ public class TeamDTO {
 	private String gamePlay;
 	private String gameAppState;
 	private String matchigState;
+	private String writerId;
+	private int alarmKind;
+	private String alarmContent;
+	private int matchingIdx;
+	private String teamAppDate;
+	private String nickname;
+	private String position;
+	private String favTime;
+	private int userManner;
 	
 	public int getTeamIdx() {
 		return teamIdx;
@@ -135,5 +146,59 @@ public class TeamDTO {
 	}
 	public void setMatchigState(String matchigState) {
 		this.matchigState = matchigState;
+	}
+	public String getWriterId() {
+		return writerId;
+	}
+	public void setWriterId(String writerId) {
+		this.writerId = writerId;
+	}
+	public int getAlarmKind() {
+		return alarmKind;
+	}
+	public void setAlarmKind(int alarmKind) {
+		this.alarmKind = alarmKind;
+	}
+	public String getAlarmContent() {
+		return alarmContent;
+	}
+	public void setAlarmContent(String alarmContent) {
+		this.alarmContent = alarmContent;
+	}
+	public int getMatchingIdx() {
+		return matchingIdx;
+	}
+	public void setMatchingIdx(int matchingIdx) {
+		this.matchingIdx = matchingIdx;
+	}
+	public String getTeamAppDate() {
+		return teamAppDate;
+	}
+	public void setTeamAppDate(String teamAppDate) {
+		this.teamAppDate = teamAppDate;
+	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+	public String getPosition() {
+		return position;
+	}
+	public void setPosition(String position) {
+		this.position = position;
+	}
+	public String getFavTime() {
+		return favTime;
+	}
+	public void setFavTime(String favTime) {
+		this.favTime = favTime;
+	}
+	public int getUserManner() {
+		return userManner;
+	}
+	public void setUserManner(int userManner) {
+		this.userManner = userManner;
 	}
 }
