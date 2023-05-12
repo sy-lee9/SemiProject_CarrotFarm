@@ -37,16 +37,14 @@
 	<hr>
 	<table>
 		<colgroup>
-			<col width="15%"/>
-			<col width="15%"/>
 			<col width="20%"/>
-			<col width="40%"/>
-			<col width="10%"/>
+			<col width="30%"/>
+			<col width="30%"/>
+			<col width="20%"/>
 		</colgroup>
 		<thead>
 			<tr>
 				<th>직급</th>
-				<th>활동여부</th>
 				<th>아이디</th>
 				<th>가입일</th>
 				<th>경고</th>
@@ -74,7 +72,7 @@
 	var teamIdx = $('teamIdx');
 	listCall(showPage);
 
-	// 경기 방식 선택에 따른 출력
+	// 가입일에 따른 출력
 	$('#teamJoinDate').change(function(){
 		teamJoinDate = $(this).val();
 		// 선택한 요소 확인 okay
@@ -95,7 +93,7 @@
 	function listCall(page){
 		$.ajax({
 			type:'post',
-			url:'team/list.ajax',
+			url:'teamUserList.ajax',
 			data:{
 				'page':page,
 				'teamIdx':teamIdx
@@ -129,14 +127,12 @@
 	
 	function listPrint(list){
 		var content = '';
-		
-		list.forEach(function(team, teamIdx){
+		list.forEach(function(list){
 			content +='<tr>';
-			content +='<td id="teamMatchState">'+team.teamMatchState+'</td>';
-			content +='<td>'+team.gu+'</td>';
-			content +='<td id="teamInfo"><a href="team/teamPage.go?teamIdx='+team.teamIdx+'">'+team.teamName+'</a></td>';
-			content +='<td>'+team.teamIntroduce.substring(0, 14)+'</td>';
-			content +='<td>'+team.teamUser+'</td>';
+			content +='<td>'+list.teamGrade+'</td>';
+			content +='<td><a href="team/teamPage.go?teamIdx='+list.userId+'">'+list.userId+'</a></td>';
+			content +='<td>'+list.teamJoinDate+'</td>';
+			content +='<td><button onclick="location.href='#'">확인</td>';
 			content +='</tr>';
 		});
 		$('#list').empty();

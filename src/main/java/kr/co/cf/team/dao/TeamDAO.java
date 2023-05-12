@@ -74,7 +74,7 @@ public interface TeamDAO {
 	ArrayList<TeamDTO> matchingRequestListAsc(String userId);
 	
 	//신청한 경기 모집글 변경사항 알림
-	ArrayList<TeamDTO> gameAppAlarm(String teamIdx);
+	ArrayList<TeamDTO> appGameAlarm(String teamIdx);
 
 	int teamLeadersConf(String teamIdx, String loginId);
 	

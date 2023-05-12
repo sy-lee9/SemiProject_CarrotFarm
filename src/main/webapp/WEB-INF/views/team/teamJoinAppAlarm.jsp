@@ -19,7 +19,7 @@
 	<input type="hidden" name="teamIdx" value="${teamIdx}"/>
 	<a href="teamJoinAppAlarm.go?teamIdx=${teamIdx}">팀 가입신청 알림</a>
 	<a href="#">경기 참가신청 알림</a>
-	<a href="gameAppAlarm.go?teamIdx=${teamIdx}">경기 변경사항 알림</a>
+	<a href="appGameAlarm.go?teamIdx=${teamIdx}">경기 변경사항 알림</a>
 	<br/>
 	<hr/>
 	<br/>

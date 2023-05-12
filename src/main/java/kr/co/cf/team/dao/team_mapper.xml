@@ -284,7 +284,7 @@
 			AND teamGrade IN ('leader','deputyLeader')
 	</select>
 	
-	<select id="gameAppAlarm" resultType="kr.co.cf.team.dto.TeamDTO">
+	<select id="appGameAlarm" resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT 
 		    m.matchingIdx,
 		    m.subject,
@@ -297,7 +297,8 @@
 		    a.categoryId = 'm02' 
 		    AND m.matchigState IN ('matching','finish')
 		    AND g.userId = #{param1}
-		    AND g.gameAppState IN ('신청', '확정')
+		    AND g.gameAppState IN ('신청','확정')
+		    AND a.alarmContent IN ('수정','삭제','취소')
 		ORDER BY m.gameDate DESC
 	</select>
 	
