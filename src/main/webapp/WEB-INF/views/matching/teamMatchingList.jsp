@@ -92,7 +92,7 @@
 	
 	<input type="text" id="searchInput" placeholder="제목 또는 작성자를 입력">
 	<button id="searchButton">검색</button>
-	<c:if test="${teamName != null }">
+	<c:if test="${writeRight eq 'yes'}">
 		<button onclick="location.href='teamWrite.go?categoryId=m02&teamName=${teamName}'">글쓰기</button>
 	</c:if>
 	

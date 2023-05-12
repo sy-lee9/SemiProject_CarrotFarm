@@ -134,8 +134,8 @@ public class MatchingController {
 		
 		
 		
-		float mannerPoint = matchingService.mannerPoint((String)session.getAttribute("loginId"));
-		model.addAttribute("mannerPoint", mannerPoint);
+		// float mannerPoint = matchingService.mannerPoint((String)session.getAttribute("loginId"));
+		// model.addAttribute("mannerPoint", mannerPoint);
 		
 		
 		

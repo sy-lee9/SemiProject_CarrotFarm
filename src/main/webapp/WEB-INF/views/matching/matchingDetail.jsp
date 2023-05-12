@@ -112,7 +112,7 @@ table, th, td{
 				<th>${dto.subject}</th>
 				<th>${dto.gameDate}</th>
 				<th>&#128100</th>
-				<th>${dto.writerId}</th>
+				<th><a href="../userprofile.go?userId=${dto.writerId}">${dto.writerId}</a></th>
 			</tr>
 		</thead>
 		
@@ -284,14 +284,11 @@ table, th, td{
 		     		</th>
 		     	</tr>	
 		     	<tr>
-		     		<th colspan='3'>
+		     		<th colspan='7'>
 		     		 	<p>MVP</p>
 		     		 	<p>${mvp}</p>
 		     		</th>
-		     		<th colspan='4'>
-		     		 	<p>MANNER</p>
-		     		 	<p>${mannerPoint}</p>
-		     		</th>
+		     		
 		     	</tr>
 	     	</c:if>
 

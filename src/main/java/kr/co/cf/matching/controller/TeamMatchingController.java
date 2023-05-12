@@ -33,13 +33,20 @@ public class TeamMatchingController {
 		String userId = String.valueOf(session.getAttribute("loginId"));
 		logger.info("session" + session.getAttribute("loginId"));
 		logger.info("모집글 리스트 불러오기");
+		model.addAttribute("writeRight", "no");
+		
 		if(session.getAttribute("loginId") == null) {
 			model.addAttribute("loginId", "guest");
+			model.addAttribute("writeRight", "no");
 		}else {
 			// 본인이 리더인 (해체되지 않은)팀이 있는지
 			String teamName = matchingService.leaderChk(userId);
 			
 			if(teamName != null) {
+				int leaderQ = matchingService.leaderQ(userId);
+				if(leaderQ==1) {
+					model.addAttribute("writeRight", "yes");
+				}
 				model.addAttribute("teamName", teamName);
 			}
 		}
@@ -170,8 +177,8 @@ public class TeamMatchingController {
 				
 				
 				
-				float mannerPoint = matchingService.mannerPoint((String)session.getAttribute("loginId"));
-				model.addAttribute("mannerPoint", mannerPoint);
+				//float mannerPoint = matchingService.mannerPoint((String)session.getAttribute("loginId"));
+				//model.addAttribute("mannerPoint", mannerPoint);
 
 		
 		return "/matching/teamMatchingDetail";

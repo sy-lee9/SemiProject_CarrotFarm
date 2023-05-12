@@ -340,13 +340,9 @@ table, th, td{
 		     		 	<p>${dto.teamName}</p>
 		     		 	<p>팀리뷰결과</p>
 		     		</th>
-		     		<th colspan='1'>
+		     		<th colspan='3'>
 		     		 	<p>MVP</p>
 		     		 	<p>${mvp}</p>
-		     		</th>
-		     		<th colspan='2'>
-		     		 	<p>MANNER</p>
-		     		 	<p>${mannerPoint}</p>
 		     		</th>
 		     	</tr>
 	     	</c:if>
