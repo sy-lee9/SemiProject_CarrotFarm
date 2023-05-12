@@ -18,7 +18,7 @@
 			</tr>
 			<tr>
 				<th>작성자</th>
-				<td>${dto.userId}</td>
+				<td><input type="text" name="userId" value = "${dto.userId}" style="border:none" readonly/></td>
 			</tr>
 			<tr>
 				<th>내용</th>

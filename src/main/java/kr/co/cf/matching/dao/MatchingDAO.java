@@ -18,7 +18,7 @@ public interface MatchingDAO {
 	void upHit(String matchingIdx);
 	
 	//매칭글 삭제 전 알림
-	void matchingDeleteAlarm(String userId, String matchingIdx);
+	void matchingDeleteAlarm(String userId, String matchingIdx, String categoryId);
 	void deleteGame(String matchingIdx);
 	void deleteMatching(String matchingIdx);
 	
@@ -87,6 +87,7 @@ public interface MatchingDAO {
 		
 
 	// 게임신청
+	int applyGameChk(String matchingIdx, String userId);
 	void applyGame(String matchingIdx, String userId);
 			
 	// 모집 중 -> 모집 완료 상태 변경 
@@ -97,10 +98,13 @@ public interface MatchingDAO {
 	void matchigStateToReview(String matchingIdx, String matchigState);
 	
 	ArrayList<MatchingDTO> playerList(String matchingIdx);
-
+	ArrayList<MatchingDTO> playerTeamList(String matchingIdx);
+	
 	void playerDelete(String matchingIdx, String userId);
 
 	ArrayList<MatchingDTO> gameApplyList(String matchingIdx);
+
+	ArrayList<MatchingDTO> teamApplyList(String matchingIdx);
 
 	void gameApplyAccept(String matchingIdx, String userId);
 			
@@ -113,30 +117,76 @@ public interface MatchingDAO {
 	void cancelGameInvite(HashMap<String, Object> params);
 
 	ArrayList<MatchingDTO> gameInviteList(String matchingIdx);
+	
+	ArrayList<MatchingDTO> teamInviteList(String matchingIdx);
 
 	void mvp(HashMap<String, Object> params);
-
-	void mannerUp(HashMap<String, Object> params);
-
-	void mannerDown(HashMap<String, Object> params);
-
+	
+	void manner(String matchingIdx, String writerId, String receiveId, String userMannerScore);
+	
 	int review(String matchingIdx, String writerId);
 
 	float mannerPoint(String loginId);
 
 	int cntReview(String userId, String matchingIdx);
 
-	void deleteAlarm(String matchingIdx);
+	void deleteAlarm(String matchingIdx,String categoryId);
 
 	void gameInviteAlarm(HashMap<String, Object> params);
 
 	void gameInviteCancelAlarm(HashMap<String, Object> params);
 
-	void playerDeleteAlarm(String matchingIdx, String userId);
+	void playerDeleteAlarm(String matchingIdx, String userId, String categoryId);
 
-	void gameApplyAcceptAlarm(String matchingIdx, String userId);
+	void gameApplyAcceptAlarm(String matchingIdx, String userId, String categoryId);
 
-	void gameApplyRejectAlarm(String matchingIdx, String userId);
+	void gameApplyRejectAlarm(String matchingIdx, String userId, String categoryId);
+
+	void matchingReport(HashMap<String, String> params);
+
+	void commentReport(HashMap<String, String> params);
+
+	void downHit(String matchingIdx);
+
+	String leaderChk(String userId);
+
+	MatchingDTO matchingTeamData(String teamName);
+
+	String categoryIdChk(String categoryId);
+
+	ArrayList<MatchingDTO> teamList(String matchingIdx);
+
+	MatchingDTO myTeam(String userId);
+
+
+	int playChk(String loginId, String matchingIdx);
+
+	ArrayList<MatchingDTO> teamMemberList(String userId, String matchingIdx);
+
+	void teamRegist(HashMap<String, Object> params);
+
+	void cancelRegist(HashMap<String, Object> params);
+
+	ArrayList<HashMap<String, String>> mvpCnt(String matchingIdx);
+
+	int leaderQ(String userId);
+
+	ArrayList<MatchingDTO> tagList();
+
+	void teamTagReview(String matchingIdx, String teamId, String tagIdx);
+
+	int tagChk(String matchingIdx, String teamId);
+
+	void applyGameAlarm(String categoryId, String matchingIdx, String userId);
+
+	void teamRegistAlarm(HashMap<String, Object> params);
+
+
+	
+
+
+
+	
 
 	
 

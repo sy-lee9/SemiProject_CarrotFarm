@@ -1,6 +1,7 @@
 package kr.co.cf.main.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -76,10 +77,10 @@ public class JoinController {
     public String logout(HttpSession session) {
        
        session.removeAttribute("nickName");
-       return "redirect:/";
+       return "adminUser";
     }
 
-	/* ȸ������ */
+	/* 회원가입 */
 	 @RequestMapping(value = "/join")
 	    public String join(Model model) {
 		 
@@ -90,10 +91,11 @@ public class JoinController {
 		public String write(Model model, MultipartFile userProfile, @RequestParam HashMap<String, String> params) {
 		 String msg = service.write(userProfile,params);
 			model.addAttribute("msg",msg);
+			//service.mannerDefalut(params.get("userId"));
 			return "adminUser";
 		}
 	 
-	 /* ���̵� ã�� */
+	 /* 아이디 찾기 */
 	 @RequestMapping(value="/findIdView")
 		public String findIdView() throws Exception{
 			return"findIdView";
@@ -104,7 +106,7 @@ public class JoinController {
 			logger.info("email"+dto.getEmail());
 					
 			if(service.findIdCheck(dto.getEmail())==0) {
-			model.addAttribute("msg", "�̸����� Ȯ�����ּ���");
+			model.addAttribute("msg", "해당 이메일이 존재하지 않습니다.");
 			return "findIdView";
 			}else {
 			model.addAttribute("user", service.findId(dto.getEmail()));
@@ -112,7 +114,7 @@ public class JoinController {
 			}
 		}
 		
-		/* ��й�ȣ ã�� */
+		/* 비밀번호 찾기 */
 		@RequestMapping(value = "/findpw.go")
 		public String findPwPOST1() throws Exception{
 			return "findPw";
@@ -152,10 +154,38 @@ public class JoinController {
 	      return page;
 	      }
 	      
-	      @RequestMapping(value = "/userinfo")
-		    public String userInfo(Model model) {
-
-		        return "userInfo";
-		    }
+	      @RequestMapping(value="/userinfo.go")
+	      public String userInfo(HttpSession session, Model model) {  
+	         
+	         String page = "redirect:/";      
+	         
+	         logger.info("닉네임 : "+session.getAttribute("nickName"));
+	         
+	          if(session.getAttribute("nickName") != null) {
+	             JoinDTO dto = service.userInfo(session.getAttribute("nickName"));             
+	             model.addAttribute("user",dto);
+	             page = "userInfo";
+	          }
+	         
+	         return page;
+	      }
+	      
+	      @RequestMapping(value = "/userinfoupdate.go")
+	      public String userInfoUpdate(HttpSession session, Model model) {
+	    	  
+	    	String page = "redirect:/";		
+	  		JoinDTO dto = service.userInfo(session.getAttribute("nickName"));
+	  		if(dto != null) {
+	  			page = "userInfoUpdate";
+	  			model.addAttribute("user", dto);
+	  		}				
+	  		return page;
+	  	}
+	      
+	      @RequestMapping(value="/userinfoupdate.do", method = RequestMethod.POST)
+	  	  public String userInfoUpdate(@RequestParam HashMap<String, String> params, Model model) {
+	  		logger.info("params : "+params);
+	  		return service.userInfoUpdate(params);
+	  	}
 
 }

@@ -12,21 +12,22 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-	
 <style>
 
 body {
 	  min-width: 1200px;
 	}
 	
+
 #content {
 		width : 776px;
 		height : 500px;
 		background-color: #f8f9fa;
 		vertical-align: top; /* 위쪽 정렬 */
 		margin: 0 0 0 10;
-   	 	padding: 0 0 0 50;
+   	 	padding: 0 0 0 70;
 	}
+	
 	
 table, th, td{
 		border : 1px solid black;
@@ -40,17 +41,17 @@ table, th, td{
         position: fixed;
         top: 10%;
         left: 40%;
-        width: 200px;
+        width: 250px;
         height: 300px;
-        background-color: white;
+        background-color: #f8f9fa;
         border: 1px solid black;
         z-index: 9999;
-        
+        padding: 20;
       }
       
    
 
-	h2,h3 {
+	h2,h3,p {
 	text-align:center;
 	}
 	
@@ -74,6 +75,7 @@ table, th, td{
 	  display: inline-block;
 	}
 	
+
 	
 </style>
 </head>
@@ -84,7 +86,7 @@ table, th, td{
 	</br>
 	
 	<div id="LNB">
-	  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-left" style="padding-bottom: 200px;">
+	  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-left " style="padding-bottom: 200px;">
 	    <ul class="navbar-nav flex-column">
 	      <li class="nav-item active">
 	        <div style="width: 180px; height: 150px; border : 1px solid black; border-collapse: collapse;">프로필</div>
@@ -93,7 +95,7 @@ table, th, td{
 	        <a class="nav-link" href="/cf/matching/list.do">개인 모집글</a>
 	      </li>
 	      <li class="nav-item">
-	        <a class="nav-link" href="#">팀 모집글</a>
+	        <a class="nav-link" href="/cf/matching/teamList.do">팀 모집글</a>
 	      </li>
 	    </ul>
 	  </nav>
@@ -125,7 +127,7 @@ table, th, td{
 	     			</br>🏀 경기 장소 : ${dto.courtName}
 	     			</br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 주소: ${dto.courtAddress}
 	     			</br>🏀 모집 인원 :	 &#128100 ${dto.matchingNumforSure}/${dto.matchingNum} 
-	     			<c:if test="${loginId != 'guest' }"><button id="playerList">참가자 목록</button></c:if>
+	     			<c:if test="${loginId != 'guest' }"><button id="playerList">참가자</button></c:if>
 	     			
 				    </br>🏀 경기 방식 : ${dto.gamePlay} : ${dto.gamePlay}
 	     			</br>🏀 ${dto.content}
@@ -145,7 +147,9 @@ table, th, td{
 						<li> ${playerList.userId} 
 						<c:if test="${dto.writerId eq loginId }">
 							<c:if test="${dto.writerId ne playerList.userId }">
-								<button onclick="location.href='playerDelete?userId=${playerList.userId}&matchingIdx=${dto.matchingIdx}'">취소</button>
+							<c:if test="${dto.matchigState eq 'matching'}">
+									<button onclick="location.href='playerDelete?userId=${playerList.userId}&matchingIdx=${dto.matchingIdx}'">취소</button>
+							</c:if>
 							</c:if>
 						</c:if>
 						</br>
@@ -155,32 +159,7 @@ table, th, td{
 				<button id="closePlayerListBtn">닫기</button>
 			</div>
 			
-			
-				    
-	     	<tr>
-	     		<!--matchigState가 matching 상태일 시  -->
-	     		<c:if test="${dto.matchigState eq 'matching'}">
-	     			<th colspan="2">
-	     				<button id="gameApplyList">신청자 목록</button>
-	     				<c:if test="${dto.writerId eq loginId }">
-	     				<button id="gameInviteList">초대하기</button>
-	     				</c:if>	
-	     			</th>
-	     		
-		     		<c:if test="${dto.writerId eq loginId }">
-			     		<th colspan="2">
-		     				<button onclick="location.href='matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}'">모집종료</button>
-		     			</th>
-		     		</c:if>
-		     		
-		     		<c:if test="${dto.writerId ne loginId }">
-			     		<th colspan="2">
-		     				<button onclick="location.href='applyGame?matchingIdx=${dto.matchingIdx}'">신청하기</button>
-		     			</th>
-		     		</c:if>
-	     		</c:if>
-	     		
-	     		<div id="gameApplyListPopup">
+			<div id="gameApplyListPopup">
 					<h3>신청자 목록</h3>
 					<hr>
 					<ul>
@@ -200,10 +179,9 @@ table, th, td{
 				<div id="gameInviteListPopup">
 					<h3>초대하기</h3>
 					<hr>
-					<div id="scroll" style="height: 200px; overflow: auto;">
+					<div id="scroll" style="height: 150px; overflow: auto;">
 						<ul>
 							<c:if test="${gameInviteList !=null}">
-								<p>초대한 회원</p>
 								<c:forEach items="${gameInviteList}" var="gameInviteList">
 									<li> 
 									${gameInviteList.userId}
@@ -211,7 +189,7 @@ table, th, td{
 									</li>
 								</c:forEach>
 							</c:if>
-							<hr>
+							
 							<c:forEach items="${userList}" var="userList">
 								<li> 
 									${userList.userId}
@@ -220,18 +198,46 @@ table, th, td{
 							</c:forEach>
 						</ul>
 					</div>
-					<button id="closeGameInviteListBtn">닫기</button>
+					<button id="closeGameInviteListBtn" onclick="location.href='detail.go?matchingIdx='+${dto.matchingIdx}">닫기</button>
 				</div>
 			
+			
+<!--matchigState : matching, finish, review  -->				    
+	     	<tr>
+<!--matchigState가 matching 상태일 시  -->
+	     		<c:if test="${dto.matchigState eq 'matching'}">
+	     			<th colspan="2">
+	     			<c:if test="${loginId != 'guest' }">
+	     				<button id="gameApplyList">신청자</button>
+	     				<c:if test="${dto.writerId eq loginId }">
+	     				<button id="gameInviteList">초대</button>
+	     				</c:if>	
+	     			</c:if>
+	     			</th>
 	     		
-	     		<!--matchigState가 finish 상태일 시  -->
+		     		<c:if test="${dto.writerId eq loginId }">
+			     		<th colspan="2">
+		     				<button id="matchingChk" >모집종료</button>
+		     			</th>
+		     		</c:if>
+		     		
+		     		<c:if test="${dto.writerId ne loginId }">
+				     	<th colspan="2">
+				     		<c:if test="${loginId != 'guest' }">
+			     				<button id="applyChk" onclick="location.href='applyGame?matchingIdx=${dto.matchingIdx}'">신청</button>
+			     			</c:if>
+			     		</th>
+		     		</c:if>
+	     		</c:if>
+	     		
+<!--matchigState가 finish 상태일 시  -->
 	     		<c:if test="${dto.matchigState eq 'finish'}">
 	     			<th colspan="2">
 	     			
 	     			</th>
 	     			<c:if test="${dto.writerId eq loginId }">
 			     		<th colspan="2">
-			     			<button onclick="location.href='matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}'">경기종료</button>
+			     			<button id="finishChk" >경기종료</button>
 		     			</th>
 		     		</c:if>
 		     		
@@ -240,98 +246,62 @@ table, th, td{
 		     		</c:if>
 	     		</c:if>
 	     		
-	     		<!--matchigState가 review 상태일 시  -->
+<!--matchigState가 review 상태일 시  -->
 	     		<c:if test="${dto.matchigState eq 'review'}">
-	     			<th colspan="4">
+	     			
+	     			<th colspan="2">
 	     				
+	     			</th>
+	     			<th colspan="2">
+	     				<button id="review" onclick="window.open('review.go?matchingIdx=${dto.matchingIdx}','당근농장 리뷰','width=600px,height=400px')">리뷰 작성</button>
 	     			</th>
 	     		</c:if>
 	     		
 	     		<th colspan="3">
-	     		<c:if test="${dto.writerId eq loginId }">
+		     		<c:if test="${dto.writerId eq loginId }">
+			     		
+			     			<button onclick="location.href='update.go?matchingIdx=${dto.matchingIdx}'">수정</button>
+			     			<button id="delChk" >삭제</button>
+							<button onclick="location.href='./list.do'">목록</button>
+			     		
+		     		</c:if>
 		     		
-		     			<button onclick="location.href='update.go?matchingIdx=${dto.matchingIdx}'">수정하기</button>
-		     			<button onclick="location.href='delete.do?matchingIdx=${dto.matchingIdx}'">삭제하기</button>
-						<button onclick="location.href='./list.do'">목록으로</button>
-		     		
-	     		</c:if>
 	     		
-	     		
-	     		<c:if test="${dto.writerId ne loginId }">
-		     		<button onclick="location.href='./list.do'">목록으로</button>
-	     		</c:if>
+		     		<c:if test="${dto.writerId ne loginId }">
+			     		<c:if test="${loginId != 'guest' }">
+			     			<button onclick="window.open('matchingReport.go?matchingIdx=${dto.matchingIdx}','당근농장 신고','width=600px,height=400px')">신고</button>
+			     		</c:if>
+			     		<button onclick="location.href='./list.do'">목록</button>
+		     		</c:if>
 	     		</th>
 	     	</tr>
 	     	
-	     	
-	     	<!-- 리뷰 영역 -->
+	     	<!-- 리뷰 결과 -->
 	     	<c:if test="${dto.matchigState eq 'review'}">
-	     	<c:if test="${review == 'no'}">
-	     		
-	     		<form action="review?matchingIdx=${dto.matchingIdx}" method="post">
-	     		<tr>
-	     			<td colspan="7">
-	     				
-	     					<h2>REVIEW</h2>
-	     					
-	     			</td>
-	     		</tr>
-	     		<tr>
-	     			<td colspan="3">		
-	     				<c:forEach items="${playerList}" var="playerList" varStatus="status">
-	     				<c:if test="${status.index % 2 == 0}"> 
-	     					<input type="radio" name="receiveId" value="${playerList.userId}"> ${playerList.userId} 
-	     					<c:if test="${playerList.userId ne loginId}">
-		     					<input type="radio" name="manner_${playerList.userId} " value="${playerList.userId}_up"> 👍
-		     					<input type="radio" name="manner_${playerList.userId} " value="${playerList.userId}_down"> 👎
-	     					</c:if></br>
-	     				</c:if>	
-	     				</c:forEach>		
-	     			</td>
-	     			
-	     			<td colspan="4">		
-	     				<c:forEach items="${playerList}" var="playerList" varStatus="status">
-	     				<c:if test="${status.index % 2 != 0}"> 
-	     					<input type="radio" name="receiveId" value="${playerList.userId}"> ${playerList.userId} 
-	     					<c:if test="${playerList.userId ne loginId}">
-		     					<input type="radio" name="manner_${playerList.userId} " value="${playerList.userId}_up"> 👍
-		     					<input type="radio" name="manner_${playerList.userId} " value="${playerList.userId}_down"> 👎
-	     					</c:if></br>
-	     				</c:if>	
-	     				</c:forEach>		
-	     			</td>
-	     		</tr>
-	     		<tr>
-	     			<th colspan="7"><button id="review_btn">제출하기</button></th>
-	     		</tr>	
-	     		</form>
+		     	<tr>
+		     		<th colspan='7'>
+		     		 	<p>리뷰결과</p>
+		     		</th>
+		     	</tr>	
+		     	<tr>
+		     		<th colspan='3'>
+		     		 	<p>MVP</p>
+		     		 	<p>${mvp}</p>
+		     		</th>
+		     		<th colspan='4'>
+		     		 	<p>MANNER</p>
+		     		 	<p>${mannerPoint}</p>
+		     		</th>
+		     	</tr>
 	     	</c:if>
-	     	<c:if test="${review == 'yes'}">
-	     		<tr>
-	     			<td colspan="7">
-	     				
-	     					<h2>REVIEW</h2>
-	     					
-	     			</td>
-	     		</tr>
-	     		<tr>
-	     			<th colspan="3">
-	     				
-	     					<h2>MVP</h2>
-	     					${mvp}
-	     			</th>
-	     			<th colspan="4">
-	     				
-	     					<h2>MANNER</h2>
-	     					${mannerPoint}
-	     			</th>
-	     		</tr>
-	     	</c:if>
-	     	</c:if>
-	     	
+
 	     	
 	     	
 	     	</br>
+<!--matchigState : matching, finish, review  -->		     	
+	     	
+	     	
+	     	
 	     	
 	     	
 	     	
@@ -346,11 +316,12 @@ table, th, td{
 			     		<c:if test="${commentList.userId eq loginId}">
 			     			<a  href="commentUpdate.go?commentIdx=${commentList.commentIdx}&matchingIdx=${dto.matchingIdx}" >수정</a> 
 			     			/ 
-			     			<a href="commentDelete.do?commentIdx=${commentList.commentIdx}&matchingIdx=${dto.matchingIdx}">삭제</a>
+			     			<a href="commentDelete.do?commentIdx=${commentList.commentIdx}&matchingIdx=${dto.matchingIdx}" id="delCommentChk" >삭제</a>
+
 			     		</c:if>
 			     		<c:if test="${commentList.userId ne loginId}">
-				     		<c:if test="${loginId != 'guest' }"><button id="playerList">
-				     			<a href="#">신고</a>
+				     		<c:if test="${loginId != 'guest' }">
+				     			<a href="#" onclick="window.open('commentReport.go?commentIdx=${commentList.commentIdx}','당근농장 신고','width=600px,height=400px')">신고</a>				     			
 				     		</c:if>	 
 			     		</c:if>	     					
 			     	</td>
@@ -359,18 +330,18 @@ table, th, td{
 		     
 		     <tr>
 
-			     <form method="post" action="commentUpdate.do?">
+			     <form method="post" action="commentUpdate.do?" id="commentForm">
 					<th >
 						<input type="text" name="commentIdx" value="${commentDto.commentIdx}" hidden>
 						<input type="text" name="matchingIdx" value="${dto.matchingIdx}" style= "border:none;" hidden>
-						<input type="text" name="userId" value="${loginId}" style= "border:none;" readonly>
+						<input type="text" name="userId" value="${loginId}" style= "border:none; width:50px; background-color: #f8f9fa;" readonly>
 					</th>
 					<c:if test="${loginId != 'guest' }">
 						<th colspan="5">
-							<input type="text" name="commentContent" value="${commentDto.commentContent}">
+							<input type="text" name="commentContent" id="commentContent" value="${commentDto.commentContent}" style="background-color: #f8f9fa; border:none;width:400px;">
 						</th>
 						<th>
-							<button>작성</button>
+							<input type="button" value="작성" onclick="subCommentChk()" />
 						</th>
 					</c:if>
 					<c:if test="${loginId == 'guest' }">
@@ -415,14 +386,71 @@ table, th, td{
     });
 	
     
-    
-    
-    
+    //=============================================================
+    // comfirm 창 모음
+    //=============================================================
 
 
     
+   $(function() {
+	   $('#delChk').click(function(event) {
+	     if (!confirm('삭제하시면 복구할수 없습니다. \n 정말로 삭제하시겠습니까??')) {
+	       event.preventDefault(); // 기본 이벤트 처리 중단
+	     } else {
+	       location.href = 'delete.do?matchingIdx=${dto.matchingIdx}'; // onclick 이벤트 처리
+	     }
+	   });
+	 });
+
+   
+   $(function() {
+	   $('#matchingChk').click(function(event) {
+	     var matchingNumforSure = parseInt('${dto.matchingNumforSure}');
+	     var matchingNum = parseInt('${dto.matchingNum}');
+	     if (matchingNumforSure > matchingNum) {
+	       alert('모집 인원 수 보다 경기 참여 인원이 많습니다. 참가자 목록을 확인해 주세요');
+	       event.preventDefault();
+	     } else if (matchingNumforSure == 1) {
+		   alert('경기는 최소 2명의 참가자가 존재할 때만 가능합니다. ');
+		    event.preventDefault();
+		 }else if (!confirm('모집을 종료하면 경기 참가 신청은 자동으로 거절 됩니다.\n 정말로 종료하시겠습니까??')) {
+	       event.preventDefault(); 
+	     } else {
+	       location.href='matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}';
+	     }
+	   });
+	 });
+
+   
+   
+   $(function() {
+	   $('#finishChk').click(function(event) {
+	     if (!confirm('경기를 종료하고 리뷰를 작성하시겠습니까?')) {
+	       event.preventDefault(); // 기본 이벤트 처리 중단
+	     } else {
+	    	location.href='matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}';
+	     }
+	   });
+	 });
+   
+
     
-    
+
+   
+  function subCommentChk(){
+		console.log($('#commentContent').val());
+		
+		if($('#commentContent').val() == ''){
+			alert('댓글을 입력해주세요.');
+			return false;
+		}else{
+			$('#commentForm').submit();
+		}
+		
+		
+	}
+  
+ 
     
     
 	
@@ -506,10 +534,6 @@ function inviteUser(userId, matchingIdx) {
     }
     
 
-	
-	
-	
-	
         
     </script>
 </html>

@@ -11,6 +11,7 @@ public class AdminUserDTO {
 	private String teamName;
 	private String email;
 	private String photoName;
+
 	private String userState;
 	public String getUserState() {
 		return userState;
@@ -21,6 +22,7 @@ public class AdminUserDTO {
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
+
 	public String getPhotoName() {
 		return photoName;
 	}

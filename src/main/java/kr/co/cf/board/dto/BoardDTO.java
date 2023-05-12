@@ -16,6 +16,11 @@ public class BoardDTO {
 	private int bidx;
 	private String photoName;
 	private int photoId;
+	private Date commentWriteTime;
+	private String commentContent;
+	private String commentIdx;
+	private String freeboardType;
+	private String freeboardSearchInput;
 	
 
 	public String getSubject() {
@@ -90,6 +95,36 @@ public class BoardDTO {
 	}
 	public void setPhotoId(int photoId) {
 		this.photoId = photoId;
+	}
+	public Date getCommentWriteTime() {
+		return commentWriteTime;
+	}
+	public void setCommentWriteTime(Date commentWriteTime) {
+		this.commentWriteTime = commentWriteTime;
+	}
+	public String getCommentContent() {
+		return commentContent;
+	}
+	public void setCommentContent(String commentContent) {
+		this.commentContent = commentContent;
+	}
+	public String getCommentIdx() {
+		return commentIdx;
+	}
+	public void setCommentIdx(String commentIdx) {
+		this.commentIdx = commentIdx;
+	}
+	public String getFreeboardType() {
+		return freeboardType;
+	}
+	public void setFreeboardType(String freeboardType) {
+		this.freeboardType = freeboardType;
+	}
+	public String getFreeboardSearchInput() {
+		return freeboardSearchInput;
+	}
+	public void setFreeboardSearchInput(String freeboardSearchInput) {
+		this.freeboardSearchInput = freeboardSearchInput;
 	}
 
 

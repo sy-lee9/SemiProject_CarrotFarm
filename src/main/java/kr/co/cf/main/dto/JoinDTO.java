@@ -14,9 +14,15 @@ public class JoinDTO {
 	private Date birthday;
 	private int locationIdx;
 	private String favTime;
+
 	private String position;
 	private String userPw;
 	private String height;
+
+	private String si;
+	private String gu;
+	
+	
 	public String getUserId() {
 		return userId;
 	}
@@ -76,6 +82,18 @@ public class JoinDTO {
 	}
 	public void setFavTime(String favTime) {
 		this.favTime = favTime;
+	}
+	public String getSi() {
+		return si;
+	}
+	public void setSi(String si) {
+		this.si = si;
+	}
+	public String getGu() {
+		return gu;
+	}
+	public void setGu(String gu) {
+		this.gu = gu;
 	}
 	
 	

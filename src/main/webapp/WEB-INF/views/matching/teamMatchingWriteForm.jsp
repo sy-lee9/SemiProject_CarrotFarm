@@ -72,17 +72,16 @@ body {
 	</div>
 	
 	<div id="content">
-	<form method="post" action="write.do?categoryId=m01">
+	<form method="post" action="write.do?categoryId=m02">
 				
 		<input type="text" name="subject" id="subject" placeholder="제목을 입력해주세요">
-		<input type="datetime" name="gameDate" id="date" placeholder="경기 일시">
-		<input type="text" name="writerId" value="${writerId}" style="border:none;" readonly>
+		<input type="datetime" name="gameDate" id="date" placeholder="경기 일시"> ${teamName}
+		<input type="text" name="writerId" value="${writerId}" style="border:none;" hidden>
 
 		<br>
 
 		<select name="gamePlay" id="gamePlay">
 			<option value="none">경기방식</option>
-			<option value="1">1:1</option>
 			<option value="3">3:3</option>
 			<option value="5">5:5</option>
 		</select>
@@ -104,7 +103,7 @@ body {
 		<select name="courtIdx" id="courtIdx">
 			<option value="none">경기장</option>
 			<c:forEach items="${courtList}" var="court">
-				<c:if test="${court.locationIdx == writerData.locationIdx}">
+				<c:if test="${court.locationIdx == teamData.locationIdx}">
 					<option value="${court.courtIdx}">${court.courtName}</option>
 				</c:if>
 			</c:forEach>
@@ -137,7 +136,7 @@ body {
 	    
 	    if(listType=='loc'){
 	    	content += '<select name="locationList" id="locationIdx">';
-    		content += '<option value="${writerData.locationIdx}">${writerData.gu}</option>';
+    		content += '<option value="${teamData.locationIdx}">${teamData.gu}</option>';
 	    	content += '</select>';	    	
 	    	$('#locationIdx').replaceWith(content);
 	    	content='';

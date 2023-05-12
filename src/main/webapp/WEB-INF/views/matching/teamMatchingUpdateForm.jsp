@@ -72,19 +72,18 @@ body {
 	</div>
 	
 	<div id="content">
-	<form method="post" action="write.do?categoryId=m01">
+	<form method="post" action="update.do?matchingIdx=${dto.matchingIdx}">
 				
-		<input type="text" name="subject" id="subject" placeholder="제목을 입력해주세요">
-		<input type="datetime" name="gameDate" id="date" placeholder="경기 일시">
-		<input type="text" name="writerId" value="${writerId}" style="border:none;" readonly>
+		<input type="text" name="subject" id="subject" placeholder="제목을 입력해주세요" value="${dto.subject}">
+		<input type="datetime" name="gameDate" id="date" placeholder="경기 일시" value="${dto.gameDate}"> ${dto.teamName}
+		<input type="text" name="writerId" value="${loginId}" style="border:none;" hidden>
 
 		<br>
 
 		<select name="gamePlay" id="gamePlay">
 			<option value="none">경기방식</option>
-			<option value="1">1:1</option>
-			<option value="3">3:3</option>
-			<option value="5">5:5</option>
+			<option value="3" id="3">3:3</option>
+			<option value="5" id="5">5:5</option>
 		</select>
 		
 		
@@ -102,19 +101,19 @@ body {
 		
 		
 		<select name="courtIdx" id="courtIdx">
-			<option value="none">경기장</option>
+			<option value="${dto.courtIdx}">${dto.courtName}</option>
 			<c:forEach items="${courtList}" var="court">
-				<c:if test="${court.locationIdx == writerData.locationIdx}">
+				<c:if test="${court.locationIdx == teamData.locationIdx}">
 					<option value="${court.courtIdx}">${court.courtName}</option>
 				</c:if>
 			</c:forEach>
 		</select>
 		
 
-		👤<input type="text" name="matchingNum" id="matchingNum" placeholder="모집인원" style="border:none;" readonly><br>
-		<textarea name="content" id ="content" rows="10" cols="50" style="width: 555px; height: 228px;" placeholder="경기모집에 관련된 설명을 작성해주세요"></textarea><br>
+		👤<input type="text" name="matchingNum" id="matchingNum" placeholder="모집인원" style="border:none;" value ="${dto.matchingNum}"  readonly><br>
+		<textarea name="content" id ="content" rows="10" cols="50" style="width: 555px; height: 228px;" placeholder="경기모집에 관련된 설명을 작성해주세요">${dto.content}</textarea><br>
 		<input type="button" value="작성" onclick="subChk()">
-
+		
 	</form>
 	</div>
 </body>
@@ -137,7 +136,7 @@ body {
 	    
 	    if(listType=='loc'){
 	    	content += '<select name="locationList" id="locationIdx">';
-    		content += '<option value="${writerData.locationIdx}">${writerData.gu}</option>';
+    		content += '<option value="${teamData.locationIdx}">${teamData.gu}</option>';
 	    	content += '</select>';	    	
 	    	$('#locationIdx').replaceWith(content);
 	    	content='';
@@ -248,7 +247,22 @@ body {
 			    });
 			  });
 		
-		 
+		 function gps(){
+				var dto = '${dto.gamePlay}';
+			 	console.log(dto);
+			 	
+			 	if(dto=='3'){
+			 		$('#3').prop('selected',true);
+			 	} else if(dto=='5'){
+			 		$('#5').prop('selected',true);
+			 	} else {
+			 		
+			 	}
+			 };
+			 
+			 $(document).ready(function() {
+					gps();
+			});
 		 
 		 
 

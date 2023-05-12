@@ -7,11 +7,18 @@
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <style>
 	table{
-		width: 800;
-		height: 500;
+		width: 1000;
+		height: 300;
+		margin: 30;
 	}
 	th,td{
 		text-align: center;
+	}
+	td{
+		height: 10;
+	}
+	#gameDate{
+		margin: 30;
 	}
 </style>
 </head>
@@ -25,10 +32,12 @@
 
 	<table>
 		<colgroup>
-			<col width="15%"/>
-			<col width="40%"/>
+			<col width="10%"/>
 			<col width="30%"/>
-			<col width="15%"/>
+			<col width="30%"/>
+			<col width="10%"/>
+			<col width="10%"/>
+			<col width="10%"/>
 		</colgroup>
 		<thead>
 			<tr>
@@ -46,7 +55,6 @@
 	</table>
 </body>
 <script>
-	//var showPage = 1;
 	var selectedGameDate = 'default';
 	var teamIdx = ${teamIdx}
 	console.log(selectedGameDate);
@@ -58,8 +66,7 @@
 		selectedGameDate = $(this).val();
 		// 선택한 요소 확인 okay
 		console.log(selectedGameDate);
-		listCall(showPage);
-		$('#pagination').twbsPagination('destroy');
+		listCall();
 	});	
 	
 	function listCall(){
@@ -82,29 +89,30 @@
 	}
 	
 	function listPrint(list){
-		/* var matchigState = list.matchigState;
-		if(matchigState = 'matching'){
-			matchigState = '모집중';
-		}else {
-			matchigState = '모집종료';
-		}
-		
-		var gameAppState = list.gameAppState;
-		if(gameAppState = '신청'){
-			gameAppState = '미응답';
-		}else{
-			gameAppState = '수락';
-		} */
-		
+
 		var content = '';				
-		list.forEach(function(list, idx){
+		list.forEach(function(list){		
 			content +='<tr>';
 			content +='<td>'+list.gu+'</td>';
-			content +='<td>'+list.subject+'</a></td>';
+			content +='<td><a href="../matching/detail.go?matchingIdx=${list.matchingIdx}">'+list.subject+'</a></td>';
 			content +='<td>'+list.gameDate+'</td>';
 			content +='<td>'+list.gamePlay+' : '+list.gamePlay+'</td>';
-			content +='<td>'+list.matchigState+'</td>';
-			content +='<td>'+list.gameAppState+'</td>';
+			
+			var matchigState = list.matchigState;
+			if(matchigState == 'matching'){
+				matchigState = '모집중';
+			}else if(matchigState == 'finish'){
+				matchigState = '모집종료';
+			}
+			content +='<td>'+matchigState+'</td>';
+			
+			var gameAppState = list.gameAppState;
+			if(gameAppState == '신청'){
+				gameAppState = '미응답';
+			}else if(gameAppState == '확정'){
+				gameAppState = '수락';
+			}
+			content +='<td>'+gameAppState+'</td>';
 			content +='</tr>';
 		});
 		$('#list').empty();
