@@ -39,8 +39,6 @@ textarea{
 	resize : none;
 }
 
-items
-
 </style>
 </head>
 <body>
