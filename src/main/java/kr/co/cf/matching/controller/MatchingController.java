@@ -341,6 +341,14 @@ public class MatchingController {
 				logger.info(dto.getUserId()+"의 투표수 : "+cntReview);
 				if(cntReview>mvpChk) {
 					model.addAttribute("mvp", dto.getUserId());
+					logger.info("살려줘");
+					matchingService.gameMvp(String.valueOf(dto.getMatchingIdx()),dto.getUserId());
+					
+					// 테이블에 데이터삽입 
+					// matchingIdx,dto.getUserId()
+					
+					// 
+					
 				}
 			}
 			

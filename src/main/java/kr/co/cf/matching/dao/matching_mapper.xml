@@ -364,6 +364,10 @@
 		INSERT INTO report(categoryId, userId, reportContent, reportState, reportId) VALUES('rc',#{userId},#{reportContent},'미처리',#{commentIdx})
 	</insert>
 	
+	<insert id="gameMvp">
+		insert into mvpUser(matchingIdx,gameMvp) values(#{param1},#{param2})
+	</insert>
+	
 </mapper>
 
 

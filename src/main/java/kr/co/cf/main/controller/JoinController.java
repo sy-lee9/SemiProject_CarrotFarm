@@ -24,6 +24,8 @@ import org.springframework.web.servlet.ModelAndView;
 import kr.co.cf.main.dao.JoinDAO;
 import kr.co.cf.main.dto.JoinDTO;
 import kr.co.cf.main.service.JoinService;
+import kr.co.cf.matching.dto.MatchingDTO;
+import kr.co.cf.matching.service.MatchingService;
 
 @Controller
 public class JoinController {
@@ -32,6 +34,8 @@ public class JoinController {
 	
 	
 	@Autowired JoinService service;
+	
+	@Autowired MatchingService matchingService;
 	
 	@RequestMapping(value="/login")
 	public String home() {
@@ -77,7 +81,7 @@ public class JoinController {
     public String logout(HttpSession session) {
        
        session.removeAttribute("nickName");
-       return "adminUser";
+       return "main";
     }
 
 	/* 회원가입 */
@@ -91,8 +95,8 @@ public class JoinController {
 		public String write(Model model, MultipartFile userProfile, @RequestParam HashMap<String, String> params) {
 		 String msg = service.write(userProfile,params);
 			model.addAttribute("msg",msg);
-			//service.mannerDefalut(params.get("userId"));
-			return "adminUser";
+			service.mannerDefalut(params.get("userId"));
+			return "main";
 		}
 	 
 	 /* 아이디 찾기 */
@@ -183,9 +187,50 @@ public class JoinController {
 	  	}
 	      
 	      @RequestMapping(value="/userinfoupdate.do", method = RequestMethod.POST)
-	  	  public String userInfoUpdate(@RequestParam HashMap<String, String> params, Model model) {
+	  	  public String userInfoUpdate(@RequestParam HashMap<String, String> params, Model model, MultipartFile photo) {
 	  		logger.info("params : "+params);
-	  		return service.userInfoUpdate(params);
+	  		return service.userInfoUpdate(params,photo);
+	  	}
+	      
+	      @RequestMapping(value="/mygames")
+	  	public String teamGameList(Model model) {
+	  		return "myGames";
+	  	}
+	  	
+	  	@RequestMapping(value="/mygameList.ajax", method = RequestMethod.POST)
+	  	@ResponseBody
+	  	public HashMap<String, Object> gameList(@RequestParam HashMap<String, Object> params){
+	  		logger.info("list params : "+params);
+	  		return service.gameList(params);
+	  	}
+	  	
+	  	@RequestMapping(value="/userprofile.go")
+	  	public String userprofile(@RequestParam String userId, Model model) {
+	  		logger.info(userId);
+	  		ArrayList<JoinDTO> list= service.profileGames(userId);
+	  		model.addAttribute("profileGames",list);
+	  		
+	  		JoinDTO dto = service.profileInfo(userId);
+	  		model.addAttribute("profileInfo", dto);
+	  		
+	  		float mannerPoint = matchingService.mannerPoint(userId);
+	  		model.addAttribute("mannerPoint", mannerPoint);
+	  		
+	  		return "userProfile";
+	  	}
+	  	
+	  	@RequestMapping(value = "/userReport.go")
+	  	public String userReportPage(Model model, @RequestParam String userId, @RequestParam String userIdx) {
+	  		model.addAttribute("userId",userId);
+	  		model.addAttribute("userIdx",userIdx);
+	  		return "userReport";
+	  	}
+	  	@RequestMapping(value = "/userReport.do")
+	  	public String userReport(@RequestParam HashMap<String, String> params) {
+	  		logger.info("넘어 오는 값들: "+params);
+	  		params.put("reportContent",params.get("report")+params.get("content") );
+	  		service.userReport(params);
+	  		return "redirect:/userReport.go?userId="+params.get("reportId")+"&userIdx="+params.get("userIdx");
 	  	}
 
 }

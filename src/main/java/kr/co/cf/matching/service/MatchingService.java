@@ -336,6 +336,11 @@ public class MatchingService {
 		
 	}
 
+	public void gameMvp(String matchingIdx, String userId) {
+		matchingDAO.gameMvp(matchingIdx,userId);
+		
+	}
+
 	
 	
 	

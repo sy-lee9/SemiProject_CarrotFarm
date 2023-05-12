@@ -16,6 +16,11 @@ public class JoinDTO {
 	private String favTime;
 	private String si;
 	private String gu;
+	private String photoName;
+	private String subject;
+	private String gameDate;
+	private String gamePlay;
+	private int userIdx;
 	
 	
 	public String getUserId() {
@@ -89,6 +94,36 @@ public class JoinDTO {
 	}
 	public void setGu(String gu) {
 		this.gu = gu;
+	}
+	public String getSubject() {
+		return subject;
+	}
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+	public String getGameDate() {
+		return gameDate;
+	}
+	public void setGameDate(String gameDate) {
+		this.gameDate = gameDate;
+	}
+	public String getGamePlay() {
+		return gamePlay;
+	}
+	public void setGamePlay(String gamePlay) {
+		this.gamePlay = gamePlay;
+	}
+	public String getPhotoName() {
+		return photoName;
+	}
+	public void setPhotoName(String photoName) {
+		this.photoName = photoName;
+	}
+	public int getUserIdx() {
+		return userIdx;
+	}
+	public void setUserIdx(int userIdx) {
+		this.userIdx = userIdx;
 	}
 	
 	

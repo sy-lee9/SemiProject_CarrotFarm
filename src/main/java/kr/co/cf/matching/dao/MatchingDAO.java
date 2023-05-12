@@ -142,6 +142,8 @@ public interface MatchingDAO {
 
 	void commentReport(HashMap<String, String> params);
 
+	void gameMvp(String matchingIdx, String userId);
+
 	
 
 	
