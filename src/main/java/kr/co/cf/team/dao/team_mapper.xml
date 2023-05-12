@@ -12,7 +12,6 @@
 			(SELECT gu FROM location WHERE locationIdx = t.locationIdx) AS gu
 		FROM team t 
 			WHERE teamDisband = 0 
-				AND t.locationIdx = (SELECT locationIdx FROM userData WHERE userId = #{userId})
 					ORDER BY teamIdx DESC LIMIT 10 OFFSET #{offset};
 	</select>
 	
@@ -24,7 +23,6 @@
 		FROM team t 
 		WHERE teamMatchState = #{matchState} 
 		AND teamDisband = 0
-		AND t.locationIdx = (SELECT locationIdx FROM userData WHERE userId = #{userId})
 		ORDER BY teamIdx DESC		
 		LIMIT 10 OFFSET #{offset};
 	</select>
@@ -37,7 +35,6 @@
 		FROM team t 
 		WHERE teamName LIKE CONCAT(#{searchText})
 		AND teamDisband = 0
-		AND t.locationIdx = (SELECT locationIdx FROM userData WHERE userId = #{userId})
 		ORDER BY teamIdx DESC		
 		LIMIT 10 OFFSET #{offset};
 	</select>

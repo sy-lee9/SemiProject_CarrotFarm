@@ -126,7 +126,7 @@
 		list.forEach(function(list, idx){
 			content +='<tr>';
 			content +='<td>'+list.gu+'</td>';
-			content +='<td><a href="../matching/detail.go?matchingIdx=${list.matchingIdx}">'+list.subject+'</a></td>';
+			content +='<td><a href="../matching/detail.go?matchingIdx='+list.matchingIdx+'">'+list.subject+'</a></td>';
 			content +='<td>'+list.gameDate+'</td>';
 			content +='<td>'+list.gamePlay+' : '+list.gamePlay+'</td>';
 			content +='</tr>';
