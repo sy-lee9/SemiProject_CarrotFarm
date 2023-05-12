@@ -25,7 +25,7 @@
 
 	<insert id="photoWrite" parameterType="String">
       INSERT INTO photo(categoryId,photoName,photoId) 
-      VALUES((select categoryId from category where categoryKind = 'userProfile'),#{param1},'userProfile')
+      VALUES((select categoryId from category where categoryKind = 'ProFile'),#{param1},'userProfile')
    	</insert>
    	
    	<select id="locationFind" resultType="int">
