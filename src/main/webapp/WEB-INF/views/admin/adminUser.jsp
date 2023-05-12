@@ -56,7 +56,6 @@
 			</tr>
 		</thead>
 		<tbody>
-
 			
 			
 			<tbody id="list">			
@@ -73,9 +72,7 @@
 			      </nav>
 			    </div>
 			  </th>
-			</tr>
-		</tbody>	
-
+			</tr>	
 		</tbody>
 	</table>
 			
@@ -160,7 +157,7 @@ function listPrint(list){
 		content +='<td><input type="checkbox" value="'+item.userId+'"</td>';
 		content +='<td>'+item.userIdx+'</td>';
 		content +='<td>'+item.userState+'</td>';
-		content +='<td>'+item.userId+'</td>';
+		content +='<td><a href="userprofile.go?userId="'+item.userId+'"/>'+item.userId+'</td>';
 		content +='<td>'+item.userName+'</td>';
 		console.log(item.photoName);
 		if(item.photoName==null){

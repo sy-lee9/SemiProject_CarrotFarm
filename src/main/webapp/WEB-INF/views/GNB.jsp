@@ -5,25 +5,28 @@
 <head>
 <meta charset="UTF-8">
 <title>🏀 당근농장</title>
-	
-	<style>
-	
-		
-		/* 추가적인 스타일 시트 */
-		.navbar-brand {
-		
-			width: 150px;
-			height: 50px;
-			background-image: url("/photo/mainLogo.png"); /* 로고 이미지 추가 */
-			background-size: cover;
-			background-position: center;
-			background-repeat: no-repeat;
-		}
 
-		.navbar-light .navbar-nav .nav-link {
-			color: #000000; /* 네비게이션 바 텍스트 색상 */
-		}
+   
+   <style>
+   
+      
+      /* 추가적인 스타일 시트 */
+      .navbar-brand {
+      
+         width: 150px;
+         height: 50px;
+         background-image: url("/photo/mainLogo.png"); /* 로고 이미지 추가 */
+         background-size: cover;
+         background-position: center;
+         background-repeat: no-repeat;
+      }
 
+
+      .navbar-light .navbar-nav .nav-link {
+         color: #000000; /* 네비게이션 바 텍스트 색상 */
+      }
+
+<<<<<<< HEAD
 		.navbar-light .navbar-nav .nav-link.active,
 		.navbar-light .navbar-nav .nav-link:hover {
 			color: #FFA500; /* 선택된 메뉴 텍스트 색상 */
@@ -85,8 +88,8 @@
 
 
 
-	
-	
+   
+   
 </body>
 <script>
 
