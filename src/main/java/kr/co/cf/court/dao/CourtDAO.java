@@ -64,6 +64,8 @@ public interface CourtDAO {
 
 	void courtTipOff(HashMap<String, String> params);
 
+	void courtReviewReport(HashMap<String, String> params);
+
 	
 
 }

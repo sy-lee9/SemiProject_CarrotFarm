@@ -94,7 +94,7 @@
 	function listCall(page){
 		$.ajax({
 			type:'post',
-			url:'team/list.ajax',
+			url:'team/teamList.ajax',
 			data:{
 				'page':page,
 				'matchState':selectedMatchState,
@@ -139,6 +139,12 @@
 		});
 		$('#list').empty();
 		$('#list').append(content);
+	}
+	
+	var msg = "${msg}";
+	console.log(msg);
+	if(msg != ''){
+		alert(msg);
 	}
 </script>
 </html>

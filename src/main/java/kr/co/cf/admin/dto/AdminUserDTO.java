@@ -7,10 +7,22 @@ public class AdminUserDTO {
 	private String nickname;
 	private String userName;
 	private int userIdx;
-	private Date userJoinDate;
+	private String userJoinDate;
 	private String teamName;
 	private String email;
 	private String photoName;
+
+	private String userState;
+	public String getUserState() {
+		return userState;
+	}
+	public void setUserState(String userState) {
+		this.userState = userState;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
 	public String getPhotoName() {
 		return photoName;
 	}
@@ -47,10 +59,10 @@ public class AdminUserDTO {
 	public void setUserIdx(int userIdx) {
 		this.userIdx = userIdx;
 	}
-	public Date getUserJoinDate() {
+	public String getUserJoinDate() {
 		return userJoinDate;
 	}
-	public void setUserJoinDate(Date userJoinDate) {
+	public void setUserJoinDate(String userJoinDate) {
 		this.userJoinDate = userJoinDate;
 	}
 	public String getTeamName() {

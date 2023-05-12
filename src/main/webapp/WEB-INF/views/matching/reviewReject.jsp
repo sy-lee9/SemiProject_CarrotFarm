@@ -7,16 +7,19 @@
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 <style>
-
+	body {
+		margin-top: 120;
+		text-align:center;
+	}
 </style>
 </head>
 <body>
-	당근농장
+
+	<h3>리뷰는 경기에 참여한 사람만 작성 가능합니다. </h3>
+	
+	<input type="button" onclick="window.close()" id="closeBtn" value="닫기"/>
 </body>
 <script>
-var msg = "${msg}";
-if(msg != ""){
-	alert(msg);
-}
+
 </script>
 </html>

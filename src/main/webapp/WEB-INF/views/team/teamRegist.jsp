@@ -38,6 +38,7 @@
 </head>
 <body>
 	<form action="teamRegist.do" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="loginId" value="${loginId}"/>
 	<table>
 		<thead>
 			<colgroup>
@@ -202,12 +203,6 @@
 	if(msg != ""){
 		alert(msg);
 	}
-	
-	
-	
-	
-
-
 
 </script>
 </html>

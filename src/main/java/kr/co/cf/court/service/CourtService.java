@@ -191,7 +191,7 @@ public class CourtService {
 				fileSave(courtReviewIdx,photo,userId,type);
 			}else {
 				String type="fileChange";
-				File file = new File("C:/img/upload/"+photoName);
+					File file = new File("C:/img/upload/"+photoName);
 				if(file.exists()) {
 					file.delete();
 				}
@@ -204,6 +204,11 @@ public class CourtService {
 
 	public void courtTipOff(HashMap<String, String> params) {
 		courtdao.courtTipOff(params);
+		
+	}
+
+	public void courtReviewReport(HashMap<String, String> params) {
+		courtdao.courtReviewReport(params);
 		
 	}
 

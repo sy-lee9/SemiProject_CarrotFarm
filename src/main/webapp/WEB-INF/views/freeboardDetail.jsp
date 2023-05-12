@@ -5,9 +5,11 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<link rel="stylesheet" href="resources/css/commons.css">
 <style>
 @charset "UTF-8";
+
+<table frame=void>
+
 
 table{
 	width : 100%;
@@ -58,13 +60,49 @@ textarea{
 			</tr>
 			</c:if>
 			<tr>
-				<th colspan="2">
+				<th colspan="4">
 					<input type = "button" onclick="location.href='./freeboardList.do'" value="리스트"/>
 					<input type = "button" value="삭제" onclick="if(confirm('정말로 삭제하시겠습니까?')){location.href='./freeboardDelete.do?bidx=${dto.boardIdx}';}">
 					<input type = "button" onclick="location.href='./freeboardUpdate.go?bidx=${dto.boardIdx}'" value="수정"/>				
 					<input type = "button" value="신고"/>
 				</th>
 			</tr>
+			<tr>
+	     		<th colspan="7">
+		     		<table>
+			     		<c:forEach items="${fcommentList}" var="fcommentList">
+			     			<tr>
+			     				<th>${fcommentList.userId} </th>
+			     				<td >${fcommentList.commentContent}</td>
+			     				<td>${fcommentList.commentWriteTime}</td>
+			     				<td>
+			     					<c:if test="${fcommentList.userId eq loginId}">
+			     						<a  href="freeboardcommentUpdate.go?commentIdx=${fcommentList.commentIdx}&bidx=${dto.boardIdx}" >수정</a> 
+			     						/ 
+			     						<a href="freeboardcommentDelete.do?commentIdx=${fcommentList.commentIdx}&bidx=${dto.boardIdx}">삭제</a>
+			     					</c:if>
+			     					<c:if test="${fcommentList.userId ne loginId}">
+			     						<a href="#">신고</a>
+			     					</c:if>     					
+			     				</td>
+			     			</tr>
+			     		</c:forEach>
+		     		</table>
+		     	</th>	     	
+		     </tr>
+		     <tr>
+			     <form method="post" action="freeboardcommentWrite.do?categoryId=b001&comentId=${dto.boardIdx}">
+			     		<th>
+			     			<input type="text" name="userId" value="${loginId}" style= "border:none;" readonly>
+			     		</th>
+			     		<th colspan="5">
+			     			<input type="text" name="commentContent">
+			     		</th>
+			     		<th>
+			     			<button>작성</button>
+			     		</th>
+			     </form> 
+		     </tr>
 		</table>
 </body>
 <script>

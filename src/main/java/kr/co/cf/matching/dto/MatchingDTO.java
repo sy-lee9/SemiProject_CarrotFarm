@@ -31,10 +31,53 @@ public class MatchingDTO {
 	private String commentIdx;
 	private String alarmcontent;
 	private String alarmKind;
+	private String teamName;
+	private String teamGrade;
+	private int tagIdx;
+	private String tagContent;
+
 	
 	
+	public int getTagIdx() {
+		return tagIdx;
+	}
+	public void setTagIdx(int tagIdx) {
+		this.tagIdx = tagIdx;
+	}
+	public String getTagContent() {
+		return tagContent;
+	}
+	public void setTagContent(String tagContent) {
+		this.tagContent = tagContent;
+	}
+	public String getTeamGrade() {
+		return teamGrade;
+	}
+	public void setTeamGrade(String teamGrade) {
+		this.teamGrade = teamGrade;
+	}
+	private int teamIdx;
+	private int teamFavNum;
 	
 	
+	public int getTeamIdx() {
+		return teamIdx;
+	}
+	public void setTeamIdx(int teamIdx) {
+		this.teamIdx = teamIdx;
+	}
+	public int getTeamFavNum() {
+		return teamFavNum;
+	}
+	public void setTeamFavNum(int teamFavNum) {
+		this.teamFavNum = teamFavNum;
+	}
+	public String getTeamName() {
+		return teamName;
+	}
+	public void setTeamName(String teamName) {
+		this.teamName = teamName;
+	}
 	public String getAlarmcontent() {
 		return alarmcontent;
 	}
