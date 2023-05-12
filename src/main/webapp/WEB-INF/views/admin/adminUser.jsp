@@ -56,24 +56,7 @@
 			</tr>
 		</thead>
 		<tbody>
-<<<<<<< HEAD
-			<c:forEach items="${list}" var="member">
-				
-				<tr>
-					<td><input type="checkbox"/></td>
-					<td>${member.userIdx}</td>
-					<td>사용중</td>
-					<td><a href="userprofile.go?userId=${member.userId}">${member.userId}</a></td>
-					<td>${member.userName}</td>
-					<td><img width="50" src="/photo/${member.photoName}"/></td>
-					<td>${member.nickname}</td>
-					<td><button onclick="nicknameChange('${member.userId}')">닉네임 변경</button></td>
-					<td><button>사진 변경</button></td>
-					<td>가입팀</td>
-					<td>${member.userJoinDate}</td>
-				</tr>
-			</c:forEach>
-=======
+
 			
 			
 			<tbody id="list">			
@@ -92,8 +75,7 @@
 			  </th>
 			</tr>
 		</tbody>	
-	
->>>>>>> origin/master
+
 		</tbody>
 	</table>
 			
