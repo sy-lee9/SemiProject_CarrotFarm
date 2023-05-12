@@ -30,12 +30,12 @@
 <body>
 
 	<br><br/>
-	<input type ="text" id="freeboardSearchInput" placeholder="제목 또는 닉네임을 입력">
-	<button id ="freeboardSearchButton">검색</button>
+	<input type ="text" id="teampictureboardSearchInput" placeholder="제목 또는 닉네임을 입력">
+	<button id ="teampictureboardSearchButton">검색</button>
 
 	<br><br/>
 	<c:if test="${loginId != 'guest' }">
-	<button onclick="location.href='freeboardWrite.go'">글쓰기 등록</button>
+	<button onclick="location.href='teampictureboardWrite.go'">글쓰기 등록</button>
 	</c:if>
 	
 	<table>
@@ -67,8 +67,8 @@ var searchText = 'default';
 var showPage = 1;
 listCall(showPage);
 
-$('#freeboardSearchButton').click(function(){
-	searchText = $('#freeboardSearchInput').val();
+$('#teampictureboardSearchButton').click(function(){
+	searchText = $('#teampictureboardSearchInput').val();
 	listCall(showPage);
 	$('#pagination').twbsPagination('destroy');
 });
@@ -76,7 +76,7 @@ $('#freeboardSearchButton').click(function(){
 function listCall(page){
 	$.ajax({
 		type:'post',
-		url:'flist.ajax',
+		url:'tplist.ajax',
 		data:{
 			'page':page,
 			'search':searchText
@@ -84,8 +84,8 @@ function listCall(page){
 		dataType:'json',
 		success:function(data){
 			console.log(data);
-			console.log(data.freeboardList);
-			listPrint(data.freeboardList);
+			console.log(data.teampictureboardList);
+			listPrint(data.teampictureboardList);
 			
 			$('#pagination').twbsPagination({
 				startPage:data.currPage, 
@@ -106,13 +106,13 @@ function listCall(page){
 	});
 }
 
-function listPrint(falist){
+function listPrint(tpalist){
 	var content = '';
 
-	falist.forEach(function(item,idx){
+	tpalist.forEach(function(item,idx){
 		content +='<tr>';
 		content +='<td>'+item.boardIdx+'</td>';
-		content +='<td><a href="freeboardDetail.do?bidx='+item.boardIdx+'">'+item.subject+'</a></td>';
+		content +='<td><a href="teampictureboardDetail.do?bidx='+item.boardIdx+'">'+item.subject+'</a></td>';
 		content +='<td>'+item.userId+'</td>';
 		
 

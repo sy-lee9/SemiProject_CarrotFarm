@@ -182,15 +182,185 @@ public class BoardService {
 		dao.fcommentUpdate(params);
 	}
 
+	public void fboardReport(HashMap<String, String> params) {
+		dao.fboardReport(params);
+		
+	}
+
+	public void fboardCommentReport(HashMap<String, String> params) {
+		dao.fboardCommentReport(params);
+		
+	}
 	
+	public void fdownHit(String bidx) {
+		dao.fdownHit(bidx);
+		
+	}
 	
-	
+
 	
 	
 	
 	
 	
 	public ArrayList<BoardDTO> nlist() {
+		return dao.nlist();
+	}
+	
+	public HashMap<String, Object> nalist(int page, String search) {
+		
+		logger.info(page + "페이지 보여줘");
+		logger.info("search : " + search);
+
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
+		int offset =(page-1) * 10;
+		
+		int total = dao.natotalCount();
+		
+		if (search.equals("default") || search.equals("")) {
+			total = dao.natotalCount();
+			
+		} else {
+			total = dao.natotalCountSearch(search);
+		};
+		
+		
+
+		int range = total%10 == 0 ? total/10 : (total/10)+1;
+		logger.info("전체 게시물 수 : " + total);
+		logger.info("총 페이지 수 : " + range);
+		
+		page = page >range ? range : page;
+		
+		ArrayList<BoardDTO> nalist = dao.nalist(10, offset);
+		
+		//params.put("offset", offset);
+		
+		if (search.equals("default") || search.equals("")) {
+			nalist = dao.nalist(10, offset);
+			
+		} else {
+			nalist = dao.nalistSearch(search);
+		}
+		
+		map.put("currPage", page);
+		map.put("pages", range);
+		
+		map.put("noticeboardList", nalist);
+		return map;
+	}
+	
+	public String nwrite(MultipartFile photo, HashMap<String, String> params) {
+		
+		String page = "redirect:/noticeboardList.do";
+		BoardDTO dto = new BoardDTO();
+		dto.setSubject(params.get("subject"));
+		dto.setUserId(params.get("userId"));
+		dto.setContent(params.get("content"));
+		dto.setCategoryId(params.get("categoryId"));
+		
+		
+		
+		int row = dao.nwrite(dto);
+		logger.info("업데이트 row : " + row);
+		
+		int bidx = dto.getBoardIdx();
+		logger.info("방금 인서트한 bidx : " + bidx);
+		
+		page = "redirect:/noticeboardDetail.do?bidx=" + bidx;
+		
+		if (!photo.getOriginalFilename().equals("")) {
+			logger.info("파일 업로드 작업");
+			
+			nfileSave(bidx,photo);
+		}
+		return page;
+	}
+		
+	private void nfileSave(int photoIdx, MultipartFile photo) {
+		String OriginalFileName = photo.getOriginalFilename();
+		String ext = OriginalFileName.substring(OriginalFileName.lastIndexOf("."));
+		String photoId = System.currentTimeMillis() + ext;
+		logger.info(OriginalFileName + " -> " + photoId);
+		
+		try {
+			byte[] bytes = photo.getBytes();
+			Path path = Paths.get("C:/img/upload/" + photoId);
+			Files.write(path,bytes);
+			logger.info(photoId + "세이브 완료");
+			dao.nfileWrite(photoIdx, photoId);
+			logger.info("포토인덱스 : " + photoIdx + "포토네임 : " + photoId);
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+		
+	}
+
+	public BoardDTO ndetail(String boardIdx, String flag) {
+		if(flag.equals("detail")) {
+			dao.nupHit(boardIdx);
+		}
+		BoardDTO dto = dao.ndetail(boardIdx);
+		logger.info("boardIdx : " + boardIdx);
+		logger.info("dto : " + dto);
+		
+		logger.info("사진이름" +dto.getPhotoName());
+		return dto;
+	}
+
+	public void ndelete(String bidx) {
+		String newFileName = dao.nfindFile(bidx);
+		logger.info("파일 이름 : " + newFileName);
+		
+		int row = dao.ndelete(bidx);
+		logger.info("삭제 데이터 : " + row);
+		
+		if (newFileName != null && row > 0) {
+			File file = new File("C:/img/upload/" + newFileName);
+			if (file.exists()) {
+				file.delete();
+			}
+		}
+	}
+
+	public String nupdate(MultipartFile photo, HashMap<String, String> params) {
+		int bidx = Integer.parseInt(params.get("bidx"));
+		int row = dao.nupdate(params);
+		logger.info("bidx 값 : " + bidx);
+		logger.info("row 값 : " + row);
+		
+		if(photo != null && !photo.getOriginalFilename().equals("")) {
+			nfileSave(bidx,photo);
+		}
+		
+		String page = row >0 ? "redirect:/noticeboardDetail.do?bidx=" + bidx : "redirect:/noticeboardList.do";
+		logger.info("update => " + page);
+		return page;
+	}
+
+
+	public void nboardReport(HashMap<String, String> params) {
+		dao.nboardReport(params);
+		
+	}
+
+	public void nboardCommentReport(HashMap<String, String> params) {
+		dao.nboardCommentReport(params);
+		
+	}
+	
+	public void ndownHit(String bidx) {
+		dao.ndownHit(bidx);
+		
+	}
+	
+	public String nuserRight(String loginId) {
+		return dao.nuserRight(loginId);
+	}
+	
+	/*public ArrayList<BoardDTO> nlist() {
 		return dao.nlist();
 	}
 	
@@ -301,10 +471,8 @@ public class BoardService {
 		return page;
 	}
 
-	public String userRight(String loginId) {
-		return dao.userRight(loginId);
-	}
 	
+	*/
 	
 	
 	

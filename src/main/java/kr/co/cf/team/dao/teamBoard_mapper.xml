@@ -5,6 +5,121 @@
 
 <mapper namespace="kr.co.cf.team.dao.TeamBoardDAO">
 	
+	<select id="tplist" resultType="kr.co.cf.team.dto.TeamBoardDTO">
+		SELECT
+			boardIdx, userId, subject, content, writeTime, bHit
+		FROM board WHERE categoryId = 'b011' ORDER BY boardIdx DESC 
+	</select>
+	
+	<select id="tpalist" resultType="kr.co.cf.team.dto.TeamBoardDTO">
+		SELECT
+			boardIdx, userId, subject, writeTime, bHit
+		FROM board WHERE categoryId = 'b011' ORDER BY boardIdx DESC LIMIT #{param1} OFFSET #{param2}
+	</select>
+	
+	<select id="tpalistSearch" resultType="kr.co.cf.team.dto.TeamBoardDTO">
+		SELECT
+			boardIdx, userId, subject, writeTime, bHit
+		FROM board WHERE categoryId = 'b011' 
+		AND (subject LIKE CONCAT('%' #{search} '%') OR 
+			userId 
+		LIKE CONCAT('%' #{search} '%'))
+	</select>
+	
+	
+	
+	<select id="tpatotalCount" resultType="int">
+		SELECT COUNT(boardIdx) FROM board
+	</select>
+	
+	<select id="tpatotalCountSearch" resultType="int">
+		SELECT COUNT(boardIdx) FROM board
+			WHERE subject LIKE CONCAT('%' #{param1} '%') OR userId LIKE CONCAT('%' #{param1} '%')
+	</select>
+	
+	<insert 
+		useGeneratedKeys="true"
+		keyColumn="boardIdx"
+		keyProperty="boardIdx"
+		id="tpwrite" parameterType="kr.co.cf.team.dto.TeamBoardDTO">
+		INSERT INTO board(subject, userId, content, categoryId)
+			VALUES(#{subject}, #{userId}, #{content}, 'b011')
+	</insert>
+	
+	<insert id = "tpfileWrite">
+		INSERT INTO photo(categoryId, photoId, photoName)
+			VALUES('p',#{param1}, #{param2}) 
+	</insert>
+	
+	<update id = "tpupHit">
+		UPDATE board SET bHit = bHit+1
+			WHERE boardIdx = #{param1}
+	</update>
+	
+	<select id = "tpdetail" resultType="kr.co.cf.team.dto.TeamBoardDTO">
+		SELECT
+			b.boardIdx, b.userId, b.subject, b.content, b.writeTime,
+			p.photoIdx, p.photoName, p.photoId
+		FROM board b left JOIN photo p ON (b.boardIdx = p.photoId)
+		WHERE b.boardIdx = #{boardIdx}
+	</select>
+	
+	<delete id="tpdelete">
+		DELETE FROM board WHERE boardIdx = #{param1}
+	</delete>
+	
+	<select id="tpfindFile" resultType="String">
+		SELECT photoName FROM photo WHERE photoIdx = #{param1}
+	</select>
+	
+	<update id="tpupdate" parameterType="hashmap">
+		UPDATE board SET subject = #{subject}
+			,userId = #{userId}
+			,content = #{content}
+		WHERE boardIdx = #{bidx}
+	</update>
+	
+
+	
+	<select id="tpcommentList" resultType="kr.co.cf.team.dto.TeamBoardDTO">
+		SELECT
+			commentIdx,
+			userId,
+			commentWriteTime,
+			commentContent
+		FROM comment
+		WHERE categoryId='b011' AND comentId=#{param1}
+	</select>
+	
+	<insert id="tpcommentWrite" parameterType="hashmap">
+		INSERT INTO comment(userId, categoryId,comentId,commentContent) VALUES(#{userId},#{categoryId},#{comentId},#{commentContent})
+	</insert>
+	
+	<delete id="tpcommentDelete">
+		DELETE FROM comment WHERE commentIdx = #{param1};
+	</delete>
+	
+	<select id="tpcommentGet" resultType="kr.co.cf.team.dto.TeamBoardDTO">
+		SELECT
+			commentIdx,
+			userId,
+			commentWriteTime,
+			commentContent
+		FROM comment
+		WHERE commentIdx=#{param1}
+	</select>
+	
+	<update id="tpcommentUpdate" parameterType="hashmap">
+		UPDATE comment SET commentContent=#{commentContent} WHERE commentIdx=#{commentIdx}
+	</update>
+	
+	<insert id="tpboardReport" parameterType="hashmap">
+		INSERT INTO report(categoryId, userId, reportContent, reportState, reportId) VALUES ('rfb',#{userId},#{reportContent},'미처리',#{boardIdx})
+	</insert>
+	
+	<insert id="tpboardCommentReport" parameterType="hashmap">
+		INSERT INTO report(categoryId, userId, reportContent, reportState, reportId) VALUES ('rfbc',#{userId},#{reportContent},'미처리',#{commentIdx})
+	</insert>
 
 
 </mapper>
