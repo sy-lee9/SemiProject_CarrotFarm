@@ -7,6 +7,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import kr.co.cf.main.dto.JoinDTO;
+import kr.co.cf.matching.dto.MatchingDTO;
+import kr.co.cf.team.dto.TeamDTO;
 
 public interface JoinDAO {
 
@@ -16,7 +18,7 @@ public interface JoinDAO {
 	
 	int nickChk(String nickName);
 
-	int photoWrite(String photoName);
+	int photoWrite(String photoName,String userId);
 
 	int joinData(JoinDTO dto);
 
@@ -39,7 +41,33 @@ public interface JoinDAO {
 	int userInfoUpdatedata(HashMap<String, String> params);
 
 	int userInfoUpdateloc(int locationIdx, String userId);
+	
 
+	ArrayList<JoinDTO> gameList(HashMap<String, Object> params);
+
+	ArrayList<JoinDTO> GameDateList(HashMap<String, Object> params);
+
+	ArrayList<JoinDTO> SearchGameList(HashMap<String, Object> params);
+
+	ArrayList<JoinDTO> GameDateListDesc(HashMap<String, Object> params);
+
+	ArrayList<JoinDTO> GameDateListAsc(HashMap<String, Object> params);
+
+	ArrayList<JoinDTO> profileGames(String userId);
+
+	JoinDTO profileInfo(String userId);
+
+	void mannerDefalut(String userId);
+
+	void photoDefalut(String userId);
+
+	void photoUpdate(String photoName, String userId);
+
+	String selectPhoto(String userId);
+
+	void userReport(HashMap<String, String> params);
+
+	
 
 
 

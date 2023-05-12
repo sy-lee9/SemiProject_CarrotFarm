@@ -17,6 +17,8 @@
 </style>
 </head>
 <body>
+
+<jsp:include page="../loginBox.jsp"></jsp:include>
 	<select name="stateCategory" id="stateCategory">
 		 <option value="default">회원상태</option>
          <option value="사용중">사용중</option>
@@ -70,9 +72,7 @@
 			      </nav>
 			    </div>
 			  </th>
-			</tr>
-		</tbody>	
-	
+			</tr>	
 		</tbody>
 	</table>
 			
@@ -87,6 +87,8 @@
 	<button onclick="location.href='logout'">로그아웃</button>
 	<button onclick="location.href='userdelete.go'">회원탈퇴</button>
 	<button onclick="location.href='userinfo.go'">회원정보</button>
+	<button onclick="location.href='mygames'">참여경기 리스트</button>
+	<button onclick="location.href='userprofile.go?userId=${sessionScope.loginId}'">회원 프로필</button>
 </body>
 <script>
 
@@ -155,7 +157,7 @@ function listPrint(list){
 		content +='<td><input type="checkbox" value="'+item.userId+'"</td>';
 		content +='<td>'+item.userIdx+'</td>';
 		content +='<td>'+item.userState+'</td>';
-		content +='<td>'+item.userId+'</td>';
+		content +='<td><a href="userprofile.go?userId="'+item.userId+'"/>'+item.userId+'</td>';
 		content +='<td>'+item.userName+'</td>';
 		console.log(item.photoName);
 		if(item.photoName==null){

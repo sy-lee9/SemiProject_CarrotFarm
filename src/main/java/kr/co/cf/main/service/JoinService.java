@@ -1,5 +1,6 @@
 package kr.co.cf.main.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -9,7 +10,9 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,6 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.cf.main.dao.JoinDAO;
 import kr.co.cf.main.dto.JoinDTO;
+import kr.co.cf.matching.dto.MatchingDTO;
+import kr.co.cf.team.dto.TeamDTO;
 
 
 @Service
@@ -55,8 +60,6 @@ public String write(MultipartFile userProfile, HashMap<String, String> params) {
       logger.info("join service");
        String msg = "회원가입에 실패하였습니다.";
        int locationIdx = locationconf(params);
-       
-       int photoSave = 0;
 
       JoinDTO dto = new JoinDTO();
       dto.setUserId(params.get("userId"));
@@ -73,10 +76,11 @@ public String write(MultipartFile userProfile, HashMap<String, String> params) {
       
       if(!userProfile.getOriginalFilename().equals("")) {
             logger.info("파일 업로드 작업");
-            if(photoSave(userProfile,params) == 1) {
-               photoSave = 1;
-            }
-         }
+            String type="photoWrite";
+            photoSave(userProfile,params,type);
+      }else {
+    	  	dao.photoDefalut(params.get("userId"));
+      }
       
       if(dao.join(dto) == 1) {
          dao.joinData(dto);
@@ -96,14 +100,16 @@ private int locationconf(HashMap<String, String> params) {
    return locationIdx;
 }
 
-private int photoSave(MultipartFile userProfile,HashMap<String, String> params) {
+private int photoSave(MultipartFile userProfile,HashMap<String, String> params, String type) {
     int photoWrite = 0;
     
     // 1. 파일을 C:/img/upload/ 에 저장
           //1-1. 원본 이름 추출
           String oriFileName = userProfile.getOriginalFilename();
           //1-2. 새이름 생성
-          String photoName = params.get("userId")+oriFileName;
+          String ext = oriFileName.substring(oriFileName.lastIndexOf("."));
+          String photoName = params.get("userId")+System.currentTimeMillis()+ext;
+          
           logger.info(photoName);
           try {
              byte[] bytes = userProfile.getBytes();//1-3. 바이트 추출
@@ -113,8 +119,21 @@ private int photoSave(MultipartFile userProfile,HashMap<String, String> params) 
              logger.info(photoName+" save OK");
              // 2. 저장 정보를 DB 에 저장
              //2-1. userProfile, photoName insert
-             photoWrite = dao.photoWrite(photoName);
-             logger.info("프로필 사진 업로드 여부: "+photoWrite);
+             String userId = params.get("userId");
+             if(type.equals("photoWrite")) {
+            	 photoWrite = dao.photoWrite(photoName, userId);
+            	 logger.info("프로필 사진 업로드 여부: "+photoWrite);
+             }else {
+            	 String oriPhotoName = dao.selectPhoto(userId);
+            	 logger.info(oriPhotoName);
+            	 File file = new File("c:/img/upload/"+oriPhotoName);
+            	 if(file.exists()) {
+            		 file.delete();
+            	 }
+            	 dao.photoUpdate(photoName,userId);
+            	 
+             }
+
                       
           } catch (IOException e) {
              e.printStackTrace();
@@ -213,7 +232,7 @@ private int photoSave(MultipartFile userProfile,HashMap<String, String> params) 
           return dao.userInfo(attribute);
     }
       
-      public String userInfoUpdate(HashMap<String, String> params) {		
+      public String userInfoUpdate(HashMap<String, String> params, MultipartFile photo) {		
   		String userId = params.get("userId");
   		int locationIdx = locationconf(params);
   		int row = dao.userInfoUpdate(params);
@@ -221,9 +240,94 @@ private int photoSave(MultipartFile userProfile,HashMap<String, String> params) 
   		row = dao.userInfoUpdateloc(locationIdx,userId);
   		String page = row>0 ? "redirect:/userinfo.go?userId="+userId : "redirect:/userinfo.go";
   		logger.info("update => "+page);
-  		
+  		 if(!photo.getOriginalFilename().equals("")) {
+  			String type="fileChange";
+  			 photoSave(photo,params,type); 
+  		 }
   		return page;
   	}
+      
+      public HashMap<String, Object> gameList(HashMap<String, Object> params) { 
+  		
+  		int page = Integer.parseInt((String) params.get("page"));
+  		String selectedGameDate = String.valueOf(params.get("selectedGameDate"));
+  		String searchText = String.valueOf(params.get("searchText"));
+  		logger.info(page+" 페이지 보기");
+  		logger.info("한 페이지에 "+10+" 개씩 보기");
+  		
+  		ArrayList<JoinDTO> list = new ArrayList<JoinDTO>();
+  		HashMap<String, Object> map = new HashMap<String, Object>();	
+
+  		//총 페이지 수 
+  		int offset = (page-1)*10;
+  		
+  		params.put("offset", offset);
+  		
+  				
+  				if(searchText.equals("default") || searchText.equals("")) {
+  					if(selectedGameDate.equals("default")) {
+  						// 전체 보여주기
+  							list = dao.gameList(params);
+  							logger.info("gameList size : "+list.size());					
+  					}else{
+  						// 경기순을 선택한 경우
+  						if(selectedGameDate.equals("DESC")) {
+  								list = dao.GameDateListDesc(params);
+  								logger.info("GameDateList size : "+list.size());		
+  						}else {
+  							params.put("range", "ASC");
+  							list = dao.GameDateListAsc(params);
+  							logger.info("GameDateList size : "+list.size());					
+  						}
+  					}
+  				}else {
+  					// 검색어 입력한 경우
+  						list = dao.SearchGameList(params);		
+  						logger.info("SearchGameList size : "+list.size());
+  				}
+  		
+  		logger.info("totalGameList size : "+list.size());
+  		
+  		// 만들 수 있는 총 페이지 수 
+  		// 전체 게시물 / 페이지당 보여줄 수
+  		int total = list.size();
+  		logger.info("total "+total);
+  		int range = total%10 == 0 ? total/10 : (total/10)+1;
+  		logger.info("전체 게시물 수 : "+total);
+  		logger.info("총 페이지 수 : "+range);
+  		
+  		page = page > range ? range : page;
+  		
+  		map.put("currPage", page);
+  		map.put("pages", range);
+  				
+  		logger.info("list : "+ list);
+  		map.put("list", list);
+  		logger.info("map : "+ map);
+  		return map;
+  	}
+
+	public ArrayList<JoinDTO> profileGames(String userId) {
+		return dao.profileGames(userId);
+	}
+
+	public JoinDTO profileInfo(String userId) {
+		
+		return dao.profileInfo(userId);
+	}
+
+	public void mannerDefalut(String userId) {
+		
+		dao.mannerDefalut(userId);
+	}
+
+	public void userReport(HashMap<String, String> params) {
+		dao.userReport(params);
+		
+	}
+	
+	
+
 
       
 }

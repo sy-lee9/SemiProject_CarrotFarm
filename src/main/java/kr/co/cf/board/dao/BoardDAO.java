@@ -40,22 +40,30 @@ public interface BoardDAO {
 
 	void fcommentUpdate(HashMap<String, String> params);
 	
+	void fboardReport(HashMap<String, String> params);
+
+	void fboardCommentReport(HashMap<String, String> params);
 	
+	void fdownHit(String bidx);
 
 	
 	
 	
-
+	
 	ArrayList<BoardDTO> nlist();
-	
+
 	ArrayList<BoardDTO> nalist(int cnt, int offset);
 	
+	ArrayList<BoardDTO> nalistSearch(String search);
+	
 	int natotalCount();
-
+	
+	int natotalCountSearch(String search);
+	
 	int nwrite(BoardDTO dto);
 
 	void nfileWrite(int photoIdx, String photoId);
-	
+
 	void nupHit(String boardIdx);
 
 	BoardDTO ndetail(String boardIdx);
@@ -65,8 +73,27 @@ public interface BoardDAO {
 	int ndelete(String bidx);
 
 	int nupdate(HashMap<String, String> params);
+	
+	ArrayList<BoardDTO> ncommentList(String bidx);
 
-	String userRight(String loginId);
+	void ncommentWrite(HashMap<String, String> params);
+
+	void ncommentDelete(String commentIdx);
+
+	BoardDTO ncommentGet(String commentIdx);
+
+	void ncommentUpdate(HashMap<String, String> params);
+	
+	void nboardReport(HashMap<String, String> params);
+
+	void nboardCommentReport(HashMap<String, String> params);
+	
+	void ndownHit(String bidx);
+	
+	String nuserRight(String loginId);
+	
+
+
 
 	
 	
@@ -100,6 +127,12 @@ public interface BoardDAO {
 	int iupdate(HashMap<String, String> params);
 
 	String iuserRight(String loginId);
+
+	
+
+	
+
+
 
 	
 

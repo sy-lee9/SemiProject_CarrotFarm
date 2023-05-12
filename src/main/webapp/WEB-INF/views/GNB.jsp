@@ -5,8 +5,10 @@
 <head>
 <meta charset="UTF-8">
 <title>🏀 당근농장</title>
+
 	
 	   <style>
+
       /* 추가적인 스타일 시트 */
       .navbar-brand {
       
@@ -21,6 +23,7 @@
       .navbar-light .navbar-nav .nav-link {
          color: #000000; /* 네비게이션 바 텍스트 색상 */
       }
+
 
       .navbar-light .navbar-nav .nav-link.active,
       .navbar-light .navbar-nav .nav-link:hover {
@@ -51,13 +54,14 @@
       }
    </style>
 
+
 </head>
 <body>
 
-	</br>
-	
-	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand mr-auto" href="#"></a>
+   </br>
+   
+   <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand mr-auto" href="/cf"></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -67,16 +71,16 @@
         <a class="nav-link" href="/cf/matching/list.do">경기 모집</a>
       </li>
       <li class="nav-item flex-grow-1">
-        <a class="nav-link" href="#">경기장</a>
+        <a class="nav-link" href="/cf/court">경기장</a>
       </li>
       <li class="nav-item flex-grow-1">
-        <a class="nav-link" href="#">게시판</a>
+        <a class="nav-link" href="/cf/noticeboardList.do">게시판</a>
       </li>
       <li class="nav-item flex-grow-1">
-        <a class="nav-link" href="#">팀페이지</a>
+        <a class="nav-link" href="/cf/team">팀페이지</a>
       </li>
       <li class="nav-item flex-grow-1">
-        <a class="nav-link" href="#">마이페이지</a>
+        <a class="nav-link" href="/cf/userinfo.go">마이페이지</a>
       </li>
     </ul>
   </div>
@@ -84,8 +88,8 @@
 
 
 
-	
-	
+   
+   
 </body>
 <script>
 
