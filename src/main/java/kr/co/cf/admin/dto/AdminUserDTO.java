@@ -11,6 +11,7 @@ public class AdminUserDTO {
 	private String teamName;
 	private String email;
 	private String photoName;
+	
 	public String getPhotoName() {
 		return photoName;
 	}

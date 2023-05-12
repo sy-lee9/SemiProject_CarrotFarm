@@ -140,5 +140,11 @@
 		$('#list').empty();
 		$('#list').append(content);
 	}
+	
+	var msg = "${msg}";
+	console.log(msg);
+	if(msg != ''){
+		alert(msg);
+	}
 </script>
 </html>
