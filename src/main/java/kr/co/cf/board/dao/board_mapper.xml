@@ -24,9 +24,7 @@
 		AND (subject LIKE CONCAT('%' #{search} '%') OR 
 			userId 
 		LIKE CONCAT('%' #{search} '%'))
-	</select>
-	
-	
+	</select>	
 	
 	<select id="fatotalCount" resultType="int">
 		SELECT COUNT(boardIdx) FROM board
@@ -52,8 +50,11 @@
 	</insert>
 	
 	<update id = "fupHit">
-		UPDATE board SET bHit = bHit+1
-			WHERE boardIdx = #{param1}
+		UPDATE board SET bHit = bHit+1 WHERE boardIdx = #{param1}
+	</update>
+	
+	<update id = "fdownHit">
+		UPDATE board SET bHit = bHit-1 WHERE boardIdx = #{param1}
 	</update>
 	
 	<select id = "fdetail" resultType="kr.co.cf.board.dto.BoardDTO">
@@ -113,7 +114,13 @@
 		UPDATE comment SET commentContent=#{commentContent} WHERE commentIdx=#{commentIdx}
 	</update>
 	
+	<insert id="fboardReport" parameterType="hashmap">
+		INSERT INTO report(categoryId, userId, reportContent, reportState, reportId) VALUES ('rfb',#{userId},#{reportContent},'미처리',#{boardIdx})
+	</insert>
 	
+	<insert id="fboardCommentReport" parameterType="hashmap">
+		INSERT INTO report(categoryId, userId, reportContent, reportState, reportId) VALUES ('rfbc',#{userId},#{reportContent},'미처리',#{commentIdx})
+	</insert>
 	
 	
 	
@@ -122,6 +129,96 @@
 	
 	
 	<select id="nlist" resultType="kr.co.cf.board.dto.BoardDTO">
+		SELECT
+			boardIdx, userId, subject, content, writeTime, bHit
+		FROM board WHERE categoryId = 'b002' ORDER BY boardIdx DESC 
+	</select>
+	
+	<select id="nalist" resultType="kr.co.cf.board.dto.BoardDTO">
+		SELECT
+			boardIdx, userId, subject, writeTime, bHit
+		FROM board WHERE categoryId = 'b002' ORDER BY boardIdx DESC LIMIT #{param1} OFFSET #{param2}
+	</select>
+	
+	<select id="nalistSearch" resultType="kr.co.cf.board.dto.BoardDTO">
+		SELECT
+			boardIdx, userId, subject, writeTime, bHit
+		FROM board WHERE categoryId = 'b002' 
+		AND (subject LIKE CONCAT('%' #{search} '%') OR 
+			userId 
+		LIKE CONCAT('%' #{search} '%'))
+	</select>	
+	
+	<select id="natotalCount" resultType="int">
+		SELECT COUNT(boardIdx) FROM board
+	</select>
+	
+	<select id="natotalCountSearch" resultType="int">
+		SELECT COUNT(boardIdx) FROM board
+			WHERE subject LIKE CONCAT('%' #{param1} '%') OR userId LIKE CONCAT('%' #{param1} '%')
+	</select>
+	
+	<insert 
+		useGeneratedKeys="true"
+		keyColumn="boardIdx"
+		keyProperty="boardIdx"
+		id="nwrite" parameterType="kr.co.cf.board.dto.BoardDTO">
+		INSERT INTO board(subject, userId, content, categoryId)
+			VALUES(#{subject}, #{userId}, #{content}, 'b002')
+	</insert>
+	
+	<insert id = "nfileWrite">
+		INSERT INTO photo(categoryId, photoId, photoName)
+			VALUES('p',#{param1}, #{param2}) 
+	</insert>
+	
+	<update id = "nupHit">
+		UPDATE board SET bHit = bHit+1 WHERE boardIdx = #{param1}
+	</update>
+	
+	<update id = "ndownHit">
+		UPDATE board SET bHit = bHit-1 WHERE boardIdx = #{param1}
+	</update>
+	
+	<select id = "ndetail" resultType="kr.co.cf.board.dto.BoardDTO">
+		SELECT
+			b.boardIdx, b.userId, b.subject, b.content, b.writeTime,
+			p.photoIdx, p.photoName, p.photoId
+		FROM board b left JOIN photo p ON (b.boardIdx = p.photoId)
+		WHERE b.boardIdx = #{boardIdx}
+	</select>
+	
+	<delete id="ndelete">
+		DELETE FROM board WHERE boardIdx = #{param1}
+	</delete>
+	
+	<select id="nfindFile" resultType="String">
+		SELECT photoName FROM photo WHERE photoIdx = #{param1}
+	</select>
+	
+	<update id="nupdate" parameterType="hashmap">
+		UPDATE board SET subject = #{subject}
+			,userId = #{userId}
+			,content = #{content}
+		WHERE boardIdx = #{bidx}
+	</update>
+	
+	
+	<insert id="nboardReport" parameterType="hashmap">
+		INSERT INTO report(categoryId, userId, reportContent, reportState, reportId) VALUES ('rfb',#{userId},#{reportContent},'미처리',#{boardIdx})
+	</insert>
+	
+	<insert id="nboardCommentReport" parameterType="hashmap">
+		INSERT INTO report(categoryId, userId, reportContent, reportState, reportId) VALUES ('rfbc',#{userId},#{reportContent},'미처리',#{commentIdx})
+	</insert>
+	
+	<select id="nuserRight" resultType="String">
+		SELECT userRight FROM user WHERE userId = #{param1}
+	</select>
+	
+	
+	
+	<!--<select id="nlist" resultType="kr.co.cf.board.dto.BoardDTO">
 		SELECT
 			boardIdx, userId, subject, content, writeTime, bHit
 		FROM board WHERE categoryId = 'b002' ORDER BY boardIdx DESC
@@ -179,11 +276,9 @@
 		WHERE boardIdx = #{bidx}
 	</update>
 	
-	<select id="userRight" resultType="String">
-		SELECT userRight FROM user WHERE userId = #{param1}
-	</select>
 	
 	
+	-->
 	
 	
 	

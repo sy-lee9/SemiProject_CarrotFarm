@@ -31,8 +31,7 @@ public class BoardController {
 	public HashMap<String, Object> falist(@RequestParam String page, @RequestParam String search){
 		logger.info("search : " + search);
 		
-		return service.falist(Integer.parseInt(page), search);
-		
+		return service.falist(Integer.parseInt(page), search);	
 	}
 	
 	
@@ -42,35 +41,40 @@ public class BoardController {
 		logger.info("flist 불러오기");
 		ArrayList<BoardDTO> flist = service.flist();
 		logger.info("flist cnt : " + flist.size());
-		model.addAttribute("list", flist);
-		return "freeboardList";
+		model.addAttribute("flist", flist);
+		
+		return "/board/freeboardList";
 	}
 	
+	
 	@RequestMapping(value="/freeboardWrite.go")
-	public String fwriteForm(Model model, HttpSession session) {
-		
+	public String fwriteForm(Model model, HttpSession session) {		
 		logger.info("글쓰기로 이동");
 		model.addAttribute("userId", session.getAttribute("loginId"));
-		return "freeboardWriteForm";
+		return "/board/freeboardWriteForm";
 	}
+	
 	
 	@RequestMapping(value="/freeboardWrite.do", method=RequestMethod.POST)
 	public String fwrite(MultipartFile photo, @RequestParam HashMap<String, String> params) {
 		logger.info("Params : " + params);
+		
 		return service.fwrite(photo, params);
 	}
+	
 	
 	@RequestMapping(value="/freeboardDetail.do")
 	public String fdetail(Model model, @RequestParam String bidx, HttpSession session) {
 		logger.info("fdetail : " + bidx);
-		String page = "redirect:/freeboardList.do";
+		String page = "redirect:/board/freeboardList.do";
 		
 		if(session.getAttribute("loginId") == null) {logger.info("로그인된 아이디가 없습니다. ");}
 		logger.info("게시글 bidx : " + bidx + "번 상세보기");
 		
 		BoardDTO dto = service.fdetail(bidx,"detail");
+		
 		if(dto != null) {
-			page = "freeboardDetail";
+			page = "/board/freeboardDetail";
 			model.addAttribute("dto", dto);
 			logger.info("사진이름" +dto.getPhotoName());
 		}
@@ -79,7 +83,6 @@ public class BoardController {
 		fcommentList = service.fcommentList(bidx);
 		model.addAttribute("fcommentList", fcommentList);
 		logger.info("모집글 fcommentList : " + fcommentList);
-		//return "/freeboardDetail";
 		
 		return page;
 	}
@@ -88,45 +91,54 @@ public class BoardController {
 	@RequestMapping(value = "/freeboardDelete.do")
 	public String fdelete(@RequestParam String bidx) {
 		service.fdelete(bidx);
+		
 		return "redirect:/freeboardList.do";
 	}
+
 	
 	@RequestMapping(value = "/freeboardUpdate.go")
 	public String fupdateForm(Model model, @RequestParam String bidx) {
 		logger.info("fupdate : " + bidx);
-		String page = "redirect:/freeboardList.do";
-		
-		BoardDTO dto = service.fdetail(bidx,"freeboardUpdate");
+		String page = "redirect:/board/freeboardList.do";
+		BoardDTO dto = service.fdetail(bidx,"/board/freeboardUpdate");
 		logger.info("dto 들어갔음? : " + dto);
+		
 		if(dto != null) {
-			page = "freeboardUpdateForm";
+			page = "/board/freeboardUpdateForm";
 			model.addAttribute("dto", dto);
 		}
+	
+		service.fdownHit(bidx);
+		
 		return page;
 	}
+	
 	
 	@RequestMapping(value="/freeboardUpdate.do", method=RequestMethod.POST)
 	public String fupdate(MultipartFile photo, @RequestParam HashMap<String, String> params) {
 		logger.info("Params : " + params);
+		
 		return service.fupdate(photo, params);
 	}
 	
 
 	@RequestMapping(value = "freeboardcommentWrite.do")
 	public String fcommentWrite(@RequestParam HashMap<String, String> params) {
-
 		logger.info("댓글 작성" + params);
-
 		service.fcommentWrite(params);
-		return "redirect:/freeboardDetail.do?bidx=" + params.get("comentId");
+		service.fdownHit(params.get("comentId"));
+		
+		return "redirect: ./freeboardDetail.do?bidx=" + params.get("comentId");
 	}
+	
 	
 	@RequestMapping(value = "freeboardcommentDelete.do")
 	public String fcommentDelete(@RequestParam String commentIdx,@RequestParam String bidx) {
-
 		logger.info("댓글 지우기 commentIdx : " + commentIdx);
 		service.fcommentDelete(commentIdx);
-		return "redirect:/freeboardDetail.do?bidx=" + bidx ;
+		service.fdownHit(bidx);
+		
+		return "redirect: ./freeboardDetail.do?bidx=" + bidx ;
 	}
 	
 	
@@ -134,11 +146,10 @@ public class BoardController {
 	public String fcommentUpdateGo(@RequestParam String commentIdx,@RequestParam String bidx, Model model, HttpSession session) {
 
 		logger.info("댓글 수정 commentIdx : " + commentIdx);
-		
 		BoardDTO dto = new BoardDTO();
 		dto = service.fdetail(bidx, commentIdx);
 		model.addAttribute("dto", dto);
-
+		
 		ArrayList<BoardDTO> fcommentList = new ArrayList<BoardDTO>();
 		fcommentList = service.fcommentList(bidx);
 		model.addAttribute("fcommentList", fcommentList);
@@ -148,24 +159,66 @@ public class BoardController {
 			model.addAttribute("loginId", "guest");
 		};
 		
-		
 		if(session.getAttribute("loginId") != null) {
 		BoardDTO fcommentDto = new BoardDTO();
 		fcommentDto = service.fcommentGet(commentIdx);
 		logger.info("수정할 코멘트 내용 : " +fcommentDto.getCommentContent());
 		model.addAttribute("fcommentDto", fcommentDto);
-				
 		};
-		return "/freeboardCommentUpdate" ;
+		
+		service.fdownHit(bidx);
+		
+		return "/board/freeboardCommentUpdate" ;
 	}
 	
+	
 	@RequestMapping(value = "freeboardcommentUpdate.do")
-	public String fcommentUpdateGo(@RequestParam HashMap<String, String> params) {
-
+	public String fcommentUpdateDo(@RequestParam HashMap<String, String> params) {
 		service.fcommentUpdate(params);
 		String bidx = params.get("bidx");
 		logger.info("bidx : "+ bidx);		
-		return "redirect:/freeboardDetail.do?bidx="+bidx ;
+		
+		return "redirect: ./freeboardDetail.do?bidx="+bidx ;
+	};
+	
+	
+	@RequestMapping(value= "freeboardReport.go")
+	public String fboardReportGo(Model model, @RequestParam String bidx, HttpSession session) {
+		BoardDTO dto = new BoardDTO();
+		dto.setBidx(Integer.parseInt(bidx));
+		model.addAttribute("dto", dto);
+		
+		return "/board/fboardReportDo";
+	};
+	
+	
+	@RequestMapping(value= "freeboardReport.do")
+	public String fboardReportDo(@RequestParam HashMap<String, String> params) {
+		logger.info("params : " + params);	
+		params.put("reportContent", params.get("report") + " : " + params.get("content"));
+		service.fboardReport(params);
+		
+		return "/board/fboardReportSubmit";
+	};
+	
+	
+	@RequestMapping(value= "freeboardCReport.go")
+	public String fboardCReportGo(Model model, String commentIdx, HttpSession session) {		
+		BoardDTO dto = new BoardDTO();
+		dto.setCommentIdx(commentIdx);
+		model.addAttribute("dto", dto);
+		
+		return "/board/fboardCommentReportDo";
+	};
+	
+	
+	@RequestMapping(value= "freeboardCReport.do")
+	public String fboardCReportDo(@RequestParam HashMap<String, String> params) {
+		logger.info("params : " + params);		
+		params.put("reportContent", params.get("report") + " : " + params.get("content"));
+		service.fboardCommentReport(params);
+		
+		return "/board/fboardReportSubmit";
 	};
 	
 	
@@ -180,10 +233,146 @@ public class BoardController {
 	
 	
 	
-	
-	
-	
 	@RequestMapping(value="/nlist.ajax", method = RequestMethod.POST)
+	@ResponseBody
+	public HashMap<String, Object> nalist(@RequestParam String page, @RequestParam String search){
+		logger.info("search : " + search);
+		
+		return service.nalist(Integer.parseInt(page), search);	
+	}
+	
+	
+	@RequestMapping(value = "/noticeboardList.do")
+	public String nlist(Model model, HttpSession session) {
+		logger.info("session : " + session.getAttribute("loginId"));
+		logger.info("nlist 불러오기");
+		ArrayList<BoardDTO> nlist = service.flist();
+		logger.info("nlist cnt : " + nlist.size());
+		model.addAttribute("nlist", nlist);
+		
+		return "/board/noticeboardList";
+	}
+	
+	
+	@RequestMapping(value="/noticeboardWrite.go")
+	public String nwriteForm(Model model, HttpSession session) {		
+		logger.info("글쓰기로 이동");
+		model.addAttribute("userId", session.getAttribute("loginId"));
+		return "/board/noticeboardWriteForm";
+	}
+	
+	
+	@RequestMapping(value="/noticeboardWrite.do", method=RequestMethod.POST)
+	public String nwrite(MultipartFile photo, @RequestParam HashMap<String, String> params) {
+		logger.info("Params : " + params);
+		
+		return service.nwrite(photo, params);
+	}
+	
+	
+	@RequestMapping(value="/noticeboardDetail.do")
+	public String ndetail(Model model, @RequestParam String bidx, HttpSession session) {
+		logger.info("ndetail : " + bidx);
+		String page = "redirect:/board/noticeboardList.do";
+		
+		if(session.getAttribute("loginId") == null) {logger.info("로그인된 아이디가 없습니다. ");}
+		logger.info("게시글 bidx : " + bidx + "번 상세보기");
+		
+		BoardDTO dto = service.ndetail(bidx,"detail");
+		
+		if(dto != null) {
+			page = "/board/noticeboardDetail";
+			model.addAttribute("dto", dto);
+			logger.info("사진이름" +dto.getPhotoName());
+		}
+		
+		return page;
+	}
+	
+	
+	@RequestMapping(value = "/noticeboardDelete.do")
+	public String ndelete(@RequestParam String bidx) {
+		service.ndelete(bidx);
+		
+		return "redirect:/noticeboardList.do";
+	}
+
+	
+	@RequestMapping(value = "/noticeboardUpdate.go")
+	public String nupdateForm(Model model, @RequestParam String bidx) {
+		logger.info("nupdate : " + bidx);
+		String page = "redirect:/board/noticeboardList.do";
+		BoardDTO dto = service.ndetail(bidx,"/board/noticeboardUpdate");
+		
+		if(dto != null) {
+			page = "/board/noticeboardUpdateForm";
+			model.addAttribute("dto", dto);
+		}
+	
+		service.ndownHit(bidx);
+		
+		return page;
+	}
+	
+	
+	@RequestMapping(value="/noticeboardUpdate.do", method=RequestMethod.POST)
+	public String nupdate(MultipartFile photo, @RequestParam HashMap<String, String> params) {
+		logger.info("Params : " + params);
+		
+		return service.nupdate(photo, params);
+	}
+	
+	
+	@RequestMapping(value= "noticeboardReport.go")
+	public String nboardReportGo(Model model, @RequestParam String bidx, HttpSession session) {
+		BoardDTO dto = new BoardDTO();
+		dto.setBidx(Integer.parseInt(bidx));
+		model.addAttribute("dto", dto);
+		
+		return "/board/nboardReportDo";
+	};
+	
+	
+	@RequestMapping(value= "noticeboardReport.do")
+	public String nboardReportDo(@RequestParam HashMap<String, String> params) {
+		logger.info("params : " + params);	
+		params.put("reportContent", params.get("report") + " : " + params.get("content"));
+		service.nboardReport(params);
+		
+		return "/board/nboardReportSubmit";
+	};
+	
+	
+	@RequestMapping(value= "noticeboardCReport.go")
+	public String nboardCReportGo(Model model, String commentIdx, HttpSession session) {		
+		BoardDTO dto = new BoardDTO();
+		dto.setCommentIdx(commentIdx);
+		model.addAttribute("dto", dto);
+		
+		return "/board/nboardCommentReportDo";
+	};
+	
+	
+	@RequestMapping(value= "noticeboardCReport.do")
+	public String nboardCReportDo(@RequestParam HashMap<String, String> params) {
+		logger.info("params : " + params);		
+		params.put("reportContent", params.get("report") + " : " + params.get("content"));
+		service.nboardCommentReport(params);
+		
+		return "/board/nboardReportSubmit";
+	};
+	
+	@RequestMapping(value="/nuserRight.ajax")
+	@ResponseBody
+	public String userRight(HttpSession session){
+		String loginId = String.valueOf(session.getAttribute("loginId"));
+		logger.info(loginId);
+		logger.info("통신성공");
+		
+		return service.nuserRight(loginId);
+	}
+	
+	/*@RequestMapping(value="/nlist.ajax", method = RequestMethod.POST)
 	@ResponseBody
 	public HashMap<String, Object> nalist(@RequestParam String page, @RequestParam String cnt){
 		
@@ -252,15 +441,8 @@ public class BoardController {
 		return service.nupdate(photo, params);
 	}
 	
-	@RequestMapping(value="/userRight.ajax")
-	@ResponseBody
-	public String userRight(HttpSession session){
-		String loginId = String.valueOf(session.getAttribute("loginId"));
-		logger.info(loginId);
-		logger.info("통신성공");
-		
-		return service.userRight(loginId);
-	}
+	
+	}*/
 	
 	
 	
