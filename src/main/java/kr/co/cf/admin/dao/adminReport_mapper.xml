@@ -5,5 +5,83 @@
 
 <mapper namespace="kr.co.cf.admin.dao.AdminReportDAO">
 	
+	<select id="reportCnt" resultType="int">
+		SELECT COUNT(reportIdx) FROM report
+	</select>
+	
+	<select id="reportList" resultType="kr.co.cf.admin.dto.AdminReportDTO">
+		SELECT * FROM report
+		limit 10 OFFSET #{param1}
+	</select>
+	
+	<select id="categoryCnt" resultType="int">
+		SELECT COUNT(reportIdx) FROM report
+		WHERE categoryId=#{param1}
+	</select>
+	
+	<select id="categoryList" resultType="kr.co.cf.admin.dto.AdminReportDTO">
+		SELECT * FROM report
+		WHERE categoryId=#{param1}
+		limit 10 OFFSET #{param2}
+	</select>
+	
+	<select id="reportStateCnt" resultType="int">
+		SELECT COUNT(reportIdx) FROM report
+		WHERE reportState=#{param1}
+	</select>
+	
+	<select id="reportStateList" resultType="kr.co.cf.admin.dto.AdminReportDTO">
+		SELECT * FROM report
+		WHERE reportState=#{param1}
+		limit 10 OFFSET #{param2}
+	</select>
+	
+	<select id="sortCnt" resultType="int">
+		SELECT COUNT(reportIdx) FROM report
+		WHERE reportState=#{param1} AND categoryId=#{param2}
+	</select>
+	
+	<select id="sortList" resultType="kr.co.cf.admin.dto.AdminReportDTO">
+		SELECT * FROM report
+		WHERE reportState=#{param1} AND categoryId=#{param2}
+		limit 10 OFFSET #{param3}
+	</select>
+	
+	<select id="reportSearchCnt" resultType="int">
+		SELECT COUNT(reportIdx) FROM report
+		WHERE userId like concat('%', #{param1}, '%') 
+		OR reportUserId like concat('%', #{param1}, '%') 
+	</select>
+	
+	<select id="reportSearchList" resultType="kr.co.cf.admin.dto.AdminReportDTO">
+		SELECT * FROM report
+		WHERE userId like concat('%', #{param1}, '%') 
+		OR reportUserId like concat('%', #{param1}, '%')
+		limit 10 OFFSET #{param2}
+	</select>
+	
+	<select id="searchCategoryCnt" resultType="int">
+		SELECT COUNT(reportIdx) FROM report
+		WHERE ${param1} like concat('%', #{param2}, '%')
+	</select>
+	
+	<select id="searchCategoryList" resultType="kr.co.cf.admin.dto.AdminReportDTO">
+		SELECT * FROM report
+		WHERE ${param1} like concat('%', #{param2}, '%')
+		limit 10 OFFSET #{param3}
+	</select>
+	
+	<select id="reportInfo" resultType="kr.co.cf.admin.dto.AdminReportDTO">
+		SELECT * FROM report
+		WHERE reportIdx=#{param1}
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
 	
 </mapper>

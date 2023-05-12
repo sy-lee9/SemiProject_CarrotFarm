@@ -6,16 +6,17 @@ public class JoinDTO {
 	
 	private String userId;
 	private String nickName;
-	private String userPw;
-	private String height;
 	private String userName;
-	private String position;
+	private String email;
+	
+	
+	
 	private Date birthday;
 	private int locationIdx;
-	private String email;
 	private String favTime;
-	
-	
+	private String position;
+	private String userPw;
+	private String height;
 	public String getUserId() {
 		return userId;
 	}

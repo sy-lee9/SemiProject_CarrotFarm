@@ -11,7 +11,7 @@
 	<table>
 			<c:forEach items="${courtReviews}" var="courtReviews">
 			<tr>
-				<th>${courtReview.userId}</th>
+				<th>${courtReviews.userId}</th>
 				<th><input class="userCourtReview" type="text" disabled value="${courtReviews.courtOneLineReview}"/></th>				
 				<th>☆${courtReviews.courtStar}</th>
 				
@@ -20,6 +20,7 @@
 				</c:if>
 				<th><a href="#" onclick ="window.open('courtReviewUpdate.go?courtReviewIdx=${courtReviews.courtReviewIdx}&courtIdx=${courtIdx}','리뷰 수정','width=800px,height=400px')">수정</a></th>
 				<th><a href="courtReviewDelete.do?courtReviewIdx=${courtReviews.courtReviewIdx}&courtIdx=${courtIdx}">삭제</a></th>
+				<th><a href="#" onclick="window.open('courtReviewReport.go?courtReviewIdx=${courtReview.courtReviewIdx}','리뷰 신고하기','width=600px,height=400px')">신고</a></th>
 			</tr>
 		</c:forEach>
 		</table>
