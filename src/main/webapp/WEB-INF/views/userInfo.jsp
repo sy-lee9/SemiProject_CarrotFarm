@@ -12,9 +12,14 @@
 </style>
 </head>
 <body>
-   <jsp:include page="login.jsp"></jsp:include>
+<jsp:include page="loginBox.jsp"></jsp:include>
    <h3>회원 정보</h3>
       <table>
+      	<tr>
+      		<td>
+				<img width="200" src="/photo/${user.photoName}"/>
+			</td>
+         </tr>
          <tr>
             <th>아이디</th>
             <td>

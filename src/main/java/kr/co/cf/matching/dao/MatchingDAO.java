@@ -146,6 +146,7 @@ public interface MatchingDAO {
 
 	void commentReport(HashMap<String, String> params);
 
+
 	void downHit(String matchingIdx);
 
 	String leaderChk(String userId);

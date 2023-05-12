@@ -57,9 +57,11 @@ textarea{
 			</tr>
 			</c:if>
 			<tr>
-				<th colspan="2">
+				<th colspan="4">
 					<input type = "button" onclick="location.href='./noticeboardList.do'" value="리스트"/>
-					<input type = "button" id="registerBtn1" onclick="location.href='./noticeboardUpdate.go?bidx=${dto.boardIdx}'" value="수정"/>	
+					&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+					<input type = "button" id="registerBtn1" onclick="location.href='./noticeboardUpdate.go?bidx=${dto.boardIdx}'" value="수정"/>
+					&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 					<input type = "button" id="registerBtn2" value="삭제" onclick="if(confirm('정말로 삭제하시겠습니까?')){location.href='./noticeboardDelete.do?bidx=${dto.boardIdx}';}">			
 				</th>
 			</tr>

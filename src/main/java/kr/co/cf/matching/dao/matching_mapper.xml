@@ -462,6 +462,7 @@
 		INSERT INTO report(categoryId, userId, reportContent, reportState, reportId) VALUES('rc',#{userId},#{reportContent},'미처리',#{commentIdx})
 	</insert>
 	
+
 	<select id="leaderChk" resultType="String">
 		SELECT teamName FROM team WHERE teamIdx=(SELECT teamIdx FROM teamuser WHERE userId=#{param1} AND teamGrade ='leader' AND teamUserState = 'join')
 	</select>
@@ -505,6 +506,7 @@
 	<select id="tagChk" resultType="int">
 		SELECT COUNT(tagIdx) FROM tagreview WHERE matchingIdx=#{param1} AND teamId=#{param2}
 	</select>
+
 </mapper>
 
 

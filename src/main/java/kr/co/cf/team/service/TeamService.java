@@ -423,12 +423,12 @@ public class TeamService {
 		return map;
 	}
 
-	public ArrayList<TeamDTO> gameAppAlarm(String teamIdx) {
+	public ArrayList<TeamDTO> appGameAlarm(String teamIdx) {
 		
 		String userId = TeamDAO.getTeamLeader(teamIdx);
 		logger.info("getTeamLeader : "+userId);
 		
-		return TeamDAO.gameAppAlarm(userId);
+		return TeamDAO.appGameAlarm(userId);
 	}
 
 	public ArrayList<TeamDTO> writeMatchingList(String teamIdx) {

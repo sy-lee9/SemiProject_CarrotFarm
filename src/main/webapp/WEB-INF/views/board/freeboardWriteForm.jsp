@@ -32,12 +32,12 @@ textarea{
 </style>
 </head>
 <body>
-	<form action="freeboardWrite.do" method="post" enctype="multipart/form-data">
+	<form action="freeboardWrite.do" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
 	<input type="hidden" name="categoryId" value="b001"/>
 		<table>
 			<tr>
 				<th>제목</th>
-				<td><input type="text" name="subject"/></td>
+				<td><input type="text" name="subject" id="subjectInput"/></td>
 			</tr>
 			<tr>
 				<th>작성자</th>
@@ -45,7 +45,7 @@ textarea{
 			</tr>
 			<tr>
 				<th>내용</th>
-				<td><textarea name="content"/></textarea></td>
+				<td><textarea name="content" id="contentInput"/></textarea></td>
 			</tr>
 			<tr>
 				<th>사진</th>
@@ -63,5 +63,22 @@ textarea{
 	</form>
 
 </body>
-<script></script>
+<script>
+function validateForm() {
+	var subject = document.getElementById('subjectInput').value;
+	var content = document.getElementById('contentInput').value;
+	
+	if (subject.trim() == '') {
+		alert('제목을 입력해주세요.');
+		return false;
+	}
+	
+	if (content.trim() == '') {
+		alert('내용을 입력해주세요.');
+		return false;
+	}
+	
+	return true;
+}
+</script>
 </html>

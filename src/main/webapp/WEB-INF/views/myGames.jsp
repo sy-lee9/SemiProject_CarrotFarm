@@ -1,62 +1,53 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>참여 경기 리스트</title>
 <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
 <script src="resources/js/twbsPagination.js" type="text/javascript"></script>
-<style>	
-	table, th, td{
-		border: 1px solid black;
-		border-collapse: collapse;
-		padding : 5px 10px;	
-	}
-	th,td{
-		text-align: center;
-	}
+<style>
 	table{
 		width: 800;
 		height: 500;
 	}
+	th,td{
+		text-align: center;
+	}
 </style>
 </head>
 <body>
-	<select id="teamMatchState">
-	  <option value="default">모집여부</option>
-	  <option value="모집중">모집중</option>
-	  <option value="모집종료">모집종료</option>
+	<input type="hidden" name="myGameIdx"/>
+	<select id="gameDate">
+	  <option value="default">모집일순</option>
+	  <option value="DESC">경기일 최신순</option>
+	  <option value="ASC">경기일 오래된순</option>
 	</select>
 	
-	<input type="text" id="searchInput" placeholder="팀이름 검색">
+	<input type="text" id="searchInput" placeholder="제목 검색">
 	<button id="searchButton">검색</button>
-	&nbsp;&nbsp;
-	<button id="teamRegist" onclick="location.href='team/teamRegist.go'">팀 개설하기</button>
-	<hr>
 	<table>
 		<colgroup>
 			<col width="15%"/>
-			<col width="15%"/>
-			<col width="20%"/>
 			<col width="40%"/>
-			<col width="10%"/>
+			<col width="30%"/>
+			<col width="15%"/>
 		</colgroup>
 		<thead>
 			<tr>
-				<th>모집상태</th>
-				<th>주활동지역</th>
-				<th>팀 이름</th>
-				<th>팀 소개글</th>
-				<th>팀원</th>
+				<th>장소</th>
+				<th>제목</th>
+				<th>경기일시</th>
+				<th>경기방식</th>
 			</tr>
 		</thead>
 		<tbody id="list">
 			<!-- list 출력 영역 -->
 		</tbody>
 		<tr>
-			<td colspan="7" id="paging">	
+			<td colspan="4" id="paging">	
 				<!-- 	플러그인 사용	(twbsPagination)	-->
 				<div class="container">									
 					<nav aria-label="Page navigation" style="text-align:center">
@@ -69,15 +60,16 @@
 </body>
 <script>
 	var showPage = 1;
-	var selectedMatchState = 'default';
+	var selectedGameDate = 'default';
 	var searchText = 'default';
+	console.log(selectedGameDate);
 	listCall(showPage);
-
-	// 경기 방식 선택에 따른 출력
-	$('#teamMatchState').change(function(){
-		selectedMatchState = $(this).val();
+	
+	// 게임일시 선택에 따른 출력
+	$('#gameDate').change(function(){
+		selectedGameDate = $(this).val();
 		// 선택한 요소 확인 okay
-		console.log(selectedMatchState);
+		console.log(selectedGameDate);
 		listCall(showPage);
 		$('#pagination').twbsPagination('destroy');
 	});	
@@ -90,15 +82,16 @@
 		listCall(showPage);
 		$('#pagination').twbsPagination('destroy');
 	});
-		
+	
 	function listCall(page){
 		$.ajax({
 			type:'post',
-			url:'team/teamList.ajax',
+			url:'mygameList.ajax',
 			data:{
 				'page':page,
-				'matchState':selectedMatchState,
-				'searchText':searchText
+				'selectedGameDate':selectedGameDate,
+				'searchText':searchText,
+				'userId':"${sessionScope.loginId}"
 			},
 			dataType:'json',
 			success:function(data){
@@ -115,7 +108,7 @@
 						if(page != showPage){
 							showPage = page;	
 							listCall(page);							
-						}				
+						}							
 					}
 				});					
 			},
@@ -128,23 +121,16 @@
 	function listPrint(list){
 		var content = '';
 		
-		list.forEach(function(team, teamIdx){
+		list.forEach(function(list, idx){
 			content +='<tr>';
-			content +='<td id="teamMatchState">'+team.teamMatchState+'</td>';
-			content +='<td>'+team.gu+'</td>';
-			content +='<td id="teamInfo"><a href="team/teamPage.go?teamIdx='+team.teamIdx+'">'+team.teamName+'</a></td>';
-			content +='<td>'+team.teamIntroduce.substring(0, 14)+'</td>';
-			content +='<td>'+team.teamUser+'</td>';
+			content +='<td>'+list.gu+'</td>';
+			content +='<td>'+list.subject+'</a></td>';
+			content +='<td>'+list.gameDate+'</td>';
+			content +='<td>'+list.gamePlay+' : '+list.gamePlay+'</td>';
 			content +='</tr>';
 		});
 		$('#list').empty();
 		$('#list').append(content);
-	}
-	
-	var msg = "${msg}";
-	console.log(msg);
-	if(msg != ''){
-		alert(msg);
 	}
 </script>
 </html>

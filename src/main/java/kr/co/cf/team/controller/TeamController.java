@@ -49,12 +49,11 @@ public class TeamController {
 			model.addAttribute("msg",msg);
 			//사용한 세션은 반드시 바로 삭제해야함
 			session.removeAttribute("msg");
-		}
-		
+		}		
 		return "redirect:/team";
 	}
 
-	@RequestMapping(value="/team/list.ajax", method = RequestMethod.POST)
+	@RequestMapping(value="/team/teamList.ajax", method = RequestMethod.POST)
 	@ResponseBody
 	public HashMap<String, Object> getList(HttpSession session, @RequestParam HashMap<String, Object> params){
 		logger.info("list params : "+params);
@@ -395,9 +394,9 @@ public class TeamController {
 		return page;
 	}
 	
-	@RequestMapping(value="/team/gameAppAlarm.go")
+	@RequestMapping(value="/team/appGameAlarm.go")
 	public String appGameAlarm(Model model, @RequestParam String teamIdx,HttpSession session) {
-		logger.info("gameAppAlarm : "+teamIdx);			
+		logger.info("appGameAlarm : "+teamIdx);			
 
 		String page = "redirect:/team/teamPage.go";				
 		String loginId = (String) session.getAttribute("loginId");
@@ -408,7 +407,7 @@ public class TeamController {
 				logger.info("로그인확인&직급확인 완료");
 				
 				//모집중인 경기 참가신청 알림 불러오기
-				ArrayList<TeamDTO> list = TeamService.gameAppAlarm(teamIdx);
+				ArrayList<TeamDTO> list = TeamService.appGameAlarm(teamIdx);
 				logger.info("list size : "+list.size());
 				
 				model.addAttribute("list", list);
@@ -547,6 +546,11 @@ public class TeamController {
 			map = 	TeamService.leaveTeam(Integer.parseInt(teamIdx),userId);
 		}
 		return map;
+	}
+	
+	@RequestMapping(value = "/team/teamUserList.go")
+	public String teamUserListForm(HttpSession session, Model model) {
+		return "/team/teamUserList";
 	}
 	
 	
