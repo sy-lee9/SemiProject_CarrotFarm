@@ -19,128 +19,151 @@
 	
 	
 <style>
-	body {
-	  min-width: 1200px;
+	body{
+		position:relative;
+		font-size:15px;
+		padding : 10px;
+	}
+	
+	#content {
+		width:78%;
+		background-color: #f8f9fa;
+		padding: 10 30 10;
+		margin : 5px;
+		float:right;
+		
+	}
+	
+	#LNB {
+		width:20%;
+		height : 80%;
+		background-color: #f8f9fa;
+		float:left;
+		margin : 5px;
 	}
 	
 	
 	table, th, td{
-		border : 1px solid black;
-		border-collapse: collapse;
-		padding : 5px 10px;
+		margin : 5px;
 	}
 	
-	#content {
-		width : 776px;
-		height : 500px;
-		background-color: #f8f9fa;
-		vertical-align: top; /* 위쪽 정렬 */
-		padding: 10 30 10;
+	table{
+		width:90%;
+		height:70%;
+		text-align:center;
 	}
 	
-	#LNB nav.navbar {
-	    width: 200px;
-	    height: 500px;
-	    background-color: #f8f9fa;
+	#gamePlay, #sort{
+		width: 100px;
+    	height: 30px;
+    	margin : 5px;
 	}
-	#LNB  .navbar-nav {
-			text-align:center;
-		  	padding-left: 0px;
-		}
-		
+	
+	#searchInput{
+		width: 200px;
+    	height: 30px;
+    	margin : 5px;
+	}
+	
+	#searchButton, #writeButton {
+		height: 30px;
+    	margin : 5px;
+	
+	}
+	
 
-	div {
-	  display: inline-block;
-	}
 </style>
 </head>
 <body>
-
+	<%-- <div style="float: right;">
+   		<jsp:include page="../loginBox.jsp"></jsp:include>
+	</div> --%>
 	<%@ include file="../GNB.jsp" %>
 	
+
 	<div id="LNB">
-	  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-left " style="padding-bottom: 200px;">
-	    <ul class="navbar-nav flex-column">
-	      <li class="nav-item active">
+		 <ul>
+	      <li>
 	        <div style="width: 180px; height: 150px; border : 1px solid black; border-collapse: collapse;">프로필</div>
 	      </li>
-	      <li class="nav-item active">
-	        <a class="nav-link" href="/cf/matching/list.do">개인 모집글</a>
+	      <li >
+	        <a href="/cf/matching/list.do">개인 모집글</a>
 	      </li>
-	      <li class="nav-item">
-	        <a class="nav-link" href="/cf/matching/teamList.do">팀 모집글</a>
+	      <li>
+	        <a href="/cf/matching/teamList.do">팀 모집글</a>
 	      </li>
 	    </ul>
-	  </nav>
 	</div>
 	
+	
 	<div id="content">
+		<div id="filter">
 		<select id="gamePlay">
-	  <option value="default">경기방식</option>
-	  <option value="1">1:1</option>
-	  <option value="3">3:3</option>
-	  <option value="5">5:5</option>
-	</select>
+		  <option value="default">경기방식</option>
+		  <option value="1">1:1</option>
+		  <option value="3">3:3</option>
+		  <option value="5">5:5</option>
+		</select>
+		
+		<select id="sort">
+		  <option value="default">지역</option>
+		  <option value="${userData.locationIdx}">선호지역</option>
+		  <c:forEach items="${locationList}" var="locationList">
+		  	<option value="${locationList.locationIdx}">${locationList.gu}</option>	
+		  </c:forEach>
+		</select>
 	
-	<select id="sort">
-	  <option value="default">지역</option>
-	  <option value="${userData.locationIdx}">선호지역</option>
-	  <c:forEach items="${locationList}" var="locationList">
-	  	<option value="${locationList.locationIdx}">${locationList.gu}</option>	
-	  </c:forEach>
-	</select>
-
+		
+		<input type="text" id="searchInput" placeholder="제목 또는 작성자를 입력">
+		<button id="searchButton">검색</button>
+		<c:if test="${loginId != 'guest' }">
+			<button id="writeButton" onclick="location.href='write.go?categoryId=m01'">글쓰기</button>
+		</c:if>
+		</div>
 	
-	<input type="text" id="searchInput" placeholder="제목 또는 작성자를 입력">
-	<button id="searchButton">검색</button>
-	<c:if test="${loginId != 'guest' }">
-		<button onclick="location.href='write.go?categoryId=m01'">글쓰기</button>
-	</c:if>
 	
-	<hr>
-	
-	<table>
+		<table>
 		<thead>
-			<tr>
-				<th>경기방식</th>
-				<th>경기장위치</th>
-				<th>모집인원수</th>
-				<th>제목</th>
-				<th>경기 일시</th>
-				<th>글쓴이</th>
-				<th>조회수</th>
-			</tr>
-		</thead>
-
-		<tbody>
+				<tr>
+					<th style="width:50px;">경기방식</th>
+					<th>경기장위치</th>
+					<th>모집인원수</th>
+					<th>제목</th>
+					<th>경기 일시</th>
+					<th>글쓴이</th>
+					<th>조회수</th>
+				</tr>
+			</thead>
+	
+			<tbody>
+				
+				
+				<tbody id="list">			
+				
+				<!-- list 출력 위치 -->
+				
+				</tbody>
+				
+				
+				
+				
+				<tr>
+				  <th colspan="7" id="paging" style="text-align:center;">  
+				    <div class="container">                  
+				      <nav aria-label="Page navigation">
+				        <ul class="pagination justify-content-center" id="pagination"></ul>
+				      </nav>
+				    </div>
+				  </th>
+				</tr>
+	
+	
+	
+				
+			</tbody>		
 			
 			
-			<tbody id="list">			
-			
-			<!-- list 출력 위치 -->
-			
-			</tbody>
-			
-			
-			
-			
-			<tr>
-			  <th colspan="7" id="paging" style="text-align:center">  
-			    <div class="container">                  
-			      <nav aria-label="Page navigation">
-			        <ul class="pagination justify-content-center" id="pagination"></ul>
-			      </nav>
-			    </div>
-			  </th>
-			</tr>
-
-
-
-			
-		</tbody>		
-		
-		
-	</table>
+		</table>
 	</div>
 	
 </body>
