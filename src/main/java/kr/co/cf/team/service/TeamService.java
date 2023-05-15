@@ -70,13 +70,11 @@ public class TeamService {
 			//팀 개설한 회원을 팀장으로 저장
 			TeamDAO.addTeamLeader(teamIdx,loginId);
 			
-		}
-		
-		if(!teamProfilePhoto.getOriginalFilename().equals("")) {
 			logger.info("파일 업로드 작업");
 			photoSave(teamProfilePhoto,teamIdx);
 			logger.info("파일 업로드 성공");
 		}
+
 		return "redirect:/team/teamPage.go?teamIdx="+teamIdx;
 	}
 
@@ -85,23 +83,28 @@ public class TeamService {
 		// 1. 파일을 C:/carrot_farm/t01/ 에 저장
 				//1-1. 원본 이름 추출
 				String oriFileName = teamProfilePhoto.getOriginalFilename();
-				//1-2. 새이름 생성
-				String photoName = teamIdx+oriFileName;
-				logger.info(photoName);
-				try {
-					byte[] bytes = teamProfilePhoto.getBytes();//1-3. 바이트 추출
-					//1-5. 추출한 바이트 저장
-					Path path = Paths.get("C:/carrot_farm/t01/"+photoName);
-					Files.write(path, bytes);
-					logger.info(photoName+" save OK");
+				
+				String photoName = "";
+				if(oriFileName == null || oriFileName == "") {
+					photoName = "기본프로필.png";
+				}else {
+					//1-2. 새이름 생성
+					photoName = teamIdx+oriFileName;
+					try {
+						byte[] bytes = teamProfilePhoto.getBytes();//1-3. 바이트 추출
+						//1-5. 추출한 바이트 저장
+						Path path = Paths.get("C:/carrot_farm/t01/"+photoName);
+						Files.write(path, bytes);
+						logger.info(photoName+" save OK");
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 					// 2. 저장 정보를 DB 에 저장
 					//2-1. teamProfilePhoto, photoName insert
 					TeamDAO.photoWrite(photoName,teamIdx);
 					logger.info("photoName 저장완료");
-								
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+							
 	}
 
 	//사용자가 입력한 location의 idx를 받아오는 메서드
@@ -518,6 +521,200 @@ public class TeamService {
 		}
 		
 		return map;
+	}
+
+	public HashMap<String, Object> teamUserList(HashMap<String, Object> params) {
+		
+		int page = Integer.parseInt((String) params.get("page"));
+		String teamJoinDate = String.valueOf(params.get("teamJoinDate"));
+		logger.info(teamJoinDate);
+		String searchText = String.valueOf(params.get("searchText"));
+		logger.info(page+" 페이지 보여줘");
+		logger.info("한 페이지에 "+10+" 개씩 보여줄거야");
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();		
+
+		//총 페이지 수 
+		int offset = (page-1)*10;
+		
+		// 만들 수 있는 총 페이지 수 
+		// 전체 게시물 / 페이지당 보여줄 수
+		int total = 0;
+		
+		ArrayList<TeamDTO> list = new ArrayList<TeamDTO>();
+		params.put("offset", offset);
+		
+		if(searchText.equals("default") || searchText.equals("")) {
+			if(teamJoinDate.equals("default")) {
+				// 전체 보여주기
+				list.addAll(TeamDAO.teamUserListMy(params));
+				list.addAll(TeamDAO.teamLeaderList(params));
+				list.addAll(TeamDAO.teamUserList(params));
+				logger.info("teamUserList size : "+list);	
+			}else{
+				// 경기순을 선택한 경우
+				if(teamJoinDate.equals("DESC")) {//최신순
+						list = TeamDAO.teamUserListDesc(params);
+						logger.info("최신순 size : "+list.size());	
+				}else {//오래된 순
+					list = TeamDAO.teamUserListAsc(params);
+						logger.info("오래된순 size : "+list.size());	
+				}
+			}
+		}else {
+			// 검색어 입력한 경우
+				list = TeamDAO.teamUserListSearch(params);		
+				logger.info("teamUserListSearch size : "+list.size());
+		}
+		
+		total = list.size();
+		
+		int range = total%10 == 0 ? total/10 : (total/10)+1;
+		logger.info("전체 게시물 수 : "+total);
+		logger.info("총 페이지 수 : "+range);
+		
+		page = page > range ? range : page;
+		
+		map.put("currPage", page);
+		map.put("pages", range);
+
+		map.put("list", list);
+		
+		return map;
+	}
+
+	public HashMap<String, Object> teamUserListLeader(HashMap<String, Object> params) {
+		
+		int page = Integer.parseInt((String) params.get("page"));
+		String teamJoinDate = String.valueOf(params.get("teamJoinDate"));
+		logger.info(teamJoinDate);
+		String searchText = String.valueOf(params.get("searchText"));
+		logger.info(page+" 페이지 보여줘");
+		logger.info("한 페이지에 "+10+" 개씩 보여줄거야");
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();		
+
+		//총 페이지 수 
+		int offset = (page-1)*10;
+		
+		// 만들 수 있는 총 페이지 수 
+		// 전체 게시물 / 페이지당 보여줄 수
+		int total = 0;
+		
+		ArrayList<TeamDTO> list = new ArrayList<TeamDTO>();
+		params.put("offset", offset);
+		
+		if(searchText.equals("default") || searchText.equals("")) {
+			if(teamJoinDate.equals("default")) {
+				// 전체 보여주기
+				list.addAll(TeamDAO.teamLeaderList(params));
+				list.addAll(TeamDAO.teamUserList(params));
+				logger.info("teamUserList size : "+list);	
+			}else{
+				// 경기순을 선택한 경우
+				if(teamJoinDate.equals("DESC")) {//최신순
+						list = TeamDAO.teamUserListDesc(params);
+						logger.info("최신순 size : "+list.size());	
+				}else {//오래된 순
+					list = TeamDAO.teamUserListAsc(params);
+						logger.info("오래된순 size : "+list.size());	
+				}
+			}
+		}else {
+			// 검색어 입력한 경우
+				list = TeamDAO.teamUserListSearch(params);		
+				logger.info("teamUserListSearch size : "+list.size());
+		}
+		
+		total = list.size();
+		
+		int range = total%10 == 0 ? total/10 : (total/10)+1;
+		logger.info("전체 게시물 수 : "+total);
+		logger.info("총 페이지 수 : "+range);
+		
+		page = page > range ? range : page;
+		
+		map.put("currPage", page);
+		map.put("pages", range);
+
+		map.put("list", list);
+		
+		return map;
+	}
+
+	public HashMap<String, Object> changeTeamGrade(HashMap<String, Object> params) {
+		logger.info("changeTeamGrade : "+params);
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();	
+		
+		if(TeamDAO.changeTeamGrade(params) == 1) {
+			map.put("data", 1);
+		}
+		
+		return map;
+	}
+
+	public HashMap<String, Object> warningList(HashMap<String, Object> params) {
+		
+		int page = Integer.parseInt((String) params.get("page"));
+		String searchText = String.valueOf(params.get("searchText"));
+		logger.info(page+" 페이지 보여줘");
+		logger.info("한 페이지에 "+10+" 개씩 보여줄거야");
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();		
+
+		//총 페이지 수 
+		int offset = (page-1)*10;
+		
+		// 만들 수 있는 총 페이지 수 
+		// 전체 게시물 / 페이지당 보여줄 수
+		int total = 0;
+		
+		ArrayList<TeamDTO> list = new ArrayList<TeamDTO>();
+		params.put("offset", offset);
+		
+		if(searchText.equals("default") || searchText.equals("")) {
+			list = TeamDAO.warningList(params);
+			logger.info("warningList size : "+list.size());
+		}else {
+			// 검색어 입력한 경우
+				list = TeamDAO.warningListSearch(params);		
+				logger.info("teamUserListSearch size : "+list.size());
+		}
+		
+		total = list.size();
+		
+		int range = total%10 == 0 ? total/10 : (total/10)+1;
+		logger.info("전체 게시물 수 : "+total);
+		logger.info("총 페이지 수 : "+range);
+		
+		page = page > range ? range : page;
+		
+		map.put("currPage", page);
+		map.put("pages", range);
+
+		map.put("list", list);
+		
+		return map;
+	}
+
+	public void warning(HashMap<String, Object> params) {
+		int row = TeamDAO.warning(params);	
+		logger.info("update row : "+row);
+	}
+
+	public void warningCancel(HashMap<String, Object> params) {
+		int row = TeamDAO.warningCancel(params);	
+		logger.info("update row : "+row);
+	}
+
+	public void remove(HashMap<String, Object> params) {
+		int row = TeamDAO.remove(params);	
+		logger.info("update row : "+row);
+	}
+
+	public ArrayList<TeamDTO> warningHistory(int teamIdx, String userId) {
+		return TeamDAO.warningHistory(teamIdx,userId);
 	}
 
 

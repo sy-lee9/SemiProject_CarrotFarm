@@ -10,7 +10,7 @@
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=77b263fb5e91c183b524a3d94385df7c&libraries=services"></script>
 
 <!-- <script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script> -->
-<script src="./resources/js/twbsPagination.js" type="text/javascript"></script>
+<script src="resources/js/twbsPagination.js" type="text/javascript"></script>
 <style>
 	table, th, td{
       border : 1px solid black;
