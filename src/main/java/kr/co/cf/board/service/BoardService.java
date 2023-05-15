@@ -262,9 +262,11 @@ public class BoardService {
 		dto.setCategoryId(params.get("categoryId"));
 		
 		
-		
 		int row = dao.nwrite(dto);
 		logger.info("업데이트 row : " + row);
+		
+		
+		
 		
 		int bidx = dto.getBoardIdx();
 		logger.info("방금 인서트한 bidx : " + bidx);
@@ -275,10 +277,20 @@ public class BoardService {
 			logger.info("파일 업로드 작업");
 			
 			nfileSave(bidx,photo);
+			
+		}
+		
+		//공지 작성시 알림 설정
+		ArrayList<BoardDTO> userList = dao.userList();
+		for(int i=0 ; i<userList.size() ; i++) {
+			String userId = userList.get(i).getUserId();
+			dao.sendAlarm(userId,bidx);
 		}
 		return page;
 	}
 		
+
+
 	private void nfileSave(int photoIdx, MultipartFile photo) {
 		String OriginalFileName = photo.getOriginalFilename();
 		String ext = OriginalFileName.substring(OriginalFileName.lastIndexOf("."));
@@ -424,9 +436,16 @@ public class BoardService {
 				logger.info("파일 업로드 작업");
 				
 				ifileSave(bidx,photo);
-				//iinquirySave(bidx);
+				
 			}
+			iinquirytableSave(bidx);
 			return page;
+		}
+		
+		
+		private void iinquirytableSave(int inquiryIdx) {
+			String inquiryState = "미처리";
+			dao.iinquirytableSave(inquiryIdx, inquiryState);
 		}
 			
 		private void ifileSave(int photoIdx, MultipartFile photo) {
@@ -448,10 +467,6 @@ public class BoardService {
 			}
 			
 		}
-		
-//		private void iinquirySave(int inquiryIdx) {
-//			String inquiryState = "미처리";
-//		}
 
 		public BoardDTO idetail(String boardIdx, String flag) {
 			if(flag.equals("detail")) {
