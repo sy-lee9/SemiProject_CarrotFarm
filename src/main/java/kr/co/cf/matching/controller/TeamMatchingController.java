@@ -244,4 +244,106 @@ public class TeamMatchingController {
 		data.put("msg", "등록 취소 성공");
 		return data;
 		}
+	
+	
+	@RequestMapping(value = "/matching/teamCommentUpdate.go")
+	public String teamCommentUpdateGo(@RequestParam String commentIdx,Model model, HttpSession session, @RequestParam String matchingIdx) {
+		
+		logger.info("모집글 matchingIdx : " + matchingIdx + "번 상세보기");
+		
+		// 모집글 내용
+		MatchingDTO matchingDto = new MatchingDTO();
+		matchingDto = matchingService.matchingDetail(matchingIdx);
+		model.addAttribute("dto", matchingDto);
+		
+		// 해당 모집글의 댓글 불러 오기
+		ArrayList<MatchingDTO> commentList = new ArrayList<MatchingDTO>();
+		commentList = matchingService.commentList(matchingIdx);
+		model.addAttribute("commentList", commentList);
+		logger.info("모집글 commentList : " + commentList);
+		
+		// 로그인 정보가 없을 시
+		if(session.getAttribute("loginId") == null) {
+			model.addAttribute("loginId", "guest");
+		}
+		if(session.getAttribute("loginId") != null) {
+			// 초대 가능한 팀 리스트 
+			ArrayList<MatchingDTO> teamList = matchingService.teamList(matchingIdx);
+			model.addAttribute("teamList", teamList);
+			
+			// 해당 경기 초대 팀 리스트 
+			ArrayList<MatchingDTO> teamInviteList = new ArrayList<MatchingDTO>();
+			teamInviteList = matchingService.teamInviteList(matchingIdx);
+			model.addAttribute("teamInviteList", teamInviteList);
+			
+			// 해당 경기 참가자 정보
+			ArrayList<MatchingDTO> playerList = new ArrayList<MatchingDTO>();
+			playerList = matchingService.playerTeamList(matchingIdx);
+			model.addAttribute("playerList", playerList);
+			
+			// 해당 경기 신청자 목록
+			ArrayList<MatchingDTO> teamApplyList = new ArrayList<MatchingDTO>();
+			teamApplyList = matchingService.teamApplyList(matchingIdx);
+			model.addAttribute("teamApplyList", teamApplyList);
+			
+			// 내 팀정보 
+			MatchingDTO myTeamDto = new MatchingDTO();
+			myTeamDto = matchingService.myTeam(String.valueOf(session.getAttribute("loginId")));
+			model.addAttribute("myTeamDto", myTeamDto);
+			
+			// 팀원 리스트
+			ArrayList<MatchingDTO> teamMemberList = new ArrayList<MatchingDTO>();
+			teamMemberList = matchingService.teamMemberList(matchingIdx,String.valueOf(session.getAttribute("loginId")));
+			model.addAttribute("teamMemberList", teamMemberList);
+		}
+		
+		// MVP 결과 
+				ArrayList<MatchingDTO> playerList = new ArrayList<MatchingDTO>();
+				playerList = matchingService.playerList(matchingIdx);
+				int mvpChk = playerList.size()/2; 
+				logger.info("mvp  최소 득표수 : " + mvpChk);
+				String mvp = "mvp미정";
+				ArrayList<HashMap<String, String>> mvpCnt = matchingService.mvpCnt(matchingIdx);
+				
+				for (int i = 0; i < mvpCnt.size(); i++) {
+					HashMap<String, String> map = mvpCnt.get(i);
+					String realCnt = "";
+					String realId = "";
+					for(String key : map.keySet()){
+						String value = String.valueOf(map.get(key));
+						logger.info(key+" : "+value);
+						if(key.equals("cnt")) {
+							realCnt=String.valueOf(map.get(key));
+						}
+						if(key.equals("receiveId")) {
+							realId=String.valueOf(map.get(key));
+						}
+					}
+					if(Integer.parseInt(realCnt)>mvpChk) {
+						mvp = realId;
+					}
+					
+				}
+				
+				model.addAttribute("mvp",mvp);
+				
+				
+				
+				//float mannerPoint = matchingService.mannerPoint((String)session.getAttribute("loginId"));
+				//model.addAttribute("mannerPoint", mannerPoint);
+
+		
+		return "/matching/teamMatchingDetail";
+	}
+	
+	@RequestMapping(value = "/matching/teamCommentUpdate.do")
+	public String teamCommentUpdateGo(@RequestParam HashMap<String, String> params) {
+		
+		matchingService.commentUpdate(params);
+		String matchingIdx = params.get("matchingIdx");
+		logger.info("matchingIdx"+matchingIdx);		
+		return "redirect:/matching/teamDetail.go?matchingIdx="+matchingIdx ;
+	}
+	
+	
 }

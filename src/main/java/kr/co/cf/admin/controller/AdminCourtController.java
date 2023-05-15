@@ -132,6 +132,7 @@ public class AdminCourtController {
 		adminCourtService.adminCourtRegist(params);
 		return "redirect:/adminCourt";
 	}
+	
 			
 		
 }

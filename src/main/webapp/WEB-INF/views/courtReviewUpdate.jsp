@@ -81,7 +81,8 @@
 		<button>저장</button>
 	</div>
 	</form>
-	 
+	 <button onclick="closeButton()">닫기</button>
+	
 </body>
 <script>
 	function validateForm() {
@@ -92,6 +93,11 @@
 		    return false;
 		  }
 		}
+	function closeButton(){
+		console.log('함수 실행');
+		window.opener.location.reload();
+		window.close();
+	}
 </script>
 </html>
 

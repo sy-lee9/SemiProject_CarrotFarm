@@ -35,9 +35,23 @@ public class MatchingDTO {
 	private String teamGrade;
 	private int tagIdx;
 	private String tagContent;
+	private int alarmIdx;
+	private String reportUserId;
 
 	
 	
+	public String getReportUserId() {
+		return reportUserId;
+	}
+	public void setReportUserId(String reportUserId) {
+		this.reportUserId = reportUserId;
+	}
+	public int getAlarmIdx() {
+		return alarmIdx;
+	}
+	public void setAlarmIdx(int alarmIdx) {
+		this.alarmIdx = alarmIdx;
+	}
 	public int getTagIdx() {
 		return tagIdx;
 	}

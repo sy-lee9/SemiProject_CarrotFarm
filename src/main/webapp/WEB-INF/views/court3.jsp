@@ -10,6 +10,10 @@
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=77b263fb5e91c183b524a3d94385df7c&libraries=services"></script>
 
 <script src="resources/js/twbsPagination.js" type="text/javascript"></script>
+<!-- 부트스트랩 JavaScript 파일 불러오기 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <style>
 	table, th, td{
       border : 1px solid black;
@@ -19,6 +23,7 @@
 </style>
 </head>
 <body>
+	<%@ include file="./GNB.jsp" %>
 	<button onclick="window.open('courtTipOff.go','경기장 제보','width=400px,height=400px')">경기장 제보</button>
 	<select name="gu" id="gu" onchange="courtSort('gu')">
 		<option value="none">위치</option>
@@ -40,18 +45,9 @@
 	<div>
 	<table id="courtList">
 		<thead>
-		<tr>
-			<td colspan="6" id="paging">	
-				<!-- 	플러그인 사용	(twbsPagination)	-->
-				<div class="container">									
-					<nav aria-label="Page navigation" style="text-align:center">
-						<ul class="pagination" id="pagination"></ul>
-					</nav>					
-				</div>
-			</td>
-		</tr>
+		
 		</thead>
-		<tbody>
+		<tbody id="list">			
 			<c:forEach items="${courtList}" var="court" varStatus="status" end="9">
 				<tr>
 					<th>${court.courtState}</th>
@@ -65,6 +61,20 @@
 					<th>☆${court.courtStar}</th>
 				</tr>
 			</c:forEach>
+			
+			
+		</tbody>
+		<tbody>
+			<tr>
+			<td colspan="6" id="paging">	
+				<!-- 	플러그인 사용	(twbsPagination)	-->
+				<div class="container">									
+					<nav aria-label="Page navigation" style="text-align:center">
+						<ul class="pagination" id="pagination"></ul>
+					</nav>					
+				</div>
+			</td>
+		</tr>
 		</tbody>
 	</table>
 	</div>
@@ -309,7 +319,7 @@
 		}
 	}
 	function courtListDraw(list){
-		$('#courtList tbody').empty();
+		$('#list').empty();
 		var content = '';
 		list.forEach(function(item,index){
 			content += '<tr>';
@@ -324,7 +334,7 @@
 			content +='<th>'+item.courtAddress+'</th>';
 			content +='<th>'+item.courtStar+'</th>';
 		});
-		$('#courtList tbody').append(content);
+		$('#list').append(content);
 	}
 	function mapGeocoder(address){
 		var geocoder = new kakao.maps.services.Geocoder();
