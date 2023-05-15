@@ -40,7 +40,7 @@ textarea{
 			</tr>
 			<tr>
 				<th>작성자</th>
-				<td>${loginId}</td>
+				<td>${dto.userId}</td>
 			</tr>
 			<tr>
 				<th>작성일</th>
@@ -70,7 +70,7 @@ textarea{
 <script>
 $.ajax({
 	type:'post',
-	url:'userRight.ajax',
+	url:'nuserRight.ajax',
 	data:{},
 	dataType:'json',
 	success:function(data){

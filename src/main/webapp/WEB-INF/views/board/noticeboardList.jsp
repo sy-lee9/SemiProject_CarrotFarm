@@ -25,13 +25,38 @@
 	#paging{
 		text-align: center;
 	}
+	
+	   body{
+      position:relative;
+      font-size:15px;
+      padding : 10px;
+   }
+   
+   #content {
+      width:78%;
+      background-color: #f8f9fa;
+      padding: 10 30 10;
+      margin : 5px;
+      float:right;
+      
+   }
+   
+   #LNB {
+      width:20%;
+      height : 80%;
+      background-color: #f8f9fa;
+      float:left;
+      margin : 5px;
+   }
 </style>
 </head>
 <body>
-	게시물 갯수 : 
-	<select id="pagePerNum">
-		<option value="10">10</option>
-	</select>
+
+	<br><br/>
+	<input type ="text" id="noticeboardSearchInput" placeholder="제목 또는 닉네임을 입력">
+	<button id ="noticeboardSearchButton">검색</button>
+	
+	<br><br/>
 	<button id="registerBtn" onclick="location.href='noticeboardWrite.go'">등록</button>
 	<table>
 		<thead>
@@ -58,9 +83,21 @@
 	</table>
 </body>
 <script>
+
+var searchText = 'default';
+var showPage = 1;
+listCall(showPage);
+
+$('#noticeboardSearchButton').click(function(){
+	searchText = $('#noticeboardSearchInput').val();
+	listCall(showPage);
+	$('#pagination').twbsPagination('destroy');
+});
+
+
 $.ajax({
 	type:'post',
-	url:'userRight.ajax',
+	url:'nuserRight.ajax',
 	data:{},
 	dataType:'json',
 	success:function(data){
@@ -74,23 +111,13 @@ $.ajax({
 	}
 });
 
-
-
-var showPage = 1;
-listCall(showPage);
-
-$('#pagePerNum').change(function(){
-	listCall(showPage);
-	$('#pagination').twbsPagination('destroy');
-});
-
 function listCall(page){
 	$.ajax({
 		type:'post',
 		url:'nlist.ajax',
 		data:{
 			'page':page,
-			'cnt':$('#pagePerNum').val()	
+			'search':searchText
 		},
 		dataType:'json',
 		success:function(data){
@@ -101,7 +128,7 @@ function listCall(page){
 			$('#pagination').twbsPagination({
 				startPage:data.currPage, 
 				totalPages:data.pages, 
-				visiblePages:10,
+				visiblePages:5,
 				onPageClick:function(event,page){
 					console.log(page,showPage);
 					if (page != showPage) {
