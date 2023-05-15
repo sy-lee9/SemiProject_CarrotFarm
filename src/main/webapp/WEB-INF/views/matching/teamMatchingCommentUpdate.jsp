@@ -13,8 +13,7 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <style>
-
-body{
+	body{
 		position:relative;
 		font-size:15px;
 		padding : 10px;
@@ -70,7 +69,7 @@ body{
 		text-align:center;
 	}
 
-	#playerListPopup, #gameApplyListPopup,#gameInviteListPopup {
+	#playerListPopup, #gameApplyListPopup,#gameInviteListPopup, #teamRegistPopup{
         display: none;
         position: fixed;
         top: 20%;
@@ -89,7 +88,7 @@ body{
 		text-align:center;
 	}
 	
-	#closePlayerListBtn, #closeGameApplyListBtn, #closeGameInviteListBtn{
+	#closePlayerListBtn, #closeGameApplyListBtn, #closeGameInviteListBtn, #closeTeamRegistPopup{
 		margin:auto;
         display:block;
 	}
@@ -130,39 +129,42 @@ body{
 	    <a href="/cf/matching/teamList.do" >팀 모집글</a>	    
 	</div>
 	
-	
-	
 	<div id="content">
-	
 	<table>
-		
-			<tr style="height:15px;" >
+		<tr style="height:15px;">
 				<th style="text-align:left;"><h2>&nbsp; &nbsp; &nbsp; &nbsp; ${dto.subject}</h2></th>
 				<th style="width: 28%;">${dto.gameDate} </th>
 				<th style="width: 10%;">&#128100 ${dto.matchingNumforSure}/${dto.matchingNum}</th>
-				<th style="width: 12%;"><a href="../userprofile.go?userId=${dto.writerId}">${dto.writerId}</a></th>
-			</tr>
-			<tr style="height:1px;">
+				<th style="width: 12%;">${dto.teamName}</th>
+		</tr>
+		<tr style="height:1px;">
 				<th colspan="4"><hr/></th>
-			</tr>
-	     	<tr>
-	     		<th>
-	     			<div id="map" style="width:90%;height:90%; border: 1px solid black;"></div>
-	     		</th>
-	     		<td colspan="3" style="text-align:left; padding-left:20px; border-left:1px solid gray;" >
-	     			</br>🏀 경기 일시 : ${dto.gameDate} 
-	     			</br>🏀 경기 장소 : ${dto.courtName}
-	     			</br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 주소: ${dto.courtAddress}
-	     			</br>🏀 모집 인원 :	 &#128100 ${dto.matchingNumforSure}/${dto.matchingNum} &nbsp; &nbsp; 
-	     				<c:if test="${loginId != 'guest' }"> 
-	     					<button  class="btn btn-outline-dark" id="playerList">참가자</button>
+		</tr>
+		<tr>
+	     	<th>
+	     		<div id="map" style="width:90%;height:90%; border: 1px solid black;"></div>
+	     	</th>
+	     	<td colspan="3" style="text-align:left; padding-left:20px; border-left:1px solid gray;" >
+	     		</br>🏀 경기 일시 : ${dto.gameDate} 
+	     		</br>🏀 경기 장소 : ${dto.courtName}
+	     		</br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 주소: ${dto.courtAddress}
+	     		</br>🏀 모집 인원 :	 &#128100 ${dto.matchingNumforSure}/${dto.matchingNum} &nbsp; &nbsp; 
+	     			<c:if test="${loginId != 'guest' }">
+	     				<button class="btn btn-outline-dark" id="playerList">참가자</button>
+	     				
+	     				<c:if test="${myTeamDto.teamGrade eq 'leader'}">
+	     					<c:forEach items="${playerList}" var="playerList">
+	     					<c:if test="${playerList.userId eq loginId}">
+	     						<button class="btn btn-outline-dark" id="teamRegist">팀원등록</button>
+	     					</c:if>
+	     				</c:forEach>
+	     				
 	     				</c:if>
-	     			
+	     			</c:if>
 				    </br>🏀 경기 방식 : ${dto.gamePlay} : ${dto.gamePlay}
-	     			</br> ${dto.content}
+	     			</br>🏀 ${dto.content}
 	     		</td>
 	     	</tr>
-	     	
 	     	
 	     	<c:if test="${loginId == 'guest' }">
 	     	<tr>
@@ -172,34 +174,38 @@ body{
    		
 	     	
 			
-			
-<!--matchigState : matching, finish, review  -->				    
+				    
 	     	<tr>
-<!--matchigState가 matching 상태일 시  -->
+	     		<!--matchigState가 matching 상태일 시  -->
 	     		<c:if test="${dto.matchigState eq 'matching'}">
 	     			<th>
-		     			<c:if test="${loginId != 'guest' }">
+	     				<c:if test="${loginId != 'guest' }">
 		     				<button class="btn btn-outline-dark" id="gameApplyList">신청자</button>
 		     				<c:if test="${dto.writerId eq loginId }">
-		     				<button class="btn btn-outline-dark" id="gameInviteList">초대</button>
-		     				</c:if>	
-		     			</c:if>
+		     					<button class="btn btn-outline-dark" id="gameInviteList">초대</button>
+	     					</c:if>	
+	     				</c:if>	
 	     			</th>
 	     		
 		     		<c:if test="${dto.writerId eq loginId }">
 			     		<th style="text-align:left;">
-		     				<button class="btn btn-warning" id="matchingChk" >모집종료</button>
+		     				<button class="btn btn-warning" id="matchingChk">모집종료</button>
 		     			</th>
 		     		</c:if>
 		     		
 		     		<c:if test="${dto.writerId ne loginId }">
-				     	<th colspan="2" style="text-align:left;">
-				     		<c:if test="${loginId != 'guest' }">
+			     		<th colspan="2" style="text-align:left;">
+			     		<c:if test="${loginId != 'guest' }">
+				     		<c:if test="${myTeamDto.teamGrade eq 'leader'}">
 			     				<button class="btn btn-warning" id="applyChk" onclick="location.href='applyGame?matchingIdx=${dto.matchingIdx}'">신청</button>
 			     			</c:if>
-			     		</th>
+		     			</c:if>
+		     			</th>
 		     		</c:if>
 	     		</c:if>
+	     		
+	     	
+			 
 	     		
 <!--matchigState가 finish 상태일 시  -->
 	     		<c:if test="${dto.matchigState eq 'finish'}">
@@ -207,8 +213,8 @@ body{
 	     			
 	     			</th>
 	     			<c:if test="${dto.writerId eq loginId }">
-			     		<th colspan="1">
-			     			<button class="btn btn-warning" id="finishChk" >경기종료</button>
+			     		<th>
+			     			<button class="btn btn-warning" id="finishChk">경기종료</button>
 		     			</th>
 		     		</c:if>
 		     		
@@ -217,6 +223,7 @@ body{
 		     		</c:if>
 	     		</c:if>
 	     		
+
 <!--matchigState가 review 상태일 시  -->
 	     		<c:if test="${dto.matchigState eq 'review'}">
 	     			
@@ -247,38 +254,36 @@ body{
 	     		</th>
 	     	</tr>
 	     	
-	     	
-	     	
 	     	<!-- 리뷰 결과 -->
-	     	
 	     	<c:if test="${dto.matchigState eq 'review'}">
-	     		<tr style="height:1px;">
+		     	<tr style="height:1px;">
 					<th colspan="4"><hr/></th>
 				</tr>
-		     	<tr>
+		     	<tr >
 		     		<th>
 		     		 	<p>리뷰결과</p>
 		     		</th>
-		     		<th colspan="3" style="border-left:1px solid gray;">
+		     	</tr>	
+		     	<tr>
+		     		<th colspan="1" style="border-left:1px solid gray;">
+		     		 	<p>${dto.teamName}</p>
+		     		 	<p>팀리뷰결과</p>
+		     		</th>
+		     		<th colspan="3">
 		     		 	<p>MVP</p>
 		     		 	<p>${mvp}</p>
 		     		</th>
-		     	</tr>	
-		     	
+		     	</tr>
 	     	</c:if>
 
 	     	
 	     	
 	     	</br>
-<!--matchigState : matching, finish, review  -->		     	
+<!--matchigState : matching, finish, review  -->		     	     	
+	     	
 	     	<tr style="height:1px;">
 				<th colspan="4"><hr/></th>
 			</tr>
-	     	
-	     	
-	     	
-	     	
-	     	
 <!-- 댓글 -->
 		<table style="width:90%; height:15%;">
 	     	
@@ -289,7 +294,7 @@ body{
 				     	<td style="width:15%;">${commentList.commentWriteTime}</td>
 				     	<td style="width:10%;">
 				     		<c:if test="${commentList.userId eq loginId}">
-				     			<a  href="commentUpdate.go?commentIdx=${commentList.commentIdx}&matchingIdx=${dto.matchingIdx}" >수정</a> 
+				     			<a  href="commentUpdate.go?teamCommentIdx=${commentList.commentIdx}&matchingIdx=${dto.matchingIdx}" >수정</a> 
 				     			/ 
 				     			<a href="commentDelete.do?commentIdx=${commentList.commentIdx}&matchingIdx=${dto.matchingIdx}" id="delCommentChk" >삭제</a>
 	
@@ -304,8 +309,8 @@ body{
 				</c:forEach>
 		     
 			     <tr>
-
-			     <form method="post" action="commentUpdate.do?" id="commentForm">
+	
+				   <form method="post" action="teamCommentUpdate.do?" id="commentForm">
 					<th >
 						<input type="text" name="commentIdx" value="${commentDto.commentIdx}" hidden>
 						<input type="text" name="matchingIdx" value="${dto.matchingIdx}" style= "border:none;" hidden>
@@ -326,96 +331,115 @@ body{
 								     		
 					</c:if>
 				</form>
-			     			     
-		     </tr>
-		     
+				     			     
+			     </tr>
 		     </table>
-		     
-		     
-		     
-		     
-		  
-		   </table>
-		   </div>
-		  </body>
-		  
-		  
-
-		  
-<!-- 참가자 목록, 신청자 목록, 초대가능 목록 div -->
-		  
-		  
-		  <div id="playerListPopup">
+		   
+		   
+		   
+		   <div id="playerListPopup">
 				<h3>참가자 목록</h3>
 				<hr>
-				<div id="scroll" >
+				<div id="scroll" style="height: 150px; overflow: auto;">
 				<ul>
 					<c:forEach items="${playerList}" var="playerList">
-						<li> &nbsp; &nbsp; ${playerList.userId} &nbsp; &nbsp; 
-						<c:if test="${dto.writerId eq loginId }">
-							<c:if test="${dto.writerId ne playerList.userId }">
-							<c:if test="${dto.matchigState eq 'matching'}">
-									&nbsp; &nbsp; <button class="btn btn-outline-dark" onclick="location.href='playerDelete?userId=${playerList.userId}&matchingIdx=${dto.matchingIdx}'">취소</button>
+						<c:if test="${playerList.teamName eq dto.teamName}">
+							<li> ${playerList.teamName} ${playerList.userId}
+							<c:if test="${dto.writerId eq loginId }">
+								<c:if test="${dto.writerId ne playerList.userId }">
+									<button onclick="location.href='playerDelete?userId=${playerList.userId}&matchingIdx=${dto.matchingIdx}'">취소</button>
+								</c:if>
 							</c:if>
-							</c:if>
+							</br>
+							</li>
 						</c:if>
-						</br>
-						</li>
+					</c:forEach>
+					</br>
+					<c:forEach items="${playerList}" var="playerList">
+						<c:if test="${playerList.teamName ne dto.teamName}">
+							<li> ${playerList.teamName} ${playerList.userId} 
+							<c:if test="${dto.writerId eq loginId }">
+								<c:if test="${dto.writerId ne playerList.userId }">
+									<button onclick="location.href='playerDelete?userId=${playerList.userId}&matchingIdx=${dto.matchingIdx}'">취소</button>
+								</c:if>
+							</c:if>
+							</br>
+							</li>
+						</c:if>
 					</c:forEach>
 				</ul>
 				</div>
-				</br></br>
-				<button class="btn btn-outline-dark" id="closePlayerListBtn">닫기</button>
+				<button id="closePlayerListBtn">닫기</button>
 			</div>
 			
-			<div id="gameApplyListPopup">
-					<h3>신청자 목록</h3>
+			<div id="teamRegistPopup">
+					<h3>팀원등록</h3>
 					<hr>
-					<div id="scroll" >
+					<div id="scroll" style=" width:230px; height: 150px; overflow: auto;">
+						<c:if test="${teamMemberList ne null}">
+							<c:forEach items="${teamMemberList}" var="teamMemberList">
+								<c:if test="${teamMemberList.userId ne loginId}">
+									<li> 
+										${teamMemberList.userId}
+										<button id="registBtn_${teamMemberList.userId}" onclick="teamRegist('${teamMemberList.userId}', '${dto.matchingIdx}')">등록</button>
+									</li>
+								</c:if>
+							</c:forEach>
+						</c:if>
+						<c:if test="${teamMemberList eq null}">
+							<li> 등록할 수 있는 팀원이 없습니다. </li>
+						</c:if>
+					</div>
+					<button id="closeTeamRegistBtn" onclick="location.href='teamDetail.go?matchingIdx='+${dto.matchingIdx}">닫기</button>
+			</div>
+			
+	     		<div id="gameApplyListPopup">
+					<h3>신청팀 목록</h3>
+					<hr>
 					<ul>
-						<c:forEach items="${gameApplyList}" var="gameApplyList">
-							<li> &nbsp; &nbsp; ${gameApplyList.userId} &nbsp; &nbsp; 
+						<c:forEach items="${teamApplyList}" var="gameApplyList">
+							<li> ${gameApplyList.userId} ${gameApplyList.teamName} 
 							<c:if test="${dto.writerId eq loginId }">
-								<button class="btn btn-outline-dark" onclick="location.href='gameApplyAccept?userId=${gameApplyList.userId}&matchingIdx=${dto.matchingIdx}'">수락</button> / 
-								<button class="btn btn-outline-dark" onclick="location.href='gameApplyReject?userId=${gameApplyList.userId}&matchingIdx=${dto.matchingIdx}'">거절</button>
+								<button onclick="location.href='gameApplyAccept?userId=${gameApplyList.userId}&matchingIdx=${dto.matchingIdx}'">수락</button> / 
+								<button onclick="location.href='gameApplyReject?userId=${gameApplyList.userId}&matchingIdx=${dto.matchingIdx}'">거절</button>
 							</c:if>
 							</br>
 							</li>
 						</c:forEach>
 					</ul>
-					</div>
-					</br></br>
-					<button class="btn btn-outline-dark" id="closeGameApplyListBtn">닫기</button>
+					<button id="closeGameApplyListBtn">닫기</button>
 				</div>
 				
 				<div id="gameInviteListPopup">
 					<h3>초대하기</h3>
 					<hr>
-					<div id="scroll" >
+					<div id="scroll" style="height: 150px; overflow: auto;">
 						<ul>
-							<c:if test="${gameInviteList !=null}">
-								<c:forEach items="${gameInviteList}" var="gameInviteList">
-									<li> &nbsp; &nbsp; 
-									${gameInviteList.userId} &nbsp; &nbsp; &nbsp; &nbsp; 
-									<button class="btn btn-outline-dark" id="inviteBtn_${gameInviteList.userId}" onclick="cancelInvite('${gameInviteList.userId}', '${dto.matchingIdx}')">취소</button>
+							<c:if test="${teamInviteList !=null}">
+								<c:forEach items="${teamInviteList}" var="teamInviteList">
+									<li> 
+										${teamInviteList.teamName}
+										<button id="inviteBtn_${teamInviteList.userId}" onclick="cancelInvite('${teamInviteList.userId}', '${dto.matchingIdx}')">취소</button>
 									</li>
 								</c:forEach>
-							</c:if>
-							
-							<c:forEach items="${userList}" var="userList">
-								<li> &nbsp; &nbsp; 
-									${userList.userId} &nbsp; &nbsp; &nbsp; &nbsp; 
-									<button class="btn btn-outline-dark" id="inviteBtn_${userList.userId}" onclick="inviteUser('${userList.userId}', '${dto.matchingIdx}')">초대</button>
+							</c:if> 
+									
+											
+							<c:forEach items="${teamList}" var="teamList">
+								<li> 
+									${teamList.teamName}
+									<button id="inviteBtn_${teamList.userId}" onclick="inviteTeam('${teamList.userId}', '${dto.matchingIdx}')">초대</button>
 								</li>
 							</c:forEach>
 						</ul>
 					</div>
-					</br></br>
-					<button class="btn btn-outline-dark" id="closeGameInviteListBtn" onclick="location.href='detail.go?matchingIdx='+${dto.matchingIdx}">닫기</button>
+					<button id="closeGameInviteListBtn" onclick="location.href='teamDetail.go?matchingIdx='+${dto.matchingIdx}">닫기</button>
 				</div>
-		  
-		  		
-		  
+		   
+		   
+		   
+		   </div>
+		  </body>
 		  
 		  
 		  
@@ -447,12 +471,28 @@ body{
     });
 	
     
+   
+    
+    
+    
+    
+    
+    function subCommentChk(){
+		console.log($('#commentContent').val());
+		
+		if($('#commentContent').val() == ''){
+			alert('댓글을 입력해주세요.');
+			return false;
+		}else{
+			$('#commentForm').submit();
+		}
+		
+		
+	}
+    
     //=============================================================
     // comfirm 창 모음
     //=============================================================
-
-
-    
    $(function() {
 	   $('#delChk').click(function(event) {
 	     if (!confirm('삭제하시면 복구할수 없습니다. \n 정말로 삭제하시겠습니까??')) {
@@ -463,7 +503,7 @@ body{
 	   });
 	 });
 
-   
+
    $(function() {
 	   $('#matchingChk').click(function(event) {
 	     var matchingNumforSure = parseInt('${dto.matchingNumforSure}');
@@ -472,16 +512,15 @@ body{
 	       alert('모집 인원 수 보다 경기 참여 인원이 많습니다. 참가자 목록을 확인해 주세요');
 	       event.preventDefault();
 	     } else if (matchingNumforSure == 1) {
-		   alert('경기는 최소 2명의 참가자가 존재할 때만 가능합니다. ');
-		    event.preventDefault();
-		 }else if (!confirm('모집을 종료하면 경기 참가 신청은 자동으로 거절 됩니다.\n 정말로 종료하시겠습니까??')) {
+			 alert('경기는 최소 2명의 참가자가 존재할 때만 가능합니다. ');
+			 event.preventDefault();
+		}else if (!confirm('모집을 종료하면 경기 참가 신청은 자동으로 거절 됩니다.\n 정말로 종료하시겠습니까??')) {
 	       event.preventDefault(); 
 	     } else {
 	       location.href='matchigStateUpdate?matchingIdx=${dto.matchingIdx}&matchigState=${dto.matchigState}';
 	     }
 	   });
 	 });
-
    
    
    $(function() {
@@ -494,28 +533,14 @@ body{
 	   });
 	 });
    
-
-    
-
    
-  function subCommentChk(){
-		console.log($('#commentContent').val());
-		
-		if($('#commentContent').val() == ''){
-			alert('댓글을 입력해주세요.');
-			return false;
-		}else{
-			$('#commentForm').submit();
-		}
-		
-		
-	}
+
   
  
     
     
 	
-    var playerListBtn = document.getElementById('playerList');
+ var playerListBtn = document.getElementById('playerList');
     var playerListPopup = document.getElementById('playerListPopup');
     var closePlayerListBtn = document.getElementById('closePlayerListBtn');
 
@@ -527,7 +552,7 @@ body{
       playerListPopup.style.display = 'none';
     });
 	
-    
+     
     var gameApplyListBtn = document.getElementById('gameApplyList');
     var gameApplyListPopup = document.getElementById('gameApplyListPopup');
     var closeGameApplyListBtn = document.getElementById('closeGameApplyListBtn');
@@ -539,8 +564,23 @@ body{
     closeGameApplyListBtn.addEventListener('click', function() {
     	gameApplyListPopup.style.display = 'none';
     });
+   
+   
     
-    var gameInviteListBtn = document.getElementById('gameInviteList');
+    var teamRegistBtn = document.getElementById('teamRegist');
+    var teamRegistPopup = document.getElementById('teamRegistPopup');
+    var closeTeamRegistBtn = document.getElementById('closeTeamRegistBtn');
+
+    teamRegistBtn.addEventListener('click', function() {
+    	teamRegistPopup.style.display = 'block';
+    });
+
+    closeTeamRegistBtn.addEventListener('click', function() {
+    	teamRegistPopup.style.display = 'none';
+    });
+    
+    
+     var gameInviteListBtn = document.getElementById('gameInviteList');
     var gameInviteListPopup = document.getElementById('gameInviteListPopup');
     var closeGameInviteListBtn = document.getElementById('closeGameInviteListBtn');
 
@@ -551,8 +591,7 @@ body{
     closeGameInviteListBtn.addEventListener('click', function() {
     	gameInviteListPopup.style.display = 'none';
     });
-    
-function inviteUser(userId, matchingIdx) {
+function inviteTeam(userId, matchingIdx) {
         
         $.ajax({
             url: 'gameInvite.ajax',
@@ -588,12 +627,55 @@ function inviteUser(userId, matchingIdx) {
                 var inviteBtn = document.getElementById('inviteBtn_' + userId);
                 inviteBtn.textContent = '초대';
                 inviteBtn.onclick = function() {
-                    inviteUser(userId, '${dto.matchingIdx}');
+                    inviteUser('${gameInviteList.userId}', '${dto.matchingIdx}');
                 };
             }
         });
     }
     
+
+    
+function teamRegist(userId, matchingIdx) {
+        
+        $.ajax({
+            url: 'teamRegist.ajax',
+            type: 'POST',
+            data: {
+                userId: userId,
+                matchingIdx: matchingIdx
+            },
+            success: function(data) {
+                // 버튼 변경
+                console.log(data);
+                var inviteBtn = document.getElementById('registBtn_' + userId);
+                inviteBtn.textContent = '취소';
+                inviteBtn.onclick = function() {
+                	cancelRegist(userId,matchingIdx);
+                };
+            }
+        });
+}
+
+function cancelRegist(userId,matchingIdx) {
+    
+    $.ajax({
+        url: 'cancelRegist.ajax',
+        type: 'POST',
+        data: {
+            userId: userId,
+            matchingIdx: matchingIdx
+        },
+        success: function(data) {
+            // 버튼 변경
+            console.log(data);
+            var inviteBtn = document.getElementById('registBtn_' + userId);
+            inviteBtn.textContent = '등록';
+            inviteBtn.onclick = function() {
+            	teamRegist(userId, matchingIdx);
+            };
+        }
+    });
+}
 
         
     </script>
