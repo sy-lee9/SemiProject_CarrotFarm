@@ -52,13 +52,12 @@
     	margin : 5px;
 	}
 
-
-	a {
-	  color : balck;
+a {
+	  color : black;
 	}
 	
 	a:link {
-	  color : balck;
+	  color : black;
 	}
 	a:visited {
 	  color : black;

@@ -166,8 +166,8 @@ public class TeamController {
 						model.addAttribute("teamUserChk",true);
 					}
 				}
-				page = "/team/teamPage";
 			}	
+			page = "/team/teamPage";
 		}		
 		
 		String msg = (String) session.getAttribute("msg");
