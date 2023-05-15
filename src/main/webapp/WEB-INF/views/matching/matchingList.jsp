@@ -23,6 +23,7 @@
 		position:relative;
 		font-size:15px;
 		padding : 10px;
+		min-width: 1200px;
 	}
 	
 	#content {
@@ -36,10 +37,14 @@
 	
 	#LNB {
 		width:20%;
-		height : 80%;
+		height : 83%;
 		background-color: #f8f9fa;
 		float:left;
 		margin : 5px;
+		font-weight: bold;
+        font-size: 15px;
+		text-align:center;
+		
 	}
 	
 	
@@ -48,7 +53,7 @@
 	}
 	
 	table{
-		width:90%;
+		width:95%;
 		height:70%;
 		text-align:center;
 	}
@@ -66,33 +71,59 @@
 	}
 	
 	#searchButton, #writeButton {
+		font-size: 15px;
 		height: 30px;
     	margin : 5px;
 	
+	}
+	
+	#writeButton {
+		float:right;
+		margin-right : 50px;
+	}
+	
+	a {
+	  color : balck;
+	}
+	
+	a:link {
+	  color : balck;
+	}
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	 text-decoration-line: none;
+	  color : #FFA500 ;
+	}
+	
+	.pagination .page-link {
+  		color: gray; /* 기본 글자색을 검정색으로 지정 */
+	}
+
+	.pagination .page-item.active .page-link {
+ 		background-color: #FFA500;
+ 		border:none;
 	}
 	
 
 </style>
 </head>
 <body>
-	<%-- <div style="float: right;">
-   		<jsp:include page="../loginBox.jsp"></jsp:include>
-	</div> --%>
+	<div style="float: right;">
+		<%@ include file="../loginBox.jsp" %>
+	</div> 
 	<%@ include file="../GNB.jsp" %>
-	
+
 
 	<div id="LNB">
-		 <ul>
-	      <li>
-	        <div style="width: 180px; height: 150px; border : 1px solid black; border-collapse: collapse;">프로필</div>
-	      </li>
-	      <li >
-	        <a href="/cf/matching/list.do">개인 모집글</a>
-	      </li>
-	      <li>
-	        <a href="/cf/matching/teamList.do">팀 모집글</a>
-	      </li>
-	    </ul>
+		<br/><br/>
+		 <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
+	      <br/><br/>
+	    <a href="/cf/matching/list.do">개인 모집글</a> 
+	      <br/><br/>
+	    <a href="/cf/matching/teamList.do" >팀 모집글</a>
+	    
 	</div>
 	
 	
@@ -115,26 +146,30 @@
 	
 		
 		<input type="text" id="searchInput" placeholder="제목 또는 작성자를 입력">
-		<button id="searchButton">검색</button>
+		<button id="searchButton" class="btn btn-outline-dark">검색</button>
 		<c:if test="${loginId != 'guest' }">
-			<button id="writeButton" onclick="location.href='write.go?categoryId=m01'">글쓰기</button>
+			<button id="writeButton" class="btn btn-outline-dark" onclick="location.href='write.go?categoryId=m01'">글쓰기</button>
 		</c:if>
 		</div>
 	
-	
+		<hr/>
 		<table>
 		<thead>
 				<tr>
-					<th style="width:50px;">경기방식</th>
-					<th>경기장위치</th>
-					<th>모집인원수</th>
-					<th>제목</th>
-					<th>경기 일시</th>
-					<th>글쓴이</th>
-					<th>조회수</th>
+					<th style="width:10%;">경기방식</th>
+					<th style="width:10%;">경기장위치</th>
+					<th style="width:10%;">모집인원수</th>
+					<th style="width:35%;">제목</th>
+					<th style="width:20%;">경기 일시</th>
+					<th style="width:10%;">글쓴이</th>
+					<th style="width:5%;">조회수</th>
 				</tr>
 			</thead>
-	
+				
+				<tr>
+					<th colspan="7"> <hr/> </th>
+				</tr>
+				
 			<tbody>
 				
 				
@@ -149,8 +184,10 @@
 				
 				<tr>
 				  <th colspan="7" id="paging" style="text-align:center;">  
-				    <div class="container">                  
+				    <div class="container">                 
+				    <hr/> 
 				      <nav aria-label="Page navigation">
+				      	
 				        <ul class="pagination justify-content-center" id="pagination"></ul>
 				      </nav>
 				    </div>
@@ -252,7 +289,7 @@ function listPrint(list){
 		content +='<td id="gamePlay">'+item.gamePlay+':'+item.gamePlay+'</td>';
 		content +='<td>'+item.gu +'</td>';
 		content +='<td id="gamePlayer"> ' + item.matchingNumforSure +'/'+ item.matchingNum+ '</td>';
-		content +='<td id="subject"><a href="detail.go?matchingIdx='+ item.matchingIdx+'">'+item.subject+'</a></td>';
+		content +='<td id="subject" style="text-align:left; padding-left:30px;"><a href="detail.go?matchingIdx='+ item.matchingIdx+'">'+item.subject+'</a></td>';
 		content +='<td>'+item.gameDate+'</td>';
 		content +='<td id="writerId">'+item.writerId+'</td>';
 		content +='<td>'+item.bHit+'</td>';

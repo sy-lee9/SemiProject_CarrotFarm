@@ -55,7 +55,7 @@
  	
  	
  	<insert id="matchingDeleteAlarm">
-		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES(#{param3},#{param1},'삭제',#{param2})
+		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES(#{param3},#{param1},#{param4},#{param2})
 	</insert> 
 	
  	<delete id="deleteGame">
@@ -281,6 +281,12 @@
 		INSERT INTO game(categoryId,matchingIdx,userId,gameAppState) values('m01',#{param1},#{param2},'신청')
 	</insert>
 	
+	<delete id="applyGameDelete">
+		DELETE FROM game WHERE matchingIdx=#{param1}  AND userId=#{param2} AND gameAppState='신청'
+	</delete>
+	
+	
+	
 	<update id="matchigStateToFinish">
 		UPDATE matching SET matchigState = 'finish' WHERE matchingIdx=#{param1}
 	</update>
@@ -340,11 +346,15 @@
 	
 	
 	<update id="gameApplyAccept">
-		UPDATE game SET gameAppState='확정' WHERE matchingIdx=#{param1} AND userId=#{param2}
+		UPDATE game SET gameAppState='확정' WHERE matchingIdx=#{param1} AND userId=#{param2} AND gameAppState='신청'
 	</update>
 	
 	<delete id="gameApplyReject">
-		DELETE FROM game WHERE matchingIdx=#{param1} AND userId=#{param2}
+		DELETE FROM game WHERE matchingIdx=#{param1} AND userId=#{param2} AND gameAppState='신청'
+	</delete>
+	
+	<delete id="applyGameAlarmDelete">
+		DELETE FROM alarm WHERE alarmKind=#{param1} AND userId=#{param2} AND alarmcontent='신청'
 	</delete>
 	
 	<select id="userList" resultType="kr.co.cf.matching.dto.MatchingDTO">
@@ -368,6 +378,19 @@
 	<insert id="gameInvite" parameterType="hashmap">
 		INSERT INTO game(categoryId,matchingIdx,userId,gameAppState) VALUES(#{categoryId},#{matchingIdx},#{userId},'초대')
 	</insert>
+	
+	<update id="inviteAccept">
+		UPDATE game SET gameAppState='확정' WHERE matchingIdx=#{param1} AND userId=#{param2} AND gameAppState='초대'
+	</update>
+	
+	
+	<delete id="inviteReject">
+		DELETE FROM game WHERE matchingIdx=#{param1} AND userId=#{param2} AND gameAppState='초대'
+	</delete>
+	
+	<delete id="inviteAlarmDelete">
+		DELETE FROM alarm WHERE alarmKind=#{param1} AND userId=#{param2} AND alarmcontent='초대'
+	</delete>	
 	
 	<insert id="teamRegist" parameterType="hashmap">
 		INSERT INTO game(categoryId,matchingIdx,userId,gameAppState) VALUES('m02',#{matchingIdx},#{userId},'확정')
@@ -443,7 +466,7 @@
 	</insert>
 	
 	<insert id="applyGameAlarm">
-		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES(#{param1},#{param2},'신청',#{param3})
+		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES(#{param1},#{param3},'신청',#{param2})
 	</insert>
 	
 	<insert id="gameApplyAcceptAlarm">
@@ -454,12 +477,16 @@
 		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES(#{param3},#{param2},'신청거절',#{param1})
 	</insert>
 	
+	<select id="inviteChk" resultType="int">
+		SELECT COUNT(userId) FROM game WHERE matchingIdx=#{param1} AND userId=#{param2} AND gameAppState='초대'
+	</select>
+		
 	<insert id="matchingReport" parameterType="hashmap">
-		INSERT INTO report(categoryId, userId, reportContent, reportState, reportId) VALUES('rm',#{userId},#{reportContent},'미처리',#{matchingIdx})
+		INSERT INTO report(categoryId, userId, reportContent, reportState, reportId,reportUserId) VALUES('rm',#{userId},#{reportContent},'미처리',#{matchingIdx},#{reportUserId})
 	</insert>
 	
 	<insert id="commentReport" parameterType="hashmap">
-		INSERT INTO report(categoryId, userId, reportContent, reportState, reportId) VALUES('rc',#{userId},#{reportContent},'미처리',#{commentIdx})
+		INSERT INTO report(categoryId, userId, reportContent, reportState, reportId,reportUserId) VALUES('rc',#{userId},#{reportContent},'미처리',#{commentIdx},#{reportUserId})
 	</insert>
 	
 
@@ -506,7 +533,10 @@
 	<select id="tagChk" resultType="int">
 		SELECT COUNT(tagIdx) FROM tagreview WHERE matchingIdx=#{param1} AND teamId=#{param2}
 	</select>
-
+	
+	<select id="getSubject" resultType="String">
+		SELECT subject FROM matching WHERE matchingIdx=#{param1}
+	</select>
 </mapper>
 
 

@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>🏀 당근농장</title>
 <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>  
@@ -79,7 +79,7 @@
 		</tbody>
 	</table>
 			
-			
+
 			
 
 
@@ -87,11 +87,7 @@
 			
 	<button onclick="nicknameChange()">닉네임 변경</button>
 	<button onclick="profileChange()">프로필 변경</button>
-	<button onclick="location.href='logout'">로그아웃</button>
-	<button onclick="location.href='userdelete.go'">회원탈퇴</button>
-	<button onclick="location.href='userinfo.go'">회원정보</button>
-	<button onclick="location.href='mygames'">참여경기 리스트</button>
-	<button onclick="location.href='userprofile.go?userId=${sessionScope.loginId}'">회원 프로필</button>
+	
 </body>
 <script>
 
@@ -160,7 +156,7 @@ function listPrint(list){
 		content +='<td><input type="checkbox" value="'+item.userId+'"</td>';
 		content +='<td>'+item.userIdx+'</td>';
 		content +='<td>'+item.userState+'</td>';
-		content +='<td><a href="userprofile.go?userId="'+item.userId+'"/>'+item.userId+'</td>';
+		content +='<td><a href="#" onclick="window.open('userprofile.go?userId='+item.userId+','width=600px,height=400px')"/>'+item.userId+'</td>';
 		content +='<td>'+item.userName+'</td>';
 		console.log(item.photoName);
 		if(item.photoName==null){
@@ -240,9 +236,6 @@ function profileChange(){
 	});
 }
 
-var msg = "${msg}";
-if(msg != ""){
-	alert(msg);
-}
+
 </script>
 </html>

@@ -4,7 +4,45 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.cf.member.dao.AlarmDAO">
+
+	<select id="totalCount" resultType="int">
+		SELECT COUNT(alarmIdx) FROM alarm WHERE userId=#{param1} AND (categoryId='m01' OR categoryId='m02')
+	</select>
 	
+	<select id="totalNoticeCount" resultType="int">
+		SELECT COUNT(alarmIdx) FROM alarm WHERE userId=#{param1} AND categoryId='b002'
+	</select>
 
-
+	<select id="list" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT 
+			a.alarmIdx,
+			a.categoryId, 
+			m.subject,
+			m.matchingIdx, 
+			a.userId,
+			a.alarmcontent,
+			a.alarmKind
+		FROM alarm a
+		LEFT JOIN matching m on a.alarmKind = m.matchingIdx 
+		WHERE userId=#{param2} AND (a.categoryId='m01' OR a.categoryId='m02')
+		ORDER By alarmIdx DESC 
+		LIMIT 10 OFFSET #{param1}
+	</select>
+	
+	<select id="NoticeList" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT 
+			a.alarmIdx,
+			a.categoryId, 
+			b.subject,
+			a.alarmKind, 
+			a.userId,
+			a.alarmcontent,
+			a.alarmKind
+		FROM alarm a
+		LEFT JOIN board b on a.alarmKind = b.boardIdx 
+		WHERE a.userId=#{param2} AND a.categoryId='b002'
+		ORDER By alarmIdx DESC 
+		LIMIT 10 OFFSET #{param1}
+	</select>
+	
 </mapper>

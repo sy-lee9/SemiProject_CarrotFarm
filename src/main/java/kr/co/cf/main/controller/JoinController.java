@@ -80,7 +80,7 @@ public class JoinController {
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(HttpSession session) {
        
-       session.removeAttribute("nickName");
+       session.removeAttribute("loginId");
        return "main";
     }
 
@@ -163,10 +163,10 @@ public class JoinController {
 	         
 	         String page = "redirect:/";      
 	         
-	         logger.info("닉네임 : "+session.getAttribute("nickName"));
+	         logger.info("아이디 : "+session.getAttribute("loginId"));
 	         
-	          if(session.getAttribute("nickName") != null) {
-	             JoinDTO dto = service.userInfo(session.getAttribute("nickName"));             
+	          if(session.getAttribute("loginId") != null) {
+	             JoinDTO dto = service.userInfo(session.getAttribute("loginId"));             
 	             model.addAttribute("user",dto);
 	             page = "userInfo";
 	          }
@@ -219,6 +219,21 @@ public class JoinController {
 	  		return "userProfile";
 	  	}
 	  	
+	  	@RequestMapping(value="/userprofilepop.go")
+	  	public String userProfilePop(@RequestParam String userId, Model model) {
+	  		logger.info(userId);
+	  		ArrayList<JoinDTO> list= service.profileGames(userId);
+	  		model.addAttribute("profileGames",list);
+	  		
+	  		JoinDTO dto = service.profileInfo(userId);
+	  		model.addAttribute("profileInfo", dto);
+	  		
+	  		float mannerPoint = matchingService.mannerPoint(userId);
+	  		model.addAttribute("mannerPoint", mannerPoint);
+	  		
+	  		return "userProfilePop";
+	  	}
+	  	
 	  	@RequestMapping(value = "/userReport.go")
 	  	public String userReportPage(Model model, @RequestParam String userId, @RequestParam String userIdx) {
 	  		model.addAttribute("userId",userId);
@@ -227,10 +242,11 @@ public class JoinController {
 	  	}
 	  	@RequestMapping(value = "/userReport.do")
 	  	public String userReport(@RequestParam HashMap<String, String> params) {
-	  		logger.info("넘어 오는 값들: "+params);
+	  		logger.info("유저 신고 con: "+params);
 	  		params.put("reportContent",params.get("report")+params.get("content") );
 	  		service.userReport(params);
 	  		return "redirect:/userReport.go?userId="+params.get("reportId")+"&userIdx="+params.get("userIdx");
 	  	}
+	  	
 
 }

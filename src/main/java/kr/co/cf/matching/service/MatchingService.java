@@ -42,17 +42,20 @@ public class MatchingService {
 		
 		// 삭제 전 해당 매칭글의 idx를 가진 알림을 모두 삭제 함
 		String categoryId = matchingDAO.categoryIdChk(matchingIdx);
+		String subject = matchingDAO.getSubject(matchingIdx);
 		matchingDAO.deleteAlarm(matchingIdx,categoryId);
 		
 		
-		// 삭제 전 해당 matchingIdx의 playerList에게 수정된 내용에 대한 알림을 보내야함
+		// 삭제 전 해당 matchingIdx의 playerList에게 삭제알림을 보내야함
 		ArrayList<MatchingDTO> playerList =  matchingDAO.playerList(matchingIdx);
 		
 		for (int i = 0; i < playerList.size(); i++) {
 			String userId =playerList.get(i).getUserId();
 			logger.info("userId" + userId);
 			if(!(userId.equals(writerId))) {
-				matchingDAO.matchingDeleteAlarm(userId,matchingIdx,categoryId);
+				String delSubject="삭제 "+subject;
+				logger.info("삭제 내용" + delSubject);
+				matchingDAO.matchingDeleteAlarm(userId,matchingIdx,categoryId,delSubject);
 			}
 			
 		}
@@ -63,7 +66,9 @@ public class MatchingService {
 		for (int i = 0; i < gameApplyList.size(); i++) {
 			String userId =gameApplyList.get(i).getUserId();
 			if(!(userId.equals(writerId))) {
-				matchingDAO.matchingDeleteAlarm(userId,matchingIdx,categoryId);
+				String delSubject="삭제 "+subject;
+				logger.info("삭제 내용" + delSubject);
+				matchingDAO.matchingDeleteAlarm(userId,matchingIdx,categoryId,delSubject);
 			}	
 		}
 		
@@ -293,12 +298,46 @@ public class MatchingService {
 	public void gameApplyAccept(String matchingIdx, String userId) {
 		String categoryId = matchingDAO.categoryIdChk(matchingIdx);
 		matchingDAO.gameApplyAccept(matchingIdx,userId);
+		
+		// 게임 신청 수락시 초대, 초대 알림 삭제
+		int inviteChk = matchingDAO.inviteChk(matchingIdx,userId);
+		logger.info("inviteChk : " +inviteChk);
+		if(inviteChk!=0) {
+			// 신청 accept 하면서 초대 지우기 
+			HashMap<String, Object> params = new HashMap<String, Object>();
+			params.put("matchingIdx", matchingIdx);
+			params.put("userId", userId);
+			matchingDAO.cancelGameInvite(params);
+			
+			// 초대알림도 지우기
+			matchingDAO.gameInviteCancelAlarm(params);
+		}
+		
+		// 신청 알림 지우기
+		matchingDAO.applyGameAlarmDelete(matchingIdx, userId);
+		
 		matchingDAO.gameApplyAcceptAlarm(matchingIdx,userId,categoryId);
 	}
 	
 	public void gameApplyReject(String matchingIdx, String userId) {
 		String categoryId = matchingDAO.categoryIdChk(matchingIdx);
-		matchingDAO.gameApplyReject(matchingIdx,userId);	
+		matchingDAO.gameApplyReject(matchingIdx,userId);
+		
+		// 게임 신청 거절시 초대, 초대 알림 삭제
+				int inviteChk = matchingDAO.inviteChk(matchingIdx,userId);
+				if(inviteChk!=0) {
+					// 신청 거절 하면서 초대 지우기 
+					HashMap<String, Object> params = new HashMap<String, Object>();
+					params.put("matchingIdx", matchingIdx);
+					params.put("userId", userId);
+					matchingDAO.cancelGameInvite(params);
+					
+					// 초대알림도 지우기
+					matchingDAO.gameInviteCancelAlarm(params);
+				}
+		// 신청 알림 지우기
+		matchingDAO.applyGameAlarmDelete(matchingIdx, userId);
+				
 		matchingDAO.gameApplyRejectAlarm(matchingIdx,userId,categoryId);
 	}
 
@@ -422,6 +461,30 @@ public class MatchingService {
 	public int tagChk(String matchingIdx, String teamId) {
 		return matchingDAO.tagChk(matchingIdx,teamId);
 	}
+
+	public void inviteAccept(String matchingIdx, String userId) {
+		matchingDAO.inviteAccept(matchingIdx,userId);
+		
+	}
+	
+	public void inviteReject(String matchingIdx, String userId) {
+		matchingDAO.inviteReject(matchingIdx,userId);
+	}
+	
+	public void inviteAlarmDelete(String matchingIdx, String userId) {
+		matchingDAO.inviteAlarmDelete(matchingIdx,userId);
+		
+	}
+
+	public void applyGameDelete(String matchingIdx, String userId) {
+		matchingDAO.applyGameDelete(matchingIdx,userId);
+	}
+
+	public void applyGameAlarmDelete(String matchingIdx, String userId) {
+		matchingDAO.applyGameAlarmDelete(matchingIdx,userId);
+	}
+
+	
 
 
 

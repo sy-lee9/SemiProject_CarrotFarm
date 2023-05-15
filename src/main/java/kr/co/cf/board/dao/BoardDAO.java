@@ -74,48 +74,28 @@ public interface BoardDAO {
 
 	int nupdate(HashMap<String, String> params);
 	
-	ArrayList<BoardDTO> ncommentList(String bidx);
-
-	void ncommentWrite(HashMap<String, String> params);
-
-	void ncommentDelete(String commentIdx);
-
-	BoardDTO ncommentGet(String commentIdx);
-
-	void ncommentUpdate(HashMap<String, String> params);
-	
-	void nboardReport(HashMap<String, String> params);
-
-	void nboardCommentReport(HashMap<String, String> params);
-	
 	void ndownHit(String bidx);
 	
 	String nuserRight(String loginId);
 	
 
-
-
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	
 	ArrayList<BoardDTO> ilist();
-	
+
 	ArrayList<BoardDTO> ialist(int cnt, int offset);
 	
+	ArrayList<BoardDTO> ialistSearch(String search);
+	
 	int iatotalCount();
-
+	
+	int iatotalCountSearch(String search);
+	
 	int iwrite(BoardDTO dto);
 
 	void ifileWrite(int photoIdx, String photoId);
-	
+
 	void iupHit(String boardIdx);
 
 	BoardDTO idetail(String boardIdx);
@@ -125,17 +105,19 @@ public interface BoardDAO {
 	int idelete(String bidx);
 
 	int iupdate(HashMap<String, String> params);
+	
+	ArrayList<BoardDTO> icommentList(String bidx);
+
+	void icommentWrite(HashMap<String, String> params);
+
+	void icommentDelete(String commentIdx);
+
+	BoardDTO icommentGet(String commentIdx);
+
+	void icommentUpdate(HashMap<String, String> params);
+	
+	void idownHit(String bidx);
 
 	String iuserRight(String loginId);
-
-	
-
-	
-
-
-
-	
-
-	
 
 }
