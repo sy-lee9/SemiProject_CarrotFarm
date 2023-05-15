@@ -12,7 +12,6 @@
 </style>
 </head>
 <body>
-<jsp:include page="loginBox.jsp"></jsp:include>
     <h3>회원 정보 수정</h3>
     <form method="post" action="userinfoupdate.do" enctype="multipart/form-data">
         <table>

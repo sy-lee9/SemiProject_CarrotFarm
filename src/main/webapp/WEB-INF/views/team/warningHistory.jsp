@@ -21,10 +21,11 @@
 	}
 	th,td{
 		text-align: center;
+		height: 20;
 	}
 	table{
 		width: 800;
-		height: 500;
+		height: 100;
 	}
 </style>
 </head>
