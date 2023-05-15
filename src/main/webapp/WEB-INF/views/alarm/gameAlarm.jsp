@@ -84,6 +84,10 @@
 </style>
 </head>
 <body>
+	<div style="float: right;">
+		<%@ include file="../loginBox.jsp" %>
+	</div> 
+	
 	<%@ include file="../GNB.jsp" %>
 
 
@@ -101,16 +105,16 @@
 	<div id="content">
 		<ul class="nav nav-tabs">
 		  <li class="nav-item">
-		    <a class="nav-link active" href="#">경기 알림</a>
+		    <a class="nav-link" href="/cf/userNoticeAlarm">공지사항</a>
 		  </li>
 		  <li class="nav-item">
-		    <a class="nav-link" href="#">Link</a>
+		    <a class="nav-link active" href="/cf/userGameAlarm">경기알림</a>
 		  </li>
 		  <li class="nav-item">
-		    <a class="nav-link" href="#">Link</a>
+		    <a class="nav-link" href="#">경고알림</a>
 		  </li>
 		  <li class="nav-item">
-		    <a class="nav-link disabled" href="#">Disabled</a>
+		    <a class="nav-link disabled" href="#">팀 알림</a>
 		  </li>
 		</ul>
 		<!-- </br>
@@ -171,7 +175,7 @@ listCall(showPage);
 function listCall(page){
    $.ajax({
       type:'post',
-      url:'userAlarm.ajax',
+      url:'userGameAlarm.ajax',
       data:{
     	  'page':page,
     	  'userId':userId

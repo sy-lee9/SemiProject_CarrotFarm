@@ -23,15 +23,15 @@ public class AlarmController {
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	@RequestMapping(value="/userAlarm")
-	public String userAlarm() {
+	@RequestMapping(value="/userGameAlarm")
+	public String userGameAlarm() {
 		
-		return "/user/gameAlarm";
+		return "/alarm/gameAlarm";
 	}
 	
-	@RequestMapping(value="/userAlarm.ajax")
+	@RequestMapping(value="/userGameAlarm.ajax")
 	@ResponseBody
-	   public HashMap<String, Object> userAlarm(@RequestParam HashMap<String, Object> params) {
+	   public HashMap<String, Object> userGameAlarm(@RequestParam HashMap<String, Object> params) {
 	      logger.info("params : " + params);
 	      
 	      HashMap<String, Object> list = new HashMap<String, Object>();
@@ -41,6 +41,42 @@ public class AlarmController {
 	      return list;   
 	      
 	   }
+	
+	@RequestMapping(value="/userNoticeAlarm")
+	public String userNoticeAlarm() {
+		
+		return "/alarm/noticeAlarm";
+	}
+	
+	@RequestMapping(value="/userNoticeAlarm.ajax")
+	@ResponseBody
+	   public HashMap<String, Object> userNoticeAlarm(@RequestParam HashMap<String, Object> params) {
+	      logger.info("params : " + params);
+	      
+	      HashMap<String, Object> list = new HashMap<String, Object>();
+	      
+	      list = alramService.noticeList(params);
+	   
+	      return list;   
+	      
+	   }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	@RequestMapping(value="/inviteAccept")
 	public String inviteAccept(@RequestParam String matchingIdx, HttpSession session) {
@@ -67,7 +103,7 @@ public class AlarmController {
 		
 		
 		
-		return "/user/gameAlarm";
+		return "/alarm/gameAlarm";
 	}
 	
 	@RequestMapping(value="/inviteReject")
@@ -96,6 +132,6 @@ public class AlarmController {
 		
 		
 		
-		return "/user/gameAlarm";
+		return "/alarm/gameAlarm";
 	}
 }

@@ -10,4 +10,8 @@ public interface AlarmDAO {
 
 	ArrayList<MatchingDTO> list(int offset, String userId);
 
+	int totalNoticeCount(String userId);
+
+	ArrayList<MatchingDTO> NoticeList(int offset, String userId);
+
 }
