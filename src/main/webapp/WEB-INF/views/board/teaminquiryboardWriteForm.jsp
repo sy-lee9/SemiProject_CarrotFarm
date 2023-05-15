@@ -38,7 +38,7 @@
 	
 	#LNB ul li {
 	margin-top : 30px;
-    margin-bottom: 90px; /* 원하는 줄간격 크기 */
+    margin-bottom: 40px; /* 원하는 줄간격 크기 */
 	}
 
 	
@@ -71,34 +71,50 @@
 	      </li>
 	      
 	      <li >
-	        <a href="/cf/freeboardList.do" style="font-weight: bold; font-size: 20px ; color: black;">자유 게시판</a>
+	        <a href="/cf/" style="font-weight: bold; font-size: 20px ; color: black;">팀소개</a>
 	      </li>
 	      
 	      <li>
-	        <a href="/cf/noticeboardList.do" style="font-weight: bold; font-size: 20px; color: orange;">공지사항</a>
+	        <a href="/cf/" style="font-weight: bold; font-size: 20px; color: black;">팀원</a>
 	      </li>
 	      
 	      <li>
-	        <a href="/cf/inquiryboardList.do" style="font-weight: bold; font-size: 20px; color: black;">문의</a>
+	        <a href="/cf/" style="font-weight: bold; font-size: 20px; color: black;">참여 경기</a>
 	      </li>
+	      
+	      <li >
+	        <a href="/cf/teamnoticeboardList.do" style="font-weight: bold; font-size: 20px ; color: black;">팀 공지 사항</a>
+	      </li>
+	      
+	      <li>
+	        <a href="/cf/teamfreeboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 자유 게시판</a>
+	      </li>
+	      
+	      <li>
+	        <a href="/cf/teampictureboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 사진첩</a>
+	      </li>
+	      
+	      <li>
+	        <a href="/cf/teaminquiryboardList.do" style="font-weight: bold; font-size: 20px; color: orange;">팀 문의</a>
+	      </li>
+
 	    </ul>
 	</div>
 	
 	<div id="content">
-	<form action="noticeboardWrite.do" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
-	<input type="hidden" name="categoryId" value="b002"/>
+	<form action="teaminquiryboardWrite.do" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+	<input type="hidden" name="categoryId" value="b014"/>
 		<table>
 			<tr>
 				<th>제목</th>
-				<td>
-					<input type="text" name="subject" id="subjectInput" maxlength="60" style="width : 950px ; height : 30px"
+				<td><input type="text" name="subject"id="subjectInput" maxlength="60" style="width : 950px ; height : 30px"
 					 	onfocus="hideMessage()" onblur="showMessage()" placeholder="제목은 60자까지 가능합니다"/>
         			<span id="message" style="color: red;"></span>
 				</td>
 			</tr>
 			<tr>
 				<th>작성자</th>
-				<td><input type="text" name="userId" value="${userId}" style="border:none; background-color: #f8f9fa ; text-align:center;"readonly/></td>
+				<td><input type="text" name="userId" value="${userId}" style="border:none; background-color: #f8f9fa ; text-align:center;"readonly/> </td>
 			</tr>
 			<tr>
 				<th>내용</th>
@@ -112,7 +128,7 @@
 			</tr>
 			<tr>
 				<th colspan="2">
-					<input type = "button" onclick="location.href='./noticeboardList.do'" value="리스트"/>
+					<input type = "button" onclick="location.href='./teaminquiryboardList.do'" value="리스트"/>
 					<button>저장</button>
 				</th>
 			</tr>
@@ -138,6 +154,7 @@ function validateForm() {
 	return true;
 }
 
+
 function hideMessage() {
     document.getElementById("message").style.display = "none";
 }
@@ -145,5 +162,6 @@ function hideMessage() {
 function showMessage() {
     document.getElementById("message").style.display = "inline";
 }
+
 </script>
 </html>

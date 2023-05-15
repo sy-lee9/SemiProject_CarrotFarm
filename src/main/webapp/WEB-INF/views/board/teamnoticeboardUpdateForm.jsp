@@ -12,9 +12,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-
 <style>
-		body{
+body{
 		position:relative;
 		font-size:15px;
 		padding : 10px;
@@ -38,7 +37,7 @@
 	
 	#LNB ul li {
 	margin-top : 30px;
-    margin-bottom: 90px; /* 원하는 줄간격 크기 */
+    margin-bottom: 40px; /* 원하는 줄간격 크기 */
 	}
 
 	
@@ -71,51 +70,75 @@
 	      </li>
 	      
 	      <li >
-	        <a href="/cf/freeboardList.do" style="font-weight: bold; font-size: 20px ; color: black;">자유 게시판</a>
+	        <a href="/cf/" style="font-weight: bold; font-size: 20px ; color: black;">팀소개</a>
 	      </li>
 	      
 	      <li>
-	        <a href="/cf/noticeboardList.do" style="font-weight: bold; font-size: 20px; color: orange;">공지사항</a>
+	        <a href="/cf/" style="font-weight: bold; font-size: 20px; color: black;">팀원</a>
 	      </li>
 	      
 	      <li>
-	        <a href="/cf/inquiryboardList.do" style="font-weight: bold; font-size: 20px; color: black;">문의</a>
+	        <a href="/cf/" style="font-weight: bold; font-size: 20px; color: black;">참여 경기</a>
 	      </li>
+	      
+	      <li >
+	        <a href="/cf/teamnoticeboardList.do" style="font-weight: bold; font-size: 20px ; color: orange;">팀 공지 사항</a>
+	      </li>
+	      
+	      <li>
+	        <a href="/cf/teamfreeboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 자유 게시판</a>
+	      </li>
+	      
+	      <li>
+	        <a href="/cf/teampictureboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 사진첩</a>
+	      </li>
+	      
+	      <li>
+	        <a href="/cf/teaminquiryboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 문의</a>
+	      </li>
+
 	    </ul>
 	</div>
 	
 	<div id="content">
-	<form action="noticeboardWrite.do" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
-	<input type="hidden" name="categoryId" value="b002"/>
+
+	<form action="teamnoticeboardUpdate.do" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+		<input type = "hidden" name="bidx" value="${dto.boardIdx}"/>
 		<table>
 			<tr>
 				<th>제목</th>
-				<td>
-					<input type="text" name="subject" id="subjectInput" maxlength="60" style="width : 950px ; height : 30px"
+				<td><input type="text" name="subject" value = "${dto.subject}"id="subjectInput" maxlength="60" style="width : 950px ; height : 30px" 
 					 	onfocus="hideMessage()" onblur="showMessage()" placeholder="제목은 60자까지 가능합니다"/>
         			<span id="message" style="color: red;"></span>
 				</td>
 			</tr>
 			<tr>
 				<th>작성자</th>
-				<td><input type="text" name="userId" value="${userId}" style="border:none; background-color: #f8f9fa ; text-align:center;"readonly/></td>
+					<td>
+						<input type="text" name="userId" value = "${dto.userId}"
+					 		style="border:none; background-color: #f8f9fa ; text-align:center;"readonly/>
+					 </td>
 			</tr>
 			<tr>
 				<th>내용</th>
-				<td><textarea name="content" id="contentInput" style="width : 950px; height : 500px; resize: none"/></textarea></td>
+				<td><textarea name="content" id="contentInput" style="width : 950px; height : 500px; resize: none">${dto.content}</textarea></td>
 			</tr>
 			<tr>
 				<th>사진</th>
 				<td>
-					<input type="file" name="photo"/>
+					<c:if test="${dto.photoName eq null}">
+						<input type="file" name="photo"/>
+					</c:if>
+					<c:if test="${dto.photoName ne null}">
+						<img src = "/photo/${dto.photoName}" style="width: 50%; height: 50%;"/>
+					</c:if>
 				</td>
 			</tr>
 			<tr>
 				<th colspan="2">
-					<input type = "button" onclick="location.href='./noticeboardList.do'" value="리스트"/>
 					<button>저장</button>
 				</th>
-			</tr>
+			</tr>	
 		</table>
 	</form>
 	</div>
@@ -138,12 +161,5 @@ function validateForm() {
 	return true;
 }
 
-function hideMessage() {
-    document.getElementById("message").style.display = "none";
-}
-
-function showMessage() {
-    document.getElementById("message").style.display = "inline";
-}
 </script>
 </html>

@@ -39,7 +39,7 @@
 	
 	#LNB ul li {
 	margin-top : 30px;
-    margin-bottom: 90px; /* 원하는 줄간격 크기 */
+    margin-bottom: 40px; /* 원하는 줄간격 크기 */
 	}
 
 	
@@ -75,16 +75,33 @@
 	      </li>
 	      
 	      <li >
-	        <a href="/cf/freeboardList.do" style="font-weight: bold; font-size: 20px ; color: black;">자유 게시판</a>
+	        <a href="/cf/" style="font-weight: bold; font-size: 20px ; color: black;">팀소개</a>
 	      </li>
 	      
 	      <li>
-	        <a href="/cf/noticeboardList.do" style="font-weight: bold; font-size: 20px; color: orange;">공지사항</a>
+	        <a href="/cf/" style="font-weight: bold; font-size: 20px; color: black;">팀원</a>
 	      </li>
 	      
 	      <li>
-	        <a href="/cf/inquiryboardList.do" style="font-weight: bold; font-size: 20px; color: black;">문의</a>
+	        <a href="/cf/" style="font-weight: bold; font-size: 20px; color: black;">참여 경기</a>
 	      </li>
+	      
+	      <li >
+	        <a href="/cf/teamnoticeboardList.do" style="font-weight: bold; font-size: 20px ; color: orange;">팀 공지 사항</a>
+	      </li>
+	      
+	      <li>
+	        <a href="/cf/teamfreeboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 자유 게시판</a>
+	      </li>
+	      
+	      <li>
+	        <a href="/cf/teampictureboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 사진첩</a>
+	      </li>
+	      
+	      <li>
+	        <a href="/cf/teaminquiryboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 문의</a>
+	      </li>
+
 	    </ul>
 	</div>
 	
@@ -114,12 +131,12 @@
 			</c:if>
 			<tr>
 				<th colspan="4">
-					<input type = "button" onclick="location.href='./noticeboardList.do'" value="리스트"/>
+					<input type = "button" onclick="location.href='./teamnoticeboardList.do'" value="리스트"/>
 					&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 					<c:if test="${dto.userId eq loginId }">
-					<input type = "button" id="registerBtn1" onclick="location.href='./noticeboardUpdate.go?bidx=${dto.boardIdx}'" value="수정"/>
+					<input type = "button" id="registerBtn1" onclick="location.href='./teamnoticeboardUpdate.go?bidx=${dto.boardIdx}'" value="수정"/>
 					&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-					<input type = "button" id="registerBtn2" value="삭제" onclick="if(confirm('정말로 삭제하시겠습니까?')){location.href='./noticeboardDelete.do?bidx=${dto.boardIdx}';}">			
+					<input type = "button" id="registerBtn2" value="삭제" onclick="if(confirm('정말로 삭제하시겠습니까?')){location.href='./teamnoticeboardDelete.do?bidx=${dto.boardIdx}';}">			
 					</c:if>
 				</th>
 			</tr>
@@ -129,7 +146,7 @@
 <script>
 $.ajax({
 	type:'post',
-	url:'nuserRight.ajax',
+	url:'tnuserRight.ajax',
 	data:{},
 	dataType:'json',
 	success:function(data){

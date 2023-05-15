@@ -12,9 +12,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-
 <style>
-
 	body{
 		position:relative;
 		font-size:15px;
@@ -39,7 +37,7 @@
 	
 	#LNB ul li {
 	margin-top : 30px;
-    margin-bottom: 90px; /* 원하는 줄간격 크기 */
+    margin-bottom: 40px; /* 원하는 줄간격 크기 */
 	}
 
 	
@@ -61,12 +59,12 @@
 		padding : 15px 10px;
 	}
 	
-	#freeboardSearchInput{
+	#teamnoticeboardSearchInput{
 		width: 200px;
     	height: 30px;
 	}
 	
-	#freeboardSearchButton {
+	#teamnoticeboardSearchButton {
 		height: 30px;
 	}
 </style>
@@ -82,32 +80,50 @@
 	        <div style="width: 180px; height: 150px; border : 1px solid black; border-collapse: collapse;">프로필</div>
 	      </li>
 	      
-	      <li >
-	        <a href="/cf/freeboardList.do" style="font-weight: bold; font-size: 20px ; color: black;">자유 게시판</a>
+	      <li>
+	        <a href="/cf/" style="font-weight: bold; font-size: 20px ; color: black;">팀소개</a>
 	      </li>
 	      
 	      <li>
-	        <a href="/cf/noticeboardList.do" style="font-weight: bold; font-size: 20px; color: black;">공지사항</a>
+	        <a href="/cf/" style="font-weight: bold; font-size: 20px; color: black;">팀원</a>
 	      </li>
 	      
 	      <li>
-	        <a href="/cf/inquiryboardList.do" style="font-weight: bold; font-size: 20px; color: orange;">문의</a>
+	        <a href="/cf/" style="font-weight: bold; font-size: 20px; color: black;">참여 경기</a>
 	      </li>
+	      
+	      <li>
+	        <a href="/cf/teamnoticeboardList.do" style="font-weight: bold; font-size: 20px ; color: orange;">팀 공지 사항</a>
+	      </li>
+	      
+	      <li>
+	        <a href="/cf/teamfreeboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 자유 게시판</a>
+	      </li>
+	      
+	      <li>
+	        <a href="/cf/teampictureboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 사진첩</a>
+	      </li>
+	      
+	      <li>
+	        <a href="/cf/teaminquiryboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 문의</a>
+	      </li>
+
 	    </ul>
 	</div>
 	
 	<div id="content">
+
 	<br/>
-	<input type ="text" id="inquiryboardSearchInput" placeholder="제목 또는 닉네임을 입력">
-	<button id ="inquiryboardSearchButton">검색</button>
+	<input type ="text" id="teamnoticeboardSearchInput" placeholder="제목 또는 닉네임을 입력">
+	<button id ="teamnoticeboardSearchButton">검색</button>
+	
 	<br/>
 	<br/>
 	<c:if test="${loginId != null }">
-	<button id="registerBtn" onclick="location.href='inquiryboardWrite.go'">문의 등록</button>
+	<button id="registerBtn" onclick="location.href='teamnoticeboardWrite.go'">공지사항 등록</button>
 	</c:if>
 	<br/>
 	<br/>
-	
 	<table>
 		<thead>
 			<tr>
@@ -135,22 +151,37 @@
 </body>
 <script>
 
-
-
 var searchText = 'default';
 var showPage = 1;
 listCall(showPage);
 
-$('#inquiryboardSearchButton').click(function(){
-	searchText = $('#inquiryboardSearchInput').val();
+$('#teamnoticeboardSearchButton').click(function(){
+	searchText = $('#teamnoticeboardSearchInput').val();
 	listCall(showPage);
 	$('#pagination').twbsPagination('destroy');
+});
+
+
+$.ajax({
+	type:'post',
+	url:'tnuserRight.ajax',
+	data:{},
+	dataType:'json',
+	success:function(data){
+		console.log(data);
+		if (data != "1") {
+			document.getElementById("registerBtn").style.display = "none";
+		}
+	},
+	error:function(e){
+		console.log(e);
+	}
 });
 
 function listCall(page){
 	$.ajax({
 		type:'post',
-		url:'ilist.ajax',
+		url:'tnlist.ajax',
 		data:{
 			'page':page,
 			'search':searchText
@@ -158,8 +189,8 @@ function listCall(page){
 		dataType:'json',
 		success:function(data){
 			console.log(data);
-			console.log(data.inquiryboardList);
-			listPrint(data.inquiryboardList);
+			console.log(data.teamnoticeboardList);
+			listPrint(data.teamnoticeboardList);
 			
 			$('#pagination').twbsPagination({
 				startPage:data.currPage, 
@@ -180,13 +211,13 @@ function listCall(page){
 	});
 }
 
-function listPrint(ialist){
+function listPrint(tnalist){
 	var content = '';
 
-	ialist.forEach(function(item,idx){
+	tnalist.forEach(function(item,idx){
 		content +='<tr>';
 		content +='<td>'+item.boardIdx+'</td>';
-		content +='<td><a href="inquiryboardDetail.do?bidx='+item.boardIdx+'">'+item.subject+'</a></td>';
+		content +='<td><a href="teamnoticeboardDetail.do?bidx='+item.boardIdx+'">'+item.subject+'</a></td>';
 		content +='<td>'+item.userId+'</td>';
 		
 

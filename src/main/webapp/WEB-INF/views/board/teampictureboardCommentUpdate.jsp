@@ -16,11 +16,31 @@
 
 <style>
 
+	.photo-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+	}
+
+  .photo-item {
+    width: 300px;
+    height: 300px;
+    margin: 10px;
+
+	}
+
+  .photo-item img {
+    max-width: 100%;
+    max-height: 100%;
+	}
+	
+	
+	
 	body{
 		position:relative;
 		font-size:15px;
 		padding : 10px;
-	}
+	}	
 	
 	#content {
 		width:82%;
@@ -40,7 +60,7 @@
 	
 	#LNB ul li {
 	margin-top : 30px;
-    margin-bottom: 90px; /* 원하는 줄간격 크기 */
+    margin-bottom: 40px; /* 원하는 줄간격 크기 */
 	}
 
 	
@@ -67,17 +87,14 @@
     	height: 30px;
 	}
 	
-	# freeboardSearchButton {
+	#freeboardSearchButton {
 		height: 30px;
 	}
-	
-	.hidden-row {
-    display: none;
-}
 </style>
 </head>
 <body>
-<%@ include file="../GNB.jsp" %>
+
+	<%@ include file="../GNB.jsp" %>
 	
 
 	<div id="LNB">
@@ -87,16 +104,33 @@
 	      </li>
 	      
 	      <li >
-	        <a href="/cf/freeboardList.do" style="font-weight: bold; font-size: 20px ; color: orange;">자유 게시판</a>
+	        <a href="/cf/" style="font-weight: bold; font-size: 20px ; color: black;">팀소개</a>
 	      </li>
 	      
 	      <li>
-	        <a href="/cf/noticeboardList.do" style="font-weight: bold; font-size: 20px; color: black;">공지사항</a>
+	        <a href="/cf/" style="font-weight: bold; font-size: 20px; color: black;">팀원</a>
 	      </li>
 	      
 	      <li>
-	        <a href="/cf/inquiryboardList.do" style="font-weight: bold; font-size: 20px; color: black;">문의</a>
+	        <a href="/cf/" style="font-weight: bold; font-size: 20px; color: black;">참여 경기</a>
 	      </li>
+	      
+	      <li >
+	        <a href="/cf/teamnoticeboardList.do" style="font-weight: bold; font-size: 20px ; color: black;">팀 공지 사항</a>
+	      </li>
+	      
+	      <li>
+	        <a href="/cf/teamfreeboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 자유 게시판</a>
+	      </li>
+	      
+	      <li>
+	        <a href="/cf/teampictureboardList.do" style="font-weight: bold; font-size: 20px; color: orange;">팀 사진첩</a>
+	      </li>
+	      
+	      <li>
+	        <a href="/cf/teaminquiryboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 문의</a>
+	      </li>
+
 	    </ul>
 	</div>
 	
@@ -104,50 +138,50 @@
 		<table>
 			<tr>
 				<th>제목</th>
-				<td colspan="111">${dto.subject}</td>
+				<td colspan="111">${dto.get(0).subject}</td>
 			</tr>
 			<tr>
 				<th>작성자</th>
-				<td colspan="111">${dto.userId}</td>
+				<td colspan="111">${dto.get(0).userId}</td>
 			</tr>
 			<tr>
 				<th>작성일</th>
-				<td colspan="111">${dto.writeTime}</td>
+				<td colspan="111">${dto.get(0).writeTime}</td>
 			</tr>
 			<tr>
 				<th>내용</th>
-				<td colspan="111">${dto.content}</td>
+				<td colspan="111">${dto.get(0).content}</td>
 			</tr>
-			<c:if test= "${dto.photoName ne null}">
+			<c:if test= "${dto.get(0).photoName ne null}">
 			<tr>
 				<th>사진</th>
-				<td colspan="111"><img width = "333" src="/photo/${dto.photoName}"/></td>
+				<td colspan="111"><img width = "333" src="/photo/${dto.get(0).photoName}"/></td>
 			</tr>
 			</c:if>
 			<tr class="hidden-row">
 				<th colspan="11">
-					<input type = "button" onclick="location.href='./freeboardList.do'" value="리스트"/>
+					<input type = "button" onclick="location.href='./teampictureboardList.do'" value="리스트"/>
 					&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-					<input type = "button" onclick="location.href='./freeboardUpdate.go?bidx=${dto.boardIdx}'" value="수정"/>
+					<input type = "button" onclick="location.href='./teampictureboardUpdate.go?bidx=${dto.get(0).boardIdx}'" value="수정"/>
 					&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-					<input type = "button" value="삭제" onclick="if(confirm('정말로 삭제하시겠습니까?')){location.href='./freeboardDelete.do?bidx=${dto.boardIdx}';}">
+					<input type = "button" value="삭제" onclick="if(confirm('정말로 삭제하시겠습니까?')){location.href='./teampictureboardDelete.do?bidx=${dto.get(0).boardIdx}';}">
 				</th>
 			</tr>
 			<tr style="display: none;">
 	     		<th colspan="7">
 		     		<table>
-			     		<c:forEach items="${fcommentList}" var="fcommentList">
+			     		<c:forEach items="${tpcommentList}" var="tpcommentList">
 			     			<tr>
-			     				<th>${fcommentList.userId} </th>
-			     				<td >${fcommentList.commentContent}</td>
-			     				<td>${fcommentList.commentWriteTime}</td>
+			     				<th>${tpcommentList.userId} </th>
+			     				<td >${tpcommentList.commentContent}</td>
+			     				<td>${tpcommentList.commentWriteTime}</td>
 			     				<td>
-			     					<c:if test="${fcommentList.userId eq loginId}">
-			     						<a  href="freeboardcommentUpdate.go?commentIdx=${fcommentList.commentIdx}&bidx=${dto.boardIdx}" >수정</a> 
+			     					<c:if test="${tpcommentList.userId eq loginId}">
+			     						<a  href="teampictureboardcommentUpdate.go?commentIdx=${tpcommentList.commentIdx}&bidx=${dto.get(0).boardIdx}" >수정</a> 
 			     						/ 
-			     						<a href="freeboardcommentDelete.do?commentIdx=${fcommentList.commentIdx}&bidx=${dto.boardIdx}">삭제</a>
+			     						<a href="teampictureboardcommentDelete.do?commentIdx=${tpcommentList.commentIdx}&bidx=${dto.get(0).boardIdx}">삭제</a>
 			     					</c:if>
-			     					<c:if test="${fcommentList.userId ne loginId}">
+			     					<c:if test="${tpcommentList.userId ne loginId}">
 			     						<a href="#">신고</a>
 			     					</c:if>     					
 			     				</td>
@@ -157,7 +191,7 @@
 		     	</th>	     	
 		     </tr>
 		     <tr style="display: none;">
-			     <form method="post" action="freeboardcommentWrite.do?categoryId=b001&comentId=${dto.boardIdx}">
+			     <form method="post" action="teampictureboardcommentWrite.do?categoryId=b001&comentId=${dto.get(0).boardIdx}">
 			     		<th>
 			     			<input type="text" name="userId" value="${loginId}" style= "border:none;" readonly>
 			     		</th>
@@ -170,21 +204,16 @@
 			     </form> 
 		     </tr>
 		     
-		     <c:forEach items="${fcommentList}" var="fcommentList">
-				<tr >
-			    	<th>${fcommentList.userId} </th>
-			     	<td colspan="3">${fcommentList.commentContent}</td>
-			     	<td>${fcommentList.commentWriteTime}</td>
+		     <c:forEach items="${tpcommentList}" var="tpcommentList">
+				<tr>
+			    	<th>${tpcommentList.userId} </th>
+			     	<td colspan="3">${tpcommentList.commentContent}</td>
+			     	<td>${tpcommentList.commentWriteTime}</td>
 			     	<td colspan="2">
-			     		<c:if test="${fcommentList.userId eq loginId}">
-			     			<a  href="fcommentUpdate.go?commentIdx=${fcommentList.commentIdx}&bidx=${dto.bidx}" ></a> 
+			     		<c:if test="${tpcommentList.userId eq loginId}">
+			     			<a  href="tpcommentUpdate.go?commentIdx=${tpcommentList.commentIdx}&bidx=${dto.get(0).bidx}" ></a> 
 			     			 
-			     			<a href="fcommentDelete.do?commentIdx=${fcommentList.commentIdx}&bidx=${dto.bidx}"></a>
-			     		</c:if>
-			     		<c:if test="${fcommentList.userId ne loginId}">
-				     		<c:if test="${loginId != 'guest' }"><button id="playerList"></button>
-				     			<a href="#">신고</a>
-				     		</c:if>	 
+			     			<a href="tpcommentDelete.do?commentIdx=${tpcommentList.commentIdx}&bidx=${dto.get(0).bidx}"></a>
 			     		</c:if>
 			     	</td>
 			     </tr>
@@ -192,15 +221,15 @@
 		     
 		     <tr>
 
-			     <form method="post" action="freeboardcommentUpdate.do?">
+			     <form method="post" action="teampictureboardcommentUpdate.do?">
 					<th>
-						<input type="hidden" name="commentIdx" value="${fcommentDto.commentIdx}">
-						<input type="hidden" name="bidx" value="${dto.boardIdx}" style= "border:none;">
+						<input type="hidden" name="commentIdx" value="${tpcommentDto.commentIdx}">
+						<input type="hidden" name="bidx" value="${dto.get(0).boardIdx}" style= "border:none;">
 						<input type="text" name="userId" value="${loginId}" style= "border:none; background-color: #f8f9fa ; text-align:center;" readonly; readonly>
 					</th>
 					<c:if test="${loginId != 'guest' }">
 						<th colspan="5">
-							<input type="text" name="commentContent" value="${fcommentDto.commentContent}"  style="width : 650px">
+							<input type="text" name="commentContent" value="${tpcommentDto.commentContent}" style="width : 650px">
 						</th>
 						<th>
 							<button>댓글 수정</button>
@@ -209,7 +238,7 @@
 					<c:if test="${loginId == 'guest' }">
 						<th colspan="6">
 							<input type="text" name="commentContent" style= "border:none; width:400px;" placeholder="댓글 작성은 로그인 후 가능합니다. ">
-						</th>
+						</th>     		
 					</c:if>
 				</form>  
 		     </tr>

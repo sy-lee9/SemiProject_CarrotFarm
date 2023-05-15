@@ -40,7 +40,7 @@
 	
 	#LNB ul li {
 	margin-top : 30px;
-    margin-bottom: 90px; /* 원하는 줄간격 크기 */
+    margin-bottom: 40px; /* 원하는 줄간격 크기 */
 	}
 
 	
@@ -76,16 +76,33 @@
 	      </li>
 	      
 	      <li >
-	        <a href="/cf/freeboardList.do" style="font-weight: bold; font-size: 20px ; color: black;">자유 게시판</a>
+	        <a href="/cf/" style="font-weight: bold; font-size: 20px ; color: black;">팀소개</a>
 	      </li>
 	      
 	      <li>
-	        <a href="/cf/noticeboardList.do" style="font-weight: bold; font-size: 20px; color: black;">공지사항</a>
+	        <a href="/cf/" style="font-weight: bold; font-size: 20px; color: black;">팀원</a>
 	      </li>
 	      
 	      <li>
-	        <a href="/cf/inquiryboardList.do" style="font-weight: bold; font-size: 20px; color: orange;">문의</a>
+	        <a href="/cf/" style="font-weight: bold; font-size: 20px; color: black;">참여 경기</a>
 	      </li>
+	      
+	      <li >
+	        <a href="/cf/teamnoticeboardList.do" style="font-weight: bold; font-size: 20px ; color: black;">팀 공지 사항</a>
+	      </li>
+	      
+	      <li>
+	        <a href="/cf/teamfreeboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 자유 게시판</a>
+	      </li>
+	      
+	      <li>
+	        <a href="/cf/teampictureboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 사진첩</a>
+	      </li>
+	      
+	      <li>
+	        <a href="/cf/teaminquiryboardList.do" style="font-weight: bold; font-size: 20px; color: orange;">팀 문의</a>
+	      </li>
+
 	    </ul>
 	</div>
 	
@@ -115,28 +132,28 @@
 			</c:if>
 			<tr>
 				<th colspan="4">
-					<input type = "button" onclick="location.href='./inquiryboardList.do'" value="리스트"/>
+					<input type = "button" onclick="location.href='./teaminquiryboardList.do'" value="리스트"/>
 					&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 						<c:if test="${dto.userId eq loginId || userRight eq 1}">
-						<input type = "button" onclick="location.href='./inquiryboardUpdate.go?bidx=${dto.boardIdx}'" value="수정"/>
+						<input type = "button" onclick="location.href='./teaminquiryboardUpdate.go?bidx=${dto.boardIdx}'" value="수정"/>
 						&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-						<input type = "button" value="삭제" onclick="if(confirm('정말로 삭제하시겠습니까?')){location.href='./inquiryboardDelete.do?bidx=${dto.boardIdx}';}">
+						<input type = "button" value="삭제" onclick="if(confirm('정말로 삭제하시겠습니까?')){location.href='./teaminquiryboardDelete.do?bidx=${dto.boardIdx}';}">
 					</c:if>
 				</th>
 			</tr>
 			<tr>
 	     		<th colspan="7">
 		     		<table style="width: 100%;">
-			     		<c:forEach items="${icommentList}" var="icommentList">
+			     		<c:forEach items="${ticommentList}" var="ticommentList">
 			     			<tr>
-			     				<th style="width: 18%;">${icommentList.userId} </th>
-			     				<td style="width: 47%;">${icommentList.commentContent}</td>
-			     				<td style="width: 18%;">${icommentList.commentWriteTime}</td>
+			     				<th style="width: 18%;">${ticommentList.userId} </th>
+			     				<td style="width: 47%;">${ticommentList.commentContent}</td>
+			     				<td style="width: 18%;">${ticommentList.commentWriteTime}</td>
 			     				<td style="width: 17%;">
-			     					<c:if test="${icommentList.userId eq loginId || userRight eq 1}">
-			     						<a  href="inquiryboardcommentUpdate.go?commentIdx=${icommentList.commentIdx}&bidx=${dto.boardIdx}">수정</a> 
+			     					<c:if test="${ticommentList.userId eq loginId || userRight eq 1}">
+			     						<a  href="teaminquiryboardcommentUpdate.go?commentIdx=${ticommentList.commentIdx}&bidx=${dto.boardIdx}">수정</a> 
 			     						/ 
-			     						<a href="inquiryboardcommentDelete.do?commentIdx=${icommentList.commentIdx}&bidx=${dto.boardIdx}">삭제</a>
+			     						<a href="teaminquiryboardcommentDelete.do?commentIdx=${ticommentList.commentIdx}&bidx=${dto.boardIdx}">삭제</a>
 			     					</c:if>    					
 			     				</td>
 			     			</tr>
@@ -146,11 +163,11 @@
 		     </tr>
 		     <tr>
 		     	<c:if test="${loginId != null}">
-			     	<form method="post" action="inquiryboardcommentWrite.do?categoryId=b003&comentId=${dto.boardIdx}" >
-			     		<td id = "icommentContent">
+			     	<form method="post" action="teaminquiryboardcommentWrite.do?categoryId=b014&comentId=${dto.boardIdx}" >
+			     		<td id = "ticommentContent">
 			     			<input type="text" name="userId" value="${loginId}" style= "border:none; background-color: #f8f9fa ; text-align:center;" readonly>
 			     		</td>
-			     		<td colspan="5" id = "iicommentContent">
+			     		<td colspan="5" id = "tiicommentContent">
 			     			<input type="text" name="commentContent" onclick="hideMessage()" onblur="showMessage()" oninput="limitText(this, 255)" placeholder="댓글을 입력하세요 (최대 255자)" style="width : 650px">
 
 			     			&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
@@ -165,14 +182,14 @@
 <script>
 $.ajax({
 	type:'post',
-	url:'iuserRight.ajax',
+	url:'tiuserRight.ajax',
 	data:{},
 	dataType:'json',
 	success:function(data){
 		console.log(data);
 		if (data != "1") {
-			document.getElementById("icommentContent").style.display = "none";
-			document.getElementById("iicommentContent").style.display = "none";
+			document.getElementById("ticommentContent").style.display = "none";
+			document.getElementById("tiicommentContent").style.display = "none";
 		}
 	},
 	error:function(e){

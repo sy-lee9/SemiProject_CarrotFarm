@@ -39,7 +39,7 @@
 	
 	#LNB ul li {
 	margin-top : 30px;
-    margin-bottom: 90px; /* 원하는 줄간격 크기 */
+    margin-bottom: 40px; /* 원하는 줄간격 크기 */
 	}
 
 	
@@ -61,12 +61,12 @@
 		padding : 15px 10px;
 	}
 	
-	#freeboardSearchInput{
+	#teamfreeboardSearchInput{
 		width: 200px;
     	height: 30px;
 	}
 	
-	#freeboardSearchButton {
+	#teamfreeboardSearchButton {
 		height: 30px;
 	}
 </style>
@@ -83,27 +83,46 @@
 	      </li>
 	      
 	      <li >
-	        <a href="/cf/freeboardList.do" style="font-weight: bold; font-size: 20px ; color: black;">자유 게시판</a>
+	        <a href="/cf/" style="font-weight: bold; font-size: 20px ; color: black;">팀소개</a>
 	      </li>
 	      
 	      <li>
-	        <a href="/cf/noticeboardList.do" style="font-weight: bold; font-size: 20px; color: black;">공지사항</a>
+	        <a href="/cf/" style="font-weight: bold; font-size: 20px; color: black;">팀원</a>
 	      </li>
 	      
 	      <li>
-	        <a href="/cf/inquiryboardList.do" style="font-weight: bold; font-size: 20px; color: orange;">문의</a>
+	        <a href="/cf/" style="font-weight: bold; font-size: 20px; color: black;">참여 경기</a>
 	      </li>
+	      
+	      <li >
+	        <a href="/cf/teamnoticeboardList.do" style="font-weight: bold; font-size: 20px ; color: black;">팀 공지 사항</a>
+	      </li>
+	      
+	      <li>
+	        <a href="/cf/teamfreeboardList.do" style="font-weight: bold; font-size: 20px; color: orange;">팀 자유 게시판</a>
+	      </li>
+	      
+	      <li>
+	        <a href="/cf/teampictureboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 사진첩</a>
+	      </li>
+	      
+	      <li>
+	        <a href="/cf/teaminquiryboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 문의</a>
+	      </li>
+
 	    </ul>
 	</div>
 	
 	<div id="content">
+
 	<br/>
-	<input type ="text" id="inquiryboardSearchInput" placeholder="제목 또는 닉네임을 입력">
-	<button id ="inquiryboardSearchButton">검색</button>
+	<input type ="text" id="teamfreeboardSearchInput" placeholder="제목 또는 닉네임을 입력">
+	<button id ="teamfreeboardSearchButton">검색</button>
+
 	<br/>
 	<br/>
 	<c:if test="${loginId != null }">
-	<button id="registerBtn" onclick="location.href='inquiryboardWrite.go'">문의 등록</button>
+	<button onclick="location.href='teamfreeboardWrite.go'">글쓰기 등록</button>
 	</c:if>
 	<br/>
 	<br/>
@@ -115,7 +134,7 @@
 				<th>제목</th>
 				<th>작성자</th>
 				<th>작성일</th>
-				<th>조회수</th>
+				<th>조회수</th>			
 			</tr>
 		</thead>
 		<tbody id="list">
@@ -134,15 +153,12 @@
 	</div>
 </body>
 <script>
-
-
-
 var searchText = 'default';
 var showPage = 1;
 listCall(showPage);
 
-$('#inquiryboardSearchButton').click(function(){
-	searchText = $('#inquiryboardSearchInput').val();
+$('#teamfreeboardSearchButton').click(function(){
+	searchText = $('#teamfreeboardSearchInput').val();
 	listCall(showPage);
 	$('#pagination').twbsPagination('destroy');
 });
@@ -150,7 +166,7 @@ $('#inquiryboardSearchButton').click(function(){
 function listCall(page){
 	$.ajax({
 		type:'post',
-		url:'ilist.ajax',
+		url:'tflist.ajax',
 		data:{
 			'page':page,
 			'search':searchText
@@ -158,8 +174,8 @@ function listCall(page){
 		dataType:'json',
 		success:function(data){
 			console.log(data);
-			console.log(data.inquiryboardList);
-			listPrint(data.inquiryboardList);
+			console.log(data.teamfreeboardList);
+			listPrint(data.teamfreeboardList);
 			
 			$('#pagination').twbsPagination({
 				startPage:data.currPage, 
@@ -180,13 +196,13 @@ function listCall(page){
 	});
 }
 
-function listPrint(ialist){
+function listPrint(tfalist){
 	var content = '';
 
-	ialist.forEach(function(item,idx){
+	tfalist.forEach(function(item,idx){
 		content +='<tr>';
 		content +='<td>'+item.boardIdx+'</td>';
-		content +='<td><a href="inquiryboardDetail.do?bidx='+item.boardIdx+'">'+item.subject+'</a></td>';
+		content +='<td><a href="teamfreeboardDetail.do?bidx='+item.boardIdx+'">'+item.subject+'</a></td>';
 		content +='<td>'+item.userId+'</td>';
 		
 

@@ -87,7 +87,7 @@
 	      </li>
 	      
 	      <li >
-	        <a href="/cf/freeboardList.do" style="font-weight: bold; font-size: 20px ; color: orange;">자유 게시판</a>
+	        <a href="/cf/freeboardList.do" style="font-weight: bold; font-size: 20px ; color: black;">자유 게시판</a>
 	      </li>
 	      
 	      <li>
@@ -95,7 +95,7 @@
 	      </li>
 	      
 	      <li>
-	        <a href="/cf/inquiryboardList.do" style="font-weight: bold; font-size: 20px; color: black;">문의</a>
+	        <a href="/cf/inquiryboardList.do" style="font-weight: bold; font-size: 20px; color: orange;">문의</a>
 	      </li>
 	    </ul>
 	</div>
@@ -126,30 +126,27 @@
 			</c:if>
 			<tr class="hidden-row">
 				<th colspan="11">
-					<input type = "button" onclick="location.href='./freeboardList.do'" value="리스트"/>
+					<input type = "button" onclick="location.href='./inquiryboardList.do'" value="리스트"/>
 					&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-					<input type = "button" onclick="location.href='./freeboardUpdate.go?bidx=${dto.boardIdx}'" value="수정"/>
+					<input type = "button" onclick="location.href='./inquiryboardUpdate.go?bidx=${dto.boardIdx}'" value="수정"/>
 					&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-					<input type = "button" value="삭제" onclick="if(confirm('정말로 삭제하시겠습니까?')){location.href='./freeboardDelete.do?bidx=${dto.boardIdx}';}">
+					<input type = "button" value="삭제" onclick="if(confirm('정말로 삭제하시겠습니까?')){location.href='./inquiryboardDelete.do?bidx=${dto.boardIdx}';}">
 				</th>
 			</tr>
 			<tr style="display: none;">
 	     		<th colspan="7">
 		     		<table>
-			     		<c:forEach items="${fcommentList}" var="fcommentList">
+			     		<c:forEach items="${icommentList}" var="icommentList">
 			     			<tr>
-			     				<th>${fcommentList.userId} </th>
-			     				<td >${fcommentList.commentContent}</td>
-			     				<td>${fcommentList.commentWriteTime}</td>
+			     				<th>${icommentList.userId} </th>
+			     				<td >${icommentList.commentContent}</td>
+			     				<td>${icommentList.commentWriteTime}</td>
 			     				<td>
-			     					<c:if test="${fcommentList.userId eq loginId}">
-			     						<a  href="freeboardcommentUpdate.go?commentIdx=${fcommentList.commentIdx}&bidx=${dto.boardIdx}" >수정</a> 
+			     					<c:if test="${icommentList.userId eq loginId}">
+			     						<a  href="inquiryboardcommentUpdate.go?commentIdx=${icommentList.commentIdx}&bidx=${dto.boardIdx}" >수정</a> 
 			     						/ 
-			     						<a href="freeboardcommentDelete.do?commentIdx=${fcommentList.commentIdx}&bidx=${dto.boardIdx}">삭제</a>
-			     					</c:if>
-			     					<c:if test="${fcommentList.userId ne loginId}">
-			     						<a href="#">신고</a>
-			     					</c:if>     					
+			     						<a href="inquiryboardcommentDelete.do?commentIdx=${icommentList.commentIdx}&bidx=${dto.boardIdx}">삭제</a>
+			     					</c:if>				
 			     				</td>
 			     			</tr>
 			     		</c:forEach>
@@ -157,7 +154,7 @@
 		     	</th>	     	
 		     </tr>
 		     <tr style="display: none;">
-			     <form method="post" action="freeboardcommentWrite.do?categoryId=b001&comentId=${dto.boardIdx}">
+			     <form method="post" action="inquiryboardcommentWrite.do?categoryId=b003&comentId=${dto.boardIdx}">
 			     		<th>
 			     			<input type="text" name="userId" value="${loginId}" style= "border:none;" readonly>
 			     		</th>
@@ -170,21 +167,16 @@
 			     </form> 
 		     </tr>
 		     
-		     <c:forEach items="${fcommentList}" var="fcommentList">
+		     <c:forEach items="${icommentList}" var="icommentList">
 				<tr >
-			    	<th>${fcommentList.userId} </th>
-			     	<td colspan="3">${fcommentList.commentContent}</td>
-			     	<td>${fcommentList.commentWriteTime}</td>
+			    	<th>${icommentList.userId} </th>
+			     	<td colspan="3">${icommentList.commentContent}</td>
+			     	<td>${icommentList.commentWriteTime}</td>
 			     	<td colspan="2">
-			     		<c:if test="${fcommentList.userId eq loginId}">
-			     			<a  href="fcommentUpdate.go?commentIdx=${fcommentList.commentIdx}&bidx=${dto.bidx}" ></a> 
+			     		<c:if test="${icommentList.userId eq loginId}">
+			     			<a  href="icommentUpdate.go?commentIdx=${icommentList.commentIdx}&bidx=${dto.bidx}" ></a> 
 			     			 
-			     			<a href="fcommentDelete.do?commentIdx=${fcommentList.commentIdx}&bidx=${dto.bidx}"></a>
-			     		</c:if>
-			     		<c:if test="${fcommentList.userId ne loginId}">
-				     		<c:if test="${loginId != 'guest' }"><button id="playerList"></button>
-				     			<a href="#">신고</a>
-				     		</c:if>	 
+			     			<a href="icommentDelete.do?commentIdx=${icommentList.commentIdx}&bidx=${dto.bidx}"></a>
 			     		</c:if>
 			     	</td>
 			     </tr>
@@ -192,15 +184,15 @@
 		     
 		     <tr>
 
-			     <form method="post" action="freeboardcommentUpdate.do?">
+			     <form method="post" action="inquiryboardcommentUpdate.do?">
 					<th>
-						<input type="hidden" name="commentIdx" value="${fcommentDto.commentIdx}">
+						<input type="hidden" name="commentIdx" value="${icommentDto.commentIdx}">
 						<input type="hidden" name="bidx" value="${dto.boardIdx}" style= "border:none;">
 						<input type="text" name="userId" value="${loginId}" style= "border:none; background-color: #f8f9fa ; text-align:center;" readonly; readonly>
 					</th>
 					<c:if test="${loginId != 'guest' }">
 						<th colspan="5">
-							<input type="text" name="commentContent" value="${fcommentDto.commentContent}"  style="width : 650px">
+							<input type="text" name="commentContent" value="${icommentDto.commentContent}"  style="width : 650px">
 						</th>
 						<th>
 							<button>댓글 수정</button>
