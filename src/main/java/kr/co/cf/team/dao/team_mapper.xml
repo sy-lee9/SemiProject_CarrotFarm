@@ -74,7 +74,7 @@
 	<select id="teamInfo"	resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT 
 			(SELECT SUM(userMannerScore) FROM review WHERE receiveId IN (SELECT u.userId FROM teamUser u WHERE teamIdx = t.teamIdx)) AS teamManner,
-			t.teamIdx,t.teamMatchState,t.locationIdx,t.teamName,t.teamIntroduce,t.teamDisband,teamFavTime,
+			t.teamIdx,t.teamMatchState,t.locationIdx,t.teamName,t.teamIntroduce,t.teamDisband,t.teamFavTime,teamFavNum,
 			(SELECT COUNT(userId) FROM teamUser WHERE teamIdx = t.teamIdx AND teamUserState = 'join') AS teamUser,
 			(select photoName from photo where photoId = t.teamIdx AND categoryId = 'p03') as photoName,
 			(SELECT gu FROM location WHERE locationIdx = t.locationIdx) AS gu
@@ -394,6 +394,155 @@
 			WHERE teamIdx = #{param1}
 				AND userId = #{param2}
 	</update>
+	
+	<!-- 팀원 리스트 -->
+	<select id="teamUserListMy"	resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			userId,
+			teamGrade,
+			teamJoinDate
+		FROM teamUser 
+		WHERE teamIdx = #{teamIdx}
+			AND userId = #{userId}
+			AND teamUserState = 'join'
+	</select>
+	
+	<select id="teamLeaderList"	resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			userId,
+			teamGrade,
+			teamJoinDate
+		FROM teamUser 
+			WHERE teamIdx = #{teamIdx}
+				AND teamUserState = 'join'
+				AND userId != #{userId}
+				AND teamGrade IN ('leader', 'deputyLeader','temporaryLeader')
+	</select>
+	
+	<select id="teamUserList"	resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			userId,
+			teamGrade,
+			teamJoinDate
+		FROM teamUser 
+			WHERE teamIdx = #{teamIdx}
+				AND teamUserState = 'join'
+				AND userId != #{userId}
+				AND teamGrade NOT IN ('leader', 'deputyLeader','temporaryLeader')
+			ORDER BY teamJoinDate DESC
+	</select>
+	
+	<select id="teamUserListDesc"	resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			userId,
+			teamGrade,
+			teamJoinDate
+		FROM teamUser 
+			WHERE teamIdx = #{teamIdx}
+				AND teamUserState = 'join'
+			ORDER BY teamJoinDate DESC
+			LIMIT 10 OFFSET #{offset}
+	</select>
+	
+	<select id="teamUserListAsc"	resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			userId,
+			teamGrade,
+			teamJoinDate
+		FROM teamUser 
+			WHERE teamIdx = #{teamIdx}
+				AND teamUserState = 'join'
+			ORDER BY teamJoinDate ASC
+			LIMIT 10 OFFSET #{offset}
+	</select>
+	
+	<select id="teamUserListSearch"	resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			userId,
+			teamGrade,
+			teamJoinDate
+		FROM teamUser 
+			WHERE teamIdx = #{teamIdx}
+				AND teamUserState = 'join'
+				AND userId LIKE CONCAT(#{searchText})
+			LIMIT 10 OFFSET #{offset}
+	</select>
+	
+	
+	<!-- 팀원 직급 변경 -->
+	<update id="changeTeamGrade">
+		UPDATE teamUser SET teamGrade = #{selectedTeamGrade}
+			WHERE teamIdx = #{teamIdx}
+				AND userId = #{userId}
+			LIMIT 10 OFFSET #{offset}
+	</update>
+	
+	
+	<!-- 팀원 경고 -->
+	<select id="warningList" resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT
+	        t.userId,
+		    t.teamGrade,
+		    (SELECT COUNT(warningRecieveId) FROM warning WHERE warningRecieveId = t.userId and warningResult = '경고') - 
+			(SELECT COUNT(warningRecieveId) FROM warning WHERE warningRecieveId = t.userId and warningResult = '경고취소') AS warningCount
+		FROM
+		    teamUser t
+		WHERE t.teamIdx = #{teamIdx} 
+		    AND t.teamGrade != 'leader' 
+		    AND (SELECT u.teamUserState FROM teamUser u WHERE u.teamIdx = t.teamIdx AND u.userId = t.userId) = 'join' GROUP BY userId
+		ORDER BY warningCount DESC
+	    LIMIT 10 OFFSET #{offset}
+	</select>
+	
+	<select id="warningListSearch" resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT
+	        t.userId,
+		    t.teamGrade,
+		    (SELECT COUNT(warningRecieveId) FROM warning WHERE warningRecieveId = t.userId AND warningResult = '경고') - 
+			(SELECT COUNT(warningRecieveId) FROM warning WHERE warningRecieveId = t.userId AND warningResult = '경고취소') AS warningCount
+		FROM
+		    teamUser t
+		WHERE t.teamIdx = #{teamIdx} 
+		    AND t.teamGrade != 'leader' 
+		    AND userId LIKE CONCAT(#{searchText}) 
+		    AND (SELECT u.teamUserState FROM teamUser u WHERE u.teamIdx = t.teamIdx AND u.userId = t.userId) = 'join' GROUP BY userId
+		ORDER BY warningCount DESC
+	    LIMIT 10 OFFSET #{offset}
+	</select>
+	
+	<insert id="warning">
+		INSERT INTO warning (teamIdx,warningRecieveId,warningReason,warningResult) VALUES(#{teamIdx},#{userId},#{reason},'경고');
+	</insert>
+	
+	<insert id="warningCancel">
+		INSERT INTO warning (teamIdx,warningRecieveId,warningReason,warningResult) VALUES(#{teamIdx},#{userId},#{reason},'경고취소');
+	</insert>
+	
+	<update id="remove">
+		UPDATE teamUser SET teamUserState = 'remove'
+			WHERE teamIdx = #{teamIdx}
+				AND userId = #{userId}
+	</update>
+	
+	<select id="warningHistory" resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT warningDate, warningResult, warningReason
+			FROM warning
+				WHERE teamIdx = #{param1}
+					AND warningRecieveId = #{param2}
+				ORDER BY warningDate DESC
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

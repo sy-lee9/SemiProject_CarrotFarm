@@ -37,9 +37,30 @@ public class MatchingDTO {
 	private String tagContent;
 	private int alarmIdx;
 	private String reportUserId;
-
+	private String teamMatchState;
+	private int boardIdx;
+	private String writeTime;
 	
 	
+	
+	public String getWriteTime() {
+		return writeTime;
+	}
+	public void setWriteTime(String writeTime) {
+		this.writeTime = writeTime;
+	}
+	public int getBoardIdx() {
+		return boardIdx;
+	}
+	public void setBoardIdx(int boardIdx) {
+		this.boardIdx = boardIdx;
+	}
+	public String getTeamMatchState() {
+		return teamMatchState;
+	}
+	public void setTeamMatchState(String teamMatchState) {
+		this.teamMatchState = teamMatchState;
+	}
 	public String getReportUserId() {
 		return reportUserId;
 	}

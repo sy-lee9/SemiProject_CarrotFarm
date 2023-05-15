@@ -1,6 +1,7 @@
 package kr.co.cf.team.dao;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 import kr.co.cf.team.dto.TeamDTO;
@@ -106,7 +107,36 @@ public interface TeamDAO {
 
 	int leaveTeam(int teamIdx, String userId);
 
+	//팀원 리스트
+	ArrayList<TeamDTO> teamUserListMy(HashMap<String, Object> params);
 
+	ArrayList<TeamDTO> teamLeaderList(HashMap<String, Object> params);
+
+	ArrayList<TeamDTO> teamUserList(HashMap<String, Object> params);
+
+	ArrayList<TeamDTO> teamUserListDesc(HashMap<String, Object> params);
+
+	ArrayList<TeamDTO> teamUserListAsc(HashMap<String, Object> params);
+
+	ArrayList<TeamDTO> teamUserListSearch(HashMap<String, Object> params);
+
+	//팀원 직급 변경
+	int changeTeamGrade(HashMap<String, Object> params);
+
+	//팀원 경고 및 취소
+	ArrayList<TeamDTO> warningList(HashMap<String, Object> params);
+
+	ArrayList<TeamDTO> warningListSearch(HashMap<String, Object> params);
+
+	int warning(HashMap<String, Object> params);
+
+	int warningCancel(HashMap<String, Object> params);
+
+	//팀원 강퇴
+	int remove(HashMap<String, Object> params);
+	
+	//유저 경고 기록 보기
+	ArrayList<TeamDTO> warningHistory(int teamIdx, String userId);
 
 
 

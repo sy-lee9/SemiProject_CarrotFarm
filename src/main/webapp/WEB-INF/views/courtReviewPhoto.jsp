@@ -27,6 +27,7 @@
 	    		<img src="/photo/${courtReviewPhotos.photoName}" alt="사진" />
 	  		</c:forEach>
 		</div>
+		<button onclick="window.close()">닫기</button>
 </body>
 <script>
 	console.log("${courtReviewPhoto}");

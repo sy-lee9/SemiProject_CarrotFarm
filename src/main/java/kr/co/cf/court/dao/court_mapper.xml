@@ -20,6 +20,7 @@
 			LEFT JOIN courtReview cr ON c.courtIdx = cr.courtIdx
 			where c.courtDelete = 1
 			GROUP BY c.courtIdx
+			order by courtStar desc
 	</select>
 	<select id="location" resultType="kr.co.cf.court.dto.CourtDTO">
 		select courtLatitude,courtLongitude from court
@@ -94,6 +95,7 @@
 			LEFT JOIN courtReview cr ON c.courtIdx = cr.courtIdx
 			where c.courtName like concat('%', #{param1}, '%') and c.courtDelete=1
 			GROUP BY c.courtIdx
+			order by courtStar desc
 			limit 10 OFFSET #{param2}
 	</select>
 	<!-- 블라인드 추가 -->
@@ -104,6 +106,7 @@
 			LEFT JOIN courtReview cr ON c.courtIdx = cr.courtIdx
 			where l.gu like concat('%', #{param1}, '%') and c.courtInOut like concat('%', #{param2}, '%') and c.courtDelete= 1
 			GROUP BY c.courtIdx
+			order by courtStar desc
 			limit 10 OFFSET #{param3}
 	</select>
 	<!-- 블라인드 추가 -->
@@ -114,6 +117,7 @@
 			LEFT JOIN courtReview cr ON c.courtIdx = cr.courtIdx
 			where c.courtDelete=1
 			GROUP BY c.courtIdx
+			order by courtStar desc
 			limit #{param1} OFFSET #{param2}
 	</select>
 	<!-- 블라인드 추가 -->

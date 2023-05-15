@@ -30,38 +30,34 @@
 </head>
 <body>
 
-	<input type="text" id="loginId" value="${loginId}" hidden="true"/>
-	
-	<select id="teamJoinDate">
-	  <option value="default">가입일순</option>
-	  <option value="DESC">최근순</option>
-	  <option value="ASC">오래된순</option>
-	</select>
-	
-	<input type="text" id="searchInput" placeholder="팀원 검색">
+	<input type="text" id="searchInput" placeholder="아이디 검색">
 	<button id="searchButton">검색</button>
 	&nbsp;&nbsp;
 	<hr>
 	<table>
 		<colgroup>
 			<col width="20%"/>
-			<col width="30%"/>
-			<col width="30%"/>
 			<col width="20%"/>
+			<col width="10%"/>
+			<col width="20%"/>
+			<col width="20%"/>
+			<col width="10%"/>
 		</colgroup>
 		<thead>
 			<tr>
 				<th>직급</th>
 				<th>아이디</th>
-				<th>가입일</th>
 				<th>경고</th>
+				<th>경고취소</th>
+				<th>경고횟수</th>
+				<th>강퇴</th>
 			</tr>
 		</thead>
 		<tbody id="list">
 			<!-- list 출력 영역 -->
 		</tbody>
 		<tr>
-			<td colspan="5" id="paging">	
+			<td colspan="6" id="paging">	
 				<!-- 	플러그인 사용	(twbsPagination)	-->
 				<div class="container">									
 					<nav aria-label="Page navigation" style="text-align:center">
@@ -74,20 +70,10 @@
 </body>
 <script>
 	var showPage = 1;
-	var teamJoinDate = 'default';
 	var searchText = 'default';
 	var teamIdx = "${teamIdx}";
 	listCall(showPage);
 
-	// 가입일에 따른 출력
-	$('#teamJoinDate').change(function(){
-		teamJoinDate = $(this).val();
-		// 선택한 요소 확인 okay
-		console.log(teamJoinDate);
-		listCall(showPage);
-		$('#pagination').twbsPagination('destroy');
-	});	
-		
 	// 검색어에 따른 출력 
 	$('#searchButton').click(function(){
 		//검색어 확인 
@@ -100,11 +86,10 @@
 	function listCall(page){
 		$.ajax({
 			type:'post',
-			url:'teamUserList.ajax',
+			url:'warningList.ajax',
 			data:{
 				'page':page,
 				'teamIdx':teamIdx,
-				'teamJoinDate':teamJoinDate,
 				'searchText':searchText
 			},
 			dataType:'json',
@@ -154,19 +139,24 @@
 			
 			content +='<td>'+teamGrade+'</td>';
 			content +='<td><a href="../userprofile.go?userId='+list.userId+'">'+list.userId+'</a></td>';
-			content +='<td>'+list.teamJoinDate+'</td>';
-			if(loginId == list.userId && list.teamGrade != 'leader'){
-				content += '<td><button onclick="location.href=\'#\'">확인</button></td>';
-			}
-			if(loginId != list.userId || list.teamGrade == 'leader'){
-				content += '<td></td>';
-			} 
+			content += '<td><button onclick="window.open(\'warning.go?userId='+list.userId+'&teamIdx='+teamIdx+'\',\'경고\',\'width=550px,height=530px\')">경고</button></td>';
+			content += '<td><button onclick="window.open(\'warningCancel.go?userId='+list.userId+'&teamIdx='+teamIdx+'\',\'경고 취소\',\'width=550px,height=280px\')">취소</button></td>';
+			content +='<td id="warningCount"><a href="./warningDetail.go?userId='+list.userId+'&teamIdx='+teamIdx+'">'+list.warningCount+'</a></td>';
+			content += '<td><button type="button" id="remove" onclick="window.open(\'remove.go?userId='+list.userId+'&teamIdx='+teamIdx+'\',\'강퇴\',\'width=550px,height=280px\')">강퇴</button></td>';
 			content +='</tr>';
 		}); 
 		$('#list').empty();
 		$('#list').append(content);
 	}
 	
+
+	
+	$('#warningCount').ready(function() {
+	    if (parseInt($('#warningCount').text()) >= 5) {
+	        $('#remove').attr('type', 'submit');
+	    }
+	});
+
 	var msg = "${msg}";
 	console.log(msg);
 	if(msg != ''){

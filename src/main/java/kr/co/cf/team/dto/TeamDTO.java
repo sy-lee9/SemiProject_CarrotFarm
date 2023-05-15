@@ -32,7 +32,19 @@ public class TeamDTO {
 	private String position;
 	private String favTime;
 	private int userManner;
+	private String teamGrade;
+	private String teamJoinDate;
+	private int warningCount;
+	private String warningDate;
+	private String warningResult;
+	private String warningReason;
 	
+	public int getWarningCount() {
+		return warningCount;
+	}
+	public void setWarningCount(int warningCount) {
+		this.warningCount = warningCount;
+	}
 	public int getTeamIdx() {
 		return teamIdx;
 	}
@@ -200,5 +212,35 @@ public class TeamDTO {
 	}
 	public void setUserManner(int userManner) {
 		this.userManner = userManner;
+	}
+	public String getTeamGrade() {
+		return teamGrade;
+	}
+	public void setTeamGrade(String teamGrade) {
+		this.teamGrade = teamGrade;
+	}
+	public String getTeamJoinDate() {
+		return teamJoinDate;
+	}
+	public void setTeamJoinDate(String teamJoinDate) {
+		this.teamJoinDate = teamJoinDate;
+	}
+	public String getWarningDate() {
+		return warningDate;
+	}
+	public void setWarningDate(String warningDate) {
+		this.warningDate = warningDate;
+	}
+	public String getWarningResult() {
+		return warningResult;
+	}
+	public void setWarningResult(String warningResult) {
+		this.warningResult = warningResult;
+	}
+	public String getWarningReason() {
+		return warningReason;
+	}
+	public void setWarningReason(String warningReason) {
+		this.warningReason = warningReason;
 	}
 }
