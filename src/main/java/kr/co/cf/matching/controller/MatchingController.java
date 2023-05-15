@@ -418,11 +418,6 @@ public class MatchingController {
 				
 				
 				
-				// float mannerPoint = matchingService.mannerPoint((String)session.getAttribute("loginId"));
-				// model.addAttribute("mannerPoint", mannerPoint);
-				
-				
-				
 					
 		return "/matching/matchingCommentUpdate" ;
 	}
@@ -436,12 +431,53 @@ public class MatchingController {
 		return "redirect:/matching/detail.go?matchingIdx="+matchingIdx ;
 	}
 	
+	@RequestMapping(value="/matching/matchigStateUpdate")
+	public String matchigStateUpdate(@RequestParam String matchingIdx, @RequestParam String matchigState) {
+		
+		if(matchigState.equals("matching")) {
+			matchingService.matchigStateToFinish(matchingIdx,matchigState);
+		}
+		if(matchigState.equals("finish")) {
+			matchingService.matchigStateToReview(matchingIdx,matchigState);
+		}
+		
+		matchingService.downHit(matchingIdx);
+		
+		String categoryId = matchingService.categoryIdChk(matchingIdx);
+
+		String path = "redirect:/matching/detail.go?matchingIdx=" + matchingIdx ;
+		if(categoryId.equals("m02")) {
+			path = "redirect:/matching/teamDetail.go?matchingIdx=" + matchingIdx ;
+		}
+	
+		return path;
+	}
+	
+	@RequestMapping(value="/matching/playerDelete")
+	public String playerDelete(@RequestParam String matchingIdx, @RequestParam String userId) {
+		
+		matchingService.playerDelete(matchingIdx,userId);
+		
+		String categoryId = matchingService.categoryIdChk(matchingIdx);
+		
+		String path = "redirect:/matching/detail.go?matchingIdx=" + matchingIdx;
+		
+		if(categoryId.equals("m02")) {
+			path = "redirect:/matching/teamDetail.go?matchingIdx=" + matchingIdx;
+		}
+		
+		matchingService.downHit(matchingIdx);
+		return path;
+	}
+	
 	@RequestMapping(value="/matching/applyGame")
 	public String applyGame(@RequestParam String matchingIdx, HttpSession session) {
 		
 		String userId = (String)session.getAttribute("loginId");
 		int applyGameChk = matchingService.applyGameChk(matchingIdx,userId);
-		if(applyGameChk == 0) {
+		int playListChk = matchingService.playChk(userId, matchingIdx);
+		
+		if(applyGameChk == 0 && playListChk==0) {
 			matchingService.applyGame(matchingIdx,userId);
 		}
 		
@@ -457,6 +493,29 @@ public class MatchingController {
    
       return path;
    }
+	
+	@RequestMapping(value="/matching/gameApplyAccept")
+	   public String gameApplyAccept(@RequestParam String matchingIdx, @RequestParam String userId) {
+	      
+		// 참가자 명단에 없다면 수락
+		  int playListChk = matchingService.playChk(userId, matchingIdx);
+		  if(playListChk==0) {
+			   matchingService.gameApplyAccept(matchingIdx,userId);
+		  }
+	     
+	      // Redirect라서 조회수 -1해주기
+	      matchingService.downHit(matchingIdx);
+	      
+	      // 모집글 종류에 따라서 redirect지정
+	      String categoryId = matchingService.categoryIdChk(matchingIdx);
+
+	      String path = "redirect:/matching/detail.go?matchingIdx=" + matchingIdx ;
+	      if(categoryId.equals("m02")) {
+	         path = "redirect:/matching/teamDetail.go?matchingIdx=" + matchingIdx ;
+	      }
+	   
+	      return path;
+	   }
    
    @RequestMapping(value="/matching/gameApplyReject")
    public String gameApplyReject(@RequestParam String matchingIdx, @RequestParam String userId) {
@@ -507,10 +566,11 @@ public class MatchingController {
    
    
    @RequestMapping(value ="/matching/matchingReport.go")
-   public String matchingReportGo(Model model,@RequestParam String matchingIdx, HttpSession session) {
+   public String matchingReportGo(Model model,@RequestParam String matchingIdx,@RequestParam String reportUserId, HttpSession session) {
       
       MatchingDTO dto = new MatchingDTO();
       dto.setMatchingIdx(Integer.parseInt(matchingIdx));
+      dto.setReportUserId(reportUserId);
       
       model.addAttribute("dto", dto);
       
@@ -528,10 +588,11 @@ public class MatchingController {
    }
    
    @RequestMapping(value ="/matching/commentReport.go")
-   public String commentReportGo(Model model,@RequestParam String commentIdx, HttpSession session) {
+   public String commentReportGo(Model model,@RequestParam String commentIdx, @RequestParam String reportUserId,HttpSession session) {
       
       MatchingDTO dto = new MatchingDTO();
       dto.setCommentIdx(commentIdx);
+      dto.setReportUserId(reportUserId);
       
       model.addAttribute("dto", dto);
       

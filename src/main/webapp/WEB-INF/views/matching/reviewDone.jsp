@@ -14,10 +14,10 @@
 </style>
 </head>
 <body>
-
+	<br/>
 	<h3>리뷰를 작성해 주셔서 감사합니다. </h3>
-	
-	<input type="button" onclick="window.close()" id="closeBtn" value="닫기"/>
+	<br/>
+	<input type="button" class="btn btn-outline-dark" onclick="window.close()" id="closeBtn" value="닫기"/>
 </body>
 <script>
 

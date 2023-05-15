@@ -6,18 +6,17 @@
 <meta charset="UTF-8">
 <title>🏀 당근농장</title>
 
-
 	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
-	<script src="../resources/js/twbsPagination.js" type="text/javascript"></script>
+	<script src="./resources/js/twbsPagination.js" type="text/javascript"></script>
 	
 	<!-- 부트스트랩 JavaScript 파일 불러오기 -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 	
-	
+
 <style>
 	body{
 		position:relative;
@@ -28,6 +27,7 @@
 	
 	#content {
 		width:78%;
+		height : 83%;
 		background-color: #f8f9fa;
 		padding: 10 30 10;
 		margin : 5px;
@@ -53,33 +53,9 @@
 	}
 	
 	table{
-		width:95%;
+		width:90%;
 		height:70%;
 		text-align:center;
-	}
-	
-	#gamePlay, #sort{
-		width: 100px;
-    	height: 30px;
-    	margin : 5px;
-	}
-	
-	#searchInput{
-		width: 200px;
-    	height: 30px;
-    	margin : 5px;
-	}
-	
-	#searchButton, #writeButton {
-		font-size: 15px;
-		height: 30px;
-    	margin : 5px;
-	
-	}
-	
-	#writeButton {
-		float:right;
-		margin-right : 50px;
 	}
 	
 	a {
@@ -105,14 +81,13 @@
  		background-color: #FFA500;
  		border:none;
 	}
-	
-
 </style>
 </head>
 <body>
 	<div style="float: right;">
 		<%@ include file="../loginBox.jsp" %>
 	</div> 
+	
 	<%@ include file="../GNB.jsp" %>
 
 
@@ -128,49 +103,35 @@
 	
 	
 	<div id="content">
-		<div id="filter">
-		<select id="gamePlay">
-		  <option value="default">경기방식</option>
-		  <option value="1">1:1</option>
-		  <option value="3">3:3</option>
-		  <option value="5">5:5</option>
-		</select>
-		
-		<select id="sort">
-		  <option value="default">지역</option>
-		  <option value="${userData.locationIdx}">선호지역</option>
-		  <c:forEach items="${locationList}" var="locationList">
-		  	<option value="${locationList.locationIdx}">${locationList.gu}</option>	
-		  </c:forEach>
-		</select>
-	
-		
-		<input type="text" id="searchInput" placeholder="제목 또는 작성자를 입력">
-		<button id="searchButton" class="btn btn-outline-dark">검색</button>
-		<c:if test="${loginId != 'guest' }">
-			<button id="writeButton" class="btn btn-outline-dark" onclick="location.href='write.go?categoryId=m01'">글쓰기</button>
-		</c:if>
-		</div>
-	
-		<hr/>
+		<ul class="nav nav-tabs">
+		  <li class="nav-item">
+		    <a class="nav-link" href="/cf/userNoticeAlarm">공지사항</a>
+		  </li>
+		  <li class="nav-item">
+		    <a class="nav-link active" href="/cf/userGameAlarm">경기알림</a>
+		  </li>
+		  <li class="nav-item">
+		    <a class="nav-link" href="#">경고알림</a>
+		  </li>
+		  <li class="nav-item">
+		    <a class="nav-link disabled" href="#">팀 알림</a>
+		  </li>
+		</ul>
+		<!-- </br>
+		<h2 style="margin:10px;">경기 알림</h2>
+		<hr/> -->
 		<table>
-		<thead>
-				<tr>
-					<th style="width:10%;">경기방식</th>
-					<th style="width:10%;">경기장위치</th>
-					<th style="width:10%;">모집인원수</th>
-					<th style="width:35%;">제목</th>
-					<th style="width:20%;">경기 일시</th>
-					<th style="width:10%;">글쓴이</th>
-					<th style="width:5%;">조회수</th>
-				</tr>
-			</thead>
-				
+			<thead>
+					<tr>
+						<th style="width:20%;">No</th>
+						<th style="width:50%;">공지사항</th>
+						<th style="width:30%;"></th>
+					</tr>
+				</thead>
 				<tr>
 					<th colspan="7"> <hr/> </th>
 				</tr>
-				
-			<tbody>
+				<tbody>
 				
 				
 				<tbody id="list">			
@@ -184,10 +145,9 @@
 				
 				<tr>
 				  <th colspan="7" id="paging" style="text-align:center;">  
-				    <div class="container">                 
-				    <hr/> 
+				    <div class="container" >    
+				    <hr/>              
 				      <nav aria-label="Page navigation">
-				      	
 				        <ul class="pagination justify-content-center" id="pagination"></ul>
 				      </nav>
 				    </div>
@@ -201,67 +161,30 @@
 			
 			
 		</table>
-	</div>
 	
+	</div>
 </body>
-
 <script>
 	
 	
 var showPage = 1;
-var selectedGamePlay = 'default';
-var selectedSort = 'default';
-var categoryId = 'm01';
-var searchText = 'default';
-console.log(selectedGamePlay);
+var userId = '${loginId}';
+console.log(userId);
 listCall(showPage);
-
-//검색어에 따른 출력 
-$('#searchButton').click(function(){
-	//검색어 확인 
-	searchText = $('#searchInput').val();
-	listCall(showPage);
-	searchText = 'default';
-	$('#pagination').twbsPagination('destroy');
-});
-
-// 경기 방식 선택에 따른 출력
-$('#gamePlay').change(function(){
-	selectedGamePlay = $(this).val();
-	listCall(showPage);
-	$('#pagination').twbsPagination('destroy');
-});
-
-$('#sort').change(function(){
-	selectedSort = $(this).val();
-	console.log(selectedSort);
-	listCall(showPage);
-	$('#pagination').twbsPagination('destroy');
-});
-
-
 
 function listCall(page){
    $.ajax({
       type:'post',
-      url:'list.ajax',
+      url:'userNoticeAlarm.ajax',
       data:{
     	  'page':page,
-    	  'gamePlay':selectedGamePlay,
-    	  'categoryId':categoryId,
-    	  'locationIdx':selectedSort,
-    	  'search':searchText
+    	  'userId':userId
       },
       dataType:'json',           
       success:function(data){
          console.log(data);
          listPrint(data.list);
          
-         // 페이징 처리를 위해 필요한 데이터
-         // 1. 총 페이지의 수
-         // 2. 현재 페이지
-         
-         // Paging Plugin (j-query의 기본기능을 가지고 만들었기 때문에  plugin)
          $('#pagination').twbsPagination({
 			startPage:1, // 시작 페이지
 			totalPages:data.pages,// 총 페이지 수 
@@ -282,26 +205,28 @@ function listCall(page){
 function listPrint(list){
 	var content ='';
 	
-	list.forEach(function(item,idx){
+	if(list.length==0){
+		content +='<tr>';
+		content +='<th colspan="3"> 확인할 알림이 없습니다. </th>';
+		content +='</tr>';
+	}else{
+		list.forEach(function(item,idx){
 		
 		
 		content +='<tr>';
-		content +='<td id="gamePlay">'+item.gamePlay+':'+item.gamePlay+'</td>';
-		content +='<td>'+item.gu +'</td>';
-		content +='<td id="gamePlayer"> ' + item.matchingNumforSure +'/'+ item.matchingNum+ '</td>';
-		content +='<td id="subject" style="text-align:left; padding-left:30px;"><a href="detail.go?matchingIdx='+ item.matchingIdx+'">'+item.subject+'</a></td>';
-		content +='<td>'+item.gameDate+'</td>';
-		content +='<td id="writerId">'+item.writerId+'</td>';
-		content +='<td>'+item.bHit+'</td>';
+		content +='<td>'+item.alarmIdx+'</td>';
+		content +='<td> 공지 <a href="//noticeboardDetail.do?bidx='+item.alarmkind+'"> ['+item.subject+']</a></td>';
+		content +='<td> 확인해주세요</td>';
 		content +='</tr>';
 		
 	});
-	$('#list').empty();
-	$('#list').append(content);
 }
 	
-
-
+	
+	$('#list').empty();
+	$('#list').append(content);
+} 
+	
 
 </script>
 </html>

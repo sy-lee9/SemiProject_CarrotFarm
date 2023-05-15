@@ -14,78 +14,108 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-
+	
 <style>
-body {
-	  min-width: 1200px;
+	
+	body{
+		position:relative;
+		font-size:15px;
+		padding : 10px;
+		min-width: 1200px;
 	}
-	#content {
-		width : 776px;
-		height : 500px;
+	
+	#dcontent {
+		width:78%;
+		height : 83%;
 		background-color: #f8f9fa;
-		vertical-align: top; /* 위쪽 정렬 */
-		margin: 0 0 0 10;
-   	 	padding: 50 0 0 70;
-	}
-	
-	
-	#LNB nav.navbar {
-	    width: 200px;
-	    height: 500px;
-	    background-color: #f8f9fa;
-	}
-	#LNB  .navbar-nav {
-			text-align:center;
-		  	padding-left: 0px;
-		}
+		padding: 10 30 10;
+		margin : 5px;
+		float:right;
 		
-
-	div {
-	  display: inline-block;
 	}
+	
+	#LNB {
+		width:20%;
+		height : 83%;
+		background-color: #f8f9fa;
+		float:left;
+		margin : 5px;
+		font-weight: bold;
+        font-size: 15px;
+		text-align:center;
+		
+	}
+	
+
+	#gamePlay, #sort{
+		width: 100px;
+    	height: 30px;
+    	margin : 5px;
+	}
+
+
+	a {
+	  color : balck;
+	}
+	
+	a:link {
+	  color : balck;
+	}
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	 text-decoration-line: none;
+	  color : #FFA500 ;
+	}
+	
+	input[type=text],input[type=datetime], select {
+    	height: 30px;
+    	margin-left: 10px;
+	}
+	
+
 </style>
 </head>
 <body>
-
+	<div style="float: right;">
+		<%@ include file="../loginBox.jsp" %>
+	</div> 
 	<%@ include file="../GNB.jsp" %>
 	
 	</br>
 	
 	
 	<div id="LNB">
-	  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-left" style="padding-bottom: 200px;">
-	    <ul class="navbar-nav flex-column">
-	      <li class="nav-item active">
-	        <div style="width: 180px; height: 150px; border : 1px solid black; border-collapse: collapse;">프로필</div>
-	      </li>
-	      <li class="nav-item active">
-	        <a class="nav-link" href="/cf/matching/list.do">개인 모집글</a>
-	      </li>
-	      <li class="nav-item">
-	        <a class="nav-link" href="/cf/matching/teamList.do">팀 모집글</a>
-	      </li>
-	    </ul>
-	  </nav>
+		<br/><br/>
+		 <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
+	      <br/><br/>
+	    <a href="/cf/matching/list.do">개인 모집글</a> 
+	      <br/><br/>
+	    <a href="/cf/matching/teamList.do" >팀 모집글</a>	    
 	</div>
 	
-	<div id="content">
+	<div id="dcontent">
+		<br/>
+		<h2 style="display:inline;">모집글 수정</h2> &nbsp; &nbsp; 수정시 경기 참가자, 신청자에게 수정 알림이 전송됩니다. 
+		<hr/>
 	
-	<form method="post" action="update.do?matchingIdx=${dto.matchingIdx}">
-		
-		<input type="text" name="subject" id="subject" placeholder="제목을 입력해주세요" value="${dto.subject}">
-		<input type="datetime" name="gameDate" id="date" placeholder="경기 일시" value="${dto.gameDate}">
-		<input type="text" name="writerId" value="${loginId}" style="border:none;" readonly>
+	<form method="post" action="update.do?matchingIdx=${dto.matchingIdx}" style="background-color:white; height:80%; margin: auto;">
+		<br/>
+		<div>
+		&nbsp; &nbsp;   <input type="text" name="subject" id="subject" style="width:40%;" placeholder="제목을 입력해주세요" value="${dto.subject}">
+		<input type="datetime" name="gameDate" id="date" style="width:20%;"   placeholder="경기 일시" value="${dto.gameDate}">
+		<input type="text" name="writerId" value="${loginId}" style="border:none;" hidden readonly >
 
-		<br>
-
-		<select name="gamePlay" id="gamePlay">
+		<select name="gamePlay" id="gamePlay" " style="width:10%;">
 			<option value="">경기방식</option>
 			<option id="1" value="1">1:1</option>
 			<option id="3" value="3">3:3</option>
 			<option id="5" value="5">5:5</option>
 		</select>
-
-		<select name="courtListType" id="courtListType">
+		👤<input type="text" name="matchingNum" id="matchingNum" style="width:5%;  border:none;" value ="${dto.matchingNum}" readonly><br>
+		
+		&nbsp; &nbsp; <select name="courtListType" id="courtListType">
 		  	<option value="none">경기장</option>
 		  	<option value="loc">선호지역</option>
 		  	<option value="searchLoc">위치 선택</option>
@@ -104,10 +134,14 @@ body {
 				</c:if>
 			</c:forEach>
 		</select>
-
-		👤<input type="text" name="matchingNum" id="matchingNum" style="border:none;" value ="${dto.matchingNum}" readonly><br>
-		<textarea name="content" rows="10" cols="50" style="width: 555px; height: 228px;" placeholder="경기모집에 관련된 설명을 작성해주세요">${dto.content}</textarea><br>
-		<input type="button" value="작성" onclick="subChk()"/>
+		</div>
+		<hr/>
+		
+		<div style="text-align:center; margin:auto;">
+			<textarea name="content"  style="width:95%; height:55%" placeholder="경기모집에 관련된 설명을 작성해주세요">${dto.content}</textarea><br>
+			<br>
+			<input type="button" class="btn btn-outline-dark" value="작성" onclick="subChk()"/>
+		</div>
 	</form>
 	</div>
 </body>

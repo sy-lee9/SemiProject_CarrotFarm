@@ -17,7 +17,7 @@
 
 	<h3>리뷰는 경기에 참여한 사람만 작성 가능합니다. </h3>
 	
-	<input type="button" onclick="window.close()" id="closeBtn" value="닫기"/>
+	<input type="button" class="btn btn-outline-dark" onclick="window.close()" id="closeBtn" value="닫기"/>
 </body>
 <script>
 

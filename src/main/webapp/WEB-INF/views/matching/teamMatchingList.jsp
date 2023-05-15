@@ -19,67 +19,116 @@
 	
 	
 <style>
-	body {
-	  min-width: 1200px;
+	body{
+		position:relative;
+		font-size:15px;
+		padding : 10px;
+		min-width: 1200px;
+	}
+	
+	#content {
+		width:78%;
+		background-color: #f8f9fa;
+		padding: 10 30 10;
+		margin : 5px;
+		float:right;
+		
+	}
+	
+	#LNB {
+		width:20%;
+		height : 83%;
+		background-color: #f8f9fa;
+		float:left;
+		margin : 5px;
+		font-weight: bold;
+        font-size: 15px;
+		text-align:center;
+		
 	}
 	
 	
 	table, th, td{
-		border : 1px solid black;
-		border-collapse: collapse;
-		padding : 5px 10px;
+		margin : 5px;
 	}
 	
-	#content {
-		width : 776px;
-		height : 500px;
-		background-color: #f8f9fa;
-		vertical-align: top; /* 위쪽 정렬 */
-		padding: 10 30 10;
+	table{
+		width:95%;
+		height:70%;
+		text-align:center;
 	}
 	
-	#LNB nav.navbar {
-	    width: 200px;
-	    height: 500px;
-	    background-color: #f8f9fa;
+	#gamePlay, #sort{
+		width: 100px;
+    	height: 30px;
+    	margin : 5px;
 	}
-	#LNB  .navbar-nav {
-			text-align:center;
-		  	padding-left: 0px;
-		}
-		
+	
+	#searchInput{
+		width: 200px;
+    	height: 30px;
+    	margin : 5px;
+	}
+	
+	#searchButton, #writeButton {
+		height: 30px;
+    	margin : 5px;
+		font-size: 15px;
+	}
+	
+	#writeButton {
+		float:right;
+		margin-right : 50px;
+	}
+	
+	a {
+	  color : balck;
+	}
+	
+	a:link {
+	  color : balck;
+	}
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	 text-decoration-line: none;
+	  color : #FFA500 ;
+	}
+	
+	.pagination .page-link {
+  		color: gray; /* 기본 글자색을 검정색으로 지정 */
+	}
 
-	div {
-	  display: inline-block;
+	.pagination .page-item.active .page-link {
+ 		background-color: #FFA500;
+ 		border:none;
 	}
 </style>
 </head>
 <body>
-
+	<div style="float: right;">
+		<%@ include file="../loginBox.jsp" %>
+	</div> 
 	<%@ include file="../GNB.jsp" %>
 	
 	<div id="LNB">
-	  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-left " style="padding-bottom: 200px;">
-	    <ul class="navbar-nav flex-column">
-	      <li class="nav-item active">
-	        <div style="width: 180px; height: 150px; border : 1px solid black; border-collapse: collapse;">프로필</div>
-	      </li>
-	      <li class="nav-item active">
-	        <a class="nav-link" href="/cf/matching/list.do">개인 모집글</a>
-	      </li>
-	      <li class="nav-item">
-	        <a class="nav-link" href="/cf/matching/teamList.do">팀 모집글</a>
-	      </li>
-	    </ul>
-	  </nav>
+		<br/><br/>
+		 <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
+	      <br/><br/>
+	    <a href="/cf/matching/list.do">개인 모집글</a> 
+	      <br/><br/>
+	    <a href="/cf/matching/teamList.do" >팀 모집글</a>
+	    
 	</div>
+	
 	
 	<div id="content">
 		<select id="gamePlay">
-	  <option value="default">경기방식</option>
-	  <option value="3">3:3</option>
-	  <option value="5">5:5</option>
-	</select>
+		  <option value="default">경기방식</option>
+		  <option value="3">3:3</option>
+		  <option value="5">5:5</option>
+		</select>
 	
 	<select id="sort">
 	  <option value="default">지역</option>
@@ -91,26 +140,28 @@
 
 	
 	<input type="text" id="searchInput" placeholder="제목 또는 작성자를 입력">
-	<button id="searchButton">검색</button>
+	<button id="searchButton" class="btn btn-outline-dark" >검색</button>
 	<c:if test="${writeRight eq 'yes'}">
-		<button onclick="location.href='teamWrite.go?categoryId=m02&teamName=${teamName}'">글쓰기</button>
+		<button  id="writeButton" class="btn btn-outline-dark" onclick="location.href='teamWrite.go?categoryId=m02&teamName=${teamName}'">글쓰기</button>
 	</c:if>
 	
-	<hr>
+	<hr/>
 	
 	<table>
 		<thead>
 			<tr>
-				<th>경기방식</th>
-				<th>경기장위치</th>
-				<th>모집인원수</th>
-				<th>제목</th>
-				<th>경기 일시</th>
-				<th>팀명</th>
-				<th>조회수</th>
+				<th style="width:10%;">경기방식</th>
+				<th style="width:10%;">경기장위치</th>
+				<th style="width:10%;">모집인원수</th>
+				<th style="width:35%;">제목</th>
+				<th style="width:20%;">경기 일시</th>
+				<th style="width:10%;">팀명</th>
+				<th style="width:5%;">조회수</th>
 			</tr>
 		</thead>
-
+			<tr>
+				<th colspan="7"> <hr/> </th>
+			</tr>
 		<tbody>
 			
 			
@@ -125,7 +176,8 @@
 			
 			<tr>
 			  <th colspan="7" id="paging" style="text-align:center">  
-			    <div class="container">                  
+			    <div class="container">
+			    <hr/>                   
 			      <nav aria-label="Page navigation">
 			        <ul class="pagination justify-content-center" id="pagination"></ul>
 			      </nav>
@@ -228,7 +280,7 @@ function listPrint(list){
 		content +='<td id="gamePlay">'+item.gamePlay+':'+item.gamePlay+'</td>';
 		content +='<td>'+item.gu +'</td>';
 		content +='<td id="gamePlayer"> ' + item.matchingNumforSure +'/'+ item.matchingNum+ '</td>';
-		content +='<td id="subject"><a href="teamDetail.go?matchingIdx='+ item.matchingIdx+'">'+item.subject+'</a></td>';
+		content +='<td id="subject" style="text-align:left; padding-left:30px;"><a href="teamDetail.go?matchingIdx='+ item.matchingIdx+'">'+item.subject+'</a></td>';
 		content +='<td>'+item.gameDate+'</td>';
 		content +='<td id="writerId">'+ item.teamName +'</td>';
 		content +='<td>'+item.bHit+'</td>';
