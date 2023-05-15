@@ -61,7 +61,7 @@
 		d.height, d.position, d.favTime, l.si, l.gu,
 		(select photoName from photo where photoId = u.userId) as photoName
 		FROM user u JOIN userData d ON u.userId = d.userId JOIN location l ON d.locationIdx = l.locationIdx
-		WHERE u.nickName = #{param1} AND u.userBlind = false;
+		WHERE u.userId = #{param1} AND u.userBlind = false;
 	</select>
 	
 	<!-- 회원정보 수정 -->
