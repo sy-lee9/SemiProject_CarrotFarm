@@ -85,7 +85,7 @@
 	</div>
 	<div>경기장 리뷰
 		<table>
-		<a herf="#" onclick="window.open('courtReviews.do?courtIdx=${courtInfo.courtIdx}','리뷰 모아보기','width=600px,height=400px')">더보기</a>
+		<a href="#" onclick="window.open('courtReviews.do?courtIdx=${courtInfo.courtIdx}','리뷰 모아보기','width=600px,height=400px')">더보기</a>
 			<c:forEach items="${courtReviewList}" var="courtReview" end="4">
 			<tr>
 				<th>${courtReview.userId}</th>
@@ -95,16 +95,20 @@
 				<c:if test="${courtReview.photoName ne null}">
 					<th><img width="100" src="/photo/${courtReview.photoName}"/></th>
 				</c:if>
+				<c:if test="${courtReview.userId eq sessionScope.loginId}">
 				<th><a href="#" onclick ="window.open('courtReviewUpdate.go?courtReviewIdx=${courtReview.courtReviewIdx}&courtIdx=${courtInfo.courtIdx}','리뷰 모아보기','width=800px,height=400px')">수정</a></th>
 				<th><a href="courtReviewDelete.do?courtReviewIdx=${courtReview.courtReviewIdx}&courtIdx=${courtInfo.courtIdx}">삭제</a></th>
+				</c:if>
+				<c:if test="${courtReview.userId ne sessionScope.loginId && sessionScope.loginId ne null}">
 				<th><a href="#" onclick="window.open('courtReviewReport.go?courtReviewIdx=${courtReview.courtReviewIdx}&reportUserId=${courtReview.userId}','리뷰 신고하기','width=600px,height=400px')">신고</a></th>
+				</c:if>
 			</tr>
 		</c:forEach>
 		</table>
 	</div>
 	<div class="image-grid">
 		사진 모아보기
-		<a herf="#" onclick="window.open('courtReviewPhoto.do?courtIdx=${courtInfo.courtIdx}','사진 모아보기','width=400px,height=400px')">더보기</a>
+		<a href="#" onclick="window.open('courtReviewPhoto.do?courtIdx=${courtInfo.courtIdx}','사진 모아보기','width=400px,height=400px')">더보기</a>
 			<c:if test="${reviewPhotoList eq '[]'}">
 			등록된 사진이 없습니다.
 			</c:if>
@@ -115,12 +119,13 @@
 			</c:if>
 	</div>
 	<hr/>
+	<c:if test="${sessionScope.loginId ne null}">
 	<form action="courtReviewWrite.do" method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
 	<div>
 		
 		<input type="hidden" name="courtIdx" value="${courtInfo.courtIdx}"/>
 		<input type="hidden" name="courtName" value="${courtInfo.courtName}"/>
-		<input type="hidden" name="userId" value="user01"/>
+		<input type="hidden" name="userId" value="${sessionScope.loginId}"/>
 		리뷰작성<input id="courtOneLineReview" type="text" name="courtOneLineReview" style="display: inline-block;"/>
 		<input type="file" name="photo" style="display: inline-block;"/>
 		<label>별점</label>
@@ -140,7 +145,8 @@
 		<button>작성</button>
 	</div>
 	</form>
-	 
+	</c:if>
+	 <div><button onclick="location.href='court'">목록</button></div>
 </body>
 <script>
 	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 

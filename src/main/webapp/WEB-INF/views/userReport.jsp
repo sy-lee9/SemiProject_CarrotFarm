@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>🏀 당근농장</title>
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 <style></style>
 </head>
@@ -18,9 +18,8 @@
       <label>신고 사유 선택 </label>
          <select name="report" id="report" style=" width:300px; margin: 10px;">
             <option value="none">신고 사유 </option>
-            <option value="부적절한 언어 사용">부적절한 언어 사용</option>
-            <option value="폭력">폭력 사용</option>
-            <option value="노쇼">노쇼</option>
+            <option value="부적절한 사진">부적절한 사진 사용</option>
+            <option value="부적절한 닉네임">부적절한 닉네임 사용</option>
             <option value="기타">기타</option>
          </select>
          </br>

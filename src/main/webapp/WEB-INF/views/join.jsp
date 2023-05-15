@@ -25,8 +25,9 @@
         <tr>
             <th>아이디</th>
             <td>
-	            <input type="text" name="userId" id="userId"/>
-	            <button id="idChk" type="button">중복 확인</button>
+	            <input type="text" name="userId" id="userId" pattern="^(?!.*(admin|guest)).*" required> <!-- 정규표현식 -->
+	            <button id="idChk" type="button">중복 확인</button><br>
+	            admin 과 guest 는 ID에 사용 불가합니다.
 	        </td>
             <th>사진</th>
             <td>
@@ -148,7 +149,7 @@ var nickNameChk = false;
 
 function join(){
    if(overlayChk && nickNameChk == true){
-      if($('#userId').val()==''){
+      if($('#userId').val()=='' || $('#userId').val().includes("admin")){
          alert('아이디을 입력해주세요!');
          $('#userId').focus();
       }else if($('#nickName').val()==''){

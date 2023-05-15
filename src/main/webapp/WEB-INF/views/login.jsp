@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>🏀 당근농장</title>
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 <style></style>
 </head>
@@ -44,7 +44,7 @@ function login(){
 			console.log(data);
 			if(data.user != null){
 				alert('로그인에 성공 했습니다.');
-				location.href='/cf/admin';
+				location.href='/cf/';
 			}else{
 				alert('아이디 또는 비밀번호를 확인해 주세요!');
 			}			

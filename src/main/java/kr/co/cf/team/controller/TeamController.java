@@ -27,7 +27,9 @@ public class TeamController {
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@RequestMapping(value = "/team")
-	public String list(HttpSession session, Model model) {
+	public String list(HttpSession session, Model model) {		
+		//String loginId = (String) session.getAttribute("loginId");
+		//logger.info("loginId : "+loginId);
 		
 		String msg = (String) session.getAttribute("msg");
 		logger.info(msg);
@@ -549,27 +551,204 @@ public class TeamController {
 	}
 	
 	@RequestMapping(value = "/team/teamUserList.go")
-	public String teamUserListForm(HttpSession session, Model model) {
+	public String teamUserListForm(HttpSession session, Model model, @RequestParam String teamIdx) {
+		logger.info("teamUserList : "+teamIdx);
+		model.addAttribute("teamIdx",teamIdx);
+		
+		String loginId = (String) session.getAttribute("loginId");
+		model.addAttribute("loginId",loginId);
 		return "/team/teamUserList";
 	}
 	
+	@RequestMapping(value="/team/teamUserList.ajax", method = RequestMethod.POST)
+	@ResponseBody
+	public HashMap<String, Object> teamUserList(@RequestParam HashMap<String, Object> params,HttpSession session){
+		String loginId = (String) session.getAttribute("loginId");
+		logger.info("teamUserList : "+loginId);
+
+		if(loginId != null) {	
+			params.put("userId", loginId);
+		}else {
+			params.put("userId", "로그인안함");
+			logger.info("로그인안함");
+		}
+
+		return TeamService.teamUserList(params);
+	}
 	
+	@RequestMapping(value = "/team/teamUserListLeader.go")
+	public String teamUserListLeader(HttpSession session, Model model, @RequestParam String teamIdx) {
+		logger.info("teamUserListLeader : "+teamIdx);
+		model.addAttribute("teamIdx",teamIdx);
+		
+		String page = "redirect:/team/teamPage.go";
+		
+		String loginId = (String) session.getAttribute("loginId");
+		if(loginId != null) {	
+			if((TeamService.getTeamLeader(teamIdx)).equals(loginId)){
+				logger.info("로그인확인&팀장확인 완료");
+					page = "/team/teamUserListLeader";
+					model.addAttribute("teamIdx", teamIdx);	
+			}else {
+				session.setAttribute("msg","팀장만 접근 가능합니다.");	
+				model.addAttribute("teamIdx", teamIdx);
+			}
+		}else {
+			session.setAttribute("msg","로그인 후 다시 시도해주세요.");	
+			model.addAttribute("teamIdx", teamIdx);
+		}		
+		
+		return page;
+	}
 	
+	@RequestMapping(value="/team/teamUserListLeader.ajax", method = RequestMethod.POST)
+	@ResponseBody
+	public HashMap<String, Object> teamUserListLeader(@RequestParam HashMap<String, Object> params,HttpSession session){
+		return TeamService.teamUserListLeader(params);
+	}
 	
+	@RequestMapping(value="/team/changeTeamGrade.ajax", method = RequestMethod.POST)
+	@ResponseBody
+	public HashMap<String, Object> changeTeamGrade(@RequestParam HashMap<String, Object> params,HttpSession session){
+		return TeamService.changeTeamGrade(params);
+	}
 	
+	//팀원 경고 리스트 보기
+	@RequestMapping(value = "/team/warningTeamUser.go")
+	public String warningTeamUser(HttpSession session, Model model, @RequestParam String teamIdx) {
+		logger.info("warningTeamUser : "+teamIdx);
+		model.addAttribute("teamIdx",teamIdx);
+		
+		String page = "redirect:/team/teamPage.go";
+		
+		String loginId = (String) session.getAttribute("loginId");
+		if(loginId != null) {	
+			if((TeamService.getTeamLeader(teamIdx)).equals(loginId)){
+				logger.info("로그인확인&팀장확인 완료");
+					page = "/team/warningTeamUser";
+					model.addAttribute("teamIdx", teamIdx);	
+			}else {
+				session.setAttribute("msg","팀장만 접근 가능합니다.");	
+				model.addAttribute("teamIdx", teamIdx);
+			}
+		}else {
+			session.setAttribute("msg","로그인 후 다시 시도해주세요.");	
+			model.addAttribute("teamIdx", teamIdx);
+		}		
+		
+		return page;
+	}
 	
+	@RequestMapping(value="/team/warningList.ajax", method = RequestMethod.POST)
+	@ResponseBody
+	public HashMap<String, Object> warningList(@RequestParam HashMap<String, Object> params,HttpSession session){
+		return TeamService.warningList(params);
+	}
 	
+	//경고
+	@RequestMapping(value = "/team/warning.go")
+	public String warningForm(HttpSession session, Model model,@RequestParam String teamIdx,@RequestParam String userId) {
+
+			model.addAttribute("userId",userId);
+			logger.info("warning userId : "+userId);
+			
+			model.addAttribute("teamIdx",teamIdx);
+			logger.info("warning teamIdx : "+teamIdx);
 	
+		return "/team/warningPop";
+	}
 	
+	@RequestMapping(value = "/team/warning.ajax", method = RequestMethod.POST)
+	@ResponseBody
+	public HashMap<String, Object> warning(HttpSession session, Model model,@RequestParam HashMap<String, Object> params) {		
+		logger.info("warning : "+params);
+		
+		if(params.get("warning").equals("기타")) {
+			params.put("reason", params.get("content"));
+		}else {
+			params.put("reason", params.get("warning"));
+		}
+			
+		TeamService.warning(params);
+		logger.info("경고완료");
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("success", 1);
+		
+		return map;
+	}
 	
+	//경고 취소
+	@RequestMapping(value = "/team/warningCancel.go")
+	public String warningCancelForm(HttpSession session, Model model,@RequestParam String teamIdx,@RequestParam String userId) {
+
+			model.addAttribute("userId",userId);
+			logger.info("warningCancel userId : "+userId);
+			
+			model.addAttribute("teamIdx",teamIdx);
+			logger.info("warningCancel teamIdx : "+teamIdx);
 	
+		return "/team/warningCancelPop";
+	}
 	
+	@RequestMapping(value = "/team/warningCancel.ajax", method = RequestMethod.POST)
+	@ResponseBody
+	public HashMap<String, Object> warningCancel(HttpSession session, Model model,@RequestParam HashMap<String, Object> params) {		
+		logger.info("warningCancel : "+params);
+
+		TeamService.warningCancel(params);
+		logger.info("취소완료");
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("success", 1);
+		
+		return map;
+	}
 	
+	//팀원 강퇴
+	@RequestMapping(value = "/team/remove.go")
+	public String removeForm(HttpSession session, Model model,@RequestParam String teamIdx,@RequestParam String userId) {
+
+			model.addAttribute("userId",userId);
+			logger.info("remove userId : "+userId);
+			
+			model.addAttribute("teamIdx",teamIdx);
+			logger.info("remove teamIdx : "+teamIdx);
 	
+		return "/team/removePop";
+	}
 	
+	@RequestMapping(value = "/team/remove.ajax", method = RequestMethod.POST)
+	@ResponseBody
+	public HashMap<String, Object> remove(HttpSession session, Model model,@RequestParam HashMap<String, Object> params) {		
+		logger.info("remove : "+params);
+
+		TeamService.remove(params);
+		logger.info("강퇴완료");
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("success", 1);
+		
+		return map;
+	}
 	
-	
-	
+	//경고 히스토리 보기
+	@RequestMapping(value = "/team/warningDetail.go")
+	public String warningHistory(HttpSession session, Model model,@RequestParam String teamIdx,@RequestParam String userId) {
+		logger.info("warningHistory");
+		String page = "redirect:/team/warningTeamUser.go";
+		
+		ArrayList<TeamDTO> list = TeamService.warningHistory(Integer.parseInt(teamIdx),userId);
+		logger.info("list : " + list.size());		
+		if(list != null) {				
+			model.addAttribute("list", list);				
+			model.addAttribute("userId",userId);
+			logger.info("warningDetail userId : "+userId);
+			
+			page = "/team/warningHistory";
+		}
+		return page;
+	}
 	
 	
 

@@ -4,13 +4,15 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
+	<script src="resources/js/twbsPagination.js" type="text/javascript"></script>
 
 	<!-- 부트스트랩 JavaScript 파일 불러오기 -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-	
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">	
 <style>
    body{
       position:relative;
@@ -47,6 +49,7 @@
 	
 	table{
 		width: 100%;
+		margin : 5px;
 	}
 	
 	button{
@@ -56,6 +59,7 @@
 
 	#inline{
 		float: left;
+		margin:0 20 5 0;
 	}
 
 </style>
@@ -63,7 +67,7 @@
 <body>
 <%-- 	<div><button onclick="location.href='teamPageUpdate.go?teamIdx=${team.teamIdx}'">팀정보 수정</button></div>
 	<div><button onclick="location.href='teamDisbanding.go?teamIdx=${team.teamIdx}'">팀 해체</button></div>
-	<div><button onclick="location.href='teamUserList.go?teamIdx=${team.teamIdx}'">팀원</button></div>
+
 	<div><button onclick="location.href='teamGame.go?teamIdx=${team.teamIdx}'">경기기록 보기</button></div>
 	<div><button onclick="location.href='gameMatchingRequest.go?teamIdx=${team.teamIdx}'">참가신청한 경기</button></div>
 	<div><button onclick="location.href='teamJoinAppAlarm.go?teamIdx=${team.teamIdx}'">알림</button></div>
@@ -77,22 +81,28 @@
          <li>
            <div style="width: 180px; height: 150px; border : 1px solid black; border-collapse: collapse;">프로필</div>
          </li>
-         <li >
-           <a href="/cf/matching/list.do">개인 모집글</a>
-         </li>
+         <c:if test="${teamUserChk eq true}">
+	         <li >
+	           <a href="/cf/team/teamPage.go?teamIdx=${team.teamIdx}">마이팀</a>
+	         </li>
+         </c:if>
          <li>
-           <a href="/cf/matching/teamList.do">팀 모집글</a>
+           <a href="/cf/team/teamList.go">팀 둘러보기</a>
          </li>
        </ul>
    </div>
 	
 	<div id="content">
-	<button onclick="location.href='teamList.go'">리스트로 돌아가기</button>
-	<div id="inline"><p id="teamMatchState">${team.teamMatchState}</p></div> 
+		<div><button onclick="location.href='teamUserList.go?teamIdx=${team.teamIdx}'">팀원</button></div>
+		<div><button onclick="location.href='teamUserListLeader.go?teamIdx=${team.teamIdx}'">팀원(leader)</button></div>
+		<div><button onclick="location.href='warningTeamUser.go?teamIdx=${team.teamIdx}'">경고/강퇴</button></div>
+	<div id="inline"><button onclick="location.href='teamList.go'">리스트로 돌아가기</button></div>
+	<div id="teamMatchState" style="display: flex; align-items: center; height: 40px;">${team.teamMatchState}</div> 
 	<c:if test="${team.teamMatchState == '모집중' && joinAppChk eq false && joinTeam eq false}">
 		<div><button type="button" id="joinApp" onclick="joinApp(${team.teamIdx})">가입신청</button></div>
 	</c:if>
 	<c:if test="${team.teamMatchState == '모집중' && joinAppChk eq true}">
+	<c:if test="${loginId != 'userId'}"><td></td></c:if>
 		<div><button type="button" id="joinCancelApp" onclick="joinCancel(${team.teamIdx})">가입신청 취소</button></div>
 	</c:if>
 	
@@ -134,7 +144,7 @@
 		</tr>
 		<tr>
 			<th>선호 경기종목</th>
-			<td id="teamFavNum">${team.teamFavNum}:${team.teamFavNum}</td>
+			<td id="teamFavNum"></td>
 		</tr>
 		<tr>
 			<th>리뷰</th>
@@ -173,9 +183,14 @@
 		
 	}
 
-	if($('#teamFavNum').val() == 0){
+	if("${team.teamFavNum}" == '0'){
 		$('#teamFavNum').text("상관없음");
+	}else if("${team.teamFavNum}" == '3'){
+		$('#teamFavNum').text("3:3");
+	}else if("${team.teamFavNum}" == '5'){
+		$('#teamFavNum').text("5:5");
 	}
+	
 
 	function joinApp(teamIdx) {
 		console.log('joinApp start');

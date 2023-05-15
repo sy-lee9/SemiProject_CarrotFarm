@@ -8,8 +8,6 @@
 
    
    <style>
-   
-      
 
       /* 추가적인 스타일 시트 */
       .navbar-brand {

@@ -54,7 +54,7 @@
 				<th>직급</th>
 				<th>아이디</th>
 				<th>가입일</th>
-				<th>경고</th>
+				<th>직급변경</th>
 			</tr>
 		</thead>
 		<tbody id="list">
@@ -73,6 +73,7 @@
 	</table>
 </body>
 <script>
+
 	var showPage = 1;
 	var teamJoinDate = 'default';
 	var searchText = 'default';
@@ -110,7 +111,9 @@
 			dataType:'json',
 			success:function(data){
 				console.log(data);
-				listPrint(data.list);			
+				listPrint(data.list);	
+				
+				
 				
 				//paging plugin
 				$('#pagination').twbsPagination({
@@ -140,6 +143,7 @@
 		var content = '';
 		
 		list.forEach(function(list){
+			
 			content +='<tr>';
 			
 			if(list.teamGrade == 'leader'){
@@ -148,25 +152,63 @@
 				teamGrade = '부팀장';
 			}else if(list.teamGrade == 'temporaryLeader'){
 				teamGrade = '임시팀장';
-			}else{
+			}else if(list.teamGrade == 'teamMember'){
 				teamGrade = '팀원';
 			}
-			
 			content +='<td>'+teamGrade+'</td>';
+			
 			content +='<td><a href="../userprofile.go?userId='+list.userId+'">'+list.userId+'</a></td>';
 			content +='<td>'+list.teamJoinDate+'</td>';
-			if(loginId == list.userId && list.teamGrade != 'leader'){
-				content += '<td><button onclick="location.href=\'#\'">확인</button></td>';
+			
+			if(list.teamGrade == 'leader'){
+				content += '<td><select><option value="leader">팀장</option></select></td>';
+			}else if(list.teamGrade == 'deputyLeader'){
+				content += '<td><select><option value="deputyLeader" selected>부팀장</option><option value="temporaryLeader">임시팀장</option><option value="teamMember">팀원</option></select></td>';	
+			}else if(list.teamGrade == 'temporaryLeader'){
+				content += '<td><select><option value="deputyLeader" >부팀장</option><option value="temporaryLeader" selected>임시팀장</option><option value="teamMember">팀원</option></select></td>';	
+			}else if(list.teamGrade == 'teamMember'){
+				content += '<td><select><option value="deputyLeader" >부팀장</option><option value="temporaryLeader">임시팀장</option><option value="teamMember" selected>팀원</option></select></td>';
 			}
-			if(loginId != list.userId || list.teamGrade == 'leader'){
-				content += '<td></td>';
-			} 
 			content +='</tr>';
 		}); 
 		$('#list').empty();
 		$('#list').append(content);
+		
+		//직급변경
+		$('select').change(function(){
+			console.log("change");
+			
+			selectedTeamGrade = $(this).val();
+			// 선택한 요소 확인 okay
+			console.log(selectedTeamGrade);
+			
+			var userId = $(this).closest('tr').find('td a').text();
+			console.log(userId);
+			
+			$.ajax({
+				type:'post',
+				url:'changeTeamGrade.ajax',
+				data:{
+					'teamIdx':teamIdx,
+					'userId':userId,
+					'selectedTeamGrade':selectedTeamGrade
+				},
+				dataType:'json',
+				success:function(data){
+					console.log(data);
+					alert("변경되었습니다.");
+				},
+				error:function(e){
+					console.log(e);
+				}
+			});
+			
+		});	
 	}
-	
+
+
+
+
 	var msg = "${msg}";
 	console.log(msg);
 	if(msg != ''){

@@ -73,6 +73,7 @@
 </style>
 </head>
 <body>
+
 	<div style="float: right;">
 		<%@ include file="./loginBox.jsp" %>
 	</div> 
@@ -154,14 +155,11 @@
 		</div>
 		
 	</div>
-<!-- 	
-	<button onclick="location.href='adminUser'">어드민 유저</button>
-	<button onclick="location.href='adminTeam'">어드민 팀</button>
-	<button onclick="location.href='adminTag'">어드민 태그</button>
-	<button onclick="location.href='adminCategory'">어드민 카테고리</button>
-	<button onclick="location.href='adminReport'">어드민 신고</button> -->
+	
+
 </body>
 <script>
+
 
 </script>
 </html>

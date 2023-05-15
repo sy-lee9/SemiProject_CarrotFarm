@@ -18,12 +18,18 @@
 				<c:if test="${courtReviews.photoName ne null}">
 					<th><img width="100" src="/photo/${courtReviews.photoName}"/></th>
 				</c:if>
-				<th><a href="#" onclick ="window.open('courtReviewUpdate.go?courtReviewIdx=${courtReviews.courtReviewIdx}&courtIdx=${courtIdx}','리뷰 수정','width=800px,height=400px')">수정</a></th>
-				<th><a href="courtReviewDelete.do?courtReviewIdx=${courtReviews.courtReviewIdx}&courtIdx=${courtIdx}">삭제</a></th>
-				<th><a href="#" onclick="window.open('courtReviewReport.go?courtReviewIdx=${courtReview.courtReviewIdx}','리뷰 신고하기','width=600px,height=400px')">신고</a></th>
+				<c:if test="${courtReviews.userId == sessionScope.loginId}">
+					<th><a href="#" onclick ="window.open('courtReviewUpdate.go?courtReviewIdx=${courtReviews.courtReviewIdx}&courtIdx=${courtIdx}','리뷰 수정','width=800px,height=400px')">수정</a></th>
+					<th><a href="courtReviewDelete.do?courtReviewIdx=${courtReviews.courtReviewIdx}&courtIdx=${courtIdx}">삭제</a></th>
+				</c:if>
+				<c:if test="${courtReviews.userId != sessionScope.loginId && sessionScope.loginId ne null}">
+					<th><a href="#" onclick="window.open('courtReviewReport.go?courtReviewIdx=${courtReview.courtReviewIdx}','리뷰 신고하기','width=600px,height=400px')">신고</a></th>
+				</c:if>
 			</tr>
 		</c:forEach>
 		</table>
+		<button onclick="window.close()">닫기</button>
 </body>
 <script></script>
 </html>
+
