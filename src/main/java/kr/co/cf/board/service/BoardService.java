@@ -24,6 +24,9 @@ public class BoardService {
 	
 	@Autowired BoardDAO dao;
 
+	
+	// 자유 게시판 --------------------------------------------------------------------------------------------------------------------------
+
 	public ArrayList<BoardDTO> flist() {
 		return dao.flist();
 	}
@@ -196,11 +199,9 @@ public class BoardService {
 		dao.fdownHit(bidx);
 		
 	}
-	
 
 	
-	
-	
+	// 공지사항 게시판 --------------------------------------------------------------------------------------------------------------------------
 	
 	
 	public ArrayList<BoardDTO> nlist() {
@@ -339,17 +340,6 @@ public class BoardService {
 		logger.info("update => " + page);
 		return page;
 	}
-
-
-	public void nboardReport(HashMap<String, String> params) {
-		dao.nboardReport(params);
-		
-	}
-
-	public void nboardCommentReport(HashMap<String, String> params) {
-		dao.nboardCommentReport(params);
-		
-	}
 	
 	public void ndownHit(String bidx) {
 		dao.ndownHit(bidx);
@@ -360,247 +350,178 @@ public class BoardService {
 		return dao.nuserRight(loginId);
 	}
 	
-	/*public ArrayList<BoardDTO> nlist() {
-		return dao.nlist();
-	}
 	
-	public HashMap<String, Object> nalist(int page, int cnt) {
-		logger.info(page + "페이지 보여줘");
-		logger.info("한 페이지에 " + cnt + "개씩 보여줄거야");
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		
+	// 문의 게시판 --------------------------------------------------------------------------------------------------------------------------
 
-		int offset =(page-1) * cnt;
+		public ArrayList<BoardDTO> ilist() {
+			return dao.ilist();
+		}
 		
-		int total = dao.natotalCount();
-		int range = total%cnt == 0 ? total/cnt : (total/cnt)+1;
-		logger.info("전체 게시물 수 : " + total);
-		logger.info("총 페이지 수 : " + range);
-		
-		page = page >range ? range : page;
-		
-		map.put("currPage", page);
-		map.put("pages", range);
-		
-		ArrayList<BoardDTO> nalist = dao.nalist(cnt, offset);
-		map.put("noticeboardList", nalist);
-		return map;
-	}
-
-	public String nwrite(MultipartFile photo, HashMap<String, String> params) {
-		
-		String page = "redirect:/noticeboardList.do";
-		BoardDTO dto = new BoardDTO();
-		dto.setSubject(params.get("subject"));
-		dto.setContent(params.get("content"));
-		dto.setUserId(params.get("userId"));
-		dto.setCategoryId(params.get("categoryId"));
-		
-		int row = dao.nwrite(dto);
-		logger.info("업데이트 row : " + row);
-		
-		int bidx = dto.getBoardIdx();
-		logger.info("방금 인서트한 bidx : " + bidx);
-		
-		page = "redirect:/noticeboardDetail.do?bidx=" + bidx;
-		
-		if (!photo.getOriginalFilename().equals("")) {
-			logger.info("파일 업로드 작업");
+		public HashMap<String, Object> ialist(int page, String search) {
 			
-			nfileSave(bidx,photo);
-		}
-		return page;
-	}
+			logger.info(page + "페이지 보여줘");
+			logger.info("search : " + search);
 
-	private void nfileSave(int photoIdx, MultipartFile photo) {
-		String OriginalFileName = photo.getOriginalFilename();
-		String ext = OriginalFileName.substring(OriginalFileName.lastIndexOf("."));
-		String photoId = System.currentTimeMillis() + ext;
-		logger.info(OriginalFileName + " -> " + photoId);
-		
-		try {
-			byte[] bytes = photo.getBytes();
-			Path path = Paths.get("C:/img/upload/" + photoId);
-			Files.write(path,bytes);
-			logger.info(photoId + "세이브 완료");
-			dao.nfileWrite(photoIdx, photoId);
-			logger.info("포토인덱스 : " + photoIdx + "포토네임 : " + photoId);
-		} catch (IOException e) {			
-			e.printStackTrace();
-		}
-	}
-	
-	public BoardDTO ndetail(String boardIdx, String flag) {
-		if(flag.equals("detail")) {
-			dao.nupHit(boardIdx);
-		}
-		BoardDTO dto = dao.ndetail(boardIdx);
-		
-		logger.info("사진이름" +dto.getPhotoName());
-		return dto;
-	}
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			
+			int offset =(page-1) * 10;
+			
+			int total = dao.iatotalCount();
+			
+			if (search.equals("default") || search.equals("")) {
+				total = dao.iatotalCount();
+				
+			} else {
+				total = dao.iatotalCountSearch(search);
+			};
+			
+			
 
-	public void ndelete(String bidx) {
-		String newFileName = dao.nfindFile(bidx);
-		logger.info("파일 이름 : " + newFileName);
+			int range = total%10 == 0 ? total/10 : (total/10)+1;
+			logger.info("전체 게시물 수 : " + total);
+			logger.info("총 페이지 수 : " + range);
+			
+			page = page >range ? range : page;
+			
+			ArrayList<BoardDTO> ialist = dao.ialist(10, offset);
+			
+			//params.put("offset", offset);
+			
+			if (search.equals("default") || search.equals("")) {
+				ialist = dao.ialist(10, offset);
+				
+			} else {
+				ialist = dao.ialistSearch(search);
+			}
+			
+			map.put("currPage", page);
+			map.put("pages", range);
+			
+			map.put("inquiryboardList", ialist);
+			return map;
+		}
 		
-		int row = dao.ndelete(bidx);
-		logger.info("삭제 데이터 : " + row);
+		public String iwrite(MultipartFile photo, HashMap<String, String> params) {
+			
+			String page = "redirect:/inquiryboardList.do";
+			BoardDTO dto = new BoardDTO();
+			dto.setSubject(params.get("subject"));
+			dto.setUserId(params.get("userId"));
+			dto.setContent(params.get("content"));
+			dto.setCategoryId(params.get("categoryId"));
+			
+			
+			
+			int row = dao.iwrite(dto);
+			logger.info("업데이트 row : " + row);
+			
+			int bidx = dto.getBoardIdx();
+			logger.info("방금 인서트한 bidx : " + bidx);
+			
+			page = "redirect:/inquiryboardDetail.do?bidx=" + bidx;
+			
+			if (!photo.getOriginalFilename().equals("")) {
+				logger.info("파일 업로드 작업");
+				
+				ifileSave(bidx,photo);
+				//iinquirySave(bidx);
+			}
+			return page;
+		}
+			
+		private void ifileSave(int photoIdx, MultipartFile photo) {
+			String OriginalFileName = photo.getOriginalFilename();
+			String ext = OriginalFileName.substring(OriginalFileName.lastIndexOf("."));
+			String photoId = System.currentTimeMillis() + ext;
+			logger.info(OriginalFileName + " -> " + photoId);
+			
+			try {
+				byte[] bytes = photo.getBytes();
+				Path path = Paths.get("C:/img/upload/" + photoId);
+				Files.write(path,bytes);
+				logger.info(photoId + "세이브 완료");
+				dao.ifileWrite(photoIdx, photoId);
+				logger.info("포토인덱스 : " + photoIdx + "포토네임 : " + photoId);
+			} catch (IOException e) {
+				
+				e.printStackTrace();
+			}
+			
+		}
 		
-		if (newFileName != null && row > 0) {
-			File file = new File("C:/img/upload/" + newFileName);
-			if (file.exists()) {
-				file.delete();
+//		private void iinquirySave(int inquiryIdx) {
+//			String inquiryState = "미처리";
+//		}
+
+		public BoardDTO idetail(String boardIdx, String flag) {
+			if(flag.equals("detail")) {
+				dao.fupHit(boardIdx);
+			}
+			BoardDTO dto = dao.idetail(boardIdx);
+			logger.info("boardIdx : " + boardIdx);
+			logger.info("dto : " + dto);
+			
+			logger.info("사진이름" +dto.getPhotoName());
+			return dto;
+		}
+
+		public void idelete(String bidx) {
+			String newFileName = dao.ifindFile(bidx);
+			logger.info("파일 이름 : " + newFileName);
+			
+			int row = dao.idelete(bidx);
+			logger.info("삭제 데이터 : " + row);
+			
+			if (newFileName != null && row > 0) {
+				File file = new File("C:/img/upload/" + newFileName);
+				if (file.exists()) {
+					file.delete();
+				}
 			}
 		}
-	}
 
-	public String nupdate(MultipartFile photo, HashMap<String, String> params) {
-		int bidx = Integer.parseInt(params.get("bidx"));
-		int row = dao.nupdate(params);
-		logger.info("bidx 값 : " + bidx);
-		logger.info("row 값 : " + row);
-		
-		// 2. photo에 파일명이 존재 한다면?
-		if(photo != null && !photo.getOriginalFilename().equals("")) {
-			nfileSave(bidx,photo);
-		}
-		
-		String page = row >0 ? "redirect:/noticeboardDetail.do?bidx=" + bidx : "redirect:/noticeboardList.do";
-		logger.info("update => " + page);
-		return page;
-	}
-
-	
-	*/
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	public ArrayList<BoardDTO> ilist() {
-		return dao.ilist();
-	}
-	
-	public HashMap<String, Object> ialist(int page, int cnt) {
-		logger.info(page + "페이지 보여줘");
-		logger.info("한 페이지에 " + cnt + "개씩 보여줄거야");
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		
-
-		int offset =(page-1) * cnt;
-		
-		int total = dao.iatotalCount();
-		int range = total%cnt == 0 ? total/cnt : (total/cnt)+1;
-		logger.info("전체 게시물 수 : " + total);
-		logger.info("총 페이지 수 : " + range);
-		
-		page = page >range ? range : page;
-		
-		map.put("currPage", page);
-		map.put("pages", range);
-		
-		ArrayList<BoardDTO> ialist = dao.ialist(cnt, offset);
-		map.put("inquiryboardList", ialist);
-		return map;
-	}
-
-	public String iwrite(MultipartFile photo, HashMap<String, String> params) {
-		
-		String page = "redirect:/inquiryboardList.do";
-		BoardDTO dto = new BoardDTO();
-		dto.setSubject(params.get("subject"));
-		dto.setContent(params.get("content"));
-		dto.setUserId(params.get("userId"));
-		dto.setCategoryId(params.get("categoryId"));
-		
-		int row = dao.iwrite(dto);
-		logger.info("업데이트 row : " + row);
-		
-		int bidx = dto.getBoardIdx();
-		logger.info("방금 인서트한 bidx : " + bidx);
-		
-		page = "redirect:/inquiryboardDetail.do?bidx=" + bidx;
-		
-		if (!photo.getOriginalFilename().equals("")) {
-			logger.info("파일 업로드 작업");
+		public String iupdate(MultipartFile photo, HashMap<String, String> params) {
+			int bidx = Integer.parseInt(params.get("bidx"));
+			int row = dao.iupdate(params);
+			logger.info("bidx 값 : " + bidx);
+			logger.info("row 값 : " + row);
 			
-			ifileSave(bidx,photo);
-		}
-		return page;
-	}
-
-	private void ifileSave(int photoIdx, MultipartFile photo) {
-		String OriginalFileName = photo.getOriginalFilename();
-		String ext = OriginalFileName.substring(OriginalFileName.lastIndexOf("."));
-		String photoId = System.currentTimeMillis() + ext;
-		logger.info(OriginalFileName + " -> " + photoId);
-		
-		try {
-			byte[] bytes = photo.getBytes();
-			Path path = Paths.get("C:/img/upload/" + photoId);
-			Files.write(path,bytes);
-			logger.info(photoId + "세이브 완료");
-			dao.ifileWrite(photoIdx, photoId);
-			logger.info("포토인덱스 : " + photoIdx + "포토네임 : " + photoId);
-		} catch (IOException e) {			
-			e.printStackTrace();
-		}
-	}
-	
-	public BoardDTO idetail(String boardIdx, String flag) {
-		if(flag.equals("detail")) {
-			dao.iupHit(boardIdx);
-		}
-		BoardDTO dto = dao.idetail(boardIdx);
-		
-		logger.info("사진이름" +dto.getPhotoName());
-		return dto;
-	}
-
-	public void idelete(String bidx) {
-		String newFileName = dao.ifindFile(bidx);
-		logger.info("파일 이름 : " + newFileName);
-		
-		int row = dao.idelete(bidx);
-		logger.info("삭제 데이터 : " + row);
-		
-		if (newFileName != null && row > 0) {
-			File file = new File("C:/img/upload/" + newFileName);
-			if (file.exists()) {
-				file.delete();
+			if(photo != null && !photo.getOriginalFilename().equals("")) {
+				ifileSave(bidx,photo);
 			}
-		}
-	}
-
-	public String iupdate(MultipartFile photo, HashMap<String, String> params) {
-		int bidx = Integer.parseInt(params.get("bidx"));
-		int row = dao.iupdate(params);
-		logger.info("bidx 값 : " + bidx);
-		logger.info("row 값 : " + row);
-		
-		// 2. photo에 파일명이 존재 한다면?
-		if(photo != null && !photo.getOriginalFilename().equals("")) {
-			ifileSave(bidx,photo);
+			
+			String page = row >0 ? "redirect:/inquiryboardDetail.do?bidx=" + bidx : "redirect:/inquiryboardList.do";
+			logger.info("update => " + page);
+			return page;
 		}
 		
-		String page = row >0 ? "redirect:/inquiryboardDetail.do?bidx=" + bidx : "redirect:/inquiryboardList.do";
-		logger.info("update => " + page);
-		return page;
-	}
+		
+		public ArrayList<BoardDTO> icommentList(String bidx) {
+			return dao.icommentList(bidx);
+		}
 
-	public String iuserRight(String loginId) {
-		return dao.iuserRight(loginId);
-	}
+		public void icommentWrite(HashMap<String, String> params) {
+			dao.icommentWrite(params);
+		}
 
+		public void icommentDelete(String commentIdx) {
+			dao.icommentDelete(commentIdx);
+		}
 
+		public BoardDTO icommentGet(String commentIdx) {
+			return dao.icommentGet(commentIdx);
+		}
 
-	
+		public void icommentUpdate(HashMap<String, String> params) {
+			dao.icommentUpdate(params);
+		}
+		
+		public void idownHit(String bidx) {
+			dao.idownHit(bidx);
+			
+		}
+		
+		public String iuserRight(String loginId) {
+			return dao.iuserRight(loginId);
+		}
 }	

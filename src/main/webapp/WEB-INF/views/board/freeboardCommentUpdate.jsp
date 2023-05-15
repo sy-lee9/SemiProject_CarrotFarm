@@ -3,36 +3,104 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>🏀 당근농장</title>
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
+<script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+
+
 <style>
-@charset "UTF-8";
 
-table{
-	width : 100%;
+	body{
+		position:relative;
+		font-size:15px;
+		padding : 10px;
+	}
+	
+	#content {
+		width:82%;
+		height : 85%;
+		background-color: #f8f9fa;
+		padding: 15 30 10;
+		float:right;
+	}
+	
+	#LNB {
+		width:16%;
+		height : 85%;
+		background-color: #f8f9fa;
+		float:left;
+		margin : 0px 0px 5px 5px;
+	}
+	
+	#LNB ul li {
+	margin-top : 30px;
+    margin-bottom: 90px; /* 원하는 줄간격 크기 */
+	}
+
+	
+	th, td {
+		margin : 10px;
+		border : 1px solid black;	
+		padding : 10px 10px;
+		border-collapse : collapse;
+		border-left: none;
+    	border-right: none;
+	}
+	
+	table{
+		width:98%;
+		height:60%;
+		text-align:center;
+		border : 3px solid black;	
+		border-collapse : collapse;
+		padding : 15px 10px;
+	}
+	
+	#freeboardSearchInput{
+		width: 200px;
+    	height: 30px;
+	}
+	
+	# freeboardSearchButton {
+		height: 30px;
+	}
+	
+	.hidden-row {
+    display: none;
 }
-
-table, th, td{
-	border : 1px solid black;
-	border-collapse : collapse;
-	padding : 5px 10px;
-}
-
-button{
-	margin : 5px;
-}
-
-input[type="text"]{
-	width : 100%;
-}
-
-textarea{
-	width : 100%;
-	height : 150px;
-	resize : none;	
-}</style>
+</style>
 </head>
 <body>
+<%@ include file="../GNB.jsp" %>
+	
+
+	<div id="LNB">
+		 <ul style="list-style-type: none;">
+	      <li>
+	        <div style="width: 180px; height: 150px; border : 1px solid black; border-collapse: collapse;">프로필</div>
+	      </li>
+	      
+	      <li >
+	        <a href="/cf/freeboardList.do" style="font-weight: bold; font-size: 20px ; color: orange;">자유 게시판</a>
+	      </li>
+	      
+	      <li>
+	        <a href="/cf/noticeboardList.do" style="font-weight: bold; font-size: 20px; color: black;">공지사항</a>
+	      </li>
+	      
+	      <li>
+	        <a href="/cf/inquiryboardList.do" style="font-weight: bold; font-size: 20px; color: black;">문의</a>
+	      </li>
+	    </ul>
+	</div>
+	
+	<div id="content">
 		<table>
 			<tr>
 				<th>제목</th>
@@ -56,7 +124,7 @@ textarea{
 				<td colspan="111"><img width = "333" src="/photo/${dto.photoName}"/></td>
 			</tr>
 			</c:if>
-			<tr>
+			<tr class="hidden-row">
 				<th colspan="11">
 					<input type = "button" onclick="location.href='./freeboardList.do'" value="리스트"/>
 					&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
@@ -109,15 +177,15 @@ textarea{
 			     	<td>${fcommentList.commentWriteTime}</td>
 			     	<td colspan="2">
 			     		<c:if test="${fcommentList.userId eq loginId}">
-			     			<a  href="fcommentUpdate.go?commentIdx=${fcommentList.commentIdx}&bidx=${dto.bidx}" >수정</a> 
-			     			/ 
-			     			<a href="fcommentDelete.do?commentIdx=${fcommentList.commentIdx}&bidx=${dto.bidx}">삭제</a>
+			     			<a  href="fcommentUpdate.go?commentIdx=${fcommentList.commentIdx}&bidx=${dto.bidx}" ></a> 
+			     			 
+			     			<a href="fcommentDelete.do?commentIdx=${fcommentList.commentIdx}&bidx=${dto.bidx}"></a>
 			     		</c:if>
 			     		<c:if test="${fcommentList.userId ne loginId}">
 				     		<c:if test="${loginId != 'guest' }"><button id="playerList"></button>
 				     			<a href="#">신고</a>
 				     		</c:if>	 
-			     		</c:if>	     					
+			     		</c:if>
 			     	</td>
 			     </tr>
 			</c:forEach>
@@ -128,14 +196,14 @@ textarea{
 					<th>
 						<input type="hidden" name="commentIdx" value="${fcommentDto.commentIdx}">
 						<input type="hidden" name="bidx" value="${dto.boardIdx}" style= "border:none;">
-						<input type="text" name="userId" value="${loginId}" style= "border:none;" readonly>
+						<input type="text" name="userId" value="${loginId}" style= "border:none; background-color: #f8f9fa ; text-align:center;" readonly; readonly>
 					</th>
 					<c:if test="${loginId != 'guest' }">
 						<th colspan="5">
-							<input type="text" name="commentContent" value="${fcommentDto.commentContent}">
+							<input type="text" name="commentContent" value="${fcommentDto.commentContent}"  style="width : 650px">
 						</th>
 						<th>
-							<button>작성</button>
+							<button>댓글 수정</button>
 						</th>
 					</c:if>
 					<c:if test="${loginId == 'guest' }">
@@ -146,6 +214,7 @@ textarea{
 				</form>  
 		     </tr>
 		</table>
+		</div>
 </body>
 <script>
 

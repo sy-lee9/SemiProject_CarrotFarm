@@ -9,6 +9,7 @@
 <style>
 	body {
 		text-align:center;
+		margin:auto;
 	}
 	div {
 		display:inline-block;
@@ -16,12 +17,15 @@
 </style>
 </head>
 <body>
+ <br>
 	<h2>당근농장 리뷰</h2>
 	
-	</br>
-		<form action="review.do?matchingIdx=${matchingIdx}" method="post" id="form">
+		<form action="review.do?matchingIdx=${matchingIdx}" method="post" id="form" ">
 			<input type="text" name="writerId" id="${loginId}" value="${loginId}" hidden> 
+			<div style="border: 1px solid black; width:90%; height:70%;">
+			
 			<h3>MVP를 선택해주세요</h3>
+			
 			<select name="receiveId" id="receiveId">
 				<option value="none">MVP</option>
 				<c:forEach items="${playerList}" var="playerList">
@@ -42,6 +46,7 @@
 				</c:if>
 				</c:forEach>
 			</div>
+			
 			<div>
 				<c:forEach items="${playerList}" var="playerList" varStatus="status">
 				<c:if test="${playerList.userId ne loginId}">
@@ -54,10 +59,12 @@
 				</c:if>
 				</c:forEach>
 			</div>	
-		</form>
-		</br>
-		<button onclick="subChk()">제출</button>
+			</br>
+			<button class="btn btn-outline-dark" onclick="subChk()" style="margin:10px;">제출</button>
 	
+		</div>	
+		</form>
+		
 </body>
 <script>
 function subChk(){

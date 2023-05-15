@@ -16,7 +16,7 @@
       
          width: 150px;
          height: 50px;
-         background-image: url("/photo/mainLogo.png"); /* 로고 이미지 추가 */
+         background-image: url("/img/upload/당근농장.png"); /* 로고 이미지 추가 */
          background-size: cover;
          background-position: center;
          background-repeat: no-repeat;
@@ -88,10 +88,6 @@
   </div>
 </nav>
 
-	
-
-   
-   
 </body>
 <script>
 

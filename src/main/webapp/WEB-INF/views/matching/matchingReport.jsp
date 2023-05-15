@@ -5,7 +5,10 @@
 <head>
 <meta charset="UTF-8">
 <title>🏀 당근농장</title>
-<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <style>
 body{
 		text-align:center;
@@ -13,11 +16,12 @@ body{
 </style>
 </head>
 <body>
-
+	 
 	<form action="matchingReport.do" method="post" id="form">
 		<input name="matchingIdx" type="text" value="${dto.matchingIdx}" hidden />
 		<input name="userId" type="text" value="${loginId}" hidden />
-		
+		<input name="reportUserId" type="text" value="${dto.reportUserId}" hidden />
+		<br/>
 		<h3>모집글 신고</h3>
 					
 		<label>신고 사유 선택 </label>
@@ -30,8 +34,9 @@ body{
 			</select>
 			</br>
 			<textarea name="content" id="content" style="width: 500px; height: 200px;" placeholder="기타 신고사유를 입력해 주세요." ></textarea>
-		
-		<input type="button" value="제출" onclick="subChk()" style="margin: 10px;"/><input type="button" onclick="window.close()" id="closeBtn" value="닫기"/>
+		<br/>
+		<input type="button" class="btn btn-warning" value="신고" onclick="subChk()" style="margin: 10px;"/>
+		<input type="button" class="btn btn-outline-dark" onclick="window.close()" id="closeBtn" value="닫기"/>
 	</form>
 	
 	
