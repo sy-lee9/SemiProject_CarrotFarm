@@ -51,7 +51,7 @@
 			<tr>
 				<th>참여 경기 목록</th>
 			</tr>
-			<c:if test="${profileGames eq '[]'}">
+			<c:if test="${profileGames eq '[]'}"> 
 				<tr>
 					<th colspan="4">등록된 글이 없습니다.</th>
 				</tr>

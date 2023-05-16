@@ -3,9 +3,15 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>🏀 당근농장</title>
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>  
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=77b263fb5e91c183b524a3d94385df7c&libraries=services"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <style>
 	rating {
   display: inline-block;
@@ -40,7 +46,7 @@
   color: #deb217;
 }
 
-	.image-grid {
+/* 	.image-grid {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -49,42 +55,112 @@
 .image-grid img {
   width: calc(13% - 10px);
   margin-bottom: 10px;
-}
+} */
+
+body{
+		position:relative;
+		font-size:15px;
+		padding : 10px;
+		min-width: 1200px;
+	}
+	
+	#content {
+		width:78%;
+		height :83%;
+		background-color: #f8f9fa;
+		padding: 10 30 10;
+		margin: 5px;
+		float:right;
+		
+	}
+	
+	#LNB {
+		width:20%;
+		height :83%;
+		background-color: #f8f9fa;
+		float:left;
+		margin: 5px;
+		font-weight: bold;
+        font-size: 15px;
+		text-align:center;
+		
+	}
+	a {
+	  color : black;
+	}
+	
+	a:link {
+	  color : black;
+	}
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	 text-decoration-line: none;
+	  color : #FFA500 ;
+	}
+	
+
+	
 
 
 </style>
 </head>
 <body>
+	<div style="float: right;">
+		<%@ include file="loginBox.jsp" %>
+	</div> 
+	<jsp:include page="GNB.jsp"></jsp:include>
+	<<div id="LNB">
+		<br/><br/>
+		 <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
+	    <br/><br/><br/><br/>
+	    <a href="/cf/court" style = "color: orange">경기장 상세보기</a>
+	    
+	</div>
+	<div id="content">
 	
-	<div id="map" style="width:600px;height:350px;float:left;"></div>
+	<div id="map" style="width:420px;height:420px;float:left; margin: 20px, 10px, 0px, 20px;"></div>
 	<div>
-		<table>
+		<table  style="width:750px; height:200px; margin : 20px; float : right">
 			<tr>
-				<th>${courtInfo.courtName}</th>
-				<th>
+				<th style="font-size: 30pt; height:100px;">${courtInfo.courtName}</th>
+				<th style="text-align: left;">
 					<c:if test="${courtInfo.courtStar eq ''}">0.0</c:if>
-					<c:if test="${courtInfo.courtStar ne ''}">${courtInfo.courtStar}</c:if>
+					<c:if test="${courtInfo.courtStar ne ''}">⭐${courtInfo.courtStar}</c:if>
 				</th>	
 			</tr>
-			<tr>
-				<th>위치</th>
-				<th>${courtInfo.courtAddress}</th>
+
+			<tr style="font-size: 20pt; height:100px;">
+				<th>위치 : ${courtInfo.courtAddress}</th>
 			</tr>
-			<tr>
-				<th>실내/외</th>
+			<tr style="font-size: 15pt; height:100px;">
 				<th>
 					<c:if test="${courtInfo.courtInOut eq 'out'}">실외</c:if>
 					<c:if test="${courtInfo.courtInOut eq 'in'}">실내</c:if>
 				</th>
 			</tr>
-			<tr>
-				<th>사용 여부</th>
-				<th>${courtInfo.courtState}</th>
+			<tr style="font-size: 15pt; height:100px;" >
+				<th>사용 여부 : ${courtInfo.courtState}</th>
 			</tr>
 		</table>
+	</br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br>
 	</div>
-	<div>경기장 리뷰
-		<table>
+	<div class="image-grid" style = "font-size : 20pt; font-weight: bold;">
+		사진 모아보기 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="#" onclick="window.open('courtReviewPhoto.do?courtIdx=${courtInfo.courtIdx}','사진 모아보기','width=400px,height=400px')">더보기</a>
+		
+		</br></br>
+			<c:if test="${reviewPhotoList eq '[]'}">
+			등록된 사진이 없습니다.
+			</c:if>
+			<c:if test="${reviewPhotoList ne '[]'}">
+				<c:forEach items="${reviewPhotoList}" var="reviewPhotos" end="4">
+					<img width="100" src="/photo/${reviewPhotos.photoName}"/>			
+				</c:forEach>
+			</c:if>
+	</div>
+	<div >경기장 리뷰
+		<table style="width:300px;">
 		<a href="#" onclick="window.open('courtReviews.do?courtIdx=${courtInfo.courtIdx}','리뷰 모아보기','width=600px,height=400px')">더보기</a>
 			<c:forEach items="${courtReviewList}" var="courtReview" end="4">
 			<tr>
@@ -106,27 +182,16 @@
 		</c:forEach>
 		</table>
 	</div>
-	<div class="image-grid">
-		사진 모아보기
-		<a href="#" onclick="window.open('courtReviewPhoto.do?courtIdx=${courtInfo.courtIdx}','사진 모아보기','width=400px,height=400px')">더보기</a>
-			<c:if test="${reviewPhotoList eq '[]'}">
-			등록된 사진이 없습니다.
-			</c:if>
-			<c:if test="${reviewPhotoList ne '[]'}">
-				<c:forEach items="${reviewPhotoList}" var="reviewPhotos" end="4">
-					<img width="100" src="/photo/${reviewPhotos.photoName}"/>			
-				</c:forEach>
-			</c:if>
-	</div>
 	<hr/>
 	<c:if test="${sessionScope.loginId ne null}">
 	<form action="courtReviewWrite.do" method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
-	<div>
+	<div style = "text-align: center;">
 		
 		<input type="hidden" name="courtIdx" value="${courtInfo.courtIdx}"/>
 		<input type="hidden" name="courtName" value="${courtInfo.courtName}"/>
 		<input type="hidden" name="userId" value="${sessionScope.loginId}"/>
-		리뷰작성<input id="courtOneLineReview" type="text" name="courtOneLineReview" style="display: inline-block;"/>
+		리뷰작성 &nbsp; &nbsp; <input id="courtOneLineReview" type="text" name="courtOneLineReview" style="display: inline-block;"/>
+		&nbsp; &nbsp; &nbsp; &nbsp; 
 		<input type="file" name="photo" style="display: inline-block;"/>
 		<label>별점</label>
 		<div class="rating" style="display: inline-block;">
@@ -141,12 +206,12 @@
 		  <input type="radio" id="star1" name="courtStar" value="1">
 		  <label for="star1"></label>
 	</div>
-		
-		<button>작성</button>
+		&nbsp; &nbsp; &nbsp; &nbsp; 
+		<button>작성</button> &nbsp; &nbsp; &nbsp;  <button onclick="location.href='court'">목록</button>
 	</div>
 	</form>
 	</c:if>
-	 <div><button onclick="location.href='court'">목록</button></div>
+
 </body>
 <script>
 	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 

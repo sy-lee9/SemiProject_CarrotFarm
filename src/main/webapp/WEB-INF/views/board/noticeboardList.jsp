@@ -4,44 +4,54 @@
 <head>
 <meta charset="UTF-8">
 <title>🏀 당근농장</title>
-<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
-<script src="resources/js/jquery.twbsPagination.js" type="text/javascript"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
+	<script src="resources/js/twbsPagination.js" type="text/javascript"></script>
+	
+	<!-- 부트스트랩 JavaScript 파일 불러오기 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+	
+	
 <style>
 	body{
 		position:relative;
 		font-size:15px;
 		padding : 10px;
+		min-width: 1200px;
 	}
 	
 	#content {
-		width:82%;
-		height : 85%;
+		width:78%;
+		height : 87%;
 		background-color: #f8f9fa;
-		padding: 15 30 10;
+		padding: 10 30 10;
+		margin : 5px;
 		float:right;
+		
 	}
 	
 	#LNB {
-		width:16%;
-		height : 85%;
+		width:20%;
+		height : 87%;
 		background-color: #f8f9fa;
 		float:left;
-		margin : 0px 0px 5px 5px;
+		margin : 5px;
+		font-weight: bold;
+        font-size: 15px;
+		text-align:center;
+		
 	}
 	
 	#LNB ul li {
 	margin-top : 30px;
     margin-bottom: 90px; /* 원하는 줄간격 크기 */
 	}
-
 	
-	th, td {
+	
+		th, td {
 		margin : 10px;
 		border : 1px solid black;	
 		padding : 10px 10px;
@@ -51,59 +61,93 @@
 	}
 	
 	table{
-		width:98%;
-		height:60%;
+		width:95%;
+		height:70%;
 		text-align:center;
 		border : 3px solid black;	
 		border-collapse : collapse;
 		padding : 15px 10px;
 	}
 	
+	#gamePlay, #sort{
+		width: 100px;
+    	height: 30px;
+    	margin : 5px;
+	}
+	
 	#noticeboardSearchInput{
 		width: 200px;
     	height: 30px;
+    	
 	}
 	
-	#noticeboardSearchButton {
+	#noticeboardSearchButton, #registerBtn {
+		font-size: 15px;
 		height: 30px;
+		margin : 5px;
+	
 	}
+	
+	#registerBtn {
+		float:right;
+		margin-right : 60px;
+	}
+	
+	a {
+	  color : black;
+	}
+	
+	a:link {
+	  color : black;
+	}
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	 text-decoration-line: none;
+	  color : #FFA500 ;
+	}
+	
+	.pagination .page-link {
+  		color: gray; /* 기본 글자색을 검정색으로 지정 */
+	}
+
+	.pagination .page-item.active .page-link {
+ 		background-color: #FFA500;
+ 		border:none;
+	}
+	
+
 </style>
 </head>
 <body>
-
+	<div style="float: right;">
+		<%@ include file="../loginBox.jsp" %>
+	</div> 
 	<%@ include file="../GNB.jsp" %>
-	
 
 	<div id="LNB">
-		 <ul style="list-style-type: none;">
-	      <li>
-	        <div style="width: 180px; height: 150px; border : 1px solid black; border-collapse: collapse;">프로필</div>
-	      </li>
-	      
-	      <li >
-	        <a href="/cf/freeboardList.do" style="font-weight: bold; font-size: 20px ; color: black;">자유 게시판</a>
-	      </li>
-	      
-	      <li>
-	        <a href="/cf/noticeboardList.do" style="font-weight: bold; font-size: 20px; color: orange;">공지사항</a>
-	      </li>
-	      
-	      <li>
-	        <a href="/cf/inquiryboardList.do" style="font-weight: bold; font-size: 20px; color: black;">문의</a>
-	      </li>
-	    </ul>
+		 <br/><br/>
+		 <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
+	     <br/><br/><br/><br/>
+	     <a href="/cf/freeboardList.do" style="font-weight: bold; font-size: 20px ; color: black;">자유 게시판</a>
+	   	 <br/><br/><br/><br/>
+	     <a href="/cf/noticeboardList.do" style="font-weight: bold; font-size: 20px; color: orange;">공지사항</a>
+	     <br/><br/><br/><br/>
+	     <a href="/cf/inquiryboardList.do" style="font-weight: bold; font-size: 20px; color: black;">문의</a>
+
 	</div>
 	
 	<div id="content">
 
 	<br/>
 	<input type ="text" id="noticeboardSearchInput" placeholder="제목 또는 닉네임을 입력">
-	<button id ="noticeboardSearchButton">검색</button>
+	<button id ="noticeboardSearchButton" class="btn btn-outline-dark">검색</button>
 	
 	<br/>
 	<br/>
 	<c:if test="${loginId != null }">
-	<button id="registerBtn" onclick="location.href='noticeboardWrite.go'">공지사항 등록</button>
+	<button id="registerBtn" onclick="location.href='noticeboardWrite.go'" class="btn btn-outline-dark" >공지사항 등록</button>
 	</c:if>
 	<br/>
 	<br/>
@@ -212,5 +256,9 @@ function listPrint(nalist){
 	$('#list').empty();
 	$('#list').append(content);
 }
+
+$(document).ready(function() {
+	  $('#noticeboardSearchButton').css('margin-top', '+0.5px');
+	});
 </script>
 </html>

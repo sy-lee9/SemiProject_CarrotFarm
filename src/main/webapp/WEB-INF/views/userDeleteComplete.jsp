@@ -10,6 +10,12 @@
 </head>
 <body>
 
+<div style="float: right;">
+	<jsp:include page="loginBox.jsp"></jsp:include>
+</div>
+
+<jsp:include page="GNB.jsp"></jsp:include>
+
 <h3>회원 탈퇴 완료</h3>
 <div>안녕하세요 당근농장 입니다.</div>
  <div>서비스를 이용하시면서 불편함을 드렸다면 죄송합니다.</div>

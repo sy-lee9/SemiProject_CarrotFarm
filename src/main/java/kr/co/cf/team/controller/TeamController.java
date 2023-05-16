@@ -120,23 +120,23 @@ public class TeamController {
 		return page;
 	}
 	
-	@RequestMapping(value="/team/teamPage.go")
-	public String teamPage(Model model, @RequestParam String teamIdx,HttpSession session) {
-		logger.info("teamPage : "+teamIdx);
-		String page = "redirect:/team";		
-		
-		String loginId = (String) session.getAttribute("loginId");
-		logger.info("loginId : " + loginId);
-		
-		TeamDTO TeamDTO = TeamService.teamInfo(Integer.parseInt(teamIdx));
-		logger.info("teamInfo");
-		if(TeamDTO != null) {
-			model.addAttribute("team", TeamDTO);
-			
-			ArrayList<TeamDTO> list = TeamService.tagReview(Integer.parseInt(teamIdx));
-			logger.info("list : " + list.size());		
-			if(list != null) {				
-				model.addAttribute("list", list);	
+	   @RequestMapping(value="/team/teamPage.go")
+	   public String teamPage(Model model, @RequestParam String teamIdx,HttpSession session) {
+	      logger.info("teamPage : "+teamIdx);
+	      String page = "redirect:/team";      
+	      
+	      String loginId = (String) session.getAttribute("loginId");
+	      logger.info("loginId : " + loginId);
+	      
+	      TeamDTO TeamDTO = TeamService.teamInfo(Integer.parseInt(teamIdx));
+	      logger.info("teamInfo");
+	      if(TeamDTO != null) {
+	         model.addAttribute("team", TeamDTO);
+	         
+	         ArrayList<TeamDTO> list = TeamService.tagReview(Integer.parseInt(teamIdx));
+	         logger.info("list : " + list.size());      
+	         if(list != null) {            
+	            model.addAttribute("list", list);   
 
 				//팀 신청 여부 확인
 				if(loginId != null) {

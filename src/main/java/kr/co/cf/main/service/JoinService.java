@@ -244,10 +244,11 @@ private int photoSave(MultipartFile userProfile,HashMap<String, String> params, 
   			String type="fileChange";
   			 photoSave(photo,params,type); 
   		 }
+  		 
   		return page;
   	}
       
-      public HashMap<String, Object> gameList(HashMap<String, Object> params) { 
+      public HashMap<String, Object> reviewList(HashMap<String, Object> params) { 
   		
   		int page = Integer.parseInt((String) params.get("page"));
   		String selectedGameDate = String.valueOf(params.get("selectedGameDate"));
@@ -267,7 +268,7 @@ private int photoSave(MultipartFile userProfile,HashMap<String, String> params, 
   				if(searchText.equals("default") || searchText.equals("")) {
   					if(selectedGameDate.equals("default")) {
   						// 전체 보여주기
-  							list = dao.gameList(params);
+  							list = dao.reviewList(params);
   							logger.info("gameList size : "+list.size());					
   					}else{
   						// 경기순을 선택한 경우
@@ -306,6 +307,67 @@ private int photoSave(MultipartFile userProfile,HashMap<String, String> params, 
   		logger.info("map : "+ map);
   		return map;
   	}
+      
+      
+      public HashMap<String, Object> allGameList(HashMap<String, Object> params) { 
+    		
+    		int page = Integer.parseInt((String) params.get("page"));
+    		String selectedGameDate = String.valueOf(params.get("selectedGameDate"));
+    		String searchText = String.valueOf(params.get("searchText"));
+    		logger.info(page+" 페이지 보기");
+    		logger.info("한 페이지에 "+10+" 개씩 보기");
+    		
+    		ArrayList<JoinDTO> list = new ArrayList<JoinDTO>();
+    		HashMap<String, Object> map = new HashMap<String, Object>();	
+
+    		//총 페이지 수 
+    		int offset = (page-1)*10;
+    		
+    		params.put("offset", offset);
+    		
+    				
+    				if(searchText.equals("default") || searchText.equals("")) {
+    					if(selectedGameDate.equals("default")) {
+    						// 전체 보여주기
+    							list = dao.allGameList(params);
+    							logger.info("gameList size : "+list.size());					
+    					}else{
+    						// 경기순을 선택한 경우
+    						if(selectedGameDate.equals("DESC")) {
+    								list = dao.allGameDateListDesc(params);
+    								logger.info("GameDateList size : "+list.size());		
+    						}else {
+    							params.put("range", "ASC");
+    							list = dao.allGameDateListAsc(params);
+    							logger.info("GameDateList size : "+list.size());					
+    						}
+    					}
+    				}else {
+    					// 검색어 입력한 경우
+    						list = dao.allSearchGameList(params);		
+    						logger.info("SearchGameList size : "+list.size());
+    				}
+    		
+    		logger.info("totalGameList size : "+list.size());
+    		
+    		// 만들 수 있는 총 페이지 수 
+    		// 전체 게시물 / 페이지당 보여줄 수
+    		int total = list.size();
+    		logger.info("total "+total);
+    		int range = total%10 == 0 ? total/10 : (total/10)+1;
+    		logger.info("전체 게시물 수 : "+total);
+    		logger.info("총 페이지 수 : "+range);
+    		
+    		page = page > range ? range : page;
+    		
+    		map.put("currPage", page);
+    		map.put("pages", range);
+    				
+    		logger.info("list : "+ list);
+    		map.put("list", list);
+    		logger.info("map : "+ map);
+    		return map;
+    	}
 
 	public ArrayList<JoinDTO> profileGames(String userId) {
 		return dao.profileGames(userId);
@@ -323,6 +385,11 @@ private int photoSave(MultipartFile userProfile,HashMap<String, String> params, 
 
 	public void userReport(HashMap<String, String> params) {
 		dao.userReport(params);
+		
+	}
+
+	public String findPhotoName(String id) {
+		return dao.findPhotoName(id);
 		
 	}
 	
