@@ -78,7 +78,14 @@ public interface BoardDAO {
 	
 	String nuserRight(String loginId);
 	
-
+	int nwritealarm(BoardDTO dto);
+	
+	void sendAlarm(String userId, int bidx);
+	
+	ArrayList<BoardDTO> userList();
+	
+	
+	
 	
 	
 	
@@ -119,5 +126,15 @@ public interface BoardDAO {
 	void idownHit(String bidx);
 
 	String iuserRight(String loginId);
+
+	void iinquirytableSave(int inquiryIdx, String inquiryState);
+
+	void iinquirytabledelete(String bidx, String inquiryState);
+
+	
+
+	
+
+	
 
 }

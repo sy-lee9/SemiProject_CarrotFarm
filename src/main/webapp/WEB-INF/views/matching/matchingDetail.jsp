@@ -44,11 +44,11 @@ body{
 	}
 	
 	a {
-	  color : balck;
+	  color : black;
 	}
 	
 	a:link {
-	  color : balck;
+	  color : black;
 	}
 	a:visited {
 	  color : black;
@@ -140,8 +140,8 @@ body{
 				<th style="text-align:left;"><h2>&nbsp; &nbsp; &nbsp; &nbsp; ${dto.subject}</h2></th>
 				<th style="width: 28%;">${dto.gameDate} </th>
 				<th style="width: 10%;">&#128100 ${dto.matchingNumforSure}/${dto.matchingNum}</th>
-				<th style="width: 12%;"><a href="../userprofile.go?userId=${dto.writerId}">${dto.writerId}</a></th>
-			</tr>
+				<th style="width: 12%;"><a href="#" onclick="window.open('../userprofilepop.go?userId=${dto.writerId}','회원프로필','width=600px,height=400px')">${dto.writerId}</a></th>
+			</tr>	
 			<tr style="height:1px;">
 				<th colspan="4"><hr/></th>
 			</tr>
@@ -262,7 +262,12 @@ body{
 		     		</th>
 		     		<th colspan="3" style="border-left:1px solid gray;">
 		     		 	<p>MVP</p>
-		     		 	<p>${mvp}</p>
+		     		 	<p> 
+		     		 		
+		     		 			${mvp}
+		     		 	
+		     		 	</p>
+		     		
 		     		</th>
 		     	</tr>	
 		     	
@@ -285,7 +290,7 @@ body{
 	     	
 				<c:forEach items="${commentList}" var="commentList">
 					<tr>
-				    	<th style="width:10%;">${commentList.userId} </th>
+				    	<th style="width:10%;"><a href="#" onclick="window.open('../userprofilepop.go?userId=${commentList.userId}','회원프로필','width=600px,height=400px')"> ${commentList.userId} </a></th>
 				     	<td style="width:65%; padding-left:20px; text-align:left;">${commentList.commentContent}</td>
 				     	<td style="width:15%;">${commentList.commentWriteTime}</td>
 				     	<td style="width:10%;">
@@ -348,7 +353,7 @@ body{
 				<div id="scroll" >
 				<ul>
 					<c:forEach items="${playerList}" var="playerList">
-						<li> &nbsp; &nbsp; ${playerList.userId} &nbsp; &nbsp; 
+						<li> &nbsp; &nbsp; <a href="#" onclick="window.open('../userprofilepop.go?userId=${playerList.userId}','회원프로필','width=600px,height=400px')"> ${playerList.userId} </a>&nbsp; &nbsp; 
 						<c:if test="${dto.writerId eq loginId }">
 							<c:if test="${dto.writerId ne playerList.userId }">
 							<c:if test="${dto.matchigState eq 'matching'}">
@@ -371,7 +376,7 @@ body{
 					<div id="scroll" >
 					<ul>
 						<c:forEach items="${gameApplyList}" var="gameApplyList">
-							<li> &nbsp; &nbsp; ${gameApplyList.userId} &nbsp; &nbsp; 
+							<li> <a href="#" onclick="window.open('../userprofilepop.go?userId=${gameApplyList.userId}','회원프로필','width=600px,height=400px')">&nbsp; &nbsp; ${gameApplyList.userId} </a>&nbsp; &nbsp; 
 							<c:if test="${dto.writerId eq loginId }">
 								<button class="btn btn-outline-dark" onclick="location.href='gameApplyAccept?userId=${gameApplyList.userId}&matchingIdx=${dto.matchingIdx}'">수락</button> / 
 								<button class="btn btn-outline-dark" onclick="location.href='gameApplyReject?userId=${gameApplyList.userId}&matchingIdx=${dto.matchingIdx}'">거절</button>
@@ -393,7 +398,7 @@ body{
 							<c:if test="${gameInviteList !=null}">
 								<c:forEach items="${gameInviteList}" var="gameInviteList">
 									<li> &nbsp; &nbsp; 
-									${gameInviteList.userId} &nbsp; &nbsp; &nbsp; &nbsp; 
+									<a href="#" onclick="window.open('../userprofilepop.go?userId=${gameInviteList.userId}','회원프로필','width=600px,height=400px')"> ${gameInviteList.userId} </a>&nbsp; &nbsp; &nbsp; &nbsp; 
 									<button class="btn btn-outline-dark" id="inviteBtn_${gameInviteList.userId}" onclick="cancelInvite('${gameInviteList.userId}', '${dto.matchingIdx}')">취소</button>
 									</li>
 								</c:forEach>
@@ -401,7 +406,7 @@ body{
 							
 							<c:forEach items="${userList}" var="userList">
 								<li> &nbsp; &nbsp; 
-									${userList.userId} &nbsp; &nbsp; &nbsp; &nbsp; 
+									<a href="#" onclick="window.open('../userprofilepop.go?userId=${userList.userId}','회원프로필','width=600px,height=400px')"> ${userList.userId} </a>&nbsp; &nbsp; &nbsp; &nbsp; 
 									<button class="btn btn-outline-dark" id="inviteBtn_${userList.userId}" onclick="inviteUser('${userList.userId}', '${dto.matchingIdx}')">초대</button>
 								</li>
 							</c:forEach>

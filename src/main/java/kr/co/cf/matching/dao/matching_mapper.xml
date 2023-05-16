@@ -153,6 +153,7 @@
 		  m.categoryId,
 		  m.matchingIdx,
 		  t.teamName,
+		  t.teamIdx,
 		  m.writerId, 
 		  (SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx) AS locationIdx,
 		  (SELECT gu FROM location WHERE locationIdx = (SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu, 

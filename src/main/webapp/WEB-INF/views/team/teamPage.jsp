@@ -3,50 +3,73 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<title>🏀 당근농장</title>
+	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
+	<script src="resources/js/twbsPagination.js" type="text/javascript"></script>
 
 	<!-- 부트스트랩 JavaScript 파일 불러오기 -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-	
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">	
 <style>
-   body{
-      position:relative;
-      font-size:15px;
-      padding : 10px;
-   }
-   
-   #content {
-      width:78%;
-      background-color: #f8f9fa;
-      padding: 10 30 10;
-      margin : 5px;
-      float:right;
-      
-   }
-   
-   #LNB {
-      width:20%;
-      height : 80%;
-      background-color: #f8f9fa;
-      float:left;
-      margin : 5px;
-   }
-
-	table, th, td{
-		border: 1px solid black;
-		border-collapse: collapse;
-		padding : 5px 10px;	
+	body{
+		position:relative;
+		font-size:15px;
+		padding : 10px;
+		min-width: 1200px;
 	}
 	
-	th,td{
+	#content {
+		width:78%;
+		height : 83%;
+		background-color: #f8f9fa;
+		padding: 10 30 10;
+		margin : 5px;
+		float:right;
+		
+	}
+	
+	#LNB {
+		width:20%;
+		height : 83%;
+		background-color: #f8f9fa;
+		float:left;
+		margin : 5px;
+		font-weight: bold;
+        font-size: 15px;
+		text-align:center;
+		
+	}
+	
+	a {
+	  color : black;
+	}
+	
+	a:link {
+	  color : black;
+	}
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	 text-decoration-line: none;
+	  color : #FFA500 ;
+	}
+	
+	li {
+		margin : 2px;
+	}
+	
+	table, th, td{
+		margin : 5px;
 		text-align: center;
 	}
 	
 	table{
 		width: 100%;
+		margin : 5px;
 	}
 	
 	button{
@@ -56,93 +79,107 @@
 
 	#inline{
 		float: left;
+		margin:0 20 5 0;
 	}
 
 </style>
 </head>
 <body>
-<%-- 	<div><button onclick="location.href='teamPageUpdate.go?teamIdx=${team.teamIdx}'">팀정보 수정</button></div>
+ 	<div><button onclick="location.href='teamPageUpdate.go?teamIdx=${team.teamIdx}'">팀정보 수정</button></div>
 	<div><button onclick="location.href='teamDisbanding.go?teamIdx=${team.teamIdx}'">팀 해체</button></div>
-	<div><button onclick="location.href='teamUserList.go?teamIdx=${team.teamIdx}'">팀원</button></div>
-	<div><button onclick="location.href='teamGame.go?teamIdx=${team.teamIdx}'">경기기록 보기</button></div>
 	<div><button onclick="location.href='gameMatchingRequest.go?teamIdx=${team.teamIdx}'">참가신청한 경기</button></div>
+	<div><button onclick="location.href='writeMatchingList.go?teamIdx=${team.teamIdx}'">모집중인 경기</button></div> 
 	<div><button onclick="location.href='teamJoinAppAlarm.go?teamIdx=${team.teamIdx}'">알림</button></div>
-	<div><button onclick="location.href='writeMatchingList.go?teamIdx=${team.teamIdx}'">모집중인 경기</button></div> --%>
+	<div><button onclick="location.href='teamUserListLeader.go?teamIdx=${team.teamIdx}'">팀원(leader)</button></div>
+	<div><button onclick="location.href='warningTeamUser.go?teamIdx=${team.teamIdx}'">경고/강퇴</button></div>
 	
+	<div style="float: right;">
+		<%@ include file="../loginBox.jsp" %>
+	</div> 
 	
 	<%@ include file="../GNB.jsp" %>
 	
 	<div id="LNB">
-       <ul>
-         <li>
-           <div style="width: 180px; height: 150px; border : 1px solid black; border-collapse: collapse;">프로필</div>
-         </li>
-         <li >
-           <a href="/cf/matching/list.do">개인 모집글</a>
-         </li>
-         <li>
-           <a href="/cf/matching/teamList.do">팀 모집글</a>
-         </li>
-       </ul>
-   </div>
+		<br/><br/>
+	        <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
+	      <br/><br/>
+	        <a href="/cf/team/teamPage.go?teamIdx=${team.teamIdx}">팀소개</a>
+	      <br/><br/>
+	        <a href="/cf/team/teamUserList.go?teamIdx=${team.teamIdx}">팀원</a>
+	      <br/><br/>
+	        <a href="/cf/team/teamGame.go?teamIdx=${team.teamIdx}">참여 경기</a>
+	      <br/><br/>
+	        <a href="/cf/teamnoticeboardList.do">팀 공지 사항</a>
+	      <br/><br/>
+	        <a href="/cf/teamfreeboardList.do">팀 자유 게시판</a>
+	      <br/><br/>
+	        <a href="/cf/teampictureboardList.do">팀 사진첩</a>
+	      <br/><br/>
+	        <a href="/cf/teaminquiryboardList.do" >팀 문의</a>
+	</div>
 	
 	<div id="content">
-	<button onclick="location.href='teamList.go'">리스트로 돌아가기</button>
-	<div id="inline"><p id="teamMatchState">${team.teamMatchState}</p></div> 
-	<c:if test="${team.teamMatchState == '모집중' && joinAppChk eq false && joinTeam eq false}">
-		<div><button type="button" id="joinApp" onclick="joinApp(${team.teamIdx})">가입신청</button></div>
-	</c:if>
-	<c:if test="${team.teamMatchState == '모집중' && joinAppChk eq true}">
-		<div><button type="button" id="joinCancelApp" onclick="joinCancel(${team.teamIdx})">가입신청 취소</button></div>
-	</c:if>
-	
-	<table>
-		<colgroup>
-	         <col width="50%"/>
-	         <col width="20%"/>
-	         <col width="10%"/>
-	         <col width="20%"/>
-	     </colgroup>
-		<tr>
-			<th rowspan="6">
-				<c:if test="${team.photoName eq null}">
-					<img width="400" src="/photo/팀이미지.png"/>
-				</c:if>
-				<c:if test="${team.photoName ne null}">
-					<img width="400" src="/photo/${team.photoName}"/>
-				</c:if>
-			</th>
-			<th colspan="2">${team.teamName}</th>
-			<th height="15%" >팀 소개글</th>	
-		</tr>
-		<tr>
-			<th>매너점수</th>
-			<td>${team.teamManner}</td>
-			<td rowspan="5" height="70%" valign="top">${team.teamIntroduce}</td>
-		</tr>
-		<tr>
-			<th>팀원 수</th>
-			<td>${team.teamUser}</td>
-		</tr>
-		<tr>
-			<th>활동 지역</th>
-			<td>${team.gu}</td>
-		</tr>
-		<tr>
-			<th>주 활동 시간</th>
-			<td>${team.teamFavTime}</td>
-		</tr>
-		<tr>
-			<th>선호 경기종목</th>
-			<td id="teamFavNum">${team.teamFavNum}:${team.teamFavNum}</td>
-		</tr>
-		<tr>
-			<th>리뷰</th>
+		<div id="inline"><button onclick="location.href='teamList.go'">리스트로 돌아가기</button></div>
+		<div id="teamMatchState" style="display: flex; align-items: center; float:right; height: 40px;">${team.teamMatchState}</div> 
+		<c:if test="${team.teamMatchState == '모집중' && joinAppChk eq false && joinTeam eq false}">
+			<div style="float:right;"><button type="button" id="joinApp" onclick="joinApp(${team.teamIdx})">가입신청</button></div>
+		</c:if>
+		<c:if test="${team.teamMatchState == '모집중' && joinAppChk eq true}">
+			<div style="float:right;"><button type="button" id="joinCancelApp" onclick="joinCancel(${team.teamIdx})">가입신청 취소</button></div>
+		</c:if>
+		<br/>
+		<hr/>
+		<br/>
+		<table>
+			<colgroup>
+		         <col width="50%"/>
+		         <col width="25%"/>
+		         <col width="25%"/>
+		     </colgroup>
+			<tr>
+				<th rowspan="6">
+					<c:if test="${team.photoName eq null}">
+						<img width="600" height="300" src="/photo/팀이미지.png"/>
+					</c:if>
+					<c:if test="${team.photoName ne null}">
+						<img width="600" height="300" src="/photo/${team.photoName}"/>
+					</c:if>
+				</th>
+				<th colspan="2" style="border-bottom: 1px solid black">${team.teamName}</th>			
+			</tr>
+			<tr>
+				<th>매너점수</th>
+				<td>${team.teamManner}</td>			
+			</tr>
+			<tr>
+				<th>팀원 수</th>
+				<td>${team.teamUser}</td>
+			</tr>
+			<tr>
+				<th>활동 지역</th>
+				<td>${team.gu}</td>
+			</tr>
+			<tr>
+				<th>주 활동 시간</th>
+				<td>${team.teamFavTime}</td>
+			</tr>
+			<tr>
+				<th>선호 경기종목</th>
+				<td id="teamFavNum"></td>
+			</tr>		
+		</table>
+		<br/>
+		<br/>
+		<div style="width: 400; height: 100px; margin: 10px; float: left; text-align: center;">
+			<h3>팀 소개글</h3>	
+			<p>${team.teamIntroduce}</p>		
+		</div>
+		<div style="height: 100px; margin: 10px; text-align: center;">
+			<h3>경기리뷰</h3>
 			<c:forEach items="${list}" var="team">
-				<td>${team.tagContent}</td>
+				<p style="display: inline;">${team.tagContent} ${team.tagCount}</p>&nbsp;
 			</c:forEach>
-		</tr>
-	</table>
+		</div>
 		<c:if test="${teamUserChk eq true}">
 			<button type="button" onclick="leaveTeam(${team.teamIdx})">팀 탈퇴</button>
 		</c:if>		
@@ -173,9 +210,14 @@
 		
 	}
 
-	if($('#teamFavNum').val() == 0){
+	if("${team.teamFavNum}" == '0'){
 		$('#teamFavNum').text("상관없음");
+	}else if("${team.teamFavNum}" == '3'){
+		$('#teamFavNum').text("3:3");
+	}else if("${team.teamFavNum}" == '5'){
+		$('#teamFavNum').text("5:5");
 	}
+	
 
 	function joinApp(teamIdx) {
 		console.log('joinApp start');

@@ -8,7 +8,7 @@
 
 
 	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
 	<script src="../resources/js/twbsPagination.js" type="text/javascript"></script>
 	
@@ -83,11 +83,11 @@
 	}
 	
 	a {
-	  color : balck;
+	  color : black;
 	}
 	
 	a:link {
-	  color : balck;
+	  color : black;
 	}
 	a:visited {
 	  color : black;
@@ -291,7 +291,7 @@ function listPrint(list){
 		content +='<td id="gamePlayer"> ' + item.matchingNumforSure +'/'+ item.matchingNum+ '</td>';
 		content +='<td id="subject" style="text-align:left; padding-left:30px;"><a href="detail.go?matchingIdx='+ item.matchingIdx+'">'+item.subject+'</a></td>';
 		content +='<td>'+item.gameDate+'</td>';
-		content +='<td id="writerId">'+item.writerId+'</td>';
+		content += '<td id="writerId"><a href="#" onclick="window.open(\'../userprofilepop.go?userId=' + item.writerId + '\',\'회원프로필\',\'width=600px,height=400px\')">' + item.writerId + '</a></td>';
 		content +='<td>'+item.bHit+'</td>';
 		content +='</tr>';
 		
