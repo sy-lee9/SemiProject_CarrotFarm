@@ -337,10 +337,10 @@ public class TeamService {
 					if(selectedGameDate.equals("default")) {
 						// 전체 보여주기
 							list = TeamDAO.gameList(params);
-							logger.info("gameList size : "+list.size());	
-							
-							list.get(i).getMatchingIdx();
-							logger.info("matcingIdx : "+matchingIdx);
+							logger.info("gameList size : "+list.size());								
+							/*
+							 * list.get(i).getMatchingIdx(); logger.info("matcingIdx : "+matchingIdx);
+							 */
 					}else{
 						// 경기순을 선택한 경우
 						if(selectedGameDate.equals("DESC")) {

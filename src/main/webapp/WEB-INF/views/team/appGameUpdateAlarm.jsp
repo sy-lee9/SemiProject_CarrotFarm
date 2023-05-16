@@ -3,79 +3,131 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>🏀 당근농장</title>
 	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
-	<script src="resources/js/twbsPagination.js" type="text/javascript"></script>
-
+	<script src="../resources/js/twbsPagination.js" type="text/javascript"></script>
+	
 	<!-- 부트스트랩 JavaScript 파일 불러오기 -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">	
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <style>
-
-   body{
-      position:relative;
-      font-size:15px;
-      padding : 10px;
-   }
-   
-   #content {
-      width:78%;
-      background-color: #f8f9fa;
-      padding: 10 30 10;
-      margin : 5px;
-      float:right;
-      
-   }
-   
-   #LNB {
-      width:20%;
-      height : 80%;
-      background-color: #f8f9fa;
-      float:left;
-      margin : 5px;
-   }
-
+	body{
+		position:relative;
+		font-size:15px;
+		padding : 10px;
+		min-width: 1200px;
+	}
+	
+	#content {
+		width:78%;
+		height : 83%;
+		background-color: #f8f9fa;
+		padding: 10 30 10;
+		margin : 5px;
+		float:right;
+		
+	}
+	
+	#LNB {
+		width:20%;
+		height : 83%;
+		background-color: #f8f9fa;
+		float:left;
+		margin : 5px;
+		font-weight: bold;
+        font-size: 18px;
+		text-align:center;
+		
+	}
+	
+	
+	table, th, td{
+		margin : 5px;
+	}
+	
 	table{
-		width: 500;
-		height: 500;
+		width:90%;
+		height:70%;
+		text-align:center;
 	}
-	th,td{
-		text-align: center;
+	
+	a {
+	  color : black;
 	}
-	a{
-		margin: 20;
+	
+	a:link {
+	  color : black;
+	}
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	 text-decoration-line: none;
+	  color : #FFA500 ;
+	}
+	
+	.pagination .page-link {
+  		color: gray; /* 기본 글자색을 검정색으로 지정 */
+	}
+
+	.pagination .page-item.active .page-link {
+ 		background-color: #FFA500;
+ 		border:none;
 	}
 </style>
 </head>
 <body>
-
-	<%@ include file="../GNB.jsp" %>
+	<div style="float: right;">
+		<%@ include file="../loginBox.jsp" %>
+	</div> 
 	
+	<%@ include file="../GNB.jsp" %>
+
 	<div id="LNB">
-       <ul>
-         <li>
-           <div style="width: 180px; height: 150px; border : 1px solid black; border-collapse: collapse;">프로필</div>
-         </li>
-         <li >
-           <a href="/cf/matching/list.do">개인 모집글</a>
-         </li>
-         <li>
-           <a href="/cf/matching/teamList.do">팀 모집글</a>
-         </li>
-       </ul>
-   </div>
+		<br/><br/>
+        <c:if test="${loginId eq null}">
+			<img width="200" height="200" src="/photo/기본프로필.png">
+		</c:if>
+		<c:if test="${loginId ne null}">
+			<img width="200" height="200" src="/photo/${loginPhotoName}">
+		</c:if>
+      <br/><br/>
+        <a href="/cf/team/teamJoinAppAlarm.go?teamIdx=${teamIdx}">알림</a>
+      <br/><br/>
+        <a href="/cf/team/teamPageUpdate.go?teamIdx=${teamIdx}">팀정보 수정</a>
+      <br/><br/>
+        <a href="/cf/team/teamUserListLeader.go?teamIdx=${teamIdx}">팀원</a>
+      <br/><br/>
+        <a href="/cf/writeMatchingList.go?teamIdx=${teamIdx}">모집중인 경기</a>
+      <br/><br/>
+        <a href="/cf/gameMatchingRequest.go?teamIdx=${teamIdx}" >참가신청한 경기</a>
+        <br/><br/>
+        <a href="/cf/warningTeamUser.go?teamIdx=${teamIdx}">경고/강퇴</a>
+      <br/><br/>
+        <a href="/cf/teamDisbanding.go?teamIdx=${teamIdx}" >팀 해체</a>
+	</div>
+	
 	
 	<div id="content">
 		<input type="hidden" name="teamIdx" value="${teamIdx}"/>
-		<a href="teamJoinAppAlarm.go?teamIdx=${teamIdx}">팀 가입신청 알림</a>
-		<a href="gameMatchingAppAlarm.go?teamIdx=${teamIdx}">경기 참가신청 알림</a>
-		<a href="appGameUpdateAlarm.go?teamIdx=${teamIdx}">경기 변경사항 알림</a>
-		<a href="matchingInviteAlarm.go?teamIdx=${teamIdx}">경기 초대 알림</a>
 		<br/>
-		<hr/>
+		<ul class="nav nav-tabs">
+		  <li class="nav-item">
+		    <a class="nav-link" href="teamJoinAppAlarm.go?teamIdx=${teamIdx}">팀 가입신청 알림</a>
+		  </li>
+		  <li class="nav-item">
+		    <a class="nav-link"  href="gameMatchingAppAlarm.go?teamIdx=${teamIdx}">경기 참가신청 알림</a>
+		  </li>
+		  <li class="nav-item">
+		    <a class="nav-link active"  href="appGameUpdateAlarm.go?teamIdx=${teamIdx}">경기 변경사항 알림</a>
+		  </li>
+		  <li class="nav-item">
+		    <a class="nav-link"  href="matchingInviteAlarm.go?teamIdx=${teamIdx}">경기 초대 알림</a>
+		  </li>
+		</ul>
 		<br/>
 		<table>
 			<colgroup>
@@ -89,7 +141,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:if test="${list eq null}">
+				<c:if test="${list.size() == 0}">
 					<tr>
 						<th colspan="2">신청한 경기가 없습니다.</th>
 					</tr>
