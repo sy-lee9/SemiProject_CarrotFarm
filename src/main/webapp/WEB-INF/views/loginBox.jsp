@@ -18,8 +18,16 @@
       var content= '<a href="/cf/login">[로그인]</a>';
       $("#login").html(content);
    }else{
-      var content='🏀 안녕하세요 ${sessionScope.loginId} 님! <a href="/cf/logout">[로그아웃]</a>';
-      $("#login").html(content);
+      var adminRight = "${sessionScope.adminRight}";
+      if(adminRight=="true"){
+    	  var content='🏀 안녕하세요 ${sessionScope.loginId} 님! <a href="/cf/adminUser">관리자페이지</a> <a href="/cf/logout">[로그아웃]</a>';
+          $("#login").html(content); 
+      }else{
+    	  var content='🏀 안녕하세요 ${sessionScope.loginId} 님! <a href="/cf/logout">[로그아웃]</a>';
+          $("#login").html(content);
+      }
+	 
    }
+   console.log("${sessionScope.adminRight}");
 </script>
 </html>
