@@ -43,12 +43,12 @@
 					<th colspan="4">모집중인 경기가 없습니다.</th>
 				</tr>
 			</c:if>
-			<c:forEach items="${list}" var="bbs">
+			<c:forEach items="${list}" var="matching">
 				<tr>
-					<td>${bbs.gu}</td>
-					<td><a href="../matching/detail.go?matchingIdx=${bbs.matchingIdx}">${bbs.subject}</a></td>
-					<td>${bbs.gameDate}</td>
-					<td>${bbs.writerId}</td>
+					<td>${matching.gu}</td>
+					<td><a href="../matching/detail.go?matchingIdx=${matching.matchingIdx}">${matching.subject}</a></td>
+					<td>${matching.gameDate}</td>
+					<td>${matching.writerId}</td>
 				</tr>
 			</c:forEach>
 		</tbody>
