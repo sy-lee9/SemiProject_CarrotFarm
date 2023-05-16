@@ -6,6 +6,9 @@
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=77b263fb5e91c183b524a3d94385df7c&libraries=services"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <style>
 	rating {
   display: inline-block;
@@ -51,14 +54,74 @@
   margin-bottom: 10px;
 }
 
+body{
+		position:relative;
+		font-size:15px;
+		padding : 10px;
+		min-width: 1200px;
+	}
+	
+	#content {
+		width:78%;
+		height :80%;
+		background-color: #f8f9fa;
+		padding: 10 30 10;
+		margin: 5px;
+		float:right;
+		
+	}
+	
+	#LNB {
+		width:20%;
+		height :80%;
+		background-color: #f8f9fa;
+		float:left;
+		margin: 5px;
+		font-weight: bold;
+        font-size: 15px;
+		text-align:center;
+		
+	}
+	a {
+	  color : black;
+	}
+	
+	a:link {
+	  color : black;
+	}
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	 text-decoration-line: none;
+	  color : #FFA500 ;
+	}
+	
+
+	
+
 
 </style>
 </head>
 <body>
+	<div style="float: right;">
+		<%@ include file="loginBox.jsp" %>
+	</div> 
+	<jsp:include page="GNB.jsp"></jsp:include>
+	<div id="LNB">
+		<br/><br/>
+		 <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
+	      <br/><br/>
+	    <a href="/cf/matching/list.do">개인 모집글</a> 
+	      <br/><br/>
+	    <a href="/cf/matching/teamList.do" >팀 모집글</a>
+	    
+	</div>
+	<div id="content">
 	
-	<div id="map" style="width:600px;height:350px;float:left;"></div>
+	<div id="map" style="width:400px;height:400px;float:left;"></div>
 	<div>
-		<table>
+		<table  style="width:800px; height:200px;">
 			<tr>
 				<th>${courtInfo.courtName}</th>
 				<th>
@@ -83,8 +146,8 @@
 			</tr>
 		</table>
 	</div>
-	<div>경기장 리뷰
-		<table>
+	<div >경기장 리뷰
+		<table style="width:300px;">
 		<a href="#" onclick="window.open('courtReviews.do?courtIdx=${courtInfo.courtIdx}','리뷰 모아보기','width=600px,height=400px')">더보기</a>
 			<c:forEach items="${courtReviewList}" var="courtReview" end="4">
 			<tr>
@@ -147,6 +210,7 @@
 	</form>
 	</c:if>
 	 <div><button onclick="location.href='court'">목록</button></div>
+	</div>
 </body>
 <script>
 	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 

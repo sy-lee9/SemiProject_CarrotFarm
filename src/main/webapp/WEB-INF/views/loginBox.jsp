@@ -5,7 +5,6 @@
 <head>
 <meta charset="UTF-8">
 <title>🏀 당근농장</title>
-
 <style>
 
 </style>
