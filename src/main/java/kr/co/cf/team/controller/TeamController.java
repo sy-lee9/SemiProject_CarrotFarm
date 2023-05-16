@@ -114,72 +114,73 @@ public class TeamController {
 		return page;
 	}
 	
-	@RequestMapping(value="/team/teamPage.go")
-	public String teamPage(Model model, @RequestParam String teamIdx,HttpSession session) {
-		logger.info("teamPage : "+teamIdx);
-		String page = "redirect:/team";		
-		
-		String loginId = (String) session.getAttribute("loginId");
-		logger.info("loginId : " + loginId);
-		
-		TeamDTO TeamDTO = TeamService.teamInfo(Integer.parseInt(teamIdx));
-		logger.info("teamInfo");
-		if(TeamDTO != null) {
-			model.addAttribute("team", TeamDTO);
-			
-			ArrayList<TeamDTO> list = TeamService.tagReview(Integer.parseInt(teamIdx));
-			logger.info("list : " + list.size());		
-			if(list != null) {				
-				model.addAttribute("list", list);	
+	   @RequestMapping(value="/team/teamPage.go")
+	   public String teamPage(Model model, @RequestParam String teamIdx,HttpSession session) {
+	      logger.info("teamPage : "+teamIdx);
+	      String page = "redirect:/team";      
+	      
+	      String loginId = (String) session.getAttribute("loginId");
+	      logger.info("loginId : " + loginId);
+	      
+	      TeamDTO TeamDTO = TeamService.teamInfo(Integer.parseInt(teamIdx));
+	      logger.info("teamInfo");
+	      if(TeamDTO != null) {
+	         model.addAttribute("team", TeamDTO);
+	         
+	         ArrayList<TeamDTO> list = TeamService.tagReview(Integer.parseInt(teamIdx));
+	         logger.info("list : " + list.size());      
+	         if(list != null) {            
+	            model.addAttribute("list", list);   
 
-				//팀 신청 여부 확인
-				if(loginId != null) {
-					int row = TeamService.joinAppChk(Integer.parseInt(teamIdx),loginId);
-					logger.info("chkRow : "+row);
-					
-					if(row != 0){
-						//해당 팀에 가입신청을 하지 않은 경우
-						model.addAttribute("joinAppChk",true);
-						logger.info("true");
-					}else if(row == 0){
-						//해당 팀에 가입신청을 한 경우
-						model.addAttribute("joinAppChk",false);
-						logger.info("false");
-					}
-				}	
-				
-				//가입신청 버튼 노출 여부 확인(로그인 안했을 경우)
-				if(session.getAttribute("loginId") == null) {
-					model.addAttribute("joinAppChk",false);
-					logger.info("false");
-				}
-				
-				//가입신청 버튼 노출 여부 확인(가입한 팀이 있을 경우)
-				if(session.getAttribute("loginId") != null) {
-					if(TeamService.teamJoinChk(loginId) == 0){
-						logger.info("가입한 팀이 없음");	
-						model.addAttribute("joinTeam",false);
-					}
-				}
-				
-				//팀 탈퇴 버튼 노출 여부 확인(해당 팀 가입 여부 확인) 				
-				if(session.getAttribute("loginId") != null) {
-					if(TeamService.teamUserChk(Integer.parseInt(teamIdx),loginId) == 1){
-						logger.info("해당 팀 팀원 확인");	
-						model.addAttribute("teamUserChk",true);
-					}
-			}	
-			page = "/team/teamPage";
-		}		
-		
-		String msg = (String) session.getAttribute("msg");
-		if(msg != null) {
-			model.addAttribute("msg",msg);
-			//사용한 세션은 반드시 바로 삭제해야함
-			session.removeAttribute("msg");
-		}
-		return page;
-	}
+	            //팀 신청 여부 확인
+	            if(loginId != null) {
+	               int row = TeamService.joinAppChk(Integer.parseInt(teamIdx),loginId);
+	               logger.info("chkRow : "+row);
+	               
+	               if(row != 0){
+	                  //해당 팀에 가입신청을 하지 않은 경우
+	                  model.addAttribute("joinAppChk",true);
+	                  logger.info("true");
+	               }else if(row == 0){
+	                  //해당 팀에 가입신청을 한 경우
+	                  model.addAttribute("joinAppChk",false);
+	                  logger.info("false");
+	               }
+	            }   
+	            
+	            //가입신청 버튼 노출 여부 확인(로그인 안했을 경우)
+	            if(session.getAttribute("loginId") == null) {
+	               model.addAttribute("joinAppChk",false);
+	               logger.info("false");
+	            }
+	            
+	            //가입신청 버튼 노출 여부 확인(가입한 팀이 있을 경우)
+	            if(session.getAttribute("loginId") != null) {
+	               if(TeamService.teamJoinChk(loginId) == 0){
+	                  logger.info("가입한 팀이 없음");   
+	                  model.addAttribute("joinTeam",false);
+	               }
+	            }
+	            
+	            //팀 탈퇴 버튼 노출 여부 확인(해당 팀 가입 여부 확인)             
+	            if(session.getAttribute("loginId") != null) {
+	               if(TeamService.teamUserChk(Integer.parseInt(teamIdx),loginId) == 1){
+	                  logger.info("해당 팀 팀원 확인");   
+	                  model.addAttribute("teamUserChk",true);
+	               }
+	            }
+	         }   
+	         page = "/team/teamPage";
+	      }      
+	      
+	      String msg = (String) session.getAttribute("msg");
+	      if(msg != null) {
+	         model.addAttribute("msg",msg);
+	         //사용한 세션은 반드시 바로 삭제해야함
+	         session.removeAttribute("msg");
+	      }
+	      return page;
+	   }
 	
 	@RequestMapping(value="/team/teamPagePop.go")
 	public String teamPagePop(Model model, @RequestParam String teamIdx,HttpSession session) {
