@@ -44,11 +44,11 @@ body{
 	}
 	
 	a {
-	  color : balck;
+	  color : black;
 	}
 	
 	a:link {
-	  color : balck;
+	  color : black;
 	}
 	a:visited {
 	  color : black;

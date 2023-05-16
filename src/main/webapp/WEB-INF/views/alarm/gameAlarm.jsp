@@ -59,11 +59,11 @@
 	}
 	
 	a {
-	  color : balck;
+	  color : black;
 	}
 	
 	a:link {
-	  color : balck;
+	  color : black;
 	}
 	a:visited {
 	  color : black;
@@ -103,6 +103,7 @@
 	
 	
 	<div id="content">
+	<br/>
 		<ul class="nav nav-tabs">
 		  <li class="nav-item">
 		    <a class="nav-link" href="/cf/userNoticeAlarm">공지사항</a>
@@ -111,10 +112,10 @@
 		    <a class="nav-link active" href="/cf/userGameAlarm">경기알림</a>
 		  </li>
 		  <li class="nav-item">
-		    <a class="nav-link" href="#">경고알림</a>
+		    <a class="nav-link" href="/cf/userWarningAlarm">경고알림</a>
 		  </li>
 		  <li class="nav-item">
-		    <a class="nav-link disabled" href="#">팀 알림</a>
+		    <a class="nav-link" href="/cf/userTeamAlarm">팀 알림</a>
 		  </li>
 		</ul>
 		<!-- </br>
@@ -129,7 +130,7 @@
 					</tr>
 				</thead>
 				<tr>
-					<th colspan="7"> <hr/> </th>
+					<th colspan="3"> <hr/> </th>
 				</tr>
 				<tbody>
 				
@@ -144,7 +145,7 @@
 				
 				
 				<tr>
-				  <th colspan="7" id="paging" style="text-align:center;">  
+				  <th colspan="3" id="paging" style="text-align:center;">  
 				    <div class="container" >    
 				    <hr/>              
 				      <nav aria-label="Page navigation">

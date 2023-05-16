@@ -172,6 +172,20 @@
 			VALUES('p',#{param1}, #{param2}) 
 	</insert>
 	
+	<insert id = "nwritealarm" parameterType="hashmap">
+		INSERT INTO alarm(categoryId, alarmKind, userId, alarmcontent)
+			VALUES('b002',#{boardIdx}, #{param1}, '공지사항')
+	</insert>
+	
+	<insert id="sendAlarm" >
+		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES('b002',#{param1},'공지사항',#{param2})
+	</insert>
+	
+	<select id="userList" resultType="kr.co.cf.board.dto.BoardDTO">
+		SELECT userId FROM user WHERE userBlind=0
+	</select>
+	
+	
 	<update id = "nupHit">
 		UPDATE board SET bHit = bHit+1 WHERE boardIdx = #{param1}
 	</update>
@@ -256,6 +270,11 @@
 			VALUES('p',#{param1}, #{param2}) 
 	</insert>
 	
+	<insert id = "iinquirytableSave">
+		INSERT INTO inquiry(inquiryIdx, inquiryState)
+			VALUES(#{param1}, '미처리') 
+	</insert>
+	
 	<update id = "iupHit">
 		UPDATE board SET bHit = bHit+1 WHERE boardIdx = #{param1}
 	</update>
@@ -275,6 +294,10 @@
 	<delete id="idelete">
 		DELETE FROM board WHERE boardIdx = #{param1}
 	</delete>
+	
+	<insert id = "iinquirytabledelete">
+		DELETE FROM inquiry WHERE inquiryIdx = #{param1}
+	</insert>
 	
 	<select id="ifindFile" resultType="String">
 		SELECT photoName FROM photo WHERE photoIdx = #{param1}

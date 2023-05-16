@@ -59,15 +59,46 @@ public class AlarmController {
 	   
 	      return list;   
 	      
-	   }
+	 }
+
 	
+	@RequestMapping(value="/userWarningAlarm")
+	public String userWarningAlarm() {
+		
+		return "/alarm/warningAlarm";
+	}
 	
+	@RequestMapping(value="/userWarningAlarm.ajax")
+	@ResponseBody
+	   public HashMap<String, Object> userWarningAlarm(@RequestParam HashMap<String, Object> params) {
+	      logger.info("params : " + params);
+	      
+	      HashMap<String, Object> list = new HashMap<String, Object>();
+	      
+	      list = alramService.warningList(params);
+	   
+	      return list;   
+	      
+	 }
 	
+	@RequestMapping(value="/userTeamAlarm")
+	public String userTeamAlarm() {
+		
+		return "/alarm/teamAlarm";
+	}
 	
-	
-	
-	
-	
+	@RequestMapping(value="/userTeamAlarm.ajax")
+	@ResponseBody
+	   public HashMap<String, Object> userTeamAlarm(@RequestParam HashMap<String, Object> params) {
+	      logger.info("params : " + params);
+	      
+	      HashMap<String, Object> list = new HashMap<String, Object>();
+	      
+	      list = alramService.teamList(params);
+	   
+	      return list;   
+	      
+	 }
 	
 	
 	

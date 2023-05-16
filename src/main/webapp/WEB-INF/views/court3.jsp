@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+ <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
@@ -10,16 +10,95 @@
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=77b263fb5e91c183b524a3d94385df7c&libraries=services"></script>
 
 <script src="resources/js/twbsPagination.js" type="text/javascript"></script>
+<!-- 부트스트랩 JavaScript 파일 불러오기 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <style>
-	table, th, td{
-      border : 1px solid black;
-      border-collapse: collapse;
-      padding : 5px 10px;
-   }
+   
+   body{
+		position:relative;
+		font-size:15px;
+		padding : 10px;
+		min-width: 1200px;
+	}
+	
+	#content {
+		width:78%;
+		background-color: #f8f9fa;
+		padding: 10 30 10;
+		margin : 5px;
+		float:right;
+		
+	}
+	
+	#LNB {
+		width:20%;
+		height : 83%;
+		background-color: #f8f9fa;
+		float:left;
+		margin : 5px;
+		font-weight: bold;
+        font-size: 15px;
+		text-align:center;
+		
+	}
+	a {
+	  color : black;
+	}
+	
+	a:link {
+	  color : black;
+	}
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	 text-decoration-line: none;
+	  color : #FFA500 ;
+	}
+	
+	.pagination .page-link {
+  		color: gray; /* 기본 글자색을 검정색으로 지정 */
+	}
+
+	.pagination .page-item.active .page-link {
+ 		background-color: #FFA500;
+ 		border:none;
+	}
+	#searchCourt{
+		width: 300px;
+    	height: 20px;
+    	margin : 5px;
+	}
+	
+	table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border-bottom: 1px solid black;
+    padding: 8px;
+    text-align: left;
+  }
 </style>
 </head>
 <body>
-	<button onclick="window.open('courtTipOff.go','경기장 제보','width=400px,height=400px')">경기장 제보</button>
+	<div style="float: right;">
+		<%@ include file="loginBox.jsp" %>
+	</div> 
+	<%@ include file="GNB.jsp" %>
+	<div id="LNB">
+		<br/><br/>
+		 <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
+	      <br/><br/>
+	    <a href="/cf/court">경기장 리스트</a> 
+	      <br/><br/>
+	    
+	</div>
+	<div id="content">
+	
 	<select name="gu" id="gu" onchange="courtSort('gu')">
 		<option value="none">위치</option>
 		<option value="서울특별시">서울</option>
@@ -33,73 +112,54 @@
       	<option value="in">실내</option>
       	<option value="out">실외</option>
       </select>
-	<div id="map" style="width:500px;height:400px;float:left;"></div>
+      
+	<div id="map" style="width:400px;height:400px;float:left;"></div>
 	<input id="searchCourt" type="text" name="searchCourt" placeholder="경기장 검색">
-	<button type="button" onclick="courtSort('courtSearch')">검색</button>
-	
+	<button type="button" onclick="courtSort('courtSearch')" class="btn btn-outline-dark">검색</button>
+	<button onclick="window.open('courtTipOff.go','경기장 제보','width=400px,height=400px')" class="btn btn-outline-dark">경기장 제보</button>
 	<div>
-	<table id="courtList">
+	<table id="courtList" style="width:800px;">
 		<thead>
-		<tr>
-			<td colspan="6" id="paging">	
+		
+		</thead>
+		<tbody id="list">			
+			<c:forEach items="${courtList}" var="court" varStatus="status" end="9">
+				<tr>
+					<th style="width:10%;">${court.courtState}</th>
+					<th style="width:10%;">${court.gu}</th>				
+					<th style="width:10%;">
+						<c:if test="${court.courtInOut eq 'out'}">실외</c:if>
+						<c:if test="${court.courtInOut eq 'in'}">실내</c:if>
+					</th>
+					<th style="width:30%;" id="courtName"><a href="courtDetail.do?courtIdx=${court.courtIdx}">${court.courtName}</a></th>
+					<th style="width:30%;">${court.courtAddress}</th>
+					<th style="width:10%;">☆${court.courtStar}</th>
+				</tr>
+			</c:forEach>
+			
+			
+		</tbody>
+	
+		<tbody>
+			<tr>
+			<th colspan="6" id="paging" style="border: none; width:800px;">	
 				<!-- 	플러그인 사용	(twbsPagination)	-->
 				<div class="container">									
 					<nav aria-label="Page navigation" style="text-align:center">
 						<ul class="pagination" id="pagination"></ul>
 					</nav>					
 				</div>
-			</td>
+			</th>
 		</tr>
-		</thead>
-		<tbody>
-			<c:forEach items="${courtList}" var="court" varStatus="status" end="9">
-				<tr>
-					<th>${court.courtState}</th>
-					<th>${court.gu}</th>				
-					<th>
-						<c:if test="${court.courtInOut eq 'out'}">실외</c:if>
-						<c:if test="${court.courtInOut eq 'in'}">실내</c:if>
-					</th>
-					<th id="courtName"><a href="courtDetail.do?courtIdx=${court.courtIdx}">${court.courtName}</a></th>
-					<th>${court.courtAddress}</th>
-					<th>☆${court.courtStar}</th>
-				</tr>
-			</c:forEach>
 		</tbody>
 	</table>
+	</div>
 	</div>
 </body>
 <script>
 	paging("${totalPages}");
 	var showPage = 1;
 	var address="${address}";
-	/*$('.test').change(function(){
-		address = $(this).val();
-		var inOut = $('#inOut').val();
-		console.log(inOut);
-		$.ajax({
-			type:'get',
-			url:'courtList.ajax',
-			data:{"gu":address,
-				  "inOut":inOut
-			},
-			dataType:'json',
-			success:function(data){
-				console.log(data);
-				console.log(data.courtList.length);
-				for(var i=0;i<markers.length;i++){
-					markers[i].setMap(null);
-				}
-				console.log(data.courtList);
-				markerDraw(data.courtList);
-				courtListDraw(data.courtList);
-				mapGeocoder(address);
-			},
-			error:function(e){
-				console.log(e);
-			}
-		});	
-	});*/
 	
 	function courtSort(type,page1=1){
 		// 위치 , 실내 , 검색어 + type -> gu inout search -> if(type != 'search') {search=""}
@@ -309,7 +369,7 @@
 		}
 	}
 	function courtListDraw(list){
-		$('#courtList tbody').empty();
+		$('#list').empty();
 		var content = '';
 		list.forEach(function(item,index){
 			content += '<tr>';
@@ -324,7 +384,7 @@
 			content +='<th>'+item.courtAddress+'</th>';
 			content +='<th>'+item.courtStar+'</th>';
 		});
-		$('#courtList tbody').append(content);
+		$('#list').append(content);
 	}
 	function mapGeocoder(address){
 		var geocoder = new kakao.maps.services.Geocoder();

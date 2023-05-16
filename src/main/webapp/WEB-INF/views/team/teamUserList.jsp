@@ -5,9 +5,14 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
-<script src="resources/js/twbsPagination.js" type="text/javascript"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
+	<script src="../resources/js/twbsPagination.js" type="text/javascript"></script>
+
+	<!-- 부트스트랩 JavaScript 파일 불러오기 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <style>	
 	table, th, td{
 		border: 1px solid black;
@@ -24,11 +29,13 @@
 </style>
 </head>
 <body>
+
+	<input type="text" id="loginId" value="${loginId}" hidden="true"/>
 	
 	<select id="teamJoinDate">
 	  <option value="default">가입일순</option>
-	  <option value="모집중">최근순</option>
-	  <option value="모집종료">오래된순</option>
+	  <option value="DESC">최근순</option>
+	  <option value="ASC">오래된순</option>
 	</select>
 	
 	<input type="text" id="searchInput" placeholder="팀원 검색">
@@ -69,7 +76,7 @@
 	var showPage = 1;
 	var teamJoinDate = 'default';
 	var searchText = 'default';
-	var teamIdx = $('teamIdx');
+	var teamIdx = "${teamIdx}";
 	listCall(showPage);
 
 	// 가입일에 따른 출력
@@ -125,16 +132,37 @@
 		});
 	}
 	
+	var loginId = $('#loginId').val();
+	var teamGrade;
+	console.log(loginId);
+	
 	function listPrint(list){
 		var content = '';
+		
 		list.forEach(function(list){
 			content +='<tr>';
-			content +='<td>'+list.teamGrade+'</td>';
-			content +='<td><a href="team/teamPage.go?teamIdx='+list.userId+'">'+list.userId+'</a></td>';
+			
+			if(list.teamGrade == 'leader'){
+				teamGrade = '팀장';
+			}else if(list.teamGrade == 'deputyLeader'){
+				teamGrade = '부팀장';
+			}else if(list.teamGrade == 'temporaryLeader'){
+				teamGrade = '임시팀장';
+			}else{
+				teamGrade = '팀원';
+			}
+			
+			content +='<td>'+teamGrade+'</td>';
+			content +='<td><a href="../userprofile.go?userId='+list.userId+'">'+list.userId+'</a></td>';
 			content +='<td>'+list.teamJoinDate+'</td>';
-			content +='<td><button onclick="location.href='#'">확인</td>';
+			if(loginId == list.userId && list.teamGrade != 'leader'){
+				content += '<td><button onclick="location.href=\'#\'">확인</button></td>';
+			}
+			if(loginId != list.userId || list.teamGrade == 'leader'){
+				content += '<td></td>';
+			} 
 			content +='</tr>';
-		});
+		}); 
 		$('#list').empty();
 		$('#list').append(content);
 	}
@@ -144,5 +172,6 @@
 	if(msg != ''){
 		alert(msg);
 	}
+
 </script>
 </html>

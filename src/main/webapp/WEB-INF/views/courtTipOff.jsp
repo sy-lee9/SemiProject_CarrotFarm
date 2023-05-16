@@ -5,9 +5,16 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
-<style></style>
+<style>
+	table, th, td{
+      border : 1px solid black;
+      border-collapse: collapse;
+      padding : 5px 10px;
+   }
+</style>
 </head>
 <body>
+	<h3>경기장 제보</h3>
 	<form action="courtTipOff.do">
 		<input type="hidden" name="userId" value="test1"/>
 		<table>
@@ -19,8 +26,13 @@
 				<th>경기장 주소</th>
 				<th><input type="text" name="courtAddress"/></th>
 			</tr>
+			<tr>
+				<th colspan="2"><button>저장</button><button type="button" onclick="window.close()">닫기</button></th>
+			
+			</tr>
+			
 		</table>
-		<button>저장</button>
+		
 	</form>
 </body>
 <script>

@@ -149,7 +149,7 @@ var nickNameChk = false;
 
 function join(){
    if(overlayChk && nickNameChk == true){
-      if($('#userId').val()==''){
+      if($('#userId').val()=='' || $('#userId').val().includes("admin")){
          alert('아이디을 입력해주세요!');
          $('#userId').focus();
       }else if($('#nickName').val()==''){

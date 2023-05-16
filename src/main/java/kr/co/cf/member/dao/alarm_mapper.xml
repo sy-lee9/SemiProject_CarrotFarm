@@ -12,7 +12,15 @@
 	<select id="totalNoticeCount" resultType="int">
 		SELECT COUNT(alarmIdx) FROM alarm WHERE userId=#{param1} AND categoryId='b002'
 	</select>
-
+	
+	<select id="totalWarningCount" resultType="int">
+		SELECT COUNT(alarmIdx) FROM alarm WHERE userId=#{param1} AND categoryId='r'
+	</select>
+	
+	<select id="totalTeamCount" resultType="int">
+		SELECT COUNT(alarmIdx) FROM alarm a LEFT JOIN team t on a.alarmKind = t.teamIdx WHERE a.userId='user01' AND a.categoryId ='ta01'
+	</select>
+	
 	<select id="list" resultType="kr.co.cf.matching.dto.MatchingDTO">
 		SELECT 
 			a.alarmIdx,
@@ -29,20 +37,46 @@
 		LIMIT 10 OFFSET #{param1}
 	</select>
 	
-	<select id="NoticeList" resultType="kr.co.cf.matching.dto.MatchingDTO">
+	<select id="noticeList" resultType="kr.co.cf.matching.dto.MatchingDTO">
 		SELECT 
 			a.alarmIdx,
 			a.categoryId, 
 			b.subject,
 			a.alarmKind, 
 			a.userId,
-			a.alarmcontent,
-			a.alarmKind
+			a.alarmcontent
 		FROM alarm a
 		LEFT JOIN board b on a.alarmKind = b.boardIdx 
 		WHERE a.userId=#{param2} AND a.categoryId='b002'
 		ORDER By alarmIdx DESC 
 		LIMIT 10 OFFSET #{param1}
+	</select>
+	
+	<select id="warningList" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT 
+			a.alarmIdx,
+			a.categoryId, 
+			a.alarmKind, 
+			a.userId,
+			a.alarmcontent
+		FROM alarm a
+		WHERE a.userId=#{param2} AND a.categoryId='r'
+		ORDER By alarmIdx DESC 
+		LIMIT 10 OFFSET #{param1}
+	</select>
+	
+	<select id="teamList" resultType="kr.co.cf.matching.dto.MatchingDTO">
+		SELECT 
+			a.alarmIdx,
+			a.alarmcontent,
+			t.teamIdx,
+			t.teamName 
+		FROM alarm a
+		left join team t on a.alarmKind = t.teamIdx 
+		WHERE a.userId=#{param2} AND a.categoryId ='ta01'
+		ORDER By alarmIdx DESC 
+		LIMIT 10 OFFSET #{param1}
+		
 	</select>
 	
 </mapper>
