@@ -8,9 +8,9 @@ import kr.co.cf.team.dto.TeamBoardDTO;
 
 public interface TeamBoardDAO {
 	
-	ArrayList<TeamBoardDTO> tplist();
+	ArrayList<TeamBoardDTO> tplist(String userId);
 
-	ArrayList<TeamBoardDTO> tpalist(int cnt, int offset);
+	ArrayList<TeamBoardDTO> tpalist(int cnt, int offset, String userId);
 	
 	ArrayList<TeamBoardDTO> tpalistSearch(String search);
 	
@@ -94,9 +94,9 @@ public interface TeamBoardDAO {
 	
 	
 	
-	ArrayList<TeamBoardDTO> tnlist();
-
-	ArrayList<TeamBoardDTO> tnalist(int cnt, int offset);
+	ArrayList<TeamBoardDTO> tnlist(String userId);
+	
+	ArrayList<TeamBoardDTO> tnalist(int cnt, int offset, String userId);
 	
 	ArrayList<TeamBoardDTO> tnalistSearch(String search);
 	
@@ -163,5 +163,9 @@ public interface TeamBoardDAO {
 	void tidownHit(String bidx);
 
 	String tiuserRight(String loginId);
+
+	String selectUserId(String teamIdx);
+
+	
 	
 }

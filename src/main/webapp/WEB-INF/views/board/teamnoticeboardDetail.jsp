@@ -87,20 +87,13 @@
 	      </li>
 	      
 	      <li >
-	        <a href="/cf/teamnoticeboardList.do" style="font-weight: bold; font-size: 20px ; color: orange;">팀 공지 사항</a>
+	        <a href="/cf/teamnoticeboardList.do?teamIdx=${teamIdx}" style="font-weight: bold; font-size: 20px ; color: orange;">팀 공지 사항</a>
 	      </li>
 	      
 	      <li>
-	        <a href="/cf/teamfreeboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 자유 게시판</a>
+	        <a href="/cf/teampictureboardList.do?teamIdx=${teamIdx}" style="font-weight: bold; font-size: 20px; color: black;">팀 사진첩</a>
 	      </li>
 	      
-	      <li>
-	        <a href="/cf/teampictureboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 사진첩</a>
-	      </li>
-	      
-	      <li>
-	        <a href="/cf/teaminquiryboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 문의</a>
-	      </li>
 
 	    </ul>
 	</div>
@@ -131,7 +124,7 @@
 			</c:if>
 			<tr>
 				<th colspan="4">
-					<input type = "button" onclick="location.href='./teamnoticeboardList.do'" value="리스트"/>
+					<input type = "button" onclick="location.href='./teamnoticeboardList.do?teamIdx=${teamIdx}'" value="리스트"/>
 					&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 					<c:if test="${dto.userId eq loginId }">
 					<input type = "button" id="registerBtn1" onclick="location.href='./teamnoticeboardUpdate.go?bidx=${dto.boardIdx}'" value="수정"/>
