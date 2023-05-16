@@ -118,6 +118,13 @@
 
 	<div id="LNB">
 		<br/><br/>
+		<c:if test="${loginId eq null}">
+			<img width="200" height="200" src="/photo/기본프로필.png">
+		</c:if>
+		<c:if test="${loginId ne null}">
+			<img width="200" height="200" src="/photo/${loginPhotoName}">
+		</c:if>
+		 
 	      <br/><br/>
 	    <a href="/cf/matching/list.do">개인 모집글</a> 
 	      <br/><br/>
@@ -146,7 +153,7 @@
 		
 		<input type="text" id="searchInput" placeholder="제목 또는 작성자를 입력">
 		<button id="searchButton" class="btn btn-outline-dark">검색</button>
-		<c:if test="${loginId != 'guest' }">
+		<c:if test="${loginId != null }">
 			<button id="writeButton" class="btn btn-outline-dark" onclick="location.href='write.go?categoryId=m01'">글쓰기</button>
 		</c:if>
 		</div>

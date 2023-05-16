@@ -3,15 +3,21 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>🏀 당근농장</title>
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=77b263fb5e91c183b524a3d94385df7c&libraries=services"></script>
 <style>
+#map {
+	margin: 50px; /* 원하는 margin 값으로 설정하세요 */
+	width: 500px;
+	height: 500px;
+}
+
 </style>
 </head>
 <body>
 	<input type="hidden" id="searchTest" value=""/>
-	<div id="map" style="width:500px;height:400px;"></div>
+	<div id="map" style="width:500px;height:500px;"></div>
 	${adress}
 	<table>
 		<thead>
