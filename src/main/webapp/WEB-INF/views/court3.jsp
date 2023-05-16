@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>🏀 당근농장</title>
 <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>  
@@ -25,6 +25,7 @@
 	
 	#content {
 		width:78%;
+		height : 83%;
 		background-color: #f8f9fa;
 		padding: 10 30 10;
 		margin : 5px;
@@ -68,7 +69,7 @@
 	}
 	#searchCourt{
 		width: 300px;
-    	height: 20px;
+    	height: 22px;
     	margin : 5px;
 	}
 	
@@ -92,14 +93,13 @@
 	<div id="LNB">
 		<br/><br/>
 		 <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
-	      <br/><br/>
-	    <a href="/cf/court">경기장 리스트</a> 
-	      <br/><br/>
+	    <br/><br/><br/><br/>
+	    <a href="/cf/court" style = "color: orange">경기장 리스트</a>
 	    
 	</div>
 	<div id="content">
 	
-	<select name="gu" id="gu" onchange="courtSort('gu')">
+	<select name="gu" id="gu" onchange="courtSort('gu')" style = "margin-left : 30px">
 		<option value="none">위치</option>
 		<option value="서울특별시">서울</option>
 		<c:forEach items="${guList}" var="gu">
@@ -113,37 +113,37 @@
       	<option value="out">실외</option>
       </select>
       
-	<div id="map" style="width:400px;height:400px;float:left;"></div>
+	<div id="map" style="width:420px; height:420px; float:left; margin: 20px, 10px, 0px, 20px;"></div>
 	<input id="searchCourt" type="text" name="searchCourt" placeholder="경기장 검색">
-	<button type="button" onclick="courtSort('courtSearch')" class="btn btn-outline-dark">검색</button>
-	<button onclick="window.open('courtTipOff.go','경기장 제보','width=400px,height=400px')" class="btn btn-outline-dark">경기장 제보</button>
+	&nbsp; &nbsp; 
+	<button type="button" onclick="courtSort('courtSearch')" class="btn btn-outline-dark" id = "ssearchbutton">검색</button>
+	&nbsp;  &nbsp; 
+	<button onclick="window.open('courtTipOff.go','경기장 제보','width=400px,height=400px')" class="btn btn-outline-dark" id = "courtjaebo">경기장 제보</button>
 	<div>
-	<table id="courtList" style="width:800px;">
+	<table id="courtList" style="width:800px; margin : 10px; float : right" >
 		<thead>
 		
 		</thead>
 		<tbody id="list">			
 			<c:forEach items="${courtList}" var="court" varStatus="status" end="9">
 				<tr>
-					<th style="width:10%;">${court.courtState}</th>
-					<th style="width:10%;">${court.gu}</th>				
-					<th style="width:10%;">
+					<td style="width:10%;">${court.courtState}</td>
+					<td style="width:10%;">${court.gu}</td>				
+					<td style="width:10%;">
 						<c:if test="${court.courtInOut eq 'out'}">실외</c:if>
 						<c:if test="${court.courtInOut eq 'in'}">실내</c:if>
-					</th>
-					<th style="width:30%;" id="courtName"><a href="courtDetail.do?courtIdx=${court.courtIdx}">${court.courtName}</a></th>
-					<th style="width:30%;">${court.courtAddress}</th>
-					<th style="width:10%;">☆${court.courtStar}</th>
+					</td>
+					<td style="width:30%;" id="courtName"><a href="courtDetail.do?courtIdx=${court.courtIdx}">${court.courtName}</a></td>
+					<td style="width:30%;">${court.courtAddress}</td>
+					<td style="width:10%;">☆${court.courtStar}</td>
 				</tr>
 			</c:forEach>
-			
-			
 		</tbody>
-	
-		<tbody>
+		
+		
+		<tbody style = "margin-top: 50px;">
 			<tr>
 			<th colspan="6" id="paging" style="border: none; width:800px;">	
-				<!-- 	플러그인 사용	(twbsPagination)	-->
 				<div class="container">									
 					<nav aria-label="Page navigation" style="text-align:center">
 						<ul class="pagination" id="pagination"></ul>
@@ -373,16 +373,16 @@
 		var content = '';
 		list.forEach(function(item,index){
 			content += '<tr>';
-			content += '<th>'+item.courtState+'</th>';
-			content+='<th>'+item.gu+'</th>';
+			content += '<td>'+item.courtState+'</td>';
+			content+='<td>'+item.gu+'</td>';
 			if(item.courtInOut=='out'){
-				content +='<th>실외</th>';
+				content +='<td>실외</td>';
 			}else{
-				content +='<th>실내</th>';
+				content +='<td>실내</td>';
 			}
-			content +='<th id="courtName"><a href="courtDetail.do?courtIdx='+item.courtIdx+'">'+item.courtName+'</a></th>';
-			content +='<th>'+item.courtAddress+'</th>';
-			content +='<th>'+item.courtStar+'</th>';
+			content +='<td id="courtName"><a href="courtDetail.do?courtIdx='+item.courtIdx+'">'+item.courtName+'</a></td>';
+			content +='<td>'+item.courtAddress+'</td>';
+			content +='<td>'+item.courtStar+'</td>';
 		});
 		$('#list').append(content);
 	}
@@ -405,6 +405,11 @@
 		} 
 		});
 	}
+	
+	$(document).ready(function() {
+		  $('#courtjaebo').css('margin-top', '-2px');
+		  $('#ssearchbutton').css('margin-top', '-2px');
+		});
 </script>
 </html>
 	
