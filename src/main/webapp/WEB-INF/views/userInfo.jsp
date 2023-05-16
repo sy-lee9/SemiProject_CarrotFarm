@@ -82,7 +82,7 @@
 			<br/><br/>
            <a href="/cf/userinfo.go">회원 정보</a>
            <br/><br/>
-           <a href="/cf/userprofile.go">회원 프로필</a>
+           <a href="/cf/userprofile.go?userId=${loginId}">회원 프로필</a>
            <br/><br/>
            <a href="/cf/userNoticeAlarm">알림</a>
            <br/><br/>
