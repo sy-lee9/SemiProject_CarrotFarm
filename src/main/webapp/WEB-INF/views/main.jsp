@@ -25,9 +25,8 @@
 	<c:if test="${loginId == null}">
 		<button onclick="location.href='login.go'">로그인</button>
 	</c:if>
-	<button onclick="location.href='userdelete.go'">회원탈퇴</button>
+	
 	<button onclick="location.href='userinfo.go'">회원정보</button>
-	<button onclick="location.href='mygames'">참여경기 리스트</button>
 	<button onclick="location.href='userprofile.go?userId=${sessionScope.loginId}'">회원 프로필</button>
 </body>
 <script>
@@ -36,5 +35,8 @@ var msg = "${msg}";
 if(msg != ""){
 	alert(msg);
 }
+
+var check = "${sessionScope.adminRight}";
+console.log(check);
 </script>
 </html>

@@ -7,11 +7,91 @@
 <meta charset="UTF-8">
 <title>회원 정보</title>
 <script src = "https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<!-- 부트스트랩 JavaScript 파일 불러오기 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <style>
+
+	body{
+		position:relative;
+		font-size:15px;
+		padding : 10px;
+		min-width: 1200px;
+	}
+	
+	#content {
+		width:78%;
+		background-color: #f8f9fa;
+		padding: 10 30 10;
+		margin : 5px;
+		float:right;
+		
+	}
+	
+	#LNB {
+		width:20%;
+		height : 83%;
+		background-color: #f8f9fa;
+		float:left;
+		margin : 5px;
+		font-weight: bold;
+        font-size: 15px;
+		text-align:center;
+		
+	}
+	
+	a {
+	  color : balck;
+	}
+	
+	a:link {
+	  color : balck;
+	}
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	 text-decoration-line: none;
+	  color : #FFA500 ;
+	}
+	
+	.pagination .page-link {
+  		color: gray; /* 기본 글자색을 검정색으로 지정 */
+	}
+
+	.pagination .page-item.active .page-link {
+ 		background-color: #FFA500;
+ 		border:none;
+	}
       
 </style>
 </head>
 <body>
+
+<div style="float: right;">
+	<jsp:include page="loginBox.jsp"></jsp:include>
+</div>
+
+<jsp:include page="GNB.jsp"></jsp:include>
+
+<div id="LNB">
+       <br/><br/>
+			<img width="200" height="200" src="/photo/${loginPhotoName}">
+			<br/><br/>
+           <a href="/cf/userinfo.go">회원 정보</a>
+           <br/><br/>
+           <a href="/cf/userprofile.go">회원 프로필</a>
+           <br/><br/>
+           <a href="/cf/userNoticeAlarm">알림</a>
+           <br/><br/>
+           <a href="/cf/allgames">참여 경기</a>
+           <br/><br/>
+           <a href="/cf/mygames">리뷰</a>
+           <br/><br/>
+   </div>
+	<div id="content" >
    <h3>회원 정보</h3>
       <table>
       	<tr>
@@ -71,9 +151,11 @@
             <th colspan="2">
                <button onclick="location.href='userinfoupdate.go'">회원정보 수정</button>
                <button onclick="location.href='./'">돌아가기</button>
+               <button onclick="location.href='userdelete.go'">회원탈퇴</button>
             </th>
             </tr>
       </table>
+      </div>
 </body>
 <script>
 

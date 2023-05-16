@@ -5,11 +5,11 @@
 <meta charset="UTF-8">
 <title>참여 경기 리스트</title>
 <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
-	<script src="/cf/resources/js/twbsPagination.js" type="text/javascript"></script>
-	
-	<!-- 부트스트랩 JavaScript 파일 불러오기 -->
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
+<script src="resources/js/twbsPagination.js" type="text/javascript"></script>
+
+<!-- 부트스트랩 JavaScript 파일 불러오기 -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
@@ -48,31 +48,33 @@
         font-size: 15px;
 		text-align:center;
 		
-		}
-		
-		a {
-		  color : balck;
-		}
-		
-		a:link {
-		  color : balck;
-		}
-		a:visited {
-		  color : black;
-		}
-		a:hover {
-		 text-decoration-line: none;
-		  color : #FFA500 ;
-		}
-		
-		.pagination .page-link {
-	  		color: gray; /* 기본 글자색을 검정색으로 지정 */
-		}
+	}
 	
-		.pagination .page-item.active .page-link {
-	 		background-color: #FFA500;
-	 		border:none;
-		}
+	a {
+	  color : balck;
+	}
+	
+	a:link {
+	  color : balck;
+	}
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	 text-decoration-line: none;
+	  color : #FFA500 ;
+	}
+	
+	.pagination .page-link {
+  		color: gray; /* 기본 글자색을 검정색으로 지정 */
+	}
+
+	.pagination .page-item.active .page-link {
+ 		background-color: #FFA500;
+ 		border:none;
+	}
+		
+	}
 </style>
 </head>
 <body>
@@ -84,7 +86,7 @@
 <jsp:include page="GNB.jsp"></jsp:include>
 
 	<div id="LNB">
-       <br/><br/>
+	<br/><br/>
 			<img width="200" height="200" src="/photo/${loginPhotoName}">
 			<br/><br/>
            <a href="/cf/userinfo.go">회원 정보</a>
@@ -109,6 +111,7 @@
 	
 	<input type="text" id="searchInput" placeholder="제목 검색">
 	<button id="searchButton">검색</button>
+	
 	<table>
 		<colgroup>
 			<col width="15%"/>
@@ -168,7 +171,7 @@
 	function listCall(page){
 		$.ajax({
 			type:'post',
-			url:'mygameList.ajax',
+			url:'allgameList.ajax',
 			data:{
 				'page':page,
 				'selectedGameDate':selectedGameDate,
@@ -206,7 +209,7 @@
 		list.forEach(function(list, idx){
 			content +='<tr>';
 			content +='<td>'+list.gu+'</td>';
-			'<td><a href="./matching/detail.go?matchingIdx='+list.matchingIdx+'">'+list.subject+'</a></td>';
+			content +='<td><a href="./matching/detail.go?matchingIdx='+list.matchingIdx+'">'+list.subject+'</a></td>';
 			content +='<td>'+list.gameDate+'</td>';
 			content +='<td>'+list.gamePlay+' : '+list.gamePlay+'</td>';
 			content +='</tr>';
