@@ -93,7 +93,12 @@ body{
 	
 	<div id="LNB">
 		<br/><br/>
-		 <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
+		 <c:if test="${loginId eq null}">
+			<img width="200" height="200" src="/photo/기본프로필.png">
+		</c:if>
+		<c:if test="${loginId ne null}">
+			<img width="200" height="200" src="/photo/${loginPhotoName}">
+		</c:if>
 	      <br/><br/>
 	    <a href="/cf/team/teamList.go">팀 둘러보기</a>	    
 	    <br/><br/>
@@ -107,6 +112,13 @@ body{
 		  <option value="default">모집여부</option>
 		  <option value="모집중">모집중</option>
 		  <option value="모집종료">모집종료</option>
+		</select>
+		
+		<select id="sort">
+		  <option value="default">지역</option>
+		  <c:forEach items="${locationList}" var="locationList">
+		  	<option value="${locationList.locationIdx}">${locationList.gu}</option>	
+		  </c:forEach>
 		</select>
 		
 		<input type="text" id="searchInput" placeholder="팀이름 검색">
@@ -137,11 +149,11 @@ body{
 				<!-- list 출력 영역 -->
 			</tbody>
 			<tr>
-				<td colspan="7" id="paging">	
+				<td colspan="5" id="paging">	
 					<!-- 	플러그인 사용	(twbsPagination)	-->
 					<div class="container">									
-						<nav aria-label="Page navigation" style="text-align:center">
-							<ul class="pagination" id="pagination"></ul>
+						<nav aria-label="Page navigation">
+							<ul class="pagination justify-content-center" id="pagination"></ul>
 						</nav>					
 					</div>
 				</td>
@@ -153,6 +165,7 @@ body{
 	var showPage = 1;
 	var selectedMatchState = 'default';
 	var searchText = 'default';
+	var selectedSort = 'default';
 	listCall(showPage);
 
 	// 경기 방식 선택에 따른 출력
@@ -172,6 +185,13 @@ body{
 		listCall(showPage);
 		$('#pagination').twbsPagination('destroy');
 	});
+	
+	$('#sort').change(function(){
+		selectedSort = $(this).val();
+		console.log(selectedSort);
+		listCall(showPage);
+		$('#pagination').twbsPagination('destroy');
+	});
 		
 	function listCall(page){
 		$.ajax({
@@ -180,6 +200,7 @@ body{
 			data:{
 				'page':page,
 				'matchState':selectedMatchState,
+		    	'locationIdx':selectedSort,
 				'searchText':searchText
 			},
 			dataType:'json',
@@ -210,17 +231,23 @@ body{
 	function listPrint(list){
 		var content = '';
 		
-		list.forEach(function(team, teamIdx){
+		if(list.length==0){
 			content +='<tr>';
-			content +='<td id="teamMatchState">'+team.teamMatchState+'</td>';
-			content +='<td>'+team.gu+'</td>';
-			content +='<td id="teamInfo"><a href="team/teamPage.go?teamIdx='+team.teamIdx+'">'+team.teamName+'</a></td>';
-			content +='<td>'+team.teamIntroduce.substring(0, 14)+'</td>';
-			content +='<td>'+team.teamUser+'</td>';
+			content +='<th colspan="5"> 개설된 팀이 없습니다. </th>';
 			content +='</tr>';
-		});
-		$('#list').empty();
-		$('#list').append(content);
+		}else{
+			list.forEach(function(team){
+				content +='<tr>';
+				content +='<td id="teamMatchState">'+team.teamMatchState+'</td>';
+				content +='<td>'+team.gu+'</td>';
+				content +='<td id="teamInfo"><a href="team/teamPage.go?teamIdx='+team.teamIdx+'">'+team.teamName+'</a></td>';
+				content +='<td>'+team.teamIntroduce.substring(0, 14)+'</td>';
+				content +='<td>'+team.teamUser+'</td>';
+				content +='</tr>';
+			});
+			$('#list').empty();
+			$('#list').append(content);
+		}
 	}
 	
 	var msg = "${msg}";

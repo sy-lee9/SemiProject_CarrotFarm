@@ -38,7 +38,7 @@
 		float:left;
 		margin : 5px;
 		font-weight: bold;
-        font-size: 15px;
+        font-size: 18px;
 		text-align:center;
 		
 	}
@@ -58,11 +58,8 @@
 	  color : #FFA500 ;
 	}
 	
-	li {
-		margin : 2px;
-	}
-	
 	table, th, td{
+		padding: 10px;
 		margin : 5px;
 		text-align: center;
 	}
@@ -76,22 +73,13 @@
 		margin: 5px;
 	}
 	
-
 	#inline{
 		float: left;
 		margin:0 20 5 0;
 	}
-
 </style>
 </head>
 <body>
- 	<div><button onclick="location.href='teamPageUpdate.go?teamIdx=${team.teamIdx}'">팀정보 수정</button></div>
-	<div><button onclick="location.href='teamDisbanding.go?teamIdx=${team.teamIdx}'">팀 해체</button></div>
-	<div><button onclick="location.href='gameMatchingRequest.go?teamIdx=${team.teamIdx}'">참가신청한 경기</button></div>
-	<div><button onclick="location.href='writeMatchingList.go?teamIdx=${team.teamIdx}'">모집중인 경기</button></div> 
-	<div><button onclick="location.href='teamJoinAppAlarm.go?teamIdx=${team.teamIdx}'">알림</button></div>
-	<div><button onclick="location.href='teamUserListLeader.go?teamIdx=${team.teamIdx}'">팀원(leader)</button></div>
-	<div><button onclick="location.href='warningTeamUser.go?teamIdx=${team.teamIdx}'">경고/강퇴</button></div>
 	
 	<div style="float: right;">
 		<%@ include file="../loginBox.jsp" %>
@@ -101,7 +89,12 @@
 	
 	<div id="LNB">
 		<br/><br/>
-	        <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
+        <c:if test="${loginId eq null}">
+			<img width="200" height="200" src="/photo/기본프로필.png">
+		</c:if>
+		<c:if test="${loginId ne null}">
+			<img width="200" height="200" src="/photo/${loginPhotoName}">
+		</c:if>
 	      <br/><br/>
 	        <a href="/cf/team/teamPage.go?teamIdx=${team.teamIdx}">팀소개</a>
 	      <br/><br/>
@@ -109,26 +102,26 @@
 	      <br/><br/>
 	        <a href="/cf/team/teamGame.go?teamIdx=${team.teamIdx}">참여 경기</a>
 	      <br/><br/>
-	        <a href="/cf/teamnoticeboardList.do">팀 공지 사항</a>
+	        <a href="/cf/teampictureboardList.do?teamIdx=${team.teamIdx}">팀 사진첩</a>
 	      <br/><br/>
-	        <a href="/cf/teamfreeboardList.do">팀 자유 게시판</a>
-	      <br/><br/>
-	        <a href="/cf/teampictureboardList.do">팀 사진첩</a>
-	      <br/><br/>
-	        <a href="/cf/teaminquiryboardList.do" >팀 문의</a>
+	        <a href="/cf/teaminquiryboardList.do?teamIdx=${team.teamIdx}" >팀 문의</a>
 	</div>
 	
 	<div id="content">
 		<div id="inline"><button onclick="location.href='teamList.go'">리스트로 돌아가기</button></div>
-		<div id="teamMatchState" style="display: flex; align-items: center; float:right; height: 40px;">${team.teamMatchState}</div> 
+		<div id="teamMatchState" style="margin: 10px; display: flex; align-items: center; float:right; height: 40px;">
+			<p>${team.teamMatchState}</p>
+			<c:if test="${teamLeadersChk eq true}">
+				<div style="float:right;"><button type="button" id="joinCancelApp" onclick="location.href='teamJoinAppAlarm.go?teamIdx=${team.teamIdx}'">팀관리</button></div>
+			</c:if>
+		</div> 
 		<c:if test="${team.teamMatchState == '모집중' && joinAppChk eq false && joinTeam eq false}">
-			<div style="float:right;"><button type="button" id="joinApp" onclick="joinApp(${team.teamIdx})">가입신청</button></div>
+			<div style="float:right; margin: 10px; "><button type="button" id="joinApp" onclick="joinApp(${team.teamIdx})">가입신청</button></div>
 		</c:if>
 		<c:if test="${team.teamMatchState == '모집중' && joinAppChk eq true}">
-			<div style="float:right;"><button type="button" id="joinCancelApp" onclick="joinCancel(${team.teamIdx})">가입신청 취소</button></div>
+			<div style="float:right; margin: 10px; "><button type="button" id="joinCancelApp" onclick="joinCancel(${team.teamIdx})">가입신청 취소</button></div>
 		</c:if>
 		<br/>
-		<hr/>
 		<br/>
 		<table>
 			<colgroup>
@@ -170,14 +163,24 @@
 		</table>
 		<br/>
 		<br/>
-		<div style="width: 400; height: 100px; margin: 10px; float: left; text-align: center;">
-			<h3>팀 소개글</h3>	
-			<p>${team.teamIntroduce}</p>		
+		<div style="width: 600; height: 200px; margin: 10px; float: left; text-align: center;">
+			<table>
+				<tr>
+					<th style="border-bottom: 1px solid black">팀 소개글</th>
+				</tr>
+				<tr>
+					<td>${team.teamIntroduce}</td>
+				</tr>
+			</table>
 		</div>
-		<div style="height: 100px; margin: 10px; text-align: center;">
-			<h3>경기리뷰</h3>
+		<div style="width: 600; height: 200px; margin: 10px; float: left; text-align: center;">
+			<table>
+				<tr>
+					<th style="border-bottom: 1px solid black">경기리뷰</th>
+				</tr>
+			</table>
 			<c:forEach items="${list}" var="team">
-				<p style="display: inline;">${team.tagContent} ${team.tagCount}</p>&nbsp;
+				<p style="display: inline;">${team.tagContent} ${team.tagCount}</p>&nbsp;&nbsp;
 			</c:forEach>
 		</div>
 		<c:if test="${teamUserChk eq true}">
@@ -217,7 +220,6 @@
 	}else if("${team.teamFavNum}" == '5'){
 		$('#teamFavNum').text("5:5");
 	}
-	
 
 	function joinApp(teamIdx) {
 		console.log('joinApp start');
@@ -231,6 +233,10 @@
 	        dataType:'json',
 	        success: function(data) {
 	        	 console.log(data);
+	        	 
+	        	 if(data.removeChk == '1'){
+	        		 alert("강퇴회원으로 재가입이 불가능합니다.");
+	        	 }
 	   
 	    		if(data.joinChk == '0'){
 		            // 버튼 변경	           

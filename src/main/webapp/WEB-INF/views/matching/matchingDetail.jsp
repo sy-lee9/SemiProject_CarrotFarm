@@ -33,7 +33,7 @@ body{
 	
 	#LNB {
 		width:20%;
-		height : 50%;
+		height : 83%;
 		background-color: #f8f9fa;
 		float:left;
 		margin : 5px;
@@ -123,7 +123,12 @@ body{
 	
 	<div id="LNB">
 		<br/><br/>
-		 <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
+		<c:if test="${loginId eq null}">
+			<img width="200" height="200" src="/photo/기본프로필.png">
+		</c:if>
+		<c:if test="${loginId ne null}">
+			<img width="200" height="200" src="/photo/${loginPhotoName}">
+		</c:if>
 	      <br/><br/>
 	    <a href="/cf/matching/list.do">개인 모집글</a> 
 	      <br/><br/>
@@ -154,7 +159,7 @@ body{
 	     			</br>🏀 경기 장소 : ${dto.courtName}
 	     			</br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 주소: ${dto.courtAddress}
 	     			</br>🏀 모집 인원 :	 &#128100 ${dto.matchingNumforSure}/${dto.matchingNum} &nbsp; &nbsp; 
-	     				<c:if test="${loginId != 'guest' }"> 
+	     				<c:if test="${loginId != null }"> 
 	     					<button  class="btn btn-outline-dark" id="playerList">참가자</button>
 	     				</c:if>
 	     			
@@ -164,7 +169,7 @@ body{
 	     	</tr>
 	     	
 	     	
-	     	<c:if test="${loginId == 'guest' }">
+	     	<c:if test="${loginId == null}">
 	     	<tr>
 	     		<th colspan="4"> 경기 참여는 로그인 후 가능 합니다.</th>
 	     	</tr>
@@ -178,7 +183,7 @@ body{
 <!--matchigState가 matching 상태일 시  -->
 	     		<c:if test="${dto.matchigState eq 'matching'}">
 	     			<th>
-		     			<c:if test="${loginId != 'guest' }">
+		     			<c:if test="${loginId != null }">
 		     				<button class="btn btn-outline-dark" id="gameApplyList">신청자</button>
 		     				<c:if test="${dto.writerId eq loginId }">
 		     					<button class="btn btn-outline-dark" id="gameInviteList">초대</button>
@@ -194,7 +199,7 @@ body{
 		     		
 		     		<c:if test="${dto.writerId ne loginId }">
 				     	<th colspan="2" style="text-align:left;">
-				     		<c:if test="${loginId != 'guest' }">
+				     		<c:if test="${loginId != null }">
 			     				<button class="btn btn-warning" id="applyChk" onclick="location.href='applyGame?matchingIdx=${dto.matchingIdx}'">신청</button>
 			     			</c:if>
 			     		</th>
@@ -239,7 +244,7 @@ body{
 		     		
 	     		
 		     		<c:if test="${dto.writerId ne loginId }">
-			     		<c:if test="${loginId != 'guest' }">
+			     		<c:if test="${loginId != null }">
 			     			<button class="btn btn-outline-dark" onclick="window.open('matchingReport.go?matchingIdx=${dto.matchingIdx}&reportUserId=${dto.writerId}','당근농장 신고','width=600px,height=400px')">신고</button>
 			     			
 		     			</c:if>
@@ -301,7 +306,7 @@ body{
 	
 				     		</c:if>
 				     		<c:if test="${commentList.userId ne loginId}">
-					     		<c:if test="${loginId != 'guest' }">
+					     		<c:if test="${loginId != null }">
 					     			<a href="#" onclick="window.open('commentReport.go?commentIdx=${commentList.commentIdx}&reportUserId=${commentList.userId}','당근농장 신고','width=600px,height=400px')">신고</a>				     			
 					     		</c:if>	 
 				     		</c:if>	     					
@@ -312,10 +317,11 @@ body{
 			     <tr>
 	
 				     <form method="post" action="commentWrite.do?categoryId=m01&comentId=${dto.matchingIdx}" id="commentForm">
-				     		<th >
-				     			<input type="text" name="userId" value="${loginId}" style= "border:none; width:50px; background-color: #f8f9fa;" readonly>
-				     		</th>
-				     		<c:if test="${loginId != 'guest' }">
+				     		
+				     		<c:if test="${loginId != null }">
+				     			<th >
+				     				<input type="text" name="userId" value="${loginId}" style= "border:none; width:50px; background-color: #f8f9fa;" readonly>
+				     			</th>
 					     		<th colspan="2">
 					     			<input type="text" name="commentContent" id="commentContent" style="background-color: white; border: 1px solid black; width: 100%; padding-left:20px; text-align:left;">
 					     		</th>
@@ -323,7 +329,10 @@ body{
 					     			<input type="button" class="btn btn-outline-dark" value="작성" onclick="subCommentChk()" />
 					     		</th>
 				     		</c:if>
-				     		<c:if test="${loginId == 'guest' }">
+				     		<c:if test="${loginId == null }">
+				     			<th >
+				     				<input type="text" name="userId" value="guest" style= "border:none; width:50px; background-color: #f8f9fa;" readonly>
+				     			</th>
 					     		<th colspan="3">
 					     			<input type="text" name="commentContent" style= "border:none; width:400px; background-color: #f8f9fa;" placeholder="댓글 작성은 로그인 후 가능합니다. " readonly />
 					     		</th>

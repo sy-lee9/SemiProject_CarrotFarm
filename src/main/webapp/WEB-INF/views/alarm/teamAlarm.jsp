@@ -92,14 +92,25 @@
 
 
 	<div id="LNB">
-		<br/><br/>
-		 <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
-	      <br/><br/>
-	    <a href="/cf/matching/list.do">개인 모집글</a> 
-	      <br/><br/>
-	    <a href="/cf/matching/teamList.do" >팀 모집글</a>
-	    
-	</div>
+      <br/><br/>
+		<c:if test="${loginId eq null}">
+			<img width="200" height="200" src="/photo/기본프로필.png">
+		</c:if>
+		<c:if test="${loginId ne null}">
+			<img width="200" height="200" src="/photo/${loginPhotoName}">
+		</c:if>
+			<br/><br/>
+           <a href="/cf/userinfo.go">회원 정보</a>
+           <br/><br/>
+           <a href="/cf/userprofile.go?userId=${loginId}">회원 프로필</a>
+           <br/><br/>
+           <a href="/cf/userNoticeAlarm">알림</a>
+           <br/><br/>
+           <a href="/cf/allgames">참여 경기</a>
+           <br/><br/>
+           <a href="/cf/mygames">리뷰</a>
+           <br/><br/>
+   </div>
 	
 	
 	<div id="content">

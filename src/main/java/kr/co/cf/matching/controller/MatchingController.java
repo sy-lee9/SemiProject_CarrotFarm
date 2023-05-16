@@ -33,7 +33,7 @@ public class MatchingController {
       logger.info("session" + session.getAttribute("loginId"));
       logger.info("모집글 리스트 불러오기");
       if(session.getAttribute("loginId") == null) {
-         model.addAttribute("loginId", "guest");
+        // model.addAttribute("loginId", "guest");
       }
       
       ArrayList<MatchingDTO> locationList = new ArrayList<MatchingDTO>();
