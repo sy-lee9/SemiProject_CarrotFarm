@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.cf.matching.dto.MatchingDTO;
 import kr.co.cf.team.dto.TeamDTO;
 import kr.co.cf.team.service.TeamService;
 
@@ -31,15 +32,19 @@ public class TeamController {
 		String loginId = (String) session.getAttribute("loginId");
 		logger.info("loginId : "+loginId);
 		
+		ArrayList<TeamDTO> locationList = new ArrayList<TeamDTO>();
+	    locationList = TeamService.locationList();
+	    model.addAttribute("locationList", locationList);
+		
 		if(loginId != null) {
 			if(TeamService.teamUserChk(loginId) == 1) {
 				model.addAttribute("teamUserChk", true);
 			}
 			
-			int teamIdx = TeamService.getTeamIdx(loginId);
+			String teamIdx = TeamService.getTeamIdx(loginId);
 			logger.info("get teamIdx : "+teamIdx);
 			model.addAttribute("teamIdx",teamIdx);
-		}
+		}	
 		
 		String msg = (String) session.getAttribute("msg");
 		logger.info(msg);
@@ -90,8 +95,7 @@ public class TeamController {
 					
 		}else {
 			session.setAttribute("msg", "로그인 후 다시 시도해주세요!");
-		}	
-		
+		}			
 		return page;	
 	}
 	
@@ -113,7 +117,7 @@ public class TeamController {
 		}
 		return page;
 	}
-	
+
 	 @RequestMapping(value="/team/teamPage.go")
 	   public String teamPage(Model model, @RequestParam String teamIdx,HttpSession session) {
 	      logger.info("teamPage : "+teamIdx);
@@ -421,8 +425,8 @@ public class TeamController {
 	
 	//신청한 게임 모집글 변경사항 알림
 	@RequestMapping(value="/team/appGameUpdateAlarm.go")
-	public String appGameAlarm(Model model, @RequestParam String teamIdx,HttpSession session) {
-		logger.info("appGameAlarm : "+teamIdx);			
+	public String appGameUpdateAlarm(Model model, @RequestParam String teamIdx,HttpSession session) {
+		logger.info("appGameUpdateAlarm : "+teamIdx);			
 
 		String page = "redirect:/team/teamPage.go";				
 		String loginId = (String) session.getAttribute("loginId");
@@ -562,12 +566,17 @@ public class TeamController {
 			if(TeamService.teamJoinChk(loginId) == 0){
 				logger.info("가입한 팀이 없음");	
 				
-				//팀 가입신청 테이블에 회원정보 저장
-				if(TeamService.teamJoinApp(Integer.parseInt(teamIdx),loginId) == 1) {
-					logger.info("신청 완료");	
-				}
-				
-				map.put("joinChk", 0);
+				//강퇴회원 확인
+				if(TeamService.removeChk(Integer.parseInt(teamIdx),loginId) == 1) {
+					logger.info("강퇴회원");	
+					map.put("removeChk", 1);
+				}else {
+					//팀 가입신청 테이블에 회원정보 저장
+					if(TeamService.teamJoinApp(Integer.parseInt(teamIdx),loginId) == 1) {
+						logger.info("신청 완료");	
+						map.put("joinChk", 0);
+					}
+				}								
 			}else {
 				logger.info("가입한 팀이 있음");
 				map.put("joinChk", 1);

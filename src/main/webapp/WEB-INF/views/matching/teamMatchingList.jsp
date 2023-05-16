@@ -42,7 +42,7 @@
 		float:left;
 		margin : 5px;
 		font-weight: bold;
-        font-size: 15px;
+        font-size: 18px;
 		text-align:center;
 		
 	}
@@ -114,7 +114,12 @@
 	
 	<div id="LNB">
 		<br/><br/>
-		 <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
+		<c:if test="${loginId eq null}">
+			<img width="200" height="200" src="/photo/기본프로필.png">
+		</c:if>
+		<c:if test="${loginId ne null}">
+			<img width="200" height="200" src="/photo/${loginPhotoName}">
+		</c:if>
 	      <br/><br/>
 	    <a href="/cf/matching/list.do">개인 모집글</a> 
 	      <br/><br/>
@@ -282,7 +287,8 @@ function listPrint(list){
 		content +='<td id="gamePlayer"> ' + item.matchingNumforSure +'/'+ item.matchingNum+ '</td>';
 		content +='<td id="subject" style="text-align:left; padding-left:30px;"><a href="teamDetail.go?matchingIdx='+ item.matchingIdx+'">'+item.subject+'</a></td>';
 		content +='<td>'+item.gameDate+'</td>';
-		content +='<td id="writerId">'+ item.teamName +'</td>';
+		content += '<td id="writerId"><a href="#" onclick="window.open(\'/cf/team/teamPagePop.go?teamIdx=' + item.teamIdx + '\', \'팀페이지팝업창\', \'width=1000px,height=600px\')">' + item.teamName + '</a></td>';
+		
 		content +='<td>'+item.bHit+'</td>';
 		content +='</tr>';
 		

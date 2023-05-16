@@ -79,6 +79,7 @@
 	</div> 
 	<%@ include file="./GNB.jsp" %>
 	
+
 	<div id="content" style="text-align:center;">
 		<hr/>
 		<img id="image" src="/photo/mainLogo.png"/ >

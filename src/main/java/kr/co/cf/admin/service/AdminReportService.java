@@ -111,6 +111,18 @@ public class AdminReportService {
 				}else {
 					dto.setAddress("teampictureboardDetail.do?bidx="+Integer.parseInt(boardIdx));
 				}
+			}else if(oriCategory.equals("rb012")||oriCategory.equals("b012")) {
+				if(boardIdx==null){ 
+					dto.setMsg("해당 게시글이 삭제되었습니다.");
+				}else {
+					dto.setAddress("teamfreeboardDetail.do?bidx="+Integer.parseInt(boardIdx));
+				}
+			}else if(oriCategory.equals("rb013")||oriCategory.equals("b013")) {
+				if(boardIdx==null){ 
+					dto.setMsg("해당 게시글이 삭제되었습니다.");
+				}else {
+					dto.setAddress("teamnoticeboardDetail.do?bidx="+Integer.parseInt(boardIdx));
+				}
 			}
 		}else if(categoryId.equals("rm")) {
 			String oriCategory= adminReportdao.selectMatchingCategory(params);
@@ -184,6 +196,12 @@ public class AdminReportService {
 			}else if(oriCategory!=null &&(oriCategory.equals("b011")||oriCategory.equals("rb011"))) {
 				newCategory="rb011";
 				params.put("newCategory",newCategory);
+			}else if(oriCategory!=null &&(oriCategory.equals("b012")||oriCategory.equals("rb012"))) {
+				newCategory="rb012";
+				params.put("newCategory",newCategory);
+			}else if(oriCategory!=null &&(oriCategory.equals("b013")||oriCategory.equals("rb013"))) {
+				newCategory="rb013";
+				params.put("newCategory",newCategory);
 			}
 			adminReportdao.reportBoardBlind(params);
 		
@@ -211,6 +229,7 @@ public class AdminReportService {
 		}else if(reportResult.equals("경고")) {
 			params.put("reportCheck","1");
 			adminReportdao.reportAlarm(params);
+			logger.info("경고 시 들어오는 :"+params);
 		}else {
 			params.put("reportCheck","0");
 			adminReportdao.userRestriction(params);
@@ -255,6 +274,20 @@ public class AdminReportService {
 					adminReportdao.adminReportProCancel(params);
 				}else if(oriCategory.equals("rb011")) {
 					String newCategoryId="b011";
+					params.put("newCategoryId", newCategoryId);
+					adminReportdao.boardBlindCancel(params);
+					String reportCheck="0";
+					params.put("reportCheck",reportCheck);
+					adminReportdao.adminReportProCancel(params);
+				}else if(oriCategory.equals("rb012")) {
+					String newCategoryId="b012";
+					params.put("newCategoryId", newCategoryId);
+					adminReportdao.boardBlindCancel(params);
+					String reportCheck="0";
+					params.put("reportCheck",reportCheck);
+					adminReportdao.adminReportProCancel(params);
+				}else if(oriCategory.equals("rb013")) {
+					String newCategoryId="b013";
 					params.put("newCategoryId", newCategoryId);
 					adminReportdao.boardBlindCancel(params);
 					String reportCheck="0";
@@ -312,6 +345,20 @@ public class AdminReportService {
 					adminReportdao.adminReportProCancel(params);
 				}else if(oriCategory.equals("rb011")) {
 					String newCategoryId="b003";
+					params.put("newCategoryId", newCategoryId);
+					adminReportdao.boardBlindCancel(params);
+					String reportCheck="-1";
+					params.put("reportCheck",reportCheck);
+					adminReportdao.adminReportProCancel(params);
+				}else if(oriCategory.equals("rb012")) {
+					String newCategoryId="b012";
+					params.put("newCategoryId", newCategoryId);
+					adminReportdao.boardBlindCancel(params);
+					String reportCheck="-1";
+					params.put("reportCheck",reportCheck);
+					adminReportdao.adminReportProCancel(params);
+				}else if(oriCategory.equals("rb013")) {
+					String newCategoryId="b013";
 					params.put("newCategoryId", newCategoryId);
 					adminReportdao.boardBlindCancel(params);
 					String reportCheck="-1";
@@ -377,6 +424,20 @@ public class AdminReportService {
 					adminReportdao.adminReportProCancel(params);
 				}else if(oriCategory.equals("rb011")) {
 					String newCategoryId="b011";
+					params.put("newCategoryId", newCategoryId);
+					adminReportdao.boardBlindCancel(params);
+					String reportCheck="0";
+					params.put("reportCheck",reportCheck);
+					adminReportdao.adminReportProCancel(params);
+				}else if(oriCategory.equals("rb012")) {
+					String newCategoryId="b012";
+					params.put("newCategoryId", newCategoryId);
+					adminReportdao.boardBlindCancel(params);
+					String reportCheck="0";
+					params.put("reportCheck",reportCheck);
+					adminReportdao.adminReportProCancel(params);
+				}else if(oriCategory.equals("rb013")) {
+					String newCategoryId="b013";
 					params.put("newCategoryId", newCategoryId);
 					adminReportdao.boardBlindCancel(params);
 					String reportCheck="0";

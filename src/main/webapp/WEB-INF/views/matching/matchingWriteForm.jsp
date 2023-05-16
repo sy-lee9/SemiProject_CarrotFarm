@@ -7,8 +7,8 @@
 <title>🏀 당근농장</title>
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 <!-- Datetimepicker 라이브러리 불러오기 -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
 
 <!-- 부트스트랩 JavaScript 파일 불러오기 -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
@@ -41,7 +41,7 @@
 		float:left;
 		margin : 5px;
 		font-weight: bold;
-        font-size: 15px;
+        font-size: 18px;
 		text-align:center;
 		
 	}
@@ -87,7 +87,12 @@
 	
 	<div id="LNB">
 		<br/><br/>
-		 <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
+		<c:if test="${loginId eq null}">
+			<img width="200" height="200" src="/photo/기본프로필.png">
+		</c:if>
+		<c:if test="${loginId ne null}">
+			<img width="200" height="200" src="/photo/${loginPhotoName}">
+		</c:if>
 	      <br/><br/>
 	    <a href="/cf/matching/list.do">개인 모집글</a> 
 	      <br/><br/>
@@ -153,7 +158,20 @@
 
 <script>
 	
-	
+$(function() {
+    $('#date').datetimepicker({
+      format: 'Y-m-d H:i',  // 입력값의 형식을 지정
+      lang: 'ko',  // 언어 설정
+      step: 30,  // 분 단위로 선택 가능한 간격을 지정
+      dayOfWeekStart: 1,  // 주의 시작일을 월요일로 설정
+      minDate: 0,  // 오늘 이후의 날짜만 선택 가능하도록 설정
+      allowTimes: [
+        '09:00', '10:00', '11:00', '12:00', '13:00',
+        '14:00', '15:00', '16:00', '17:00', '18:00',
+        '19:00', '20:00', '21:00', '22:00', '23:00'
+      ]  // 선택 가능한 시간을 지정
+    });
+  });
 	
 	/* 경기장 선택 방법 선택(선호위치, 선택, 전체 보기) */
 	
@@ -262,20 +280,7 @@
 		
 		
 		
-		 $(function() {
-			    $('#date').datetimepicker({
-			      format: 'Y-m-d H:i',  // 입력값의 형식을 지정
-			      lang: 'ko',  // 언어 설정
-			      step: 30,  // 분 단위로 선택 가능한 간격을 지정
-			      dayOfWeekStart: 1,  // 주의 시작일을 월요일로 설정
-			      minDate: 0,  // 오늘 이후의 날짜만 선택 가능하도록 설정
-			      allowTimes: [
-			        '09:00', '10:00', '11:00', '12:00', '13:00',
-			        '14:00', '15:00', '16:00', '17:00', '18:00',
-			        '19:00', '20:00', '21:00', '22:00', '23:00'
-			      ]  // 선택 가능한 시간을 지정
-			    });
-			  });
+
 		
 		 
 		 

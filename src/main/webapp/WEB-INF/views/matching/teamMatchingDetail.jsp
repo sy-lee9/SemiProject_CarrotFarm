@@ -37,7 +37,7 @@
 		float:left;
 		margin : 5px;
 		font-weight: bold;
-        font-size: 15px;
+        font-size: 18px;
 		text-align:center;
 		
 	}
@@ -88,7 +88,7 @@
 		text-align:center;
 	}
 	
-	#closePlayerListBtn, #closeGameApplyListBtn, #closeGameInviteListBtn, #closeTeamRegistPopup{
+	#closePlayerListBtn, #closeGameApplyListBtn, #closeGameInviteListBtn, #closeTeamRegistBtn{
 		margin:auto;
         display:block;
 	}
@@ -122,7 +122,12 @@
 	
 	<div id="LNB">
 		<br/><br/>
-		 <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
+		<c:if test="${loginId eq null}">
+			<img width="200" height="200" src="/photo/기본프로필.png">
+		</c:if>
+		<c:if test="${loginId ne null}">
+			<img width="200" height="200" src="/photo/${loginPhotoName}">
+		</c:if>
 	      <br/><br/>
 	    <a href="/cf/matching/list.do">개인 모집글</a> 
 	      <br/><br/>
@@ -135,7 +140,7 @@
 				<th style="text-align:left;"><h2>&nbsp; &nbsp; &nbsp; &nbsp; ${dto.subject}</h2></th>
 				<th style="width: 28%;">${dto.gameDate} </th>
 				<th style="width: 10%;">&#128100 ${dto.matchingNumforSure}/${dto.matchingNum}</th>
-				<th style="width: 12%;">${dto.teamName}</th>
+				<th style="width: 12%;"><a href="#" onclick="window.open('/cf/team/teamPagePop.go?teamIdx=${dto.teamIdx}', '팀페이지팝업창', 'width=1000px,height=600px');">${dto.teamName}</a></th>
 		</tr>
 		<tr style="height:1px;">
 				<th colspan="4"><hr/></th>
@@ -149,7 +154,7 @@
 	     		</br>🏀 경기 장소 : ${dto.courtName}
 	     		</br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 주소: ${dto.courtAddress}
 	     		</br>🏀 모집 인원 :	 &#128100 ${dto.matchingNumforSure}/${dto.matchingNum} &nbsp; &nbsp; 
-	     			<c:if test="${loginId != 'guest' }">
+	     			<c:if test="${loginId != null }">
 	     				<button class="btn btn-outline-dark" id="playerList">참가자</button>
 	     				
 	     				<c:if test="${myTeamDto.teamGrade eq 'leader'}">
@@ -166,7 +171,7 @@
 	     		</td>
 	     	</tr>
 	     	
-	     	<c:if test="${loginId == 'guest' }">
+	     	<c:if test="${loginId == null }">
 	     	<tr>
 	     		<th colspan="4"> 경기 참여는 로그인 후 가능 합니다.</th>
 	     	</tr>
@@ -179,7 +184,7 @@
 	     		<!--matchigState가 matching 상태일 시  -->
 	     		<c:if test="${dto.matchigState eq 'matching'}">
 	     			<th>
-	     				<c:if test="${loginId != 'guest' }">
+	     				<c:if test="${loginId != null }">
 		     				<button class="btn btn-outline-dark" id="gameApplyList">신청자</button>
 		     				<c:if test="${dto.writerId eq loginId }">
 		     					<button class="btn btn-outline-dark" id="gameInviteList">초대</button>
@@ -195,7 +200,7 @@
 		     		
 		     		<c:if test="${dto.writerId ne loginId }">
 			     		<th colspan="2" style="text-align:left;">
-			     		<c:if test="${loginId != 'guest' }">
+			     		<c:if test="${loginId != null }">
 				     		<c:if test="${myTeamDto.teamGrade eq 'leader'}">
 			     				<button class="btn btn-warning" id="applyChk" onclick="location.href='applyGame?matchingIdx=${dto.matchingIdx}'">신청</button>
 			     			</c:if>
@@ -246,7 +251,7 @@
 		     		
 	     		
 		     		<c:if test="${dto.writerId ne loginId }">
-			     		<c:if test="${loginId != 'guest' }">
+			     		<c:if test="${loginId != null }">
 			     			<button class="btn btn-outline-dark" onclick="window.open('matchingReport.go?matchingIdx=${dto.matchingIdx}','당근농장 신고','width=600px,height=400px')">신고</button>
 			     		</c:if>
 			     		<button class="btn btn-outline-dark" onclick="location.href='./list.do'">목록</button>
@@ -289,7 +294,7 @@
 	     	
 				<c:forEach items="${commentList}" var="commentList">
 					<tr>
-				    	<th style="width:10%;">${commentList.userId} </th>
+				    	<th style="width:10%;"><a href="#" onclick="window.open('../userprofilepop.go?userId=${commentList.userId}','회원프로필','width=400px,height=600px')">${commentList.userId}</a></th>
 				     	<td style="width:65%; padding-left:20px; text-align:left;">${commentList.commentContent}</td>
 				     	<td style="width:15%;">${commentList.commentWriteTime}</td>
 				     	<td style="width:10%;">
@@ -300,7 +305,7 @@
 	
 				     		</c:if>
 				     		<c:if test="${commentList.userId ne loginId}">
-					     		<c:if test="${loginId != 'guest' }">
+					     		<c:if test="${loginId != null }">
 					     			<a href="#" onclick="window.open('commentReport.go?commentIdx=${commentList.commentIdx}','당근농장 신고','width=600px,height=400px')">신고</a>				     			
 					     		</c:if>	 
 				     		</c:if>	     					
@@ -314,7 +319,7 @@
 				     		<th >
 				     			<input type="text" name="userId" value="${loginId}" style= "border:none; width:50px; background-color: #f8f9fa;" readonly>
 				     		</th>
-				     		<c:if test="${loginId != 'guest' }">
+				     		<c:if test="${loginId != null }">
 					     		<th colspan="2">
 					     			<input type="text" name="commentContent" id="commentContent" style="background-color: white; border: 1px solid black; width: 100%; padding-left:20px; text-align:left;">
 					     		</th>
@@ -322,7 +327,7 @@
 					     			<input type="button" class="btn btn-outline-dark" value="작성" onclick="subCommentChk()" />
 					     		</th>
 				     		</c:if>
-				     		<c:if test="${loginId == 'guest' }">
+				     		<c:if test="${loginId == null }">
 					     		<th colspan="3">
 					     			<input type="text" name="commentContent" style= "border:none; width:400px; background-color: #f8f9fa;" placeholder="댓글 작성은 로그인 후 가능합니다. " readonly />
 					     		</th>
@@ -341,10 +346,11 @@
 				<ul>
 					<c:forEach items="${playerList}" var="playerList">
 						<c:if test="${playerList.teamName eq dto.teamName}">
-							<li> ${playerList.teamName} ${playerList.userId}
+							<li> <a href="#" onclick="window.open('/cf/team/teamPagePop.go?teamIdx=${playerList.teamIdx}', '팀페이지팝업창', 'width=1000px,height=600px');">${playerList.teamName}</a>
+<a href="#" onclick="window.open('../userprofilepop.go?userId=${playerList.userId}','회원프로필','width=400px,height=600px')">${playerList.userId}</a>
 							<c:if test="${dto.writerId eq loginId }">
 								<c:if test="${dto.writerId ne playerList.userId }">
-									<button onclick="location.href='playerDelete?userId=${playerList.userId}&matchingIdx=${dto.matchingIdx}'">취소</button>
+									<button class="btn btn-outline-dark" onclick="location.href='playerDelete?userId=${playerList.userId}&matchingIdx=${dto.matchingIdx}'">취소</button>
 								</c:if>
 							</c:if>
 							</br>
@@ -354,10 +360,11 @@
 					</br>
 					<c:forEach items="${playerList}" var="playerList">
 						<c:if test="${playerList.teamName ne dto.teamName}">
-							<li> ${playerList.teamName} ${playerList.userId} 
+							<li> <a href="#" onclick="window.open('/cf/team/teamPagePop.go?teamIdx=${playerList.teamIdx}', '팀페이지팝업창', 'width=1000px,height=600px');">${playerList.teamName}</a>
+<a href="#" onclick="window.open('../userprofilepop.go?userId=${playerList.userId}','회원프로필','width=400px,height=600px')">${playerList.userId}</a>
 							<c:if test="${dto.writerId eq loginId }">
 								<c:if test="${dto.writerId ne playerList.userId }">
-									<button onclick="location.href='playerDelete?userId=${playerList.userId}&matchingIdx=${dto.matchingIdx}'">취소</button>
+									<button class="btn btn-outline-dark" onclick="location.href='playerDelete?userId=${playerList.userId}&matchingIdx=${dto.matchingIdx}'">취소</button>
 								</c:if>
 							</c:if>
 							</br>
@@ -366,19 +373,19 @@
 					</c:forEach>
 				</ul>
 				</div>
-				<button id="closePlayerListBtn">닫기</button>
+				<button class="btn btn-outline-dark" id="closePlayerListBtn">닫기</button>
 			</div>
 			
 			<div id="teamRegistPopup">
 					<h3>팀원등록</h3>
 					<hr>
-					<div id="scroll" style=" width:230px; height: 150px; overflow: auto;">
+					<div  id="scroll">
 						<c:if test="${teamMemberList ne null}">
 							<c:forEach items="${teamMemberList}" var="teamMemberList">
 								<c:if test="${teamMemberList.userId ne loginId}">
 									<li> 
-										${teamMemberList.userId}
-										<button id="registBtn_${teamMemberList.userId}" onclick="teamRegist('${teamMemberList.userId}', '${dto.matchingIdx}')">등록</button>
+										<a href="#" onclick="window.open('../userprofilepop.go?userId=${teamMemberList.userId}','회원프로필','width=400px,height=600px')">${teamMemberList.userId}</a>
+										<button class="btn btn-outline-dark" id="registBtn_${teamMemberList.userId}" onclick="teamRegist('${teamMemberList.userId}', '${dto.matchingIdx}')">등록</button>
 									</li>
 								</c:if>
 							</c:forEach>
@@ -387,7 +394,7 @@
 							<li> 등록할 수 있는 팀원이 없습니다. </li>
 						</c:if>
 					</div>
-					<button id="closeTeamRegistBtn" onclick="location.href='teamDetail.go?matchingIdx='+${dto.matchingIdx}">닫기</button>
+					<button class="btn btn-outline-dark" id="closeTeamRegistBtn" onclick="location.href='teamDetail.go?matchingIdx='+${dto.matchingIdx}">닫기</button>
 			</div>
 			
 	     		<div id="gameApplyListPopup">
@@ -395,28 +402,28 @@
 					<hr>
 					<ul>
 						<c:forEach items="${teamApplyList}" var="gameApplyList">
-							<li> ${gameApplyList.userId} ${gameApplyList.teamName} 
+							<li><a href="#" onclick="window.open('/cf/team/teamPagePop.go?teamIdx=${gameApplyList.teamIdx}', '팀페이지팝업창', 'width=1000px,height=600px');">${gameApplyList.teamName}</a>
 							<c:if test="${dto.writerId eq loginId }">
-								<button onclick="location.href='gameApplyAccept?userId=${gameApplyList.userId}&matchingIdx=${dto.matchingIdx}'">수락</button> / 
-								<button onclick="location.href='gameApplyReject?userId=${gameApplyList.userId}&matchingIdx=${dto.matchingIdx}'">거절</button>
+								<button class="btn btn-outline-dark" onclick="location.href='gameApplyAccept?userId=${gameApplyList.userId}&matchingIdx=${dto.matchingIdx}'">수락</button> / 
+								<button class="btn btn-outline-dark" onclick="location.href='gameApplyReject?userId=${gameApplyList.userId}&matchingIdx=${dto.matchingIdx}'">거절</button>
 							</c:if>
 							</br>
 							</li>
 						</c:forEach>
 					</ul>
-					<button id="closeGameApplyListBtn">닫기</button>
+					<button class="btn btn-outline-dark" id="closeGameApplyListBtn">닫기</button>
 				</div>
 				
 				<div id="gameInviteListPopup">
 					<h3>초대하기</h3>
 					<hr>
-					<div id="scroll" style="height: 150px; overflow: auto;">
+					<div id="scroll" >
 						<ul>
 							<c:if test="${teamInviteList !=null}">
 								<c:forEach items="${teamInviteList}" var="teamInviteList">
 									<li> 
-										${teamInviteList.teamName}
-										<button id="inviteBtn_${teamInviteList.userId}" onclick="cancelInvite('${teamInviteList.userId}', '${dto.matchingIdx}')">취소</button>
+										<a href="#" onclick="window.open('/cf/team/teamPagePop.go?teamIdx=${teamInviteList.teamIdx}', '팀페이지팝업창', 'width=1000px,height=600px');">${teamInviteList.teamName}</a>
+										<button class="btn btn-outline-dark" id="inviteBtn_${teamInviteList.userId}" onclick="cancelInvite('${teamInviteList.userId}', '${dto.matchingIdx}')">취소</button>
 									</li>
 								</c:forEach>
 							</c:if> 
@@ -424,13 +431,13 @@
 											
 							<c:forEach items="${teamList}" var="teamList">
 								<li> 
-									${teamList.teamName}
-									<button id="inviteBtn_${teamList.userId}" onclick="inviteTeam('${teamList.userId}', '${dto.matchingIdx}')">초대</button>
+									<a href="#" onclick="window.open('/cf/team/teamPagePop.go?teamIdx=${teamList.teamIdx}', '팀페이지팝업창', 'width=1000px,height=600px');">${teamList.teamName}</a>
+									<button class="btn btn-outline-dark" id="inviteBtn_${teamList.userId}" onclick="inviteTeam('${teamList.userId}', '${dto.matchingIdx}')">초대</button>
 								</li>
 							</c:forEach>
 						</ul>
 					</div>
-					<button id="closeGameInviteListBtn" onclick="location.href='teamDetail.go?matchingIdx='+${dto.matchingIdx}">닫기</button>
+					<button class="btn btn-outline-dark" id="closeGameInviteListBtn" onclick="location.href='teamDetail.go?matchingIdx='+${dto.matchingIdx}">닫기</button>
 				</div>
 		   
 		   

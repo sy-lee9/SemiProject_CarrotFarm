@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>🏀 당근농장</title>
 <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>  
@@ -15,17 +15,91 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <style>
-	table, th, td{
-      border : 1px solid black;
-      border-collapse: collapse;
-      padding : 5px 10px;
-   }
+   
+   body{
+		position:relative;
+		font-size:15px;
+		padding : 10px;
+		min-width: 1200px;
+	}
+	
+	#content {
+		width:78%;
+		height : 83%;
+		background-color: #f8f9fa;
+		padding: 10 30 10;
+		margin : 5px;
+		float:right;
+		
+	}
+	
+	#LNB {
+		width:20%;
+		height : 83%;
+		background-color: #f8f9fa;
+		float:left;
+		margin : 5px;
+		font-weight: bold;
+        font-size: 15px;
+		text-align:center;
+		
+	}
+	a {
+	  color : black;
+	}
+	
+	a:link {
+	  color : black;
+	}
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	 text-decoration-line: none;
+	  color : #FFA500 ;
+	}
+	
+	.pagination .page-link {
+  		color: gray; /* 기본 글자색을 검정색으로 지정 */
+	}
+
+	.pagination .page-item.active .page-link {
+ 		background-color: #FFA500;
+ 		border:none;
+	}
+	#searchCourt{
+		width: 300px;
+    	height: 22px;
+    	margin : 5px;
+	}
+	
+	table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border-bottom: 1px solid black;
+    padding: 8px;
+    text-align: left;
+  }
 </style>
 </head>
 <body>
-	<%@ include file="./GNB.jsp" %>
-	<button onclick="window.open('courtTipOff.go','경기장 제보','width=400px,height=400px')">경기장 제보</button>
-	<select name="gu" id="gu" onchange="courtSort('gu')">
+	<div style="float: right;">
+		<%@ include file="loginBox.jsp" %>
+	</div> 
+	<%@ include file="GNB.jsp" %>
+	<div id="LNB">
+		<br/><br/>
+		 <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
+	    <br/><br/><br/><br/>
+	    <a href="/cf/court" style = "color: orange">경기장 리스트</a>
+	    
+	</div>
+	<div id="content">
+	
+	<select name="gu" id="gu" onchange="courtSort('gu')" style = "margin-left : 30px">
 		<option value="none">위치</option>
 		<option value="서울특별시">서울</option>
 		<c:forEach items="${guList}" var="gu">
@@ -38,78 +112,54 @@
       	<option value="in">실내</option>
       	<option value="out">실외</option>
       </select>
-	<div id="map" style="width:500px;height:400px;float:left;"></div>
+      
+	<div id="map" style="width:420px; height:420px; float:left; margin: 20px, 10px, 0px, 20px;"></div>
 	<input id="searchCourt" type="text" name="searchCourt" placeholder="경기장 검색">
-	<button type="button" onclick="courtSort('courtSearch')">검색</button>
-	
+	&nbsp; &nbsp; 
+	<button type="button" onclick="courtSort('courtSearch')" class="btn btn-outline-dark" id = "ssearchbutton">검색</button>
+	&nbsp;  &nbsp; 
+	<button onclick="window.open('courtTipOff.go','경기장 제보','width=400px,height=400px')" class="btn btn-outline-dark" id = "courtjaebo">경기장 제보</button>
 	<div>
-	<table id="courtList">
+	<table id="courtList" style="width:800px; margin : 10px; float : right" >
 		<thead>
 		
 		</thead>
 		<tbody id="list">			
 			<c:forEach items="${courtList}" var="court" varStatus="status" end="9">
 				<tr>
-					<th>${court.courtState}</th>
-					<th>${court.gu}</th>				
-					<th>
+					<td style="width:10%;">${court.courtState}</td>
+					<td style="width:10%;">${court.gu}</td>				
+					<td style="width:10%;">
 						<c:if test="${court.courtInOut eq 'out'}">실외</c:if>
 						<c:if test="${court.courtInOut eq 'in'}">실내</c:if>
-					</th>
-					<th id="courtName"><a href="courtDetail.do?courtIdx=${court.courtIdx}">${court.courtName}</a></th>
-					<th>${court.courtAddress}</th>
-					<th>☆${court.courtStar}</th>
+					</td>
+					<td style="width:30%;" id="courtName"><a href="courtDetail.do?courtIdx=${court.courtIdx}">${court.courtName}</a></td>
+					<td style="width:30%;">${court.courtAddress}</td>
+					<td style="width:10%;">☆${court.courtStar}</td>
 				</tr>
 			</c:forEach>
-			
-			
 		</tbody>
-		<tbody>
+		
+		
+		<tbody style = "margin-top: 50px;">
 			<tr>
-			<td colspan="6" id="paging">	
-				<!-- 	플러그인 사용	(twbsPagination)	-->
+			<th colspan="6" id="paging" style="border: none; width:800px;">	
 				<div class="container">									
 					<nav aria-label="Page navigation" style="text-align:center">
 						<ul class="pagination" id="pagination"></ul>
 					</nav>					
 				</div>
-			</td>
+			</th>
 		</tr>
 		</tbody>
 	</table>
+	</div>
 	</div>
 </body>
 <script>
 	paging("${totalPages}");
 	var showPage = 1;
 	var address="${address}";
-	/*$('.test').change(function(){
-		address = $(this).val();
-		var inOut = $('#inOut').val();
-		console.log(inOut);
-		$.ajax({
-			type:'get',
-			url:'courtList.ajax',
-			data:{"gu":address,
-				  "inOut":inOut
-			},
-			dataType:'json',
-			success:function(data){
-				console.log(data);
-				console.log(data.courtList.length);
-				for(var i=0;i<markers.length;i++){
-					markers[i].setMap(null);
-				}
-				console.log(data.courtList);
-				markerDraw(data.courtList);
-				courtListDraw(data.courtList);
-				mapGeocoder(address);
-			},
-			error:function(e){
-				console.log(e);
-			}
-		});	
-	});*/
 	
 	function courtSort(type,page1=1){
 		// 위치 , 실내 , 검색어 + type -> gu inout search -> if(type != 'search') {search=""}
@@ -323,16 +373,16 @@
 		var content = '';
 		list.forEach(function(item,index){
 			content += '<tr>';
-			content += '<th>'+item.courtState+'</th>';
-			content+='<th>'+item.gu+'</th>';
+			content += '<td>'+item.courtState+'</td>';
+			content+='<td>'+item.gu+'</td>';
 			if(item.courtInOut=='out'){
-				content +='<th>실외</th>';
+				content +='<td>실외</td>';
 			}else{
-				content +='<th>실내</th>';
+				content +='<td>실내</td>';
 			}
-			content +='<th id="courtName"><a href="courtDetail.do?courtIdx='+item.courtIdx+'">'+item.courtName+'</a></th>';
-			content +='<th>'+item.courtAddress+'</th>';
-			content +='<th>'+item.courtStar+'</th>';
+			content +='<td id="courtName"><a href="courtDetail.do?courtIdx='+item.courtIdx+'">'+item.courtName+'</a></td>';
+			content +='<td>'+item.courtAddress+'</td>';
+			content +='<td>'+item.courtStar+'</td>';
 		});
 		$('#list').append(content);
 	}
@@ -355,6 +405,11 @@
 		} 
 		});
 	}
+	
+	$(document).ready(function() {
+		  $('#courtjaebo').css('margin-top', '-2px');
+		  $('#ssearchbutton').css('margin-top', '-2px');
+		});
 </script>
 </html>
 	

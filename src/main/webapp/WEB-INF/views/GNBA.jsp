@@ -69,19 +69,19 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav flex-grow-1">
       <li class="nav-item active flex-grow-1">
-        <a class="nav-link" href="/cf/matching/list.do">경기 모집</a>
+        <a class="nav-link" href="/cf/adminUser">회원관리</a>
       </li>
       <li class="nav-item flex-grow-1">
-        <a class="nav-link" href="/cf/court">경기장</a>
+        <a class="nav-link" href="/cf/adminTeam">팀관리</a>
       </li>
       <li class="nav-item flex-grow-1">
-        <a class="nav-link" href="/cf/noticeboardList.do">게시판</a>
+        <a class="nav-link" href="/cf/adminCourt">경기장관리</a>
       </li>
       <li class="nav-item flex-grow-1">
-        <a class="nav-link" href="/cf/team">팀페이지</a>
+        <a class="nav-link" href="/cf/adminTag">태그관리</a>
       </li>
       <li class="nav-item flex-grow-1">
-        <a class="nav-link" href="/cf/userinfo.go">마이페이지</a>
+        <a class="nav-link" href="/cf/adminReport">신고관리</a>
       </li>
     </ul>
   </div>

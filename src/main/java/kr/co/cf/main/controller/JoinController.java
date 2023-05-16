@@ -70,9 +70,22 @@ public class JoinController {
 		if(dto != null) {
 			session.setAttribute("loginId", id);
 			session.setAttribute("nickName", dto.getNickName());
+			
+			String loginPhotoName = service.findPhotoName(id);
+			if(loginPhotoName == null) {
+				loginPhotoName="기본프로필.png";
+			}
+			session.setAttribute("loginPhotoName", loginPhotoName);
+			
+			
+			if(dto.getUserId().contains("admin")) {
+				session.setAttribute("adminRight", "true");
+				
+			}
 			map.put("user", dto);
 		}
 		
+
 		
 		return map;
 	}
@@ -81,7 +94,11 @@ public class JoinController {
     public String logout(HttpSession session) {
        
        session.removeAttribute("loginId");
-       return "main";
+       if(session.getAttribute("adminRight")!=null) {
+    	   
+    	   session.removeAttribute("adminRight");
+       }
+       return "redirect:/";
     }
 
 	/* 회원가입 */
@@ -137,7 +154,7 @@ public class JoinController {
 	         
 	         String page = "redirect:/";
 	         
-	         if(session.getAttribute("nickName") != null) {
+	         if(session.getAttribute("loginId") != null) {
 	            page = "userDelete";
 	         }
 	         
@@ -149,9 +166,9 @@ public class JoinController {
 	         
 	         String page = "redirect:/";
 	         
-	         if(session.getAttribute("nickName") != null) {
-	            service.userdeletetrue(session.getAttribute("nickName"));
-	            session.removeAttribute("nickName");
+	         if(session.getAttribute("loginId") != null) {
+	            service.userdeletetrue(session.getAttribute("loginId"));
+	            session.removeAttribute("loginId");
 	            page = "userDeleteComplete";
 	         }
 	         
@@ -161,7 +178,7 @@ public class JoinController {
 	      @RequestMapping(value="/userinfo.go")
 	      public String userInfo(HttpSession session, Model model) {  
 	         
-	         String page = "redirect:/";      
+	         String page = "login";      
 	         
 	         logger.info("아이디 : "+session.getAttribute("loginId"));
 	         
@@ -178,7 +195,7 @@ public class JoinController {
 	      public String userInfoUpdate(HttpSession session, Model model) {
 	    	  
 	    	String page = "redirect:/";		
-	  		JoinDTO dto = service.userInfo(session.getAttribute("nickName"));
+	  		JoinDTO dto = service.userInfo(session.getAttribute("loginId"));
 	  		if(dto != null) {
 	  			page = "userInfoUpdate";
 	  			model.addAttribute("user", dto);
@@ -187,25 +204,56 @@ public class JoinController {
 	  	}
 	      
 	      @RequestMapping(value="/userinfoupdate.do", method = RequestMethod.POST)
-	  	  public String userInfoUpdate(@RequestParam HashMap<String, String> params, Model model, MultipartFile photo) {
+	  	  public String userInfoUpdate(HttpSession session, @RequestParam HashMap<String, String> params, Model model, MultipartFile photo) {
 	  		logger.info("params : "+params);
-	  		return service.userInfoUpdate(params,photo);
+	  		
+	  		String path = service.userInfoUpdate(params,photo);
+	  		
+	  		String loginPhotoName = service.findPhotoName(params.get("userId"));
+	  		
+	  		session.setAttribute("loginPhotoName", loginPhotoName);
+	  		
+	  		return path;
 	  	}
 	      
+	      
 	      @RequestMapping(value="/mygames")
-	  	public String teamGameList(Model model) {
-	  		return "myGames";
+	  	public String myGameList(Model model,HttpSession session) {
+	    	  if(session.getAttribute("loginId") != null) {
+		             JoinDTO dto = service.userInfo(session.getAttribute("loginId"));             
+		             model.addAttribute("user",dto);
+		             
+		          }
+	    	  return "myGames";
 	  	}
 	  	
 	  	@RequestMapping(value="/mygameList.ajax", method = RequestMethod.POST)
 	  	@ResponseBody
-	  	public HashMap<String, Object> gameList(@RequestParam HashMap<String, Object> params){
-	  		logger.info("list params : "+params);
-	  		return service.gameList(params);
+	  	public HashMap<String, Object> myGameList(@RequestParam HashMap<String, Object> params){
+	  		logger.info("myGameList params : "+params);
+	  		return service.reviewList(params);
+	  	}
+	  	
+	  	
+	  	@RequestMapping(value="/allgames")
+	  	public String allGameList(Model model,HttpSession session) {
+	    	  if(session.getAttribute("loginId") != null) {
+		             JoinDTO dto = service.userInfo(session.getAttribute("loginId"));             
+		             model.addAttribute("user",dto);
+		             
+		          }
+	    	  return "allGames";
+	  	}
+	  	
+	  	@RequestMapping(value="/allgameList.ajax", method = RequestMethod.POST)
+	  	@ResponseBody
+	  	public HashMap<String, Object> allGameList(@RequestParam HashMap<String, Object> params){
+	  		logger.info("allGameList params : "+params);
+	  		return service.allGameList(params);
 	  	}
 	  	
 	  	@RequestMapping(value="/userprofile.go")
-	  	public String userprofile(@RequestParam String userId, Model model) {
+	  	public String userprofile(@RequestParam String userId, Model model, HttpSession session) {
 	  		logger.info(userId);
 	  		ArrayList<JoinDTO> list= service.profileGames(userId);
 	  		model.addAttribute("profileGames",list);
@@ -215,6 +263,12 @@ public class JoinController {
 	  		
 	  		float mannerPoint = matchingService.mannerPoint(userId);
 	  		model.addAttribute("mannerPoint", mannerPoint);
+	  		
+	  		 if(session.getAttribute("loginId") != null) {
+	             dto = service.userInfo(session.getAttribute("loginId"));             
+	             model.addAttribute("user",dto);
+	             
+	          }
 	  		
 	  		return "userProfile";
 	  	}

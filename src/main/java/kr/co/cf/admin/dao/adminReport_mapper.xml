@@ -214,7 +214,7 @@
 	
 	<insert id="reportAlarm" parameterType="hashmap">
 		INSERT INTO alarm (categoryId,userId,alarmContent,alarmKind)
-		VALUES(#{categoryId},#{reportUserId},'운영정책에 의해 경고받으셨습니다.',#{reportIdx})
+		VALUES('r',#{reportUserId},#{reportReason},#{reportIdx})
 	</insert>
 	
 	
