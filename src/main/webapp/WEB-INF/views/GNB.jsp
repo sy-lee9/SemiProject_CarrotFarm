@@ -40,7 +40,7 @@
       }
       .navbar-nav > li > a {
           font-weight: bold;
-           font-size: 15px;
+           font-size: 18px;
       }   
       
       .navbar-brand {

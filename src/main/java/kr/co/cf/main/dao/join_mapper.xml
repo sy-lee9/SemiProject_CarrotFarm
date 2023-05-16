@@ -33,7 +33,7 @@
    </select>
    
    <select id="login" resultType="kr.co.cf.main.dto.JoinDTO">
-		SELECT nickName FROM user WHERE
+		SELECT userId FROM user WHERE
 			userId = #{param1} AND userPw = #{param2} AND userBlind = false	
 	</select>
 	
@@ -52,7 +52,7 @@
 	
 	<!-- 유저 블라인드 -->
 	<update id="userdelete">
-      UPDATE user SET userBlind = true  WHERE nickName = #{param1}
+      UPDATE user SET userBlind = true, userState='탈퇴'  WHERE userId = #{param1}
    </update>
    
    <!-- 회원 정보 -->
@@ -90,7 +90,9 @@
 	</update>
 	
 	
-	<select id="gameList" resultType="kr.co.cf.main.dto.JoinDTO">
+	<!-- 리뷰 경기 -->
+	
+	<select id="reviewList" resultType="kr.co.cf.main.dto.JoinDTO">
 		SELECT 
 			m.matchingIdx,
 			(SELECT gu FROM location WHERE locationIdx = 
@@ -164,6 +166,71 @@
 	</select>
 	
 	
+	
+	<!-- 참여했던 전체 경기 -->
+	
+	<select id="allGameList" resultType="kr.co.cf.main.dto.JoinDTO">
+		SELECT 
+			m.matchingIdx,
+			(SELECT gu FROM location WHERE locationIdx = 
+				(SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu,
+			m.subject,
+			m.gameDate,
+			m.gamePlay
+		FROM matching m 
+		INNER JOIN game g ON m.matchingIdx = g.matchingIdx
+		WHERE g.userId = #{userId}
+		ORDER BY m.matchingIdx DESC
+		LIMIT 10 OFFSET #{offset}
+	</select>
+	
+	<select id="allGameDateListDesc" resultType="kr.co.cf.main.dto.JoinDTO">
+		SELECT 
+			m.matchingIdx,
+			(SELECT gu FROM location WHERE locationIdx = 
+				(SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu,
+			m.subject,
+			m.gameDate,
+			m.gamePlay
+		FROM matching m 
+		INNER JOIN game g ON m.matchingIdx = g.matchingIdx
+		WHERE AND g.userId = #{userId}
+		ORDER BY m.gameDate DESC
+		LIMIT 10 OFFSET #{offset}
+	</select>
+	
+	<select id="allGameDateListAsc" resultType="kr.co.cf.main.dto.JoinDTO">
+		SELECT 
+			m.matchingIdx,
+			(SELECT gu FROM location WHERE locationIdx = 
+				(SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu,
+			m.subject,
+			m.gameDate,
+			m.gamePlay
+		FROM matching m 
+		INNER JOIN game g ON m.matchingIdx = g.matchingIdx
+		WHERE g.userId = #{userId}
+		ORDER BY m.gameDate ASC	
+		LIMIT 10 OFFSET #{offset}
+	</select>
+	
+	<select id="allSearchGameList" resultType="kr.co.cf.main.dto.JoinDTO">
+		SELECT 
+			m.matchingIdx,
+			(SELECT gu FROM location WHERE locationIdx = 
+				(SELECT locationIdx FROM court WHERE courtIdx = m.courtIdx)) AS gu,
+			m.subject,
+			m.gameDate,
+			m.gamePlay
+		FROM matching m
+		INNER JOIN game g ON m.matchingIdx = g.matchingIdx
+		WHERE g.userId = #{userId}
+			AND subject LIKE CONCAT(#{searchText})
+		ORDER BY m.matchingIdx DESC		
+		LIMIT 10 OFFSET #{offset}
+	</select>
+	
+	
 	<!-- 회원 프로필 -->
 	
 	<select id="profileGames" resultType="kr.co.cf.main.dto.JoinDTO">
@@ -207,6 +274,10 @@
       INSERT INTO report(categoryId,userId,reportContent,reportState,reportId,reportUserId)
       VALUES('ru',#{userId},#{reportContent},'미처리',#{reportId},#{reportUserId})
    </insert>
+   
+   <select id="findPhotoName" resultType="String">
+   	select photoName from photo where photoId=#{param1}
+   </select>
 
 	
 </mapper>

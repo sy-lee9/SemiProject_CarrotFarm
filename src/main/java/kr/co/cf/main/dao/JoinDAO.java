@@ -43,7 +43,7 @@ public interface JoinDAO {
 	int userInfoUpdateloc(int locationIdx, String userId);
 	
 
-	ArrayList<JoinDTO> gameList(HashMap<String, Object> params);
+	ArrayList<JoinDTO> reviewList(HashMap<String, Object> params);
 
 	ArrayList<JoinDTO> GameDateList(HashMap<String, Object> params);
 
@@ -52,6 +52,16 @@ public interface JoinDAO {
 	ArrayList<JoinDTO> GameDateListDesc(HashMap<String, Object> params);
 
 	ArrayList<JoinDTO> GameDateListAsc(HashMap<String, Object> params);
+	
+	ArrayList<JoinDTO> allGameList(HashMap<String, Object> params);
+
+	ArrayList<JoinDTO> allGameDateList(HashMap<String, Object> params);
+
+	ArrayList<JoinDTO> allSearchGameList(HashMap<String, Object> params);
+
+	ArrayList<JoinDTO> allGameDateListDesc(HashMap<String, Object> params);
+
+	ArrayList<JoinDTO> allGameDateListAsc(HashMap<String, Object> params);
 
 	ArrayList<JoinDTO> profileGames(String userId);
 
@@ -66,6 +76,8 @@ public interface JoinDAO {
 	String selectPhoto(String userId);
 
 	void userReport(HashMap<String, String> params);
+
+	String findPhotoName(String id);
 
 	
 

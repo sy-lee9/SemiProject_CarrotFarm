@@ -13,26 +13,58 @@
 <style>
 
 	body{
-      position:relative;
-      font-size:15px;
-      padding : 10px;
-	  }
-	   
-	   #content {
-	      width:78%;
-	      background-color: #f8f9fa;
-	      padding: 10 30 10;
-	      margin : 5px;
-	      float:right;	      
-	   }
-	   
-	   #LNB {
-	      width:20%;
-	      height : 80%;
-	      background-color: #f8f9fa;
-	      float:left;
-	      margin : 5px;
-	   }
+		position:relative;
+		font-size:15px;
+		padding : 10px;
+		min-width: 1200px;
+	}
+	
+	#content {
+		width:78%;
+		background-color: #f8f9fa;
+		padding: 10 30 10;
+		margin : 5px;
+		float:right;
+		
+	}
+	
+	#LNB {
+		width:20%;
+		height : 83%;
+		background-color: #f8f9fa;
+		float:left;
+		margin : 5px;
+		font-weight: bold;
+        font-size: 15px;
+		text-align:center;
+		
+	}
+	
+	a {
+	  color : balck;
+	}
+	
+	a:link {
+	  color : balck;
+	}
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	 text-decoration-line: none;
+	  color : #FFA500 ;
+	}
+	
+	.pagination .page-link {
+  		color: gray; /* 기본 글자색을 검정색으로 지정 */
+	}
+
+	.pagination .page-item.active .page-link {
+ 		background-color: #FFA500;
+ 		border:none;
+	}
+	
+	
 
     .right-div {
         float: right;
@@ -52,7 +84,7 @@
 	<div id="LNB">
        <ul>
          <li>
-           <div style="width: 180px; height: 150px; border : 1px solid black; border-collapse: collapse;">프로필</div>
+           <img width="180" height="180" src="/photo/${user.photoName}"/>
          </li>
          <li>
            <a href="/cf/userinfo.go">회원 정보</a>
@@ -61,18 +93,41 @@
            <a href="/cf/userprofile.go">회원 프로필</a>
          </li>
          <li>
+           <a href="/cf/userNoticeAlarm">알림</a>
+         </li>
+         <li>
            <a href="/cf/mygames">참여 경기</a>
          </li>
        </ul>
    </div>
-
+	<div id="content" >
 	<h3>회원 프로필</h3>
 	
-	<div id="inline">
+	<div id="inline" style=" float:left;">
 		<img width="200" src="/photo/${profileInfo.photoName}"/>
 	</div>
 	</br>
-	<div id="inline">
+	<div>
+	<table>
+		<tr>
+				<th>참여 경기 목록</th>
+			</tr>
+			<c:if test="${profileGames eq '[]'}">
+				<tr>
+					<th colspan="4">등록된 글이 없습니다.</th>
+				</tr>
+			</c:if>
+			<c:forEach items="${profileGames}" var="bbs" end="4">
+				<tr>
+					<td>${bbs.gu}</td>
+					<td>${bbs.subject}</td>
+					<td>${bbs.gameDate}</td>
+					<td>${bbs.gamePlay}</td>
+				</tr>
+			</c:forEach>
+		</table>
+	</div>
+	<div>
 		<table>
 			<tr>
 				<th>닉네임</th>
@@ -98,36 +153,17 @@
 				<th>매너 점수</th>
 				<td>${mannerPoint}</td>
 			</tr>
-		</table>
+			
+	</table>
 	</div>
-	
-	
-	<div class="right-div">
-		<table>
-			<tr>
-				<th>참여 경기 목록</th>
-			</tr>
-			<c:if test="${profileGames eq '[]'}">
-				<tr>
-					<th colspan="4">등록된 글이 없습니다.</th>
-				</tr>
-			</c:if>
-			<c:forEach items="${profileGames}" var="bbs" end="4">
-				<tr>
-					<td>${bbs.gu}</td>
-					<td>${bbs.subject}</td>
-					<td>${bbs.gameDate}</td>
-					<td>${bbs.gamePlay}</td>
-				</tr>
-			</c:forEach>
-		</table>
-	</div>
+
 	
 	</br>
 	<c:set var="loginId" value="${sessionScope.loginId}" />
 	<c:if test="${loginId != null}">
 		<button onclick="window.open('userReport.go?userId=${profileInfo.userId}&userIdx=${profileInfo.userIdx}','회원 신고','width=600px,height=400px')">신고</button>
 	</c:if>
+	</div>
 </body>
 <script>
 var profileGames ="${profileGames}";

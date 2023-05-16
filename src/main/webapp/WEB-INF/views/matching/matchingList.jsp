@@ -42,7 +42,7 @@
 		float:left;
 		margin : 5px;
 		font-weight: bold;
-        font-size: 15px;
+        font-size: 18px;
 		text-align:center;
 		
 	}
@@ -118,7 +118,6 @@
 
 	<div id="LNB">
 		<br/><br/>
-		 <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
 	      <br/><br/>
 	    <a href="/cf/matching/list.do">개인 모집글</a> 
 	      <br/><br/>
@@ -291,7 +290,7 @@ function listPrint(list){
 		content +='<td id="gamePlayer"> ' + item.matchingNumforSure +'/'+ item.matchingNum+ '</td>';
 		content +='<td id="subject" style="text-align:left; padding-left:30px;"><a href="detail.go?matchingIdx='+ item.matchingIdx+'">'+item.subject+'</a></td>';
 		content +='<td>'+item.gameDate+'</td>';
-		content += '<td id="writerId"><a href="#" onclick="window.open(\'../userprofilepop.go?userId=' + item.writerId + '\',\'회원프로필\',\'width=600px,height=400px\')">' + item.writerId + '</a></td>';
+		content += '<td id="writerId"><a href="#" onclick="window.open(\'../userprofilepop.go?userId=' + item.writerId + '\',\'회원프로필\',\'width=400px,height=600px\')">' + item.writerId + '</a></td>';
 		content +='<td>'+item.bHit+'</td>';
 		content +='</tr>';
 		
