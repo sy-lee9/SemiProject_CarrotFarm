@@ -14,7 +14,7 @@
       
          width: 150px;
          height: 50px;
-         background-image: url("/img/upload/mainLogo.png"); /* 로고 이미지 추가 */
+         background-image: url("/photo/mainLogo.png"); /* 로고 이미지 추가 */
          background-size: cover;
          background-position: center;
          background-repeat: no-repeat;
@@ -65,6 +65,7 @@
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
+  
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav flex-grow-1">
       <li class="nav-item active flex-grow-1">

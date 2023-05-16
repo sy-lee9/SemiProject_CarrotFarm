@@ -106,13 +106,13 @@
 	<br/>
 		<ul class="nav nav-tabs">
 		  <li class="nav-item">
-		    <a class="nav-link" href="/cf/userNoticeAlarm">공지사항</a>
+		    <a class="nav-link " href="/cf/userNoticeAlarm">공지사항</a>
 		  </li>
 		  <li class="nav-item">
-		    <a class="nav-link active" href="/cf/userGameAlarm">경기알림</a>
+		    <a class="nav-link " href="/cf/userGameAlarm">경기알림</a>
 		  </li>
 		  <li class="nav-item">
-		    <a class="nav-link" href="/cf/userWarningAlarm">경고알림</a>
+		    <a class="nav-link active" href="/cf/userWarningAlarm">경고알림</a>
 		  </li>
 		  <li class="nav-item">
 		    <a class="nav-link" href="/cf/userTeamAlarm">팀 알림</a>
@@ -125,12 +125,11 @@
 			<thead>
 					<tr>
 						<th style="width:20%;">No</th>
-						<th style="width:50%;">모집글</th>
-						<th style="width:30%;">알림 내용</th>
+						<th style="width:80%;">경고내역</th>
 					</tr>
 				</thead>
 				<tr>
-					<th colspan="3"> <hr/> </th>
+					<th colspan="2"> <hr/> </th>
 				</tr>
 				<tbody>
 				
@@ -145,7 +144,7 @@
 				
 				
 				<tr>
-				  <th colspan="3" id="paging" style="text-align:center;">  
+				  <th colspan="2" id="paging" style="text-align:center;">  
 				    <div class="container" >    
 				    <hr/>              
 				      <nav aria-label="Page navigation">
@@ -176,7 +175,7 @@ listCall(showPage);
 function listCall(page){
    $.ajax({
       type:'post',
-      url:'userGameAlarm.ajax',
+      url:'userWarningAlarm.ajax',
       data:{
     	  'page':page,
     	  'userId':userId
@@ -208,7 +207,7 @@ function listPrint(list){
 	
 	if(list.length==0){
 		content +='<tr>';
-		content +='<th colspan="3"> 확인할 알림이 없습니다. </th>';
+		content +='<th colspan="2"> 확인할 알림이 없습니다. </th>';
 		content +='</tr>';
 	}else{
 		list.forEach(function(item,idx){
@@ -216,56 +215,17 @@ function listPrint(list){
 		
 		content +='<tr>';
 		content +='<td>'+item.alarmIdx+'</td>';
-		var delAlarm = item.alarmcontent;
-		
-		if (delAlarm.startsWith('삭제')) {
-			var delSubject = delAlarm.substring(2);
-			console.log(delSubject);
-			content +='<td id="subject">['+ delSubject +']</td>';
-			content +='<td> 삭제 </td>';
-			
-		} else{
-			/* 모집글 제목 출력 */
-		
-			if(item.categoryId=='m01'){
-				content +='<td id="subject"><a href="matching/detail.go?matchingIdx='+ item.matchingIdx+'">'+item.subject+'</a></td>';
-			}
-			if(item.categoryId=='m02'){
-				content +='<td id="subject"><a href="matching/teamDetail.go?matchingIdx='+ item.matchingIdx+'">['+item.subject+']</a></td>';
-			}
-			
-			
-			if(item.alarmcontent=='초대'){
-				content +='<td>'+item.alarmcontent+' <button class="btn btn-outline-dark" onclick="inviteAccept('+item.matchingIdx+')">수락</button> <button class="btn btn-outline-dark" onclick="inviteReject('+item.matchingIdx+')">거절</button></td>';
-			}else{
-				content +='<td>'+item.alarmcontent+'</td>';
-			}
-		}
-
-		
-		
-		
+		content +='<td>'+item.alarmkind+'</td>';
 		content +='</tr>';
 		
 	});
-	}
+}
 	
 	
 	$('#list').empty();
 	$('#list').append(content);
 } 
 	
-
-	function inviteAccept(matchingIdx) {
-	 	console.log(matchingIdx);
-	 	location.href='inviteAccept?matchingIdx='+matchingIdx;
-	}
-
-	
-	function inviteReject(matchingIdx) {
-		location.href='inviteReject?matchingIdx='+matchingIdx;
-	}
-
 
 </script>
 </html>

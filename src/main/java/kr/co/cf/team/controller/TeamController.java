@@ -168,7 +168,6 @@ public class TeamController {
 						logger.info("해당 팀 팀원 확인");	
 						model.addAttribute("teamUserChk",true);
 					}
-				}				
 			}	
 			page = "/team/teamPage";
 		}		

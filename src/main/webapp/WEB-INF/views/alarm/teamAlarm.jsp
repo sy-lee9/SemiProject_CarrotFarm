@@ -106,16 +106,16 @@
 	<br/>
 		<ul class="nav nav-tabs">
 		  <li class="nav-item">
-		    <a class="nav-link" href="/cf/userNoticeAlarm">공지사항</a>
+		    <a class="nav-link " href="/cf/userNoticeAlarm">공지사항</a>
 		  </li>
 		  <li class="nav-item">
-		    <a class="nav-link active" href="/cf/userGameAlarm">경기알림</a>
+		    <a class="nav-link " href="/cf/userGameAlarm">경기알림</a>
 		  </li>
 		  <li class="nav-item">
 		    <a class="nav-link" href="/cf/userWarningAlarm">경고알림</a>
 		  </li>
 		  <li class="nav-item">
-		    <a class="nav-link" href="/cf/userTeamAlarm">팀 알림</a>
+		    <a class="nav-link active" href="/cf/userTeamAlarm">팀 알림</a>
 		  </li>
 		</ul>
 		<!-- </br>
@@ -125,8 +125,8 @@
 			<thead>
 					<tr>
 						<th style="width:20%;">No</th>
-						<th style="width:50%;">모집글</th>
-						<th style="width:30%;">알림 내용</th>
+						<th style="width:20%;">팀</th>
+						<th style="width:60%;">경고내역</th>
 					</tr>
 				</thead>
 				<tr>
@@ -176,7 +176,7 @@ listCall(showPage);
 function listCall(page){
    $.ajax({
       type:'post',
-      url:'userGameAlarm.ajax',
+      url:'userTeamAlarm.ajax',
       data:{
     	  'page':page,
     	  'userId':userId
@@ -216,56 +216,17 @@ function listPrint(list){
 		
 		content +='<tr>';
 		content +='<td>'+item.alarmIdx+'</td>';
-		var delAlarm = item.alarmcontent;
-		
-		if (delAlarm.startsWith('삭제')) {
-			var delSubject = delAlarm.substring(2);
-			console.log(delSubject);
-			content +='<td id="subject">['+ delSubject +']</td>';
-			content +='<td> 삭제 </td>';
-			
-		} else{
-			/* 모집글 제목 출력 */
-		
-			if(item.categoryId=='m01'){
-				content +='<td id="subject"><a href="matching/detail.go?matchingIdx='+ item.matchingIdx+'">'+item.subject+'</a></td>';
-			}
-			if(item.categoryId=='m02'){
-				content +='<td id="subject"><a href="matching/teamDetail.go?matchingIdx='+ item.matchingIdx+'">['+item.subject+']</a></td>';
-			}
-			
-			
-			if(item.alarmcontent=='초대'){
-				content +='<td>'+item.alarmcontent+' <button class="btn btn-outline-dark" onclick="inviteAccept('+item.matchingIdx+')">수락</button> <button class="btn btn-outline-dark" onclick="inviteReject('+item.matchingIdx+')">거절</button></td>';
-			}else{
-				content +='<td>'+item.alarmcontent+'</td>';
-			}
-		}
-
-		
-		
-		
+		content +='<td> <a href="team/teamPage.go?teamIdx='+item.teamIdx+'">'+item.teamName+'</a></td>';
+		content +='<td>'+item.alarmcontent+'</td>';
 		content +='</tr>';
-		
 	});
-	}
+}
 	
 	
 	$('#list').empty();
 	$('#list').append(content);
 } 
 	
-
-	function inviteAccept(matchingIdx) {
-	 	console.log(matchingIdx);
-	 	location.href='inviteAccept?matchingIdx='+matchingIdx;
-	}
-
-	
-	function inviteReject(matchingIdx) {
-		location.href='inviteReject?matchingIdx='+matchingIdx;
-	}
-
 
 </script>
 </html>
