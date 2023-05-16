@@ -44,9 +44,7 @@ public class TeamController {
 			String teamIdx = TeamService.getTeamIdx(loginId);
 			logger.info("get teamIdx : "+teamIdx);
 			model.addAttribute("teamIdx",teamIdx);
-		}else {
-			model.addAttribute("teamIdx",0);
-		}		
+		}	
 		
 		String msg = (String) session.getAttribute("msg");
 		logger.info(msg);
@@ -438,8 +436,8 @@ public class TeamController {
 	
 	//신청한 게임 모집글 변경사항 알림
 	@RequestMapping(value="/team/appGameUpdateAlarm.go")
-	public String appGameAlarm(Model model, @RequestParam String teamIdx,HttpSession session) {
-		logger.info("appGameAlarm : "+teamIdx);			
+	public String appGameUpdateAlarm(Model model, @RequestParam String teamIdx,HttpSession session) {
+		logger.info("appGameUpdateAlarm : "+teamIdx);			
 
 		String page = "redirect:/team/teamPage.go";				
 		String loginId = (String) session.getAttribute("loginId");

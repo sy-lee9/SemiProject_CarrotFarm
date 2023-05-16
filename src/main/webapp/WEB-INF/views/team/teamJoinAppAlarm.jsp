@@ -7,7 +7,7 @@
 	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
-	<script src="./resources/js/twbsPagination.js" type="text/javascript"></script>
+	<script src="../resources/js/twbsPagination.js" type="text/javascript"></script>
 	
 	<!-- 부트스트랩 JavaScript 파일 불러오기 -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
@@ -88,44 +88,46 @@
 
 	<div id="LNB">
 		<br/><br/>
-	        <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
-	      <br/><br/>
-	        <a href="/cf/team/teamJoinAppAlarm.go?teamIdx=${teamIdx}">알림</a>
-	      <br/><br/>
-	        <a href="/cf/team/teamPageUpdate.go?teamIdx=${teamIdx}">팀정보 수정</a>
-	      <br/><br/>
-	        <a href="/cf/team/teamUserListLeader.go?teamIdx=${teamIdx}">팀원</a>
-	      <br/><br/>
-	        <a href="/cf/writeMatchingList.go?teamIdx=${teamIdx}">모집중인 경기</a>
-	      <br/><br/>
-	        <a href="/cf/gameMatchingRequest.go?teamIdx=${teamIdx}" >참가신청한 경기</a>
-	        <br/><br/>
-	        <a href="/cf/warningTeamUser.go?teamIdx=${teamIdx}">경고/강퇴</a>
-	      <br/><br/>
-	        <a href="/cf/teamDisbanding.go?teamIdx=${teamIdx}" >팀 해체</a>
+        <c:if test="${loginId eq null}">
+			<img width="200" height="200" src="/photo/기본프로필.png">
+		</c:if>
+		<c:if test="${loginId ne null}">
+			<img width="200" height="200" src="/photo/${loginPhotoName}">
+		</c:if>
+      <br/><br/>
+        <a href="/cf/team/teamJoinAppAlarm.go?teamIdx=${teamIdx}">알림</a>
+      <br/><br/>
+        <a href="/cf/team/teamPageUpdate.go?teamIdx=${teamIdx}">팀정보 수정</a>
+      <br/><br/>
+        <a href="/cf/team/teamUserListLeader.go?teamIdx=${teamIdx}">팀원</a>
+      <br/><br/>
+        <a href="/cf/writeMatchingList.go?teamIdx=${teamIdx}">모집중인 경기</a>
+      <br/><br/>
+        <a href="/cf/gameMatchingRequest.go?teamIdx=${teamIdx}" >참가신청한 경기</a>
+        <br/><br/>
+        <a href="/cf/warningTeamUser.go?teamIdx=${teamIdx}">경고/강퇴</a>
+      <br/><br/>
+        <a href="/cf/teamDisbanding.go?teamIdx=${teamIdx}" >팀 해체</a>
 	</div>
 	
 	
 	<div id="content">
 		<input type="hidden" name="teamIdx" value="${teamIdx}"/>
-	<br/>
+		<br/>
 		<ul class="nav nav-tabs">
 		  <li class="nav-item">
-		    <a href="teamJoinAppAlarm.go?teamIdx=${teamIdx}">팀 가입신청 알림</a>
+		    <a class="nav-link active" href="teamJoinAppAlarm.go?teamIdx=${teamIdx}">팀 가입신청 알림</a>
 		  </li>
 		  <li class="nav-item">
-		    <a href="gameMatchingAppAlarm.go?teamIdx=${teamIdx}">경기 참가신청 알림</a>
+		    <a class="nav-link"  href="gameMatchingAppAlarm.go?teamIdx=${teamIdx}">경기 참가신청 알림</a>
 		  </li>
 		  <li class="nav-item">
-		    <a href="appGameUpdateAlarm.go?teamIdx=${teamIdx}">경기 변경사항 알림</a>
+		    <a class="nav-link"  href="appGameUpdateAlarm.go?teamIdx=${teamIdx}">경기 변경사항 알림</a>
 		  </li>
 		  <li class="nav-item">
-		    <a href="matchingInviteAlarm.go?teamIdx=${teamIdx}">경기 초대 알림</a>
+		    <a class="nav-link"  href="matchingInviteAlarm.go?teamIdx=${teamIdx}">경기 초대 알림</a>
 		  </li>
 		</ul>
-		
-		<br/>
-		<hr/>
 		<br/>
 		<table>
 			<colgroup>
@@ -223,35 +225,28 @@
 	}
 	
 	function listPrint(list){
-		var content = '';				
-		list.forEach(function(list){		
+		var content = '';		
+		
+		if(list.length==0){
 			content +='<tr>';
-			content +='<td>'+list.teamAppDate+'</td>';
-			content +='<td><a href="회원프로필.go?userIdx='+list.userId+'">'+list.userId+'</a></td>';
-			content +='<td>'+list.gu+'</td>';
-			content +='<td>'+list.position+'</td>';
-			content +='<td>'+list.favTime+'</td>';
-			content +='<td>'+list.userManner+'</td>';
-			content += '<td><button onclick="accept(' + "'" + list.teamIdx + "'" + ',' + "'" + list.userId + "'" + ')">수락</button> &nbsp; <button onclick="reject(' + "'" + list.teamIdx + "'" + ',' + "'" +  list.userId + "'" +  ')">거절</button></td>';
+			content +='<th colspan="7"> 확인할 알림이 없습니다. </th>';
 			content +='</tr>';
-		});
+		}else{
+			list.forEach(function(list){		
+				content +='<tr>';
+				content +='<td>'+list.teamAppDate+'</td>';
+				content +='<td><a href="회원프로필.go?userIdx='+list.userId+'">'+list.userId+'</a></td>';
+				content +='<td>'+list.gu+'</td>';
+				content +='<td>'+list.position+'</td>';
+				content +='<td>'+list.favTime+'</td>';
+				content +='<td>'+list.userManner+'</td>';
+				content += '<td><button onclick="accept(' + "'" + list.teamIdx + "'" + ',' + "'" + list.userId + "'" + ')">수락</button> &nbsp; <button onclick="reject(' + "'" + list.teamIdx + "'" + ',' + "'" +  list.userId + "'" +  ')">거절</button></td>';
+				content +='</tr>';
+			});		
+		}
 		$('#list').empty();
 		$('#list').append(content);
 	}
-
-			
 	
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
 </script>
 </html>

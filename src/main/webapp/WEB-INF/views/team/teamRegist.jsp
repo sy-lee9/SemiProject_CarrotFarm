@@ -3,19 +3,91 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<title>🏀 당근농장</title>
+	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
+	<script src="resources/js/twbsPagination.js" type="text/javascript"></script>
+
+	<!-- 부트스트랩 JavaScript 파일 불러오기 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">	
 <style>
+	body{
+		position:relative;
+		font-size:15px;
+		padding : 10px;
+		min-width: 1200px;
+	}
+	
+	#content {
+		width:78%;
+		height : 83%;
+		background-color: #f8f9fa;
+		padding: 10 30 10;
+		margin : 5px;
+		float:right;
+		
+	}
+	
+	#LNB {
+		width:20%;
+		height : 83%;
+		background-color: #f8f9fa;
+		float:left;
+		margin : 5px;
+		font-weight: bold;
+        font-size: 18px;
+		text-align:center;
+		
+	}
+	
+	a {
+	  color : black;
+	}
+	
+	a:link {
+	  color : black;
+	}
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	 text-decoration-line: none;
+	  color : #FFA500 ;
+	}
+	
 	table, th, td{
-		border: 1px solid black;
-		border-collapse: collapse;
-		padding : 5px 10px;	
+		padding: 10px;
+		margin : 5px;
+	}
+	
+	th{		
+		text-align: center;
 	}
 	
 	table{
-		width: 600px;
-		height: 700px;
+		width: 100%;
+		height: 85%;
+		margin : 5px;
 	}
+	
+	button{
+		margin: 5px;
+		text-align: center;
+	}
+	
+	#inline{
+		float: left;
+		margin:0 20 5 0;
+	}
+/* 	table, th, td{
+		border: 1px solid black;
+		border-collapse: collapse;
+		padding : 5px 10px;	
+	} */
+
 	
 	button{
 		margin: 5px;
@@ -37,74 +109,114 @@
 </style>
 </head>
 <body>
-	<form action="teamRegist.do" method="post" enctype="multipart/form-data">
-	<input type="hidden" name="loginId" value="${loginId}"/>
-	<table>
-		<thead>
-			<colgroup>
-				 <col width="30%"/>
-				 <col width="70%"/>
-			</colgroup>
-		</thead>
-		<tbody>
-			<tr>
-				<th>팀이름</th>
-				<td>
-					<input type="text" id="teamName" name="teamName"/>
-					<span id="msg"></span>
-					<div hidden="true"><span id="count">0</span>/<span id="max-count">0</span></div>
-				</td>
-			</tr>
-			<tr>
-				<th>팀 프로필 사진</th>
-				<td>
-					<input type="file" name="teamProfilePhoto"/>
-				</td>
-			</tr>
-			<tr>
-				<th>주 활동지역</th>
-				<td>
-					<input type="text" id="location" name="location"  readonly /> &nbsp;&nbsp;
-					<input type="button" id="address_kakao" value="검색"/>
-				</td>
-			</tr>
-			<tr>
-				<th>주 활동시간</th>
-				<td>
-					<select name="teamFavTime">
-				        <option value="평일/오전">평일/오전</option>
-				        <option value="평일/오후">평일/오후</option>
-				        <option value="평일/저녁">평일/저녁</option>
-				        <option value="주말/오전">주말/오전</option>
-				        <option value="주말/오후">주말/오후</option>
-				        <option value="주말/저녁">주말/저녁</option>
-				        <option value="상관없음">상관없음</option>
-				    </select>
-    			</td>
-			</tr>
-			<tr>
-				<th>선호하는 경기종목</th>
-				<td>
-					<select name="teamFavNum">
-				        <option value="3">3:3</option>
-				        <option value="5">5:5</option>
-				        <option value="0">상관없음</option>
-				    </select>
-				</td>
-			</tr>
-			<tr>
-				<th>소개글</th>
-				<td>
-					<textarea id="teamIntroduce" name="teamIntroduce" placeholder="팀소개글 및 구하는 포지션 등을 자유롭게 작성해주세요."></textarea>
-				</td>
-			<tr>
-				<th colspan="2">
-					<button type="button" onclick="teamRegist()">팀 생성하기</button>
-				</th>
-			</tr>
-		</tbody>
-	</table>
-	</form>
+	
+	<div style="float: right;">
+		<%@ include file="../loginBox.jsp" %>
+	</div> 
+	
+	<%@ include file="../GNB.jsp" %>
+	
+	<div id="LNB">
+		<br/><br/>
+		 <c:if test="${loginId eq null}">
+			<img width="200" height="200" src="/photo/기본프로필.png">
+		</c:if>
+		<c:if test="${loginId ne null}">
+			<img width="200" height="200" src="/photo/${loginPhotoName}">
+		</c:if>
+      <br/><br/>
+	    <a href="/cf/team/teamList.go">팀 둘러보기</a>	    
+	    <br/><br/>
+     	<c:if test="${teamUserChk eq true}">
+           <a href="/cf/team/teamPage.go?teamIdx=${teamIdx}">마이팀</a>
+        </c:if>
+	</div>
+	
+	<div id="content">
+		<div id="inline"><button onclick="location.href='teamList.go'">리스트로 돌아가기</button></div>
+		<div id="teamMatchState" style="margin: 10px; display: flex; align-items: center; float:right; height: 40px;">
+			<p>${team.teamMatchState}</p>
+			<c:if test="${teamLeadersChk eq true}">
+				<div style="float:right;"><button type="button" id="joinCancelApp" onclick="location.href='teamJoinAppAlarm.go?teamIdx=${team.teamIdx}'">팀관리</button></div>
+			</c:if>
+		</div> 
+		<c:if test="${team.teamMatchState == '모집중' && joinAppChk eq false && joinTeam eq false}">
+			<div style="float:right; margin: 10px; "><button type="button" id="joinApp" onclick="joinApp(${team.teamIdx})">가입신청</button></div>
+		</c:if>
+		<c:if test="${team.teamMatchState == '모집중' && joinAppChk eq true}">
+			<div style="float:right; margin: 10px; "><button type="button" id="joinCancelApp" onclick="joinCancel(${team.teamIdx})">가입신청 취소</button></div>
+		</c:if>
+		<br/>
+		<br/>
+		<form action="teamRegist.do" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="loginId" value="${loginId}"/>
+		<table>
+			<thead>
+				<colgroup>
+					 <col width="30%"/>
+					 <col width="70%"/>
+				</colgroup>
+			</thead>
+			<tbody>
+				<tr>
+					<th>팀이름</th>
+					<td>
+						<input type="text" id="teamName" name="teamName"/>
+						<span id="msg"></span>
+						<div hidden="true"><span id="count">0</span>/<span id="max-count">0</span></div>
+					</td>
+				</tr>
+				<tr>
+					<th>팀 프로필 사진</th>
+					<td>
+						<input type="file" name="teamProfilePhoto"/>
+					</td>
+				</tr>
+				<tr>
+					<th>주 활동지역</th>
+					<td>
+						<input type="text" id="location" name="location"  readonly /> &nbsp;&nbsp;
+						<input type="button" id="address_kakao" value="검색"/>
+					</td>
+				</tr>
+				<tr>
+					<th>주 활동시간</th>
+					<td>
+						<select name="teamFavTime">
+					        <option value="평일/오전">평일/오전</option>
+					        <option value="평일/오후">평일/오후</option>
+					        <option value="평일/저녁">평일/저녁</option>
+					        <option value="주말/오전">주말/오전</option>
+					        <option value="주말/오후">주말/오후</option>
+					        <option value="주말/저녁">주말/저녁</option>
+					        <option value="상관없음">상관없음</option>
+					    </select>
+	    			</td>
+				</tr>
+				<tr>
+					<th>선호하는 경기종목</th>
+					<td>
+						<select name="teamFavNum">
+					        <option value="3">3:3</option>
+					        <option value="5">5:5</option>
+					        <option value="0">상관없음</option>
+					    </select>
+					</td>
+				</tr>
+				<tr>
+					<th>소개글</th>
+					<td>
+						<textarea id="teamIntroduce" name="teamIntroduce" placeholder="팀소개글 및 구하는 포지션 등을 자유롭게 작성해주세요."></textarea>
+					</td>
+				<tr>
+					<th colspan="2">
+						<button type="button" onclick="teamRegist()">팀 생성하기</button>
+					</th>
+				</tr>
+			</tbody>
+		</table>
+		</form>
+	</div>
 </body>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
