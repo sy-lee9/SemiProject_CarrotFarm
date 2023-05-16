@@ -42,7 +42,7 @@
 		float:left;
 		margin : 5px;
 		font-weight: bold;
-        font-size: 15px;
+        font-size: 18px;
 		text-align:center;
 		
 	}
@@ -126,7 +126,7 @@
 					<tr>
 						<th style="width:20%;">No</th>
 						<th style="width:20%;">팀</th>
-						<th style="width:60%;">경고내역</th>
+						<th style="width:60%;">알림내역</th>
 					</tr>
 				</thead>
 				<tr>

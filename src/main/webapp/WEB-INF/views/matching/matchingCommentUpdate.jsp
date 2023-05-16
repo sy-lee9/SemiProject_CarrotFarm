@@ -38,7 +38,7 @@ body{
 		float:left;
 		margin : 5px;
 		font-weight: bold;
-        font-size: 15px;
+        font-size: 18px;
 		text-align:center;
 		
 	}

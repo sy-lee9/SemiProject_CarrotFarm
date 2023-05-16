@@ -19,6 +19,7 @@
  			m.gameDate,
  			m.writerId,
  			t.teamName,
+ 			t.teamIdx,
  			m.content,
  			m.courtIdx,
  			(SELECT COUNT(userID) FROM game WHERE gameAppState='확정' AND matchingIdx = m.matchingIdx) AS matchingNumforSure,
