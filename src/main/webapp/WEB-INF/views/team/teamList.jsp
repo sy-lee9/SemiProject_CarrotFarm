@@ -226,17 +226,22 @@ body{
 	function listPrint(list){
 		var content = '';
 		
-		list.forEach(function(team, teamIdx){
+		if(list.length==0){
 			content +='<tr>';
-			content +='<td id="teamMatchState">'+team.teamMatchState+'</td>';
-			content +='<td>'+team.gu+'</td>';
-			content +='<td id="teamInfo"><a href="team/teamPage.go?teamIdx='+team.teamIdx+'">'+team.teamName+'</a></td>';
-			content +='<td>'+team.teamIntroduce.substring(0, 14)+'</td>';
-			content +='<td>'+team.teamUser+'</td>';
+			content +='<th colspan="5"> 개설된 팀이 없습니다. </th>';
 			content +='</tr>';
-		});
-		$('#list').empty();
-		$('#list').append(content);
+		}else{
+			list.forEach(function(team, teamIdx){
+				content +='<tr>';
+				content +='<td id="teamMatchState">'+team.teamMatchState+'</td>';
+				content +='<td>'+team.gu+'</td>';
+				content +='<td id="teamInfo"><a href="team/teamPage.go?teamIdx='+team.teamIdx+'">'+team.teamName+'</a></td>';
+				content +='<td>'+team.teamIntroduce.substring(0, 14)+'</td>';
+				content +='<td>'+team.teamUser+'</td>';
+				content +='</tr>';
+			});
+			$('#list').empty();
+			$('#list').append(content);
 	}
 	
 	var msg = "${msg}";
