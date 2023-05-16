@@ -484,15 +484,24 @@ public class BoardService {
 			String newFileName = dao.ifindFile(bidx);
 			logger.info("파일 이름 : " + newFileName);
 			
+			iinquirytabledelete(bidx);
 			int row = dao.idelete(bidx);
+
 			logger.info("삭제 데이터 : " + row);
-			
+
 			if (newFileName != null && row > 0) {
 				File file = new File("C:/img/upload/" + newFileName);
 				if (file.exists()) {
 					file.delete();
 				}
 			}
+			
+		}
+
+		private void iinquirytabledelete(String bidx) {
+			String inquiryState = "미처리";
+			dao.iinquirytabledelete(bidx, inquiryState);
+			
 		}
 
 		public String iupdate(MultipartFile photo, HashMap<String, String> params) {

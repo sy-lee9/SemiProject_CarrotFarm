@@ -18,32 +18,39 @@
 		position:relative;
 		font-size:15px;
 		padding : 10px;
+		min-width: 1200px;
 	}
 	
 	#content {
-		width:82%;
-		height : 85%;
+		width:78%;
+		height : 87%;
 		background-color: #f8f9fa;
-		padding: 15 30 10;
+		padding: 10 30 10;
+		margin : 5px;
 		float:right;
+		
 	}
 	
 	#LNB {
-		width:16%;
-		height : 85%;
+		width:20%;
+		height : 87%;
 		background-color: #f8f9fa;
 		float:left;
-		margin : 0px 0px 5px 5px;
+		margin : 5px;
+		font-weight: bold;
+        font-size: 15px;
+		text-align:center;
+		
 	}
 	
 	#LNB ul li {
 	margin-top : 30px;
     margin-bottom: 90px; /* 원하는 줄간격 크기 */
 	}
-
 	
-	th, td {
-		margin : 10px;
+	
+		th, td {
+		margin : 15px;
 		border : 1px solid black;	
 		padding : 10px 10px;
 		border-collapse : collapse;
@@ -52,36 +59,75 @@
 	}
 	
 	table{
-		width:98%;
-		height:60%;
+		width:95%;
+		height:70%;
 		text-align:center;
 		border : 3px solid black;	
 		border-collapse : collapse;
-		padding : 15px 10px;
+		padding : 20px 10px;
+	}
+	
+	#gamePlay, #sort{
+		width: 100px;
+    	height: 30px;
+    	margin : 5px;
+	}
+	
+	#freeboardSearchInput{
+		width: 200px;
+    	height: 30px;
+    	
+	}
+	
+	#listButton, #saveButton {
+		font-size: 15px;
+		height: 30px;
+    	margin : 5px;
+	
+	}
+
+	
+	a {
+	  color : black;
+	}
+	
+	a:link {
+	  color : black;
+	}
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	 text-decoration-line: none;
+	  color : #FFA500 ;
+	}
+	
+	.pagination .page-link {
+  		color: gray; /* 기본 글자색을 검정색으로 지정 */
+	}
+
+	.pagination .page-item.active .page-link {
+ 		background-color: #FFA500;
+ 		border:none;
 	}
 </style>
 </head>
 <body>
+	<div style="float: right;">
+		<%@ include file="../loginBox.jsp" %>
+	</div> 
 	<%@ include file="../GNB.jsp" %>
-	
+
 	<div id="LNB">
-		 <ul style="list-style-type: none;">
-	      <li>
-	        <div style="width: 180px; height: 150px; border : 1px solid black; border-collapse: collapse;">프로필</div>
-	      </li>
-	      
-	      <li >
-	        <a href="/cf/freeboardList.do" style="font-weight: bold; font-size: 20px ; color: black;">자유 게시판</a>
-	      </li>
-	      
-	      <li>
-	        <a href="/cf/noticeboardList.do" style="font-weight: bold; font-size: 20px; color: orange;">공지사항</a>
-	      </li>
-	      
-	      <li>
-	        <a href="/cf/inquiryboardList.do" style="font-weight: bold; font-size: 20px; color: black;">문의</a>
-	      </li>
-	    </ul>
+		 <br/><br/>
+		 <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
+	     <br/><br/><br/><br/>
+	     <a href="/cf/freeboardList.do" style="font-weight: bold; font-size: 20px ; color: black;">자유 게시판</a>
+	   	 <br/><br/><br/><br/>
+	     <a href="/cf/noticeboardList.do" style="font-weight: bold; font-size: 20px; color: orange;">공지사항</a>
+	     <br/><br/><br/><br/>
+	     <a href="/cf/inquiryboardList.do" style="font-weight: bold; font-size: 20px; color: black;">문의</a>
+
 	</div>
 	
 	<div id="content">
@@ -112,8 +158,8 @@
 			</tr>
 			<tr>
 				<th colspan="2">
-					<input type = "button" onclick="location.href='./noticeboardList.do'" value="리스트"/>
-					<button>저장</button>
+					<input type = "button" onclick="location.href='./noticeboardList.do'" value="리스트" class="btn btn-outline-dark" id="listButton"/>
+					<button class="btn btn-outline-dark" id="saveButton">저장</button>
 				</th>
 			</tr>
 		</table>

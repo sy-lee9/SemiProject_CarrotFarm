@@ -129,6 +129,8 @@ public interface BoardDAO {
 
 	void iinquirytableSave(int inquiryIdx, String inquiryState);
 
+	void iinquirytabledelete(String bidx, String inquiryState);
+
 	
 
 	

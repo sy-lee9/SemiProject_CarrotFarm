@@ -295,6 +295,10 @@
 		DELETE FROM board WHERE boardIdx = #{param1}
 	</delete>
 	
+	<insert id = "iinquirytabledelete">
+		DELETE FROM inquiry WHERE inquiryIdx = #{param1}
+	</insert>
+	
 	<select id="ifindFile" resultType="String">
 		SELECT photoName FROM photo WHERE photoIdx = #{param1}
 	</select>
