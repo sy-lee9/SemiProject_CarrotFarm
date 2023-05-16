@@ -109,6 +109,13 @@ body{
 		  <option value="모집종료">모집종료</option>
 		</select>
 		
+		<select id="sort">
+		  <option value="default">지역</option>
+		  <c:forEach items="${locationList}" var="locationList">
+		  	<option value="${locationList.locationIdx}">${locationList.gu}</option>	
+		  </c:forEach>
+		</select>
+		
 		<input type="text" id="searchInput" placeholder="팀이름 검색">
 		<button id="searchButton">검색</button>
 		&nbsp;&nbsp;
@@ -137,11 +144,11 @@ body{
 				<!-- list 출력 영역 -->
 			</tbody>
 			<tr>
-				<td colspan="7" id="paging">	
+				<td colspan="5" id="paging">	
 					<!-- 	플러그인 사용	(twbsPagination)	-->
 					<div class="container">									
-						<nav aria-label="Page navigation" style="text-align:center">
-							<ul class="pagination" id="pagination"></ul>
+						<nav aria-label="Page navigation">
+							<ul class="pagination justify-content-center" id="pagination"></ul>
 						</nav>					
 					</div>
 				</td>
@@ -153,6 +160,7 @@ body{
 	var showPage = 1;
 	var selectedMatchState = 'default';
 	var searchText = 'default';
+	var selectedSort = 'default';
 	listCall(showPage);
 
 	// 경기 방식 선택에 따른 출력
@@ -172,6 +180,13 @@ body{
 		listCall(showPage);
 		$('#pagination').twbsPagination('destroy');
 	});
+	
+	$('#sort').change(function(){
+		selectedSort = $(this).val();
+		console.log(selectedSort);
+		listCall(showPage);
+		$('#pagination').twbsPagination('destroy');
+	});
 		
 	function listCall(page){
 		$.ajax({
@@ -180,6 +195,7 @@ body{
 			data:{
 				'page':page,
 				'matchState':selectedMatchState,
+		    	'locationIdx':selectedSort,
 				'searchText':searchText
 			},
 			dataType:'json',

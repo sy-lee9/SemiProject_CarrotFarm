@@ -4,7 +4,11 @@
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.cf.team.dao.TeamDAO">
-
+	
+ 	<select id="locationList" resultType="kr.co.cf.team.dto.TeamDTO">
+ 		SELECT locationIdx, gu FROM location;
+ 	</select>
+ 	
 	<select id="teamList" resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT 
 			t.teamIdx,t.teamMatchState,t.locationIdx,t.teamName,t.teamIntroduce,t.teamDisband,
@@ -15,7 +19,7 @@
 					ORDER BY teamIdx DESC LIMIT 10 OFFSET #{offset};
 	</select>
 	
-	<select id="getTeamIdx" resultType="int">
+	<select id="getTeamIdx" resultType="String">
 		SELECT teamIdx FROM teamUser WHERE userId = #{param1} AND teamUserState = 'join'
 	</select>
 	
@@ -105,6 +109,7 @@
 	<update id="teamPageUpdate" parameterType="kr.co.cf.team.dto.TeamDTO">
 		UPDATE team SET 
 			teamName = #{teamName}
+			,teamMatchState = #{teamMatchState}
 			,locationIdx = #{locationIdx}
 			,teamFavTime = #{teamFavTime}
 			,teamFavNum = #{teamFavNum}
@@ -387,6 +392,14 @@
 		FROM teamUser 
 		WHERE userId = #{param1}
 			AND teamUserState = 'join'
+	</select>
+	
+	<select id="removeChk"	resultType="int">
+		SELECT COUNT(userId)
+			FROM teamUser 
+				WHERE teamIdx = #{param1}
+					AND userId = #{param2}
+					AND teamUserState = 'remove'
 	</select>
 	
 	<insert id="teamJoinApp">

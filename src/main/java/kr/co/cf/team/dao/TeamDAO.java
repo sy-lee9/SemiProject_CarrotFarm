@@ -25,6 +25,9 @@ public interface TeamDAO {
 	TeamDTO teamInfo(int teamIdx);
 
 	ArrayList<TeamDTO> tagReview(int parseInt);
+
+
+	ArrayList<TeamDTO> locationList();
 	
 	ArrayList<TeamDTO> teamList(HashMap<String, Object> params);
 	
@@ -68,7 +71,7 @@ public interface TeamDAO {
 	ArrayList<TeamDTO> GameDateListAsc(HashMap<String, Object> params);
 	
 	//신청한 경기 모집글 확인
-	ArrayList<TeamDTO> getTeamLeaders(String teamIdx);
+	ArrayList<TeamDTO> getTeamLeaders(int teamIdx);
 
 	ArrayList<TeamDTO> matchingRequestList(String userId);
 
@@ -94,6 +97,8 @@ public interface TeamDAO {
 	
 	//팀 가입 신청 및 취소
 	int teamJoinChk(String loginId);
+
+	int removeChk(int teamIdx, String loginId);
 
 	int teamJoinApp(int teamIdx, String loginId);
 
@@ -152,7 +157,7 @@ public interface TeamDAO {
 
 	void removeNowAlarm(HashMap<String, Object> params);
 
-	int getTeamIdx(String loginId);
+	String getTeamIdx(String loginId);
 
 
 

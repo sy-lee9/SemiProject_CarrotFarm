@@ -74,6 +74,13 @@
 					</td>
 				</tr>
 				<tr>
+					<th>팀원 모집여부</th>
+					<td>
+						<input type="radio" name="teamMatchState" name="teamMatchState" value="모집중" <c:if test="${team.teamMatchState eq '모집중'}">checked</c:if>/>모집 &nbsp;&nbsp;&nbsp;
+						<input type="radio" name="teamMatchState" name="teamMatchState" value="모집종료"<c:if test="${team.teamMatchState eq '모집종료'}">checked</c:if>/>모집종료
+					</td>
+				</tr>
+				<tr>
 					<th>주 활동지역</th>
 					<td>
 						<input type="text" id="location" name="location" value="${team.gu}" readonly/> &nbsp;&nbsp;
