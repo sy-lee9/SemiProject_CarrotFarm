@@ -29,11 +29,11 @@ public class TeamBoardService {
 	// 팀 사진첩 --------------------------------------------------------------------------------------------------------------------------
 	
 	
-	public ArrayList<TeamBoardDTO> tplist() {
-		return dao.tplist();
+	public ArrayList<TeamBoardDTO> tplist(String userId) {
+		return dao.tplist(userId);
 	}
 	
-	public HashMap<String, Object> tpalist(int page, String search) {
+	public HashMap<String, Object> tpalist(int page, String search, String userId) {
 		
 		logger.info(page + "페이지 보여줘");
 		logger.info("search : " + search);
@@ -59,12 +59,12 @@ public class TeamBoardService {
 		
 		page = page >range ? range : page;
 		
-		ArrayList<TeamBoardDTO> tpalist = dao.tpalist(10, offset);
+		ArrayList<TeamBoardDTO> tpalist = dao.tpalist(10, offset,userId);
 		
 		//params.put("offset", offset);
 		
 		if (search.equals("default") || search.equals("")) {
-			tpalist = dao.tpalist(10, offset);
+			tpalist = dao.tpalist(10, offset,userId);
 			
 		} else {
 			tpalist = dao.tpalistSearch(search);
@@ -109,7 +109,7 @@ public class TeamBoardService {
 	            
 	         }
 		 }
-		 page = "redirect:/teampictureboardDetail.do?bidx=" + bidx;
+		 page = "redirect:/teampictureboardDetail.do?bidx=" + bidx+"&teamIdx="+params.get("teamidx");
 		 return page;
 	}
 	
@@ -385,11 +385,11 @@ public class TeamBoardService {
 	// 공지사항 게시판 --------------------------------------------------------------------------------------------------------------------------
 	
 	
-	public ArrayList<TeamBoardDTO> tnlist() {
-		return dao.tnlist();
+	public ArrayList<TeamBoardDTO> tnlist(String userId) {
+		return dao.tnlist(userId);
 	}
 	
-	public HashMap<String, Object> tnalist(int page, String search) {
+	public HashMap<String, Object> tnalist(int page, String search, String userId) {
 		
 		logger.info(page + "페이지 보여줘");
 		logger.info("search : " + search);
@@ -415,12 +415,12 @@ public class TeamBoardService {
 		
 		page = page >range ? range : page;
 		
-		ArrayList<TeamBoardDTO> tnalist = dao.tnalist(10, offset);
+		ArrayList<TeamBoardDTO> tnalist = dao.tnalist(10, offset, userId);
 		
 		//params.put("offset", offset);
 		
 		if (search.equals("default") || search.equals("")) {
-			tnalist = dao.tnalist(10, offset);
+			tnalist = dao.tnalist(10, offset,userId);
 			
 		} else {
 			tnalist = dao.tnalistSearch(search);
@@ -450,7 +450,7 @@ public class TeamBoardService {
 		int bidx = dto.getBoardIdx();
 		logger.info("방금 인서트한 bidx : " + bidx);
 		
-		page = "redirect:/teamnoticeboardDetail.do?bidx=" + bidx;
+		page = "redirect:/teamnoticeboardDetail.do?bidx=" + bidx+"&teamIdx="+params.get("teamIdx");
 		
 		if (!photo.getOriginalFilename().equals("")) {
 			logger.info("파일 업로드 작업");
@@ -699,5 +699,9 @@ public class TeamBoardService {
 		
 		public String tiuserRight(String loginId) {
 			return dao.tiuserRight(loginId);
+		}
+
+		public String selectUserId(String teamIdx) {
+			return dao.selectUserId(teamIdx);
 		}	
 };

@@ -95,27 +95,20 @@
 	      </li>
 	      
 	      <li >
-	        <a href="/cf/teamnoticeboardList.do" style="font-weight: bold; font-size: 20px ; color: black;">팀 공지 사항</a>
+	        <a href="/cf/teamnoticeboardList.do?teamIdx=${teamIdx}" style="font-weight: bold; font-size: 20px ; color: black;">팀 공지 사항</a>
 	      </li>
 	      
 	      <li>
-	        <a href="/cf/teamfreeboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 자유 게시판</a>
+	        <a href="/cf/teampictureboardList.do?teamIdx=${teamIdx}" style="font-weight: bold; font-size: 20px; color: orange;">팀 사진첩</a>
 	      </li>
 	      
-	      <li>
-	        <a href="/cf/teampictureboardList.do" style="font-weight: bold; font-size: 20px; color: orange;">팀 사진첩</a>
-	      </li>
-	      
-	      <li>
-	        <a href="/cf/teaminquiryboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 문의</a>
-	      </li>
-
 	    </ul>
 	</div>
 	
 	<div id="content">
-	<form action="teampictureboardWrite.do" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+	<form action="teampictureboardWrite.do?teamIdx=${teamIdx}" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
 	<input type="hidden" name="categoryId" value="b011"/>
+	<input type="hidden" name="teamIdx" value="${teamIdx}"/>
 		<table>
 			<tr>
 				<th>제목</th>
@@ -144,7 +137,7 @@
 			</tr>
 			<tr>
 				<th colspan="2">
-					<input type = "button" onclick="location.href='./teampictureboardList.do'" value="리스트"/>
+					<input type = "button" onclick="location.href='./teampictureboardList.do?teamIdx=${teamIdx}'" value="리스트"/>
 					<button>저장</button>
 				</th>
 			</tr>

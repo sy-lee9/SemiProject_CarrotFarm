@@ -95,21 +95,13 @@
 	      </li>
 	      
 	      <li >
-	        <a href="/cf/teamnoticeboardList.do" style="font-weight: bold; font-size: 20px ; color: black;">팀 공지 사항</a>
+	        <a href="/cf/teamnoticeboardList.do?teamIdx=${teamIdx}" style="font-weight: bold; font-size: 20px ; color: black;">팀 공지 사항</a>
 	      </li>
 	      
 	      <li>
-	        <a href="/cf/teamfreeboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 자유 게시판</a>
+	        <a href="/cf/teampictureboardList.do?teamIdx=${teamIdx}" style="font-weight: bold; font-size: 20px; color: orange;">팀 사진첩</a>
 	      </li>
 	      
-	      <li>
-	        <a href="/cf/teampictureboardList.do" style="font-weight: bold; font-size: 20px; color: orange;">팀 사진첩</a>
-	      </li>
-	      
-	      <li>
-	        <a href="/cf/teaminquiryboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 문의</a>
-	      </li>
-
 	    </ul>
 	</div>
 	
@@ -122,7 +114,7 @@
 	<br/>
 	<br/>
 	<c:if test="${loginId != null }"> <!-- teamIdx 써야할듯 -->
-	<button onclick="location.href='teampictureboardWrite.go'">글쓰기 등록</button>
+	<button onclick="location.href='teampictureboardWrite.go?teamIdx=${teamIdx}'">글쓰기 등록</button>
 	</c:if>
 	<br/>
 	<br/>
@@ -153,9 +145,11 @@
 	</div>
 </body>
 <script>
+var teamIdx="${teamIdx}";
 var searchText = 'default';
 var showPage = 1;
 listCall(showPage);
+console.log(teamIdx);
 
 $('#teampictureboardSearchButton').click(function(){
 	searchText = $('#teampictureboardSearchInput').val();
@@ -169,7 +163,8 @@ function listCall(page){
 		url:'tplist.ajax',
 		data:{
 			'page':page,
-			'search':searchText
+			'search':searchText,
+			'teamIdx' : teamIdx
 		},
 		dataType:'json',
 		success:function(data){
@@ -202,7 +197,7 @@ function listPrint(tpalist){
 	tpalist.forEach(function(item,idx){
 		content +='<tr>';
 		content +='<td>'+item.boardIdx+'</td>';
-		content +='<td><a href="teampictureboardDetail.do?bidx='+item.boardIdx+'">'+item.subject+'</a></td>';
+		content +='<td><a href="teampictureboardDetail.do?bidx='+item.boardIdx+'&teamIdx='+teamIdx+'">'+item.subject+'</a></td>';
 		content +='<td>'+item.userId+'</td>';
 		
 

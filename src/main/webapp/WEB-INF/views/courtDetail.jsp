@@ -111,7 +111,7 @@ body{
 		<%@ include file="loginBox.jsp" %>
 	</div> 
 	<jsp:include page="GNB.jsp"></jsp:include>
-	<<div id="LNB">
+	<div id="LNB">
 		<br/><br/>
 		 <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
 	    <br/><br/><br/><br/>
@@ -120,53 +120,56 @@ body{
 	</div>
 	<div id="content">
 	
-	<div id="map" style="width:420px;height:420px;float:left; margin: 20px, 10px, 0px, 20px;"></div>
+	<div id="map" style="width:500px;height:650px;float:left; margin: 20px, 10px, 0px, 20px;"></div>
 	<div>
-		<table  style="width:750px; height:200px; margin : 20px; float : right">
+		<table  style="width:700px; height:200px; margin : 10px; float : right">
 			<tr>
-				<th style="font-size: 30pt; height:100px;">${courtInfo.courtName}</th>
-				<th style="text-align: left;">
+				<th style="font-size: 20pt; height:65px;">
+					${courtInfo.courtName}
+					<c:if test="${courtInfo.courtInOut eq 'out'}">(실외)</c:if>
+					<c:if test="${courtInfo.courtInOut eq 'in'}">(실내)</c:if>
+				</th>
+				<th style="text-align: left; font-size: 20pt;">
 					<c:if test="${courtInfo.courtStar eq ''}">0.0</c:if>
 					<c:if test="${courtInfo.courtStar ne ''}">⭐${courtInfo.courtStar}</c:if>
 				</th>	
 			</tr>
-
-			<tr style="font-size: 20pt; height:100px;">
+			<tr style="font-size: 13pt; height:65px;">
 				<th>위치 : ${courtInfo.courtAddress}</th>
 			</tr>
-			<tr style="font-size: 15pt; height:100px;">
-				<th>
-					<c:if test="${courtInfo.courtInOut eq 'out'}">실외</c:if>
-					<c:if test="${courtInfo.courtInOut eq 'in'}">실내</c:if>
-				</th>
-			</tr>
-			<tr style="font-size: 15pt; height:100px;" >
+			<tr style="font-size: 13pt; height:65px;" >
 				<th>사용 여부 : ${courtInfo.courtState}</th>
 			</tr>
 		</table>
-	</br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br></br>
+	</br></br></br></br></br></br></br></br>
 	</div>
-	<div class="image-grid" style = "font-size : 20pt; font-weight: bold;">
-		사진 모아보기 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <a href="#" onclick="window.open('courtReviewPhoto.do?courtIdx=${courtInfo.courtIdx}','사진 모아보기','width=400px,height=400px')">더보기</a>
-		
+	<div class="image-grid" style = "font-size : 13pt; font-weight: bold; margin : 10px;">
+	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 사진 모아보기 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+		<a href="#" onclick="window.open('courtReviewPhoto.do?courtIdx=${courtInfo.courtIdx}','사진 모아보기','width=400px,height=400px')">더보기</a>
 		</br></br>
+		<table style="margin-right : 20px; border : 1px solid black;" >
 			<c:if test="${reviewPhotoList eq '[]'}">
-			등록된 사진이 없습니다.
+			&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 등록된 사진이 없습니다.
 			</c:if>
 			<c:if test="${reviewPhotoList ne '[]'}">
-				<c:forEach items="${reviewPhotoList}" var="reviewPhotos" end="4">
-					<img width="100" src="/photo/${reviewPhotos.photoName}"/>			
+			    <div class="image-row">
+			
+				<c:forEach items="${reviewPhotoList}" var="reviewPhotos" end="3">
+					&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <img width="100" src="/photo/${reviewPhotos.photoName}"/>			
 				</c:forEach>
+				</div>
 			</c:if>
+		</table>
 	</div>
-	<div >경기장 리뷰
-		<table style="width:300px;">
-		<a href="#" onclick="window.open('courtReviews.do?courtIdx=${courtInfo.courtIdx}','리뷰 모아보기','width=600px,height=400px')">더보기</a>
-			<c:forEach items="${courtReviewList}" var="courtReview" end="4">
+	  <div style = "font-size : 13pt; font-weight: bold;">
+
+		&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 경기장 리뷰 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="#" onclick="window.open('courtReviews.do?courtIdx=${courtInfo.courtIdx}','리뷰 모아보기','width=600px,height=400px')">더보기</a>
+			<table style = " width : 730px ; float : right; ">
+			<c:forEach items="${courtReviewList}" var="courtReview" end="3">
 			<tr>
 				<th>${courtReview.userId}</th>
 				<th><input class="userCourtReview" type="text" disabled value="${courtReview.courtOneLineReview}"/></th>				
-				<th>☆${courtReview.courtStar}</th>
+				<th>⭐${courtReview.courtStar}</th>
 				
 				<c:if test="${courtReview.photoName ne null}">
 					<th><img width="100" src="/photo/${courtReview.photoName}"/></th>
@@ -181,8 +184,8 @@ body{
 			</tr>
 		</c:forEach>
 		</table>
+		
 	</div>
-	<hr/>
 	<c:if test="${sessionScope.loginId ne null}">
 	<form action="courtReviewWrite.do" method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
 	<div style = "text-align: center;">
@@ -190,7 +193,9 @@ body{
 		<input type="hidden" name="courtIdx" value="${courtInfo.courtIdx}"/>
 		<input type="hidden" name="courtName" value="${courtInfo.courtName}"/>
 		<input type="hidden" name="userId" value="${sessionScope.loginId}"/>
-		리뷰작성 &nbsp; &nbsp; <input id="courtOneLineReview" type="text" name="courtOneLineReview" style="display: inline-block;"/>
+		</br></br></br></br></br></br></br></br></br></br></br>
+		
+		<hr/>리뷰작성 &nbsp; &nbsp; <input id="courtOneLineReview" type="text" name="courtOneLineReview" style="display: inline-block;"/>
 		&nbsp; &nbsp; &nbsp; &nbsp; 
 		<input type="file" name="photo" style="display: inline-block;"/>
 		<label>별점</label>

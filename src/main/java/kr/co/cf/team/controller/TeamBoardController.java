@@ -32,28 +32,34 @@ public class TeamBoardController {
 	
 	@RequestMapping(value="/tplist.ajax", method = RequestMethod.POST)
 	@ResponseBody
-	public HashMap<String, Object> tpalist(@RequestParam String page, @RequestParam String search){
+	public HashMap<String, Object> tpalist(@RequestParam String page, @RequestParam String search, @RequestParam String teamIdx){
 		logger.info("search : " + search);
+		logger.info("teamIdx ="+teamIdx);
+		String userId=service.selectUserId(teamIdx);
 		
-		return service.tpalist(Integer.parseInt(page), search);
+		return service.tpalist(Integer.parseInt(page), search, userId);
 		
 	}
 	
 	@RequestMapping(value = "/teampictureboardList.do")
-	public String tplist(Model model, HttpSession session) {
+	public String tplist(Model model, HttpSession session, @RequestParam String teamIdx) {
 		logger.info("session : " + session.getAttribute("loginId"));
 		logger.info("tplist 불러오기");
-		ArrayList<TeamBoardDTO> tplist = service.tplist();
+		model.addAttribute("teamIdx" , teamIdx);
+		String userId=service.selectUserId(teamIdx);
+		ArrayList<TeamBoardDTO> tplist = service.tplist(userId);
 		logger.info("tplist cnt : " + tplist.size());
 		model.addAttribute("list", tplist);
+		
 		return "/board/teampictureboardList";
 	}
 	
 	@RequestMapping(value="/teampictureboardWrite.go")
-	public String tpwriteForm(Model model, HttpSession session) {
+	public String tpwriteForm(Model model, HttpSession session,@RequestParam String teamIdx) {
 		
 		logger.info("글쓰기로 이동");
 		model.addAttribute("userId", session.getAttribute("loginId"));
+		model.addAttribute("teamIdx",teamIdx);
 		return "/board/teampictureboardWriteForm";
 	}
 	
@@ -65,10 +71,10 @@ public class TeamBoardController {
 	}	
 	
 	@RequestMapping(value="/teampictureboardDetail.do")
-	public String tpdetail(Model model, @RequestParam String bidx, HttpSession session) {
+	public String tpdetail(Model model, @RequestParam String bidx, HttpSession session, @RequestParam String teamIdx) {
 		logger.info("tpdetail : " + bidx);
 		String page = "redirect:/board/teampictureboardList.do";
-		
+		model.addAttribute("teamIdx",teamIdx);
 		if(session.getAttribute("loginId") == null) {logger.info("로그인된 아이디가 없습니다. ");}
 		logger.info("게시글 bidx : " + bidx + "번 상세보기");
 		
@@ -414,29 +420,36 @@ public class TeamBoardController {
 		
 		@RequestMapping(value="/tnlist.ajax", method = RequestMethod.POST)
 		@ResponseBody
-		public HashMap<String, Object> tnalist(@RequestParam String page, @RequestParam String search){
+		public HashMap<String, Object> tnalist(@RequestParam String page, @RequestParam String search, @RequestParam String teamIdx){
 			logger.info("search : " + search);
-			
-			return service.tnalist(Integer.parseInt(page), search);	
+			logger.info("teamIdx :"+ teamIdx);
+			String userId=service.selectUserId(teamIdx);
+			logger.info(userId);
+			return service.tnalist(Integer.parseInt(page), search,userId);	
 		}
 		
 		
 		@RequestMapping(value = "/teamnoticeboardList.do")
-		public String tnlist(Model model, HttpSession session) {
+		public String tnlist(Model model, HttpSession session,@RequestParam String teamIdx) {
 			logger.info("session : " + session.getAttribute("loginId"));
 			logger.info("tnlist 불러오기");
-			ArrayList<TeamBoardDTO> tnlist = service.tnlist();
+			
+			String userId=service.selectUserId(teamIdx);
+			
+			ArrayList<TeamBoardDTO> tnlist = service.tnlist(userId);
 			logger.info("tnlist cnt : " + tnlist.size());
 			model.addAttribute("tnlist", tnlist);
+			model.addAttribute("teamIdx",teamIdx);
 			
 			return "/board/teamnoticeboardList";
 		}
 		
 		
 		@RequestMapping(value="/teamnoticeboardWrite.go")
-		public String tnwriteForm(Model model, HttpSession session) {		
+		public String tnwriteForm(Model model, HttpSession session,@RequestParam String teamIdx) {		
 			logger.info("글쓰기로 이동");
 			model.addAttribute("userId", session.getAttribute("loginId"));
+			model.addAttribute("teamIdx",teamIdx);
 			return "/board/teamnoticeboardWriteForm";
 		}
 		
@@ -450,7 +463,7 @@ public class TeamBoardController {
 		
 		
 		@RequestMapping(value="/teamnoticeboardDetail.do")
-		public String tndetail(Model model, @RequestParam String bidx, HttpSession session) {
+		public String tndetail(Model model, @RequestParam String bidx, HttpSession session, @RequestParam String teamIdx) {
 			logger.info("tndetail : " + bidx);
 			String page = "redirect:/board/teamnoticeboardList.do";
 			
@@ -464,6 +477,7 @@ public class TeamBoardController {
 				model.addAttribute("dto", dto);
 				logger.info("사진이름" +dto.getPhotoName());
 			}
+			model.addAttribute("teamIdx",teamIdx);
 			
 			return page;
 		}
@@ -553,7 +567,7 @@ public class TeamBoardController {
 			
 			
 			@RequestMapping(value="/teaminquiryboardDetail.do")
-			public String tidetail(Model model, @RequestParam String bidx, HttpSession session) {
+			public String tidetail(Model model, @RequestParam String bidx, HttpSession session ) {
 				logger.info("tidetail : " + bidx);
 				String page = "redirect:/board/teaminquiryboardList.do";
 				

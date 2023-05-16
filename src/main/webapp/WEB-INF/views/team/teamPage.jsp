@@ -77,8 +77,6 @@
 		float: left;
 		margin:0 20 5 0;
 	}
-
-
 </style>
 </head>
 <body>
@@ -91,7 +89,12 @@
 	
 	<div id="LNB">
 		<br/><br/>
-	        <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
+        <c:if test="${loginId eq null}">
+			<img width="200" height="200" src="/photo/기본프로필.png">
+		</c:if>
+		<c:if test="${loginId ne null}">
+			<img width="200" height="200" src="/photo/${loginPhotoName}">
+		</c:if>
 	      <br/><br/>
 	        <a href="/cf/team/teamPage.go?teamIdx=${team.teamIdx}">팀소개</a>
 	      <br/><br/>
@@ -99,9 +102,11 @@
 	      <br/><br/>
 	        <a href="/cf/team/teamGame.go?teamIdx=${team.teamIdx}">참여 경기</a>
 	      <br/><br/>
+	        <a href="/cf/teamnoticeboardList.do?teamIdx=${team.teamIdx}">팀 공지 사항</a>
+	      <br/><br/>
 	        <a href="/cf/teampictureboardList.do?teamIdx=${team.teamIdx}">팀 사진첩</a>
 	      <br/><br/>
-	        <a href="/cf/teaminquiryboardList.do?teamIdx=${team.teamIdx}" >팀 문의</a>
+
 	</div>
 	
 	<div id="content">

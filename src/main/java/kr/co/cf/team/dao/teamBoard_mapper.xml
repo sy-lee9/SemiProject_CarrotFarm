@@ -8,13 +8,13 @@
 	<select id="tplist" resultType="kr.co.cf.team.dto.TeamBoardDTO">
 		SELECT
 			boardIdx, userId, subject, content, writeTime, bHit
-		FROM board WHERE categoryId = 'b011' ORDER BY boardIdx DESC 
+		FROM board WHERE categoryId = 'b011' AND userId=#{param1} ORDER BY boardIdx DESC 
 	</select>
 	
 	<select id="tpalist" resultType="kr.co.cf.team.dto.TeamBoardDTO">
 		SELECT
 			boardIdx, userId, subject, writeTime, bHit
-		FROM board WHERE categoryId = 'b011' ORDER BY boardIdx DESC LIMIT #{param1} OFFSET #{param2}
+		FROM board WHERE categoryId = 'b011' AND userId=#{param3} ORDER BY boardIdx DESC LIMIT #{param1} OFFSET #{param2}
 	</select>
 	
 	<select id="tpalistSearch" resultType="kr.co.cf.team.dto.TeamBoardDTO">
@@ -248,13 +248,14 @@
 	<select id="tnlist" resultType="kr.co.cf.team.dto.TeamBoardDTO">
 		SELECT
 			boardIdx, userId, subject, content, writeTime, bHit
-		FROM board WHERE categoryId = 'b013' ORDER BY boardIdx DESC 
+		FROM board WHERE categoryId = 'b013'  AND userId=#{param1}
+		ORDER BY boardIdx DESC 
 	</select>
 	
 	<select id="tnalist" resultType="kr.co.cf.team.dto.TeamBoardDTO">
 		SELECT
 			boardIdx, userId, subject, writeTime, bHit
-		FROM board WHERE categoryId = 'b013' ORDER BY boardIdx DESC LIMIT #{param1} OFFSET #{param2}
+		FROM board WHERE categoryId = 'b013' AND userId=#{param3} ORDER BY boardIdx DESC LIMIT #{param1} OFFSET #{param2}
 	</select>
 	
 	<select id="tnalistSearch" resultType="kr.co.cf.team.dto.TeamBoardDTO">
@@ -438,6 +439,10 @@
 	
 	<select id="tiuserRight" resultType="String">
 		SELECT userRight FROM user WHERE userId = #{param1}
+	</select>
+	
+	<select id="selectUserId"  resultType="String">
+		SELECT userId FROM teamUser WHERE teamIdx=#{param1} AND teamGrade='leader' AND teamUserState='join'
 	</select>
 
 </mapper>
