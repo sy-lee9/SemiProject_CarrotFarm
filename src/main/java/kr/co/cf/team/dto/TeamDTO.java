@@ -1,7 +1,5 @@
 package kr.co.cf.team.dto;
 
-import java.sql.Date;
-
 public class TeamDTO {
 	
 	private int teamIdx;
@@ -38,7 +36,16 @@ public class TeamDTO {
 	private String warningDate;
 	private String warningResult;
 	private String warningReason;
+	private int matcingIdx;
+	private String location;
+	private int tagCount;
 	
+	public int getTagCount() {
+		return tagCount;
+	}
+	public void setTagCount(int tagCount) {
+		this.tagCount = tagCount;
+	}
 	public int getWarningCount() {
 		return warningCount;
 	}
@@ -243,4 +250,17 @@ public class TeamDTO {
 	public void setWarningReason(String warningReason) {
 		this.warningReason = warningReason;
 	}
+	public int getMatcingIdx() {
+		return matcingIdx;
+	}
+	public void setMatcingIdx(int matcingIdx) {
+		this.matcingIdx = matcingIdx;
+	}
+	public String getLocation() {
+		return location;
+	}
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
 }

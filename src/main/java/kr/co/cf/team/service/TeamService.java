@@ -260,7 +260,7 @@ public class TeamService {
 		return TeamDAO.disbandCancle(teamIdx);
 	}
 
-	public void disbandAlarm(String teamIdx) {
+	public void disbandAlarm(int teamIdx) {
 		
 		ArrayList<TeamDTO> teamUserList = TeamDAO.getTeamUser(teamIdx);
 		logger.info("teamUserList : "+teamUserList);
@@ -272,11 +272,29 @@ public class TeamService {
 			String userId = (teamUserList.get(i).getUserId());			
 			logger.info("userID : "+userId);
 			
-			TeamDAO.disbandAlarm(userId);
+			TeamDAO.disbandAlarm(teamIdx,userId);
 			logger.info("알람전송 성공");
 			row += 1;			
 		}
 		logger.info("sendAlarmCount : "+row);		
+	}
+	
+	public void disbandCancleAlarm(int teamIdx) {
+		ArrayList<TeamDTO> teamUserList = TeamDAO.getTeamUser(teamIdx);
+		logger.info("teamUserList : "+teamUserList);
+		
+		int row = 0;
+		
+		for (int i = 0; i < teamUserList.size(); i++) {
+			
+			String userId = (teamUserList.get(i).getUserId());			
+			logger.info("userID : "+userId);
+			
+			TeamDAO.disbandCancleAlarm(teamIdx,userId);
+			logger.info("알람전송 성공");
+			row += 1;			
+		}
+		logger.info("sendAlarmCount : "+row);			
 	}
 
 	public HashMap<String, Object> gameList(HashMap<String, Object> params) { 
@@ -287,7 +305,7 @@ public class TeamService {
 		logger.info(page+" 페이지 보여줘");
 		logger.info("한 페이지에 "+10+" 개씩 보여줄거야");
 		
-		String teamIdx = (String) params.get("teamIdx");
+		int teamIdx = Integer.parseInt((String) params.get("page"));
 		ArrayList<TeamDTO> teamUserList = TeamDAO.getTeamUser(teamIdx);
 		logger.info("teamUserList : "+teamUserList);
 		
@@ -426,15 +444,31 @@ public class TeamService {
 		return map;
 	}
 
-	public ArrayList<TeamDTO> appGameAlarm(String teamIdx) {
+	public ArrayList<TeamDTO> appGameUpdateAlarm(String teamIdx) {
 		
-		String userId = TeamDAO.getTeamLeader(teamIdx);
+		String userId = TeamDAO.getTeamLeader(Integer.parseInt(teamIdx));
 		logger.info("getTeamLeader : "+userId);
 		
-		return TeamDAO.appGameAlarm(userId);
+		return TeamDAO.appGameUpdateAlarm(userId);
 	}
 
-	public ArrayList<TeamDTO> writeMatchingList(String teamIdx) {
+	public ArrayList<TeamDTO> matchingInviteAlarm(String teamIdx) {
+
+		String userId = TeamDAO.getTeamLeader(Integer.parseInt(teamIdx));
+		logger.info("getTeamLeader : "+userId);
+		
+		return TeamDAO.matchingInviteAlarm(userId);
+	}
+
+	public ArrayList<TeamDTO> gameMatchingAppAlarm(String teamIdx) {
+
+		String userId = TeamDAO.getTeamLeader(Integer.parseInt(teamIdx));
+		logger.info("getTeamLeader : "+userId);
+		
+		return TeamDAO.gameMatchingAppAlarm(userId);
+	}
+
+	public ArrayList<TeamDTO> writeMatchingList(int teamIdx) {
 		
 		String userId = TeamDAO.getTeamLeader(teamIdx);
 		logger.info("getTeamLeader : "+userId);
@@ -444,11 +478,11 @@ public class TeamService {
 		return list;
 	}
 
-	public String getTeamLeader(String teamIdx) {
+	public String getTeamLeader(int teamIdx) {
 		return TeamDAO.getTeamLeader(teamIdx);
 	}
 
-	public int teamLeadersConf(String teamIdx, String loginId) {
+	public int teamLeadersConf(int teamIdx, String loginId) {
 		return TeamDAO.teamLeadersConf(teamIdx, loginId);
 	}
 
@@ -510,7 +544,13 @@ public class TeamService {
 	public int teamUserChk(int teamIdx, String userId) {
 		return TeamDAO.teamUserChk(teamIdx, userId);
 	}
+	
+	//팀 탈퇴(팀장권한 양도)
+	public void teamGradeUpdate(int teamIdx, String userId) {
+		TeamDAO.teamGradeUpdate(teamIdx, userId);
+	}
 
+	//팀 탈퇴
 	public HashMap<String, Object> leaveTeam(int teamIdx, String userId) {
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();  
@@ -708,14 +748,28 @@ public class TeamService {
 		logger.info("update row : "+row);
 	}
 
-	public void remove(HashMap<String, Object> params) {
-		int row = TeamDAO.remove(params);	
-		logger.info("update row : "+row);
+	public int remove(HashMap<String, Object> params) {
+		return TeamDAO.remove(params);
+	}
+
+	public void removeAlarm(HashMap<String, Object> params) {
+		TeamDAO.removeAlarm(params);
 	}
 
 	public ArrayList<TeamDTO> warningHistory(int teamIdx, String userId) {
 		return TeamDAO.warningHistory(teamIdx,userId);
 	}
+
+	public void removeNowAlarm(HashMap<String, Object> params) {
+		TeamDAO.removeNowAlarm(params);
+	}
+
+	public int getTeamIdx(String loginId) {
+		return TeamDAO.getTeamIdx(loginId);
+	}
+
+
+
 
 
 	

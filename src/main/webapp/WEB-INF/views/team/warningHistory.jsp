@@ -15,8 +15,6 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <style>	
 	table, th, td{
-		border: 1px solid black;
-		border-collapse: collapse;
 		padding : 5px 10px;	
 	}
 	th,td{
@@ -27,12 +25,20 @@
 		width: 800;
 		height: 100;
 	}
+	h1{
+		margin:10;
+		display: inline;
+	}
+	button{
+		float: right;
+	}
 </style>
 </head>
 <body>
 
-	<h3>${userId}</h3>
-
+	<h1>${userId}</h1>
+	<button onclick="window.open('removeNow.go?userId=${userId}&teamIdx=${teamIdx}','즉시강퇴','width=800px,height=550px')">즉시강퇴</button>
+	<hr/>
 	<table>
 		<colgroup>
 			<col width="20%"/>
@@ -46,6 +52,9 @@
 				<th>경고 사유</th>
 			</tr>
 		</thead>
+			<tr>
+				<th colspan="3"><hr/></th>
+			</tr>
 		<tbody>
 			<c:forEach items="${list}" var="warning">
 				<tr>

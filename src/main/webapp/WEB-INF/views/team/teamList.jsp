@@ -3,69 +3,151 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
-<script src="resources/js/twbsPagination.js" type="text/javascript"></script>
+<title>🏀 당근농장</title>
+	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
+	<script src="resources/js/twbsPagination.js" type="text/javascript"></script>
+
+	<!-- 부트스트랩 JavaScript 파일 불러오기 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">	
 <style>	
+
+body{
+		position:relative;
+		font-size:15px;
+		padding : 10px;
+		min-width: 1200px;
+	}
+	
+	#content {
+		width:78%;
+		height : 83%;
+		background-color: #f8f9fa;
+		padding: 10 30 10;
+		margin : 5px;
+		float:right;
+		
+	}
+	
+	#LNB {
+		width:20%;
+		height : 83%;
+		background-color: #f8f9fa;
+		float:left;
+		margin : 5px;
+		font-weight: bold;
+        font-size: 15px;
+		text-align:center;
+		
+	}
+	
+	a {
+	  color : balck;
+	}
+	
+	a:link {
+	  color : balck;
+	}
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	 text-decoration-line: none;
+	  color : #FFA500 ;
+	}
+	
+	.pagination .page-link {
+  		color: gray; /* 기본 글자색을 검정색으로 지정 */
+	}
+
+	.pagination .page-item.active .page-link {
+ 		background-color: #FFA500;
+ 		border:none;
+	}
+	
+	li {
+		margin : 2px;
+	}	
+	
 	table, th, td{
-		border: 1px solid black;
-		border-collapse: collapse;
-		padding : 5px 10px;	
+		margin : 5px;
 	}
-	th,td{
-		text-align: center;
-	}
+	
 	table{
-		width: 800;
-		height: 500;
+/* 		border : 1px solid black; */
+		width:95%;
+		height:70%;
+		text-align:center;
 	}
 </style>
 </head>
 <body>
-	<select id="teamMatchState">
-	  <option value="default">모집여부</option>
-	  <option value="모집중">모집중</option>
-	  <option value="모집종료">모집종료</option>
-	</select>
+	<div style="float: right;">
+		<%@ include file="../loginBox.jsp" %>
+	</div> 
 	
-	<input type="text" id="searchInput" placeholder="팀이름 검색">
-	<button id="searchButton">검색</button>
-	&nbsp;&nbsp;
-	<button id="teamRegist" onclick="location.href='team/teamRegist.go'">팀 개설하기</button>
-	<hr>
-	<table>
-		<colgroup>
-			<col width="15%"/>
-			<col width="15%"/>
-			<col width="20%"/>
-			<col width="40%"/>
-			<col width="10%"/>
-		</colgroup>
-		<thead>
+	<%@ include file="../GNB.jsp" %>
+	
+	<div id="LNB">
+		<br/><br/>
+		 <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
+	      <br/><br/>
+	    <a href="/cf/team/teamList.go">팀 둘러보기</a>	    
+	    <br/><br/>
+     	<c:if test="${teamUserChk eq true}">
+           <a href="/cf/team/teamPage.go?teamIdx=${teamIdx}">마이팀</a>
+        </c:if>
+	</div>
+	
+	<div id="content">
+		<select id="teamMatchState">
+		  <option value="default">모집여부</option>
+		  <option value="모집중">모집중</option>
+		  <option value="모집종료">모집종료</option>
+		</select>
+		
+		<input type="text" id="searchInput" placeholder="팀이름 검색">
+		<button id="searchButton">검색</button>
+		&nbsp;&nbsp;
+		<button style="float:right;" id="teamRegist" onclick="location.href='team/teamRegist.go'">팀 개설하기</button>
+		<br/>
+		<hr/>
+		<br/>
+		<table>
+			<colgroup>
+				<col width="15%"/>
+				<col width="15%"/>
+				<col width="20%"/>
+				<col width="40%"/>
+				<col width="10%"/>
+			</colgroup>
+			<thead>
+				<tr>
+					<th>모집상태</th>
+					<th>주활동지역</th>
+					<th>팀 이름</th>
+					<th>팀 소개글</th>
+					<th>팀원</th>
+				</tr>
+			</thead>
+			<tbody id="list">
+				<!-- list 출력 영역 -->
+			</tbody>
 			<tr>
-				<th>모집상태</th>
-				<th>주활동지역</th>
-				<th>팀 이름</th>
-				<th>팀 소개글</th>
-				<th>팀원</th>
+				<td colspan="7" id="paging">	
+					<!-- 	플러그인 사용	(twbsPagination)	-->
+					<div class="container">									
+						<nav aria-label="Page navigation" style="text-align:center">
+							<ul class="pagination" id="pagination"></ul>
+						</nav>					
+					</div>
+				</td>
 			</tr>
-		</thead>
-		<tbody id="list">
-			<!-- list 출력 영역 -->
-		</tbody>
-		<tr>
-			<td colspan="7" id="paging">	
-				<!-- 	플러그인 사용	(twbsPagination)	-->
-				<div class="container">									
-					<nav aria-label="Page navigation" style="text-align:center">
-						<ul class="pagination" id="pagination"></ul>
-					</nav>					
-				</div>
-			</td>
-		</tr>
-	</table>
+		</table>
+	</div>
 </body>
 <script>
 	var showPage = 1;

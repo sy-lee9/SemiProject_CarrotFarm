@@ -15,6 +15,10 @@
 					ORDER BY teamIdx DESC LIMIT 10 OFFSET #{offset};
 	</select>
 	
+	<select id="getTeamIdx" resultType="int">
+		SELECT teamIdx FROM teamUser WHERE userId = #{param1} AND teamUserState = 'join'
+	</select>
+	
 	<select id="MatchStateList" resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT 
 			t.teamIdx,t.teamMatchState,t.locationIdx,t.teamName,t.teamIntroduce,t.teamDisband,
@@ -84,7 +88,10 @@
 	</select>
 	
 	<select id="tagReview" resultType="kr.co.cf.team.dto.TeamDTO">
-		SELECT tagContent FROM tag WHERE tagIdx in (SELECT tagIdx FROM tagReview WHERE teamId = #{param1})
+		SELECT 
+			tagContent,COUNT(tagContent) AS tagCount 
+		FROM tag 
+			WHERE tagIdx in (SELECT tagIdx FROM tagReview WHERE teamId = #{param1}) GROUP by tagContent
 	</select>
 	
 	<select id="updateForm"	resultType="kr.co.cf.team.dto.TeamDTO">
@@ -126,12 +133,22 @@
 			AND teamUserState = 'join'
 	</select>
 	
-	<insert id="disbandAlarm" parameterType="String">
-		insert into alarm(categoryId,userId,alarmContent) 
+	<insert id="disbandAlarm" >
+		insert into alarm(categoryId,userId,alarmContent,alarmKind) 
 		values(
 		'ta01',
-		#{param1},
-		'팀장의 팀해체 요청으로 일주일 후 팀이 해체됩니다.')
+		#{param2},
+		'팀장의 팀해체 요청으로 일주일 후 팀이 해체됩니다.',
+		#{param1})
+	</insert>
+	
+	<insert id="disbandCancleAlarm" >
+		insert into alarm(categoryId,userId,alarmContent,alarmKind) 
+		values(
+		'ta01',
+		#{param2},
+		'팀 해체가 취소되었습니다.',
+		#{param1})
 	</insert>
 	
 
@@ -281,7 +298,8 @@
 			AND teamGrade IN ('leader','deputyLeader')
 	</select>
 	
-	<select id="appGameAlarm" resultType="kr.co.cf.team.dto.TeamDTO">
+	<!-- 신청한 경기 변경사항 알림 -->
+	<select id="appGameUpdateAlarm" resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT 
 		    m.matchingIdx,
 		    m.subject,
@@ -299,6 +317,49 @@
 		ORDER BY m.gameDate DESC
 	</select>
 	
+	<!-- 초대된 경기 알림 -->
+	<select id="matchingInviteAlarm" resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			(SELECT teamIdx FROM team WHERE teamIdx = 
+		   		(SELECT teamIdx FROM teamUser WHERE userId = m.writerId)) AS teamIdx,
+			matchingIdx,
+		   (SELECT teamName FROM team WHERE teamIdx = 
+		   		(SELECT teamIdx FROM teamUser WHERE userId = m.writerId)) AS teamName,
+		   m.subject,
+		   (SELECT courtName FROM court WHERE courtIdx = m.courtIdx) AS location,
+		   m.gameDate,
+		   m.gamePlay,
+		   m.matchigState 
+		FROM 
+		    matching m
+		    INNER JOIN alarm a ON m.matchingIdx = a.alarmKind
+		WHERE 
+		    a.categoryId = 'm02' 
+		    AND a.userId = #{param1}
+		    AND a.alarmContent = '초대'
+		ORDER BY m.gameDate DESC
+	</select>
+	
+	<!-- 경기 참가신청 알림 -->
+	<select id="gameMatchingAppAlarm" resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT 
+			(SELECT teamIdx FROM teamUser WHERE userId = m.writerId) AS teamIdx,
+			m.matchingIdx,
+			(SELECT teamName FROM team WHERE teamIdx = (SELECT teamIdx FROM teamUser WHERE userId = m.writerId)) AS teamName,
+			m.subject,
+			(SELECT gu FROM location WHERE locationIdx = (SELECT locationIdx FROM team WHERE teamIdx = 
+				(SELECT teamIdx FROM teamUser WHERE userId = m.writerId))) AS gu,
+			(SELECT SUM(userMannerScore) FROM review WHERE receiveId IN (SELECT u.userId FROM teamUser u WHERE teamIdx = 
+				(SELECT teamIdx FROM teamUser WHERE userId = m.writerId))) AS teamManner
+		FROM 
+			matching m
+			INNER JOIN alarm a ON m.matchingIdx = a.alarmKind
+		WHERE 
+			a.categoryId = 'm02' 
+			AND a.userId = #{param1}
+			AND a.alarmContent = '신청'
+		ORDER BY m.gameDate DESC		
+	</select>
 	
 	<select id="getTeamLeader"	resultType="String">
 		SELECT userId
@@ -388,6 +449,13 @@
 			AND userId = #{param2}
 			AND teamUserState = 'join'
 	</select>
+	
+	<update id="teamGradeUpdate">
+		UPDATE teamUser SET teamGrade = 'leader'
+			WHERE teamIdx = #{param1}
+				AND teamGrade = 'deputyLeader'
+			LIMIT 1
+	</update>
 	
 	<update id="leaveTeam">
 		UPDATE teamUser SET teamUserState = 'leave'
@@ -524,6 +592,15 @@
 				AND userId = #{userId}
 	</update>
 	
+	<insert id="removeAlarm" parameterType="String">
+		insert into alarm(categoryId,userId,alarmContent,alarmKind) 
+		values(
+		'ta01',
+		#{userId},
+		'가입된 팀에서 강퇴되었습니다.',
+		#{teamIdx})
+	</insert>
+	
 	<select id="warningHistory" resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT warningDate, warningResult, warningReason
 			FROM warning
@@ -532,7 +609,14 @@
 				ORDER BY warningDate DESC
 	</select>
 	
-	
+	<insert id="removeNowAlarm" parameterType="String">
+		insert into alarm(categoryId,userId,alarmContent,alarmKind) 
+		values(
+		'ta01',
+		#{userId},
+		concat(#{reason}, '/해당 사유로 강퇴되었습니다.'),
+		#{teamIdx})
+	</insert>
 	
 	
 	

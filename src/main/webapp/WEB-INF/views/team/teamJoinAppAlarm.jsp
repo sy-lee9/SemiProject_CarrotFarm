@@ -18,8 +18,9 @@
 <body>
 	<input type="hidden" name="teamIdx" value="${teamIdx}"/>
 	<a href="teamJoinAppAlarm.go?teamIdx=${teamIdx}">팀 가입신청 알림</a>
-	<a href="#">경기 참가신청 알림</a>
-	<a href="appGameAlarm.go?teamIdx=${teamIdx}">경기 변경사항 알림</a>
+	<a href="gameMatchingAppAlarm.go?teamIdx=${teamIdx}">경기 참가신청 알림</a>
+	<a href="appGameUpdateAlarm.go?teamIdx=${teamIdx}">경기 변경사항 알림</a>
+	<a href="matchingInviteAlarm.go?teamIdx=${teamIdx}">경기 초대 알림</a>
 	<br/>
 	<hr/>
 	<br/>
@@ -36,7 +37,7 @@
 		<thead>
 			<tr>
 				<th>신청일</th>
-				<th>닉네임</th>
+				<th>아이디</th>
 				<th>활동지역</th>
 				<th>선호 포지션</th>
 				<th>주 활동시간</th>

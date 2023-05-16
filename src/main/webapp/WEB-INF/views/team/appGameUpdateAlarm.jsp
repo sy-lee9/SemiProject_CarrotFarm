@@ -71,8 +71,9 @@
 	<div id="content">
 		<input type="hidden" name="teamIdx" value="${teamIdx}"/>
 		<a href="teamJoinAppAlarm.go?teamIdx=${teamIdx}">팀 가입신청 알림</a>
-		<a href="#">경기 참가신청 알림</a>
-		<a href="appGameAlarm.go?teamIdx=${teamIdx}">경기 변경사항 알림</a>
+		<a href="gameMatchingAppAlarm.go?teamIdx=${teamIdx}">경기 참가신청 알림</a>
+		<a href="appGameUpdateAlarm.go?teamIdx=${teamIdx}">경기 변경사항 알림</a>
+		<a href="matchingInviteAlarm.go?teamIdx=${teamIdx}">경기 초대 알림</a>
 		<br/>
 		<hr/>
 		<br/>
@@ -93,10 +94,10 @@
 						<th colspan="2">신청한 경기가 없습니다.</th>
 					</tr>
 				</c:if>
-				<c:forEach items="${list}" var="bbs">
+				<c:forEach items="${list}" var="matching">
 					<tr>
-						<td><a href="../matching/detail.go?matchingIdx=${bbs.matchingIdx}">${bbs.subject}</a></td>
-						<td>모집글이 ${bbs.alarmContent}되었습니다.</td>
+						<td><a href="../matching/detail.go?matchingIdx=${matching.matchingIdx}">${matching.subject}</a></td>
+						<td>모집글이 ${matching.alarmContent}되었습니다.</td>
 					</tr>
 				</c:forEach>
 			</tbody>
