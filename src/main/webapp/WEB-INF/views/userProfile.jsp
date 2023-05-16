@@ -35,7 +35,7 @@
 		float:left;
 		margin : 5px;
 		font-weight: bold;
-        font-size: 15px;
+        font-size: 18px;
 		text-align:center;
 		
 	}
@@ -82,25 +82,22 @@
 <jsp:include page="GNB.jsp"></jsp:include>
 	
 	<div id="LNB">
-       <ul>
-         <li>
-           <img width="180" height="180" src="/photo/${user.photoName}"/>
-         </li>
-         <li>
+       <br/><br/>
+	<img width="200" height="200" src="/photo/${loginPhotoName}">
+	<br/><br/>
            <a href="/cf/userinfo.go">회원 정보</a>
-         </li>
-         <li>
+           <br/><br/>
            <a href="/cf/userprofile.go">회원 프로필</a>
-         </li>
-         <li>
+           <br/><br/>
            <a href="/cf/userNoticeAlarm">알림</a>
-         </li>
-         <li>
-           <a href="/cf/mygames">참여 경기</a>
-         </li>
-       </ul>
+           <br/><br/>
+           <a href="/cf/allgames">참여 경기</a>
+           <br/><br/>
+           <a href="/cf/mygames">리뷰</a>
+           <br/><br/>
    </div>
 	<div id="content" >
+	
 	<h3>회원 프로필</h3>
 	
 	<div id="inline" style=" float:left;">
@@ -156,9 +153,8 @@
 			
 	</table>
 	</div>
-
 	
-	</br>
+	<br/>
 	<c:set var="loginId" value="${sessionScope.loginId}" />
 	<c:if test="${loginId != null}">
 		<button onclick="window.open('userReport.go?userId=${profileInfo.userId}&userIdx=${profileInfo.userIdx}','회원 신고','width=600px,height=400px')">신고</button>

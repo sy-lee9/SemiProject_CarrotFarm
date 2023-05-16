@@ -5,9 +5,82 @@
 <meta charset="UTF-8">
 <title>🏀 당근농장</title>
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
-<style></style>
+
+<!-- 부트스트랩 JavaScript 파일 불러오기 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+	
+<style>
+	body{
+		position:relative;
+		font-size:15px;
+		padding : 10px;
+		min-width: 1200px;
+		
+		
+	}
+	
+	#loginBack{
+		background-image: url(/photo/로그인배경.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+	}
+	
+	#content {
+		width:100%;
+		padding: 10 30 10;
+		margin-left : 600px;
+		margin-top : 200px;
+		float:inherit;
+		
+	}
+	
+	#LNB {
+		width:20%;
+		height : 83%;
+		background-color: #f8f9fa;
+		float:left;
+		margin : 5px;
+		font-weight: bold;
+        font-size: 15px;
+		text-align:center;
+		
+	}
+	
+	a {
+	  color : balck;
+	}
+	
+	a:link {
+	  color : balck;
+	}
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	 text-decoration-line: none;
+	  color : #FFA500 ;
+	}
+	
+	.pagination .page-link {
+  		color: gray; /* 기본 글자색을 검정색으로 지정 */
+	}
+
+	.pagination .page-item.active .page-link {
+ 		background-color: #FFA500;
+ 		border:none;
+	}
+</style>
 </head>
+
+
+
 <body>
+<div id="loginBack">
+	<jsp:include page="GNB.jsp"></jsp:include>
+	
+	<div id="content" >
 	<h3>로그인</h3>
 	<table>
 		<tr>
@@ -27,6 +100,10 @@
 			</th>
 		</tr>
 	</table>
+	</div>
+	<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+	<div></div>
+	</div>
 </body>
 <script>
 function login(){

@@ -62,6 +62,11 @@
 	</table>
 </body>
 <script>
+var adminRight="${sessionScope.adminRight}";
+console.log("왜 안될까요?? "+adminRight);
+if(adminRight==''){
+	location.href="/cf/";
+}
 var showPage = 1;
 var courtSearch = 'default';
 listCall(showPage);
