@@ -291,7 +291,7 @@ function listPrint(list){
 		content +='<td id="gamePlayer"> ' + item.matchingNumforSure +'/'+ item.matchingNum+ '</td>';
 		content +='<td id="subject" style="text-align:left; padding-left:30px;"><a href="detail.go?matchingIdx='+ item.matchingIdx+'">'+item.subject+'</a></td>';
 		content +='<td>'+item.gameDate+'</td>';
-		content +='<td id="writerId">'+item.writerId+'</td>';
+		content += '<td id="writerId"><a href="#" onclick="window.open(\'../userprofilepop.go?userId=' + item.writerId + '\',\'회원프로필\',\'width=600px,height=400px\')">' + item.writerId + '</a></td>';
 		content +='<td>'+item.bHit+'</td>';
 		content +='</tr>';
 		

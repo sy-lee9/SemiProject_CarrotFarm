@@ -50,9 +50,11 @@ public interface TeamDAO {
 
 	int disbandCancle(int teamIdx);
 
-	ArrayList<TeamDTO> getTeamUser(String teamIdx);
+	ArrayList<TeamDTO> getTeamUser(int teamIdx);
 
-	void disbandAlarm(String userId);
+	void disbandAlarm(int teamIdx, String userId);
+	
+	void disbandCancleAlarm(int teamIdx, String userId);
 	
 	//참가한 경기기록 보기
 	ArrayList<TeamDTO> gameList(HashMap<String, Object> params);
@@ -75,12 +77,18 @@ public interface TeamDAO {
 	ArrayList<TeamDTO> matchingRequestListAsc(String userId);
 	
 	//신청한 경기 모집글 변경사항 알림
-	ArrayList<TeamDTO> appGameAlarm(String teamIdx);
+	ArrayList<TeamDTO> appGameUpdateAlarm(String teamIdx);
 
-	int teamLeadersConf(String teamIdx, String loginId);
+	//경기 초대 알림
+	ArrayList<TeamDTO> matchingInviteAlarm(String userId);
+
+	//경기 참가신청 알림
+	ArrayList<TeamDTO> gameMatchingAppAlarm(String userId);
+
+	int teamLeadersConf(int teamIdx, String loginId);
 	
 	//모집중인 경기 리스트 보기
-	String getTeamLeader(String teamIdx);
+	String getTeamLeader(int teamIdx);
 
 	ArrayList<TeamDTO> writeMatchingList(String userId);
 	
@@ -104,6 +112,8 @@ public interface TeamDAO {
 	
 	//팀 탈퇴
 	int teamUserChk(int teamIdx, String userId);
+
+	int teamGradeUpdate(int teamIdx, String userId);
 
 	int leaveTeam(int teamIdx, String userId);
 
@@ -134,9 +144,17 @@ public interface TeamDAO {
 
 	//팀원 강퇴
 	int remove(HashMap<String, Object> params);
+
+	void removeAlarm(HashMap<String, Object> params);
 	
 	//유저 경고 기록 보기
 	ArrayList<TeamDTO> warningHistory(int teamIdx, String userId);
+
+	void removeNowAlarm(HashMap<String, Object> params);
+
+	int getTeamIdx(String loginId);
+
+
 
 
 

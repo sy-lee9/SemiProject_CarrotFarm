@@ -109,7 +109,7 @@
 							listCall(page);							
 						}				
 					}
-				});					
+				});	
 			},
 			error:function(e){
 				console.log(e);
@@ -141,22 +141,26 @@
 			content +='<td><a href="../userprofile.go?userId='+list.userId+'">'+list.userId+'</a></td>';
 			content += '<td><button onclick="window.open(\'warning.go?userId='+list.userId+'&teamIdx='+teamIdx+'\',\'경고\',\'width=550px,height=530px\')">경고</button></td>';
 			content += '<td><button onclick="window.open(\'warningCancel.go?userId='+list.userId+'&teamIdx='+teamIdx+'\',\'경고 취소\',\'width=550px,height=280px\')">취소</button></td>';
-			content +='<td id="warningCount"><a href="./warningDetail.go?userId='+list.userId+'&teamIdx='+teamIdx+'">'+list.warningCount+'</a></td>';
-			content += '<td><button type="button" id="remove" onclick="window.open(\'remove.go?userId='+list.userId+'&teamIdx='+teamIdx+'\',\'강퇴\',\'width=550px,height=280px\')">강퇴</button></td>';
+			content +='<td><a href="./warningDetail.go?userId='+list.userId+'&teamIdx='+teamIdx+'">'+list.warningCount+'</a></td>';
+			
+			if(list.warningCount >= 5){
+				content += '<td><button onclick="window.open(\'remove.go?userId='+list.userId+'&teamIdx='+teamIdx+'\',\'강퇴\',\'width=550px,height=280px\')">강퇴</button></td>';
+			}
+			if(list.warningCount < 5){
+				content += '<td><button disabled="true" onclick="window.open(\'remove.go?userId='+list.userId+'&teamIdx='+teamIdx+'\',\'강퇴\',\'width=550px,height=280px\')">강퇴</button></td>';
+			}
+			
 			content +='</tr>';
 		}); 
 		$('#list').empty();
 		$('#list').append(content);
+
 	}
 	
 
-	
-	$('#warningCount').ready(function() {
-	    if (parseInt($('#warningCount').text()) >= 5) {
-	        $('#remove').attr('type', 'submit');
-	    }
-	});
+		
 
+	
 	var msg = "${msg}";
 	console.log(msg);
 	if(msg != ''){
