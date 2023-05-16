@@ -33,7 +33,7 @@ body{
 	
 	#LNB {
 		width:20%;
-		height : 83%;
+		height : 50%;
 		background-color: #f8f9fa;
 		float:left;
 		margin : 5px;
