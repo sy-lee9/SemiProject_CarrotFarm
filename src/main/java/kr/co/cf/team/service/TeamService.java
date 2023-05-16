@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.cf.matching.dto.MatchingDTO;
 import kr.co.cf.team.dao.TeamDAO;
 import kr.co.cf.team.dto.TeamDTO;
 
@@ -117,6 +118,10 @@ public class TeamService {
 		return locationIdx;
 	}
 
+	public ArrayList<TeamDTO> locationList() {
+		return TeamDAO.locationList();
+	}
+
 	public HashMap<String, Object> list(HashMap<String, Object> params) {
 		
 		int page = Integer.parseInt((String) params.get("page"));
@@ -186,6 +191,7 @@ public class TeamService {
 		TeamDTO TeamDTO = new TeamDTO();
 		TeamDTO.setTeamIdx(Integer.parseInt(params.get("teamIdx")));
 		TeamDTO.setTeamName(params.get("teamName"));
+		TeamDTO.setTeamMatchState(params.get("teamMatchState"));
 		TeamDTO.setTeamFavTime(params.get("teamFavTime"));
 		TeamDTO.setTeamIntroduce(params.get("teamIntroduce"));
 		TeamDTO.setTeamFavNum(Integer.parseInt(params.get("teamFavNum")));	
@@ -401,7 +407,7 @@ public class TeamService {
 		logger.info("params : "+params);
 		String selectedGameDate = String.valueOf(params.get("selectedGameDate"));
 		
-		String teamIdx = (String) params.get("teamIdx");
+		int teamIdx = (int) params.get("teamIdx");
 		ArrayList<TeamDTO> teamLeaderList = TeamDAO.getTeamLeaders(teamIdx);
 		logger.info("getTeamLeader : "+teamLeaderList);
 		
@@ -488,6 +494,10 @@ public class TeamService {
 
 	public int teamJoinChk(String loginId) {
 		return TeamDAO.teamJoinChk(loginId);
+	}
+
+	public int removeChk(int teamIdx, String loginId) {
+		return TeamDAO.removeChk(teamIdx,loginId);
 	}
 
 	public int teamJoinApp(int teamIdx, String loginId) {
@@ -764,8 +774,12 @@ public class TeamService {
 		TeamDAO.removeNowAlarm(params);
 	}
 
-	public int getTeamIdx(String loginId) {
+	public String getTeamIdx(String loginId) {
 		return TeamDAO.getTeamIdx(loginId);
+	}
+
+	public ArrayList<TeamDTO> getTeamLeaders(int teamIdx) {
+		return TeamDAO.getTeamLeaders(teamIdx);
 	}
 
 
