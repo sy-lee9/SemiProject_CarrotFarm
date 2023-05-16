@@ -44,9 +44,9 @@ public class TeamController {
 			String teamIdx = TeamService.getTeamIdx(loginId);
 			logger.info("get teamIdx : "+teamIdx);
 			model.addAttribute("teamIdx",teamIdx);
-		}
-		
-		model.addAttribute("teamIdx",0);
+		}else {
+			model.addAttribute("teamIdx",0);
+		}		
 		
 		String msg = (String) session.getAttribute("msg");
 		logger.info(msg);
