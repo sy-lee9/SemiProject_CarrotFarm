@@ -148,12 +148,13 @@
 	
 	<div id="LNB">
 		<br/><br/>
-	        <c:if test="${loginId eq null}">
+	     <c:if test="${loginId eq null}">
 			<img width="200" height="200" src="/photo/기본프로필.png">
-		</c:if>
-		<c:if test="${loginId ne null}">
-			<img width="200" height="200" src="/photo/${loginPhotoName}">
-		</c:if>
+		 </c:if>
+		 <c:if test="${loginId ne null}">
+			<img width="200" height="200" src="/photo/${loginPhotoName}"> 
+			<br/> <h3 style="display:inline-block; margin-top:10px;">${loginId} </h3>님 <a href="/cf/userNoticeAlarm">🔔</a>
+		 </c:if>
 	      <br/><br/>
 	        <a href="/cf/team/teamPage.go?teamIdx=${teamIdx}" style="font-weight: bold; font-size: 18px; color: black;">팀소개</a>
 	      <br/><br/>
@@ -253,7 +254,7 @@
 		     
 		     <tr>
 
-			     <form method="post" action="teampictureboardcommentUpdate.do?">
+			     <form method="post" action="teampictureboardcommentUpdate.do?bidx=${bidxx}&teamIdx=${teamIdx}">
 					<th>
 						<input type="hidden" name="commentIdx" value="${tpcommentDto.commentIdx}">
 						<input type="hidden" name="bidx" value="${dto.get(0).boardIdx}" style= "border:none;">

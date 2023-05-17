@@ -97,10 +97,19 @@ body{
    </div> 
    <jsp:include page="GNB.jsp"></jsp:include>
    <div id="LNB">
+   		<br/><br/>
+   		<c:if test="${loginId eq null}">
+			<img width="200" height="200" src="/photo/기본프로필.png">
+		</c:if>
+		<c:if test="${loginId ne null}">
+			<img width="200" height="200" src="/photo/${loginPhotoName}"> 
+			<br/> <h3 style="display:inline-block; margin-top:10px;">${loginId} </h3>님 <a href="/cf/userNoticeAlarm">🔔</a>
+		</c:if>
       <br/><br/>
-       <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
        <br/><br/><br/><br/>
-       <a href="/cf/court" style = "color: orange">경기장 상세보기</a>
+       <a href="/cf/court" style = "color: black">경기장 리스트</a>
+       <br/><br/><br/><br/>
+	   <a href="#" style = "color: orange">경기장 리스트</a>
        
    </div>
    <div id="content">
@@ -114,9 +123,9 @@ body{
                <c:if test="${courtInfo.courtInOut eq 'out'}">(실외)</c:if>
                <c:if test="${courtInfo.courtInOut eq 'in'}">(실내)</c:if>
             </th>
-            <th style="text-align: left; font-size: 20pt;">
-               <c:if test="${courtInfo.courtStar eq ''}">0.0</c:if>
-               <c:if test="${courtInfo.courtStar ne ''}">⭐${courtInfo.courtStar}</c:if>
+            <th id="courtStar" style="text-align: left; font-size: 20pt;">
+               <%-- <c:if test="${courtInfo.courtStar eq ''}">0.0</c:if>
+               <c:if test="${courtInfo.courtStar ne ''}">⭐${courtInfo.courtStar}</c:if> --%>
             </th>   
          </tr>
          <tr style="font-size: 13pt; height:65px;">
@@ -148,7 +157,7 @@ body{
      <div style = "font-size : 13pt; font-weight: bold;">
 
           <a style="margin:4%;" href="#" onclick="window.open('courtReviews.do?courtIdx=${courtInfo.courtIdx}','리뷰 모아보기','width=600px,height=400px')">리뷰 더보기</a>
-         <table style = " width : 730px ; float : right; ">
+         <table style = " width : 55% ; float : left; margin-left:4%; ">
          <c:forEach items="${courtReviewList}" var="courtReview" end="3">
          <tr>
             <th>${courtReview.userId}</th>
@@ -157,6 +166,9 @@ body{
             
             <c:if test="${courtReview.photoName ne null}">
                <th><img width="100" src="/photo/${courtReview.photoName}"/></th>
+            </c:if>
+             <c:if test="${courtReview.photoName eq null}">
+               <th></th>
             </c:if>
             <c:if test="${courtReview.userId eq sessionScope.loginId}">
             <th><a href="#" onclick ="window.open('courtReviewUpdate.go?courtReviewIdx=${courtReview.courtReviewIdx}&courtIdx=${courtInfo.courtIdx}','리뷰 모아보기','width=800px,height=400px')">수정</a></th>
@@ -196,12 +208,11 @@ body{
         <label for="star1"></label>
    </div>
       &nbsp; &nbsp; &nbsp; &nbsp; 
-      <button>작성</button> &nbsp; &nbsp; &nbsp;  <button onclick="location.href='court'">목록</button>
+      <button class="btn btn-outline-dark">작성</button> &nbsp; &nbsp; &nbsp;  <button class="btn btn-outline-dark" type="button" onclick="location.href='court'">목록</button>
    </div>
    </form>
    </c:if>
->>>>>>> 5abb766d64a1633008f118294a701b7e4aebd548
-
+	</div>
 </body>
 <script>
    var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
@@ -237,6 +248,15 @@ body{
           return false;
         }
       }
+   var star;
+   var courtStar = "${courtInfo.courtStar}";
+   if(courtStar==''){
+	   star = 0;
+   }else{
+	   star = parseFloat(courtStar).toFixed(2);
+   }
+   console.log(star);
+   $('#courtStar').text('⭐'+star);
 </script>
 </html>
 

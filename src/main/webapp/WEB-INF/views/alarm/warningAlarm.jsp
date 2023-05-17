@@ -98,7 +98,8 @@
 			<img width="200" height="200" src="/photo/기본프로필.png">
 		</c:if>
 		<c:if test="${loginId ne null}">
-			<img width="200" height="200" src="/photo/${loginPhotoName}">
+			<img width="200" height="200" src="/photo/${loginPhotoName}"> 
+			<br/> <h3 style="display:inline-block; margin-top:10px;">${loginId} </h3>님 <a href="/cf/userNoticeAlarm">🔔</a>
 		</c:if>
 			<br/><br/>
            <a href="/cf/userinfo.go">회원 정보</a>
@@ -227,8 +228,9 @@ function listPrint(list){
 		
 		
 		content +='<tr>';
+		content +='<td style="text-align:left;"><input type="checkbox" value="'+item.alarmIdx+'">&nbsp&nbsp&nbsp&nbsp</td>';
 		content +='<td>'+item.alarmIdx+'</td>';
-		content +='<td>'+item.alarmkind+'</td>';
+		content +='<td>'+item.alarmcontent+'를 받았습니다. </td>';
 		content +='</tr>';
 		
 	});

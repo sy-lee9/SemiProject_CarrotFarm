@@ -341,6 +341,11 @@ function profileChange(){
 $(document).ready(function() {
 	  $('#searchButton').css('margin-top', '+0.5px');
 	});
+var adminRight="${sessionScope.adminRight}";
+console.log("왜 안될까요?? "+adminRight);
+if(adminRight==''){
+   location.href="/cf/";
+}
 
 </script>
 </html>

@@ -28,7 +28,6 @@
 		padding: 10 30 10;
 		margin : 5px;
 		float:right;
-		
 	}
 	
 	#LNB {
@@ -59,7 +58,7 @@
 	}
 	
 	table, th, td{
-		padding: 10px;
+		padding: 20px;
 		margin : 5px;
 		text-align: center;
 	}
@@ -89,11 +88,12 @@
 	
 	<div id="LNB">
 		<br/><br/>
-        <c:if test="${loginId eq null}">
+		<c:if test="${loginId eq null}">
 			<img width="200" height="200" src="/photo/기본프로필.png">
 		</c:if>
 		<c:if test="${loginId ne null}">
-			<img width="200" height="200" src="/photo/${loginPhotoName}">
+			<img width="200" height="200" src="/photo/${loginPhotoName}"> 
+			<br/> <h3 style="display:inline-block; margin-top:10px;">${loginId} </h3>님 <a href="/cf/userNoticeAlarm">🔔</a>
 		</c:if>
 	      <br/><br/>
 	        <a href="/cf/team/teamPage.go?teamIdx=${team.teamIdx}">팀소개</a>
@@ -165,28 +165,31 @@
 		</table>
 		<br/>
 		<br/>
-		<div style="width: 600; height: 200px; margin: 10px; float: left; text-align: center;">
+		<div style="width: 45%; height: 30%; margin-left: 4%; float: left; text-align: center;">
 			<table>
 				<tr>
-					<th style="border-bottom: 1px solid black">팀 소개글</th>
+					<th style="border-bottom: 1px solid black;">팀 소개글</th>
 				</tr>
 				<tr>
 					<td>${team.teamIntroduce}</td>
 				</tr>
 			</table>
 		</div>
-		<div style="width: 600; height: 200px; margin: 10px; float: left; text-align: center;">
+		<div style="width: 45%; height: 30%; float: left; text-align: center; margin-left: 3%;">
 			<table>
 				<tr>
-					<th style="border-bottom: 1px solid black">경기리뷰</th>
+					<th style="border-bottom: 1px solid black;">경기리뷰</th>
 				</tr>
 			</table>
+			<br/>
 			<c:forEach items="${list}" var="team">
-				<p style="display: inline;">${team.tagContent} ${team.tagCount}</p>&nbsp;&nbsp;
+				<div style="display: inline;" class="alert alert-warning" role="alert">
+					${team.tagContent}&nbsp;&nbsp;${team.tagCount}
+				</div>&nbsp;&nbsp;
 			</c:forEach>
 		</div>
 		<c:if test="${teamUserChk eq true}">
-			<button type="button" onclick="leaveTeam(${team.teamIdx})" class="btn btn-danger" style="margin: 5px; font-size:15;">팀 탈퇴</button>
+			<button type="button" id="leaveTeam" onclick="leaveTeam(${team.teamIdx})" class="btn btn-danger" style="margin: 5px; font-size:15;">팀 탈퇴</button>
 		</c:if>		
 	</div>		
 
@@ -204,9 +207,12 @@
 	        },
 	        dataType:'json',
 	        success: function(data) {
-	        	 console.log(data);
-	  
+	        	 console.log(data);	  
             	alert("탈퇴 되었습니다.");
+            	
+            	var leaveButton = document.getElementById('leaveTeam');
+            	leaveButton.style.display = 'none';
+            	
 	        },
 			error:function(e){
 				console.log(e);

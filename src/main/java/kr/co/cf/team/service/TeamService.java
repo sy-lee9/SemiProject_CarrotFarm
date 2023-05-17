@@ -96,7 +96,7 @@ public class TeamService {
 					try {
 						byte[] bytes = teamProfilePhoto.getBytes();//1-3. 바이트 추출
 						//1-5. 추출한 바이트 저장
-						Path path = Paths.get("C:/img/upload"+photoName);
+						Path path = Paths.get("C:/img/upload/"+photoName);
 						Files.write(path, bytes);
 						logger.info(photoName+" save OK");
 					} catch (IOException e) {
@@ -390,10 +390,12 @@ public class TeamService {
 		logger.info("params : "+params);
 		String selectedGameDate = String.valueOf(params.get("selectedGameDate"));
 		
+
 		int teamIdx = Integer.parseInt((String) params.get("teamIdx"));
 		String leaderId = TeamDAO.getTeamLeader(teamIdx);
 		logger.info("getTeamLeader : "+leaderId);
 		params.put("userId", leaderId);
+
 		
 		ArrayList<TeamDTO> list = new ArrayList<TeamDTO>();
 		HashMap<String, Object> map = new HashMap<String, Object>();		

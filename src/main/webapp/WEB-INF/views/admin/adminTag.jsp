@@ -22,7 +22,7 @@
 	}
 	
 	#content {
-		width:78%;
+		width:100%;
 		height : 87%;
 		background-color: #f8f9fa;
 		padding: 10 30 10;
@@ -122,6 +122,7 @@
 		<%@ include file="../loginBox.jsp" %>
 	</div> 
 	<%@ include file="../GNBA.jsp" %>
+	<div id="content">
 	
 	<input id="searchTag" type="text" name="searchTag" placeholder="태그내용 검색">
 	<button class="btn btn-outline-dark" id="searchButton">검색</button>
@@ -149,6 +150,7 @@
 			</tr>
 		</tbody>	
 	</table>
+	</div>
 </body>
 <script>
 	var showPage = 1;

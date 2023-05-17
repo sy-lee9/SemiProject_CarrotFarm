@@ -113,6 +113,7 @@ public class TeamBoardController {
 			page = "/board/teampictureboardUpdateForm";
 			model.addAttribute("dto", dto);
 		}
+		
 		return page;
 	}
 	
@@ -168,6 +169,9 @@ public class TeamBoardController {
 		model.addAttribute("tpcommentDto", tpcommentDto);
 				
 		};
+		
+
+		model.addAttribute("bidxx", bidx);
 		return "/board/teampictureboardCommentUpdate" ;
 	}
 	
@@ -175,6 +179,7 @@ public class TeamBoardController {
 	public String tpcommentUpdateDo(@RequestParam HashMap<String, String> params) {
 
 		service.tpcommentUpdate(params);
+		logger.info("params : "+ params);		
 		String bidx = params.get("bidx");
 		String teamIdx = params.get("teamIdx");
 		logger.info("bidx : "+ bidx);		

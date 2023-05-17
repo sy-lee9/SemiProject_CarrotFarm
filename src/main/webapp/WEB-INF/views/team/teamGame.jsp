@@ -99,11 +99,12 @@
 	
 	<div id="LNB">
 		<br/><br/>
-	        <c:if test="${loginId eq null}">
+		<c:if test="${loginId eq null}">
 			<img width="200" height="200" src="/photo/기본프로필.png">
 		</c:if>
 		<c:if test="${loginId ne null}">
-			<img width="200" height="200" src="/photo/${loginPhotoName}">
+			<img width="200" height="200" src="/photo/${loginPhotoName}"> 
+			<br/> <h3 style="display:inline-block; margin-top:10px;">${loginId} </h3>님 <a href="/cf/userNoticeAlarm">🔔</a>
 		</c:if>
 	      <br/><br/>
 	        <a href="/cf/team/teamPage.go?teamIdx=${teamIdx}">팀소개</a>
