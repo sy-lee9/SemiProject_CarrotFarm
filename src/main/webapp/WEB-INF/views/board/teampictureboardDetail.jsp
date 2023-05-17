@@ -245,6 +245,7 @@
 		     <tr>
 		     	<c:if test="${loginId != null }">
 			     <form method="post" action="teampictureboardcommentWrite.do?categoryId=b011&comentId=${dto.get(0).boardIdx}">
+			     <input type="hidden" name="teamIdx" value="${teamIdx}"/>
 			     		<td>
 			     			<input type="text" name="userId" value="${loginId}" style= "border:none; background-color: #f8f9fa ; text-align:center;" readonly;>
 			     		</td>

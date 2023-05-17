@@ -317,7 +317,7 @@
 	
 				     <form method="post" action="commentWrite.do?categoryId=m01&comentId=${dto.matchingIdx}" id="commentForm">
 				     		<th >
-				     			<input type="text" name="userId" value="${loginId}" style= "border:none; width:50px; background-color: #f8f9fa;" readonly>
+				     			<input type="text" name="userId" value="${loginId}" style= "border:none; width:100px; background-color: #f8f9fa;" readonly>
 				     		</th>
 				     		<c:if test="${loginId != null }">
 					     		<th colspan="2">

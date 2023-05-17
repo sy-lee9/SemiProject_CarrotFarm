@@ -89,14 +89,14 @@ public class TeamService {
 				
 				String photoName = "";
 				if(oriFileName == null || oriFileName == "") {
-					photoName = "기본프로필.png";
+					photoName = "팀기본프로필.png";
 				}else {
 					//1-2. 새이름 생성
 					photoName = teamIdx+oriFileName;
 					try {
 						byte[] bytes = teamProfilePhoto.getBytes();//1-3. 바이트 추출
 						//1-5. 추출한 바이트 저장
-						Path path = Paths.get("C:/carrot_farm/t01/"+photoName);
+						Path path = Paths.get("C:/img/upload"+photoName);
 						Files.write(path, bytes);
 						logger.info(photoName+" save OK");
 					} catch (IOException e) {
