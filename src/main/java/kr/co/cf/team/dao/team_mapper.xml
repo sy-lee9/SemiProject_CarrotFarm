@@ -12,10 +12,11 @@
 	<select id="teamList" resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT 
 			t.teamIdx,t.teamMatchState,t.locationIdx,t.teamName,t.teamIntroduce,t.teamDisband,
-			(SELECT COUNT(userId) FROM teamUser WHERE teamIdx = t.teamIdx) AS teamUser,
+			(SELECT COUNT(userId) FROM teamUser WHERE teamIdx = t.teamIdx AND teamUserState = 'join') AS teamUser,
 			(SELECT gu FROM location WHERE locationIdx = t.locationIdx) AS gu
 		FROM team t 
 			WHERE teamDisband = 0 
+				AND (SELECT COUNT(u.userId) FROM teamUser u WHERE u.teamIdx = t.teamIdx AND u.teamUserState = 'join') != 0
 					ORDER BY teamIdx DESC LIMIT 10 OFFSET #{offset};
 	</select>
 	
@@ -88,7 +89,7 @@
 			(SELECT gu FROM location WHERE locationIdx = t.locationIdx) AS gu
 		FROM team t 
 			WHERE t.teamIdx = #{param1} 
-					ORDER BY teamIdx DESC;
+					ORDER BY teamIdx DESC
 	</select>
 	
 	<select id="tagReview" resultType="kr.co.cf.team.dto.TeamDTO">

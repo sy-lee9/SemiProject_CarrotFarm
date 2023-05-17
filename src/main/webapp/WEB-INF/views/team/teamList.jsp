@@ -128,7 +128,7 @@
 		<input type="text" id="searchInput" placeholder="팀이름 검색">
 		<button id="searchButton" style="margin: 5px; font-size:15;" class="btn btn-outline-dark">검색</button>
 		&nbsp;&nbsp;
-		<button style="float:right; 5px; font-size:15;" class="btn btn-primary" id="teamRegist" onclick="location.href='team/teamRegist.go'">팀 개설하기</button>
+		<button style="float:right; 5px; font-size:15;" class="btn btn-outline-dark" id="teamRegist" onclick="location.href='team/teamRegist.go'">팀 개설하기</button>
 		<br/>
 		<hr/>
 		<br/>
