@@ -21,6 +21,7 @@
 	
 	#content {
 		width:78%;
+		height:87%;
 		background-color: #f8f9fa;
 		padding: 10 30 10;
 		margin : 5px;
@@ -35,9 +36,13 @@
 		float:left;
 		margin : 5px;
 		font-weight: bold;
-        font-size: 15px;
+        font-size: 18px;
 		text-align:center;
 		
+	}
+	
+	button {
+		float : right;
 	}
 	
 	a {
@@ -71,6 +76,20 @@
         margin-right: 400px; /* 좌측과의 간격을 조정할 수 있습니다 */
         
     }
+    
+    
+    th,td {
+    	padding:5px;
+    }
+    
+    .tableGab {
+        margin-bottom: 50px; /* 아래쪽 간격 설정 */
+    }
+    
+    #infoTable th,td {
+    	padding : 5px 10px;
+    }
+
 
 </style>
 </head>
@@ -82,53 +101,31 @@
 <jsp:include page="GNB.jsp"></jsp:include>
 	
 	<div id="LNB">
-       <ul>
-         <li>
-           <img width="180" height="180" src="/photo/${user.photoName}"/>
-         </li>
-         <li>
+       <br/><br/>
+	<img width="200" height="200" src="/photo/${loginPhotoName}">
+	<br/><br/>
            <a href="/cf/userinfo.go">회원 정보</a>
-         </li>
-         <li>
-           <a href="/cf/userprofile.go">회원 프로필</a>
-         </li>
-         <li>
+           <br/><br/>
+           <a href="/cf/userprofile.go?userId=${loginId}">회원 프로필</a>
+           <br/><br/>
            <a href="/cf/userNoticeAlarm">알림</a>
-         </li>
-         <li>
-           <a href="/cf/mygames">참여 경기</a>
-         </li>
-       </ul>
+           <br/><br/>
+           <a href="/cf/allgames">참여 경기</a>
+           <br/><br/>
+           <a href="/cf/mygames">리뷰</a>
+           <br/><br/>
    </div>
 	<div id="content" >
+	
 	<h3>회원 프로필</h3>
 	
-	<div id="inline" style=" float:left;">
-		<img width="200" src="/photo/${profileInfo.photoName}"/>
+	<div id="inline" style=" float:left; width :30%; height:40%;">
+		<img width="100%" src="/photo/${profileInfo.photoName}"/>
 	</div>
-	</br>
-	<div>
-	<table>
-		<tr>
-				<th>참여 경기 목록</th>
-			</tr>
-			<c:if test="${profileGames eq '[]'}">
-				<tr>
-					<th colspan="4">등록된 글이 없습니다.</th>
-				</tr>
-			</c:if>
-			<c:forEach items="${profileGames}" var="bbs" end="4">
-				<tr>
-					<td>${bbs.gu}</td>
-					<td>${bbs.subject}</td>
-					<td>${bbs.gameDate}</td>
-					<td>${bbs.gamePlay}</td>
-				</tr>
-			</c:forEach>
-		</table>
-	</div>
-	<div>
-		<table>
+
+	
+	<div class="tableGab">
+		<table id="infoTable">
 			<tr>
 				<th>닉네임</th>
 				<td>${profileInfo.nickName}</td>
@@ -153,16 +150,51 @@
 				<th>매너 점수</th>
 				<td>${mannerPoint}</td>
 			</tr>
-			
-	</table>
-	</div>
-
 	
-	</br>
-	<c:set var="loginId" value="${sessionScope.loginId}" />
-	<c:if test="${loginId != null}">
-		<button onclick="window.open('userReport.go?userId=${profileInfo.userId}&userIdx=${profileInfo.userIdx}','회원 신고','width=600px,height=400px')">신고</button>
-	</c:if>
+			
+		</table>
+		</div>
+		
+		<div class="tableGab">
+		<table style="width:65%;">
+		<colgroup>
+        <col style="width:15%;">
+        <col style="width:50%;">
+        <col style="width:20%;">
+        <col style="width:15%;">
+    </colgroup>
+			<tr>
+				<th colspan="4" style="text-align:center;">참여 경기 목록</th>
+			</tr>
+			<c:if test="${profileGames ne '[]'}">
+			<tr>
+				<th style="text-align:center;">장소</th>
+				<th style="text-align:center;">제목</th>
+				<th style="text-align:center;">날짜</th>
+				<th style="text-align:center;">경기방식</th>
+			</tr>
+			</c:if>
+			<c:if test="${profileGames eq '[]'}">
+				<tr>
+					<th colspan="4" style="text-align:center;">등록된 글이 없습니다.</th>
+				</tr>
+			</c:if>
+			<c:forEach items="${profileGames}" var="bbs" end="4">
+				<tr>
+					<td style="text-align:center;">${bbs.gu}</td>
+					<td style="text-align:center;"><a href="./matching/detail.go?matchingIdx=${bbs.matchingIdx}">${bbs.subject}</a></td>
+					<td style="text-align:center;">${bbs.gameDate}</td>
+					<td style="text-align:center;">${bbs.gamePlay}:${bbs.gamePlay} </td>
+				</tr>
+			</c:forEach>
+		</table>
+		
+		</div>
+		<c:set var="loginId" value="${sessionScope.loginId}" />
+			<c:if test="${loginId != null}">
+				<button class="btn btn-outline-dark" onclick="window.open('userReport.go?userId=${profileInfo.userId}&userIdx=${profileInfo.userIdx}','회원 신고','width=600px,height=400px')">신고</button>
+			</c:if>
+		
 	</div>
 </body>
 <script>

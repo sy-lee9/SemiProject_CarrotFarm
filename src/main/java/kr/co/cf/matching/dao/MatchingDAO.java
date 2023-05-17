@@ -196,6 +196,10 @@ public interface MatchingDAO {
 
 	String getSubject(String matchingIdx);
 
+	void reviewAlarm(String categoryId, String userId, String matchingIdx);
+
+	int delete(String alarmIdx);
+
 	
 
 

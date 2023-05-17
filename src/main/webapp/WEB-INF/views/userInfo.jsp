@@ -37,9 +37,12 @@
 		float:left;
 		margin : 5px;
 		font-weight: bold;
-        font-size: 15px;
+        font-size: 18px;
 		text-align:center;
-		
+	}
+	
+	table {
+	 margin-left: 300px;
 	}
 	
 	a {
@@ -95,9 +98,11 @@
    <h3>회원 정보</h3>
       <table>
       	<tr>
-      		<td>
+      		<td colspan="2">
+      		&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 				<img width="200" src="/photo/${user.photoName}"/>
 			</td>
+			<td></td>
          </tr>
          <tr>
             <th>아이디</th>
@@ -149,9 +154,9 @@
          </tr>
          <tr>      
             <th colspan="2">
-               <button onclick="location.href='userinfoupdate.go'">회원정보 수정</button>
-               <button onclick="location.href='./'">돌아가기</button>
-               <button onclick="location.href='userdelete.go'">회원탈퇴</button>
+               <button class="btn btn-outline-dark" onclick="location.href='userinfoupdate.go'">회원정보 수정</button>
+               <button class="btn btn-outline-dark" onclick="location.href='./'">돌아가기</button>
+               <button class="btn btn-outline-dark" onclick="location.href='userdelete.go'">회원탈퇴</button>
             </th>
             </tr>
       </table>

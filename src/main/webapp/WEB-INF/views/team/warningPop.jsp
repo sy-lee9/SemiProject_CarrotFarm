@@ -45,7 +45,7 @@
 			<br/>	
 			<textarea name="content" id="content" style="width: 500px; height: 200px;" placeholder="기타 경고사유를 입력해 주세요." hidden="true"></textarea>
 			<br/>	
-		<input type="button" value="제출" onclick="subChk()" style="margin: 10px;" />
+		<input type="button" value="제출" onclick="subChk()" style="margin: 10px; font-size: 15;" class="btn btn-warning" />
 	<!-- </form> -->
 	
 	

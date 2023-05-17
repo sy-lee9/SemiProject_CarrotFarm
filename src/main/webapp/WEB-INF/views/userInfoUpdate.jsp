@@ -37,9 +37,12 @@ body{
 		float:left;
 		margin : 5px;
 		font-weight: bold;
-        font-size: 15px;
+        font-size: 18px;
 		text-align:center;
-		
+	}
+	
+	table {
+	 margin-left: 300px;
 	}
 	
 	a {
@@ -114,7 +117,7 @@ body{
                 <th>닉네임</th>
                 <td>
                     <input type="text" id="nickName" name="nickName" value="${user.nickName}"/>
-                    <button id="nickChk" type="button">중복 확인</button>
+                    <button class="btn btn-outline-dark" id="nickChk" type="button">중복 확인</button>
                     <td id="nickMsg"></td>
                 </td>
             </tr>
@@ -152,7 +155,7 @@ body{
                 <th>선호 경기 지역</th>
                 <td>
                     <input type="text" id="location" name="location" value="${user.gu}" readonly/>
-                    <button type="button" id="address_kakao">검색</button>
+                    <button class="btn btn-outline-dark" type="button" id="address_kakao">검색</button>
                 </td>
             </tr>
             <tr>
@@ -173,8 +176,10 @@ body{
             </tr>
             <tr>      
                 <th colspan="2">
-                    <button type="submit" id="update">수정 완료</button>
-                    <button onclick="location.href='userinfo.go'">취소</button>
+                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    <button class="btn btn-outline-dark" type="submit" id="update">수정 완료</button>
+                    <button class="btn btn-outline-dark" onclick="location.href='userinfo.go'">취소</button>
                 </th>
             </tr>
         </table>

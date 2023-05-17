@@ -484,6 +484,24 @@ public class MatchingService {
 		matchingDAO.applyGameAlarmDelete(matchingIdx,userId);
 	}
 
+	public void reviewAlarm(String userId, String matchingIdx) {
+		String categoryId = matchingDAO.categoryIdChk(matchingIdx);
+		matchingDAO.reviewAlarm(categoryId,userId, matchingIdx);
+	}
+
+	public HashMap<String, Object> delete(ArrayList<String> delList) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
+		int delSize = delList.size();
+		int successCnt = 0;
+		for (String alarmIdx : delList) {
+			successCnt += matchingDAO.delete(alarmIdx);
+		}
+		map.put("msg", "선택한 알람 "+successCnt+"개를 삭제했습니다. ");
+		map.put("success",true);
+		return map;
+	}
+
 	
 
 

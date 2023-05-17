@@ -75,7 +75,7 @@ public class MatchingController {
       
       // 로그인 정보가 없을 시
       if(session.getAttribute("loginId") == null) {
-         model.addAttribute("loginId", "guest");
+         //model.addAttribute("loginId", "guest");
       }
       // 로그인 정보가 있을 시
       if(session.getAttribute("loginId") != null) {      
@@ -107,7 +107,7 @@ public class MatchingController {
       playerList = matchingService.playerList(matchingIdx);
       int mvpChk = playerList.size()/2; 
       logger.info("mvp  최소 득표수 : " + mvpChk);
-      String mvp = "mvp미정";
+      String mvp = "경기 MVP는 50% 이상의 표를 획득했을 때만 공개됩니다.";
       ArrayList<HashMap<String, String>> mvpCnt = matchingService.mvpCnt(matchingIdx);
       
       for (int i = 0; i < mvpCnt.size(); i++) {
@@ -439,6 +439,11 @@ public class MatchingController {
 		}
 		if(matchigState.equals("finish")) {
 			matchingService.matchigStateToReview(matchingIdx,matchigState);
+			ArrayList<MatchingDTO> alarmList = matchingService.playerList(matchingIdx);
+			for (int i = 0; i < alarmList.size(); i++) {
+				String userId = alarmList.get(i).getUserId();
+				matchingService.reviewAlarm(userId,matchingIdx);
+			}
 		}
 		
 		matchingService.downHit(matchingIdx);

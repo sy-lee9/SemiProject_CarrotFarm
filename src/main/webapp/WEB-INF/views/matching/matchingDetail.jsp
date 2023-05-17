@@ -100,7 +100,7 @@ body{
 	}
 	
 	#scroll{
-		width: 250px;
+		width: 270px;
         height: 230px;
 		overflow: auto;
 	}
@@ -218,7 +218,9 @@ body{
 		     		</c:if>
 		     		
 		     		<c:if test="${dto.writerId ne loginId }">
-			     		
+			     		<th>
+			     			
+		     			</th>
 		     		</c:if>
 	     		</c:if>
 	     		

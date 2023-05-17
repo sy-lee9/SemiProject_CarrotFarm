@@ -93,19 +93,11 @@
 	      </li>
 	      
 	      <li>
-	        <a href="/cf/teamnoticeboardList.do" style="font-weight: bold; font-size: 20px ; color: orange;">팀 공지 사항</a>
+	        <a href="/cf/teamnoticeboardList.do?teamIdx=${teamIdx}" style="font-weight: bold; font-size: 20px ; color: orange;">팀 공지 사항</a>
 	      </li>
 	      
 	      <li>
-	        <a href="/cf/teamfreeboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 자유 게시판</a>
-	      </li>
-	      
-	      <li>
-	        <a href="/cf/teampictureboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 사진첩</a>
-	      </li>
-	      
-	      <li>
-	        <a href="/cf/teaminquiryboardList.do" style="font-weight: bold; font-size: 20px; color: black;">팀 문의</a>
+	        <a href="/cf/teampictureboardList.do?teamIdx=${teamIdx}" style="font-weight: bold; font-size: 20px; color: black;">팀 사진첩</a>
 	      </li>
 
 	    </ul>
@@ -119,9 +111,9 @@
 	
 	<br/>
 	<br/>
-	<c:if test="${loginId != null }">
-	<button id="registerBtn" onclick="location.href='teamnoticeboardWrite.go'">공지사항 등록</button>
-	</c:if>
+<%-- 	<c:if test="${loginId != null }"></c:if> --%>
+	<button id="registerBtn" onclick="location.href='teamnoticeboardWrite.go?teamIdx=${teamIdx}'">공지사항 등록</button>
+	
 	<br/>
 	<br/>
 	<table>
@@ -151,6 +143,8 @@
 </body>
 <script>
 
+var teamIdx="${teamIdx}";
+console.log("받아온 팀idx :" +teamIdx);
 var searchText = 'default';
 var showPage = 1;
 listCall(showPage);
@@ -162,7 +156,7 @@ $('#teamnoticeboardSearchButton').click(function(){
 });
 
 
-$.ajax({
+/* $.ajax({
 	type:'post',
 	url:'tnuserRight.ajax',
 	data:{},
@@ -176,7 +170,7 @@ $.ajax({
 	error:function(e){
 		console.log(e);
 	}
-});
+}); */
 
 function listCall(page){
 	$.ajax({
@@ -184,7 +178,8 @@ function listCall(page){
 		url:'tnlist.ajax',
 		data:{
 			'page':page,
-			'search':searchText
+			'search':searchText,
+			'teamIdx':teamIdx
 		},
 		dataType:'json',
 		success:function(data){
@@ -217,7 +212,7 @@ function listPrint(tnalist){
 	tnalist.forEach(function(item,idx){
 		content +='<tr>';
 		content +='<td>'+item.boardIdx+'</td>';
-		content +='<td><a href="teamnoticeboardDetail.do?bidx='+item.boardIdx+'">'+item.subject+'</a></td>';
+		content +='<td><a href="teamnoticeboardDetail.do?bidx='+item.boardIdx+'&teamIdx='+teamIdx+'">'+item.subject+'</a></td>';
 		content +='<td>'+item.userId+'</td>';
 		
 

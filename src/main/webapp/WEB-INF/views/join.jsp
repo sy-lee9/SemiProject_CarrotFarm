@@ -9,6 +9,11 @@
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  
+  <!-- 부트스트랩 JavaScript 파일 불러오기 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
   <script>
     $(function() {
       $("#datepicker").datepicker();
@@ -16,9 +21,68 @@
   </script>
 <style>
 
+	body{
+		position:relative;
+		font-size:15px;
+		padding : 10px;
+		min-width: 1200px;
+	}
+	
+	#content {
+		width:78%;
+		background-color: #f8f9fa;
+		padding: 10 30 10;
+		margin : 5px;
+		float:right;
+	}
+
+	
+	table {
+	margin : auto;
+		margin-left: 300px;
+		margin-top: 100px;
+	}
+	
+	th,td {
+		padding: 7px;
+		
+	}
+	
+	
+	a {
+	  color : balck;
+	}
+	
+	a:link {
+	  color : balck;
+	}
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	 text-decoration-line: none;
+	  color : #FFA500 ;
+	}
+	
+	.pagination .page-link {
+  		color: gray; /* 기본 글자색을 검정색으로 지정 */
+	}
+
+	.pagination .page-item.active .page-link {
+ 		background-color: #FFA500;
+ 		border:none;
+	}
+	
 </style>
 </head>
 <body>
+
+	<div style="float: right;">
+		<jsp:include page="loginBox.jsp"></jsp:include>
+	</div>
+	
+	<jsp:include page="GNB.jsp"></jsp:include>
+	
 	<h3>회원가입</h3>
 	<form action="join.do" method="post" enctype="multipart/form-data">
 	<table>
@@ -26,7 +90,7 @@
             <th>아이디</th>
             <td>
 	            <input type="text" name="userId" id="userId" pattern="^(?!.*(admin|guest)).*" required> <!-- 정규표현식 -->
-	            <button id="idChk" type="button">중복 확인</button><br>
+	            <button class="btn btn-outline-dark" id="idChk" type="button">중복 확인</button><br>
 	            admin 과 guest 는 ID에 사용 불가합니다.
 	        </td>
             <th>사진</th>
@@ -37,14 +101,14 @@
         <tr>
         	<td></td>
         	<td id="msg"></td>
-            <td colspan="2">파일 용량 제한: 100MB / 가로,세로 제한 길이: 150px</td>
+            <td colspan="2"></td>
             <td></td>
         </tr>
         <tr>
             <th>닉네임</th>
             <td>
             	<input type="text" name="nickName" id="nickName"/>
-            	<button id="nickChk" type="button">중복 확인</button><br>
+            	<button class="btn btn-outline-dark" id="nickChk" type="button">중복 확인</button><br>
             </td>
             <td id="nickMsg"></td>
             <td></td>
@@ -62,7 +126,7 @@
         </tr>
         <tr>
         	<td></td>
-        	<td>비밀번호는 8자리 이상, 영문과 숫자를 반드시 포함해야 합니다.(보류)</td>
+        	<td></td>
             <td></td>
             <td></td>
         </tr>
@@ -89,7 +153,7 @@
         	<th>선호 경기 지역</th>
             <td>
             	<input type="text" id="location" name="location" readonly/>
-            	<button type="button" id="address_kakao">검색</button>
+            	<button class="btn btn-outline-dark" type="button" id="address_kakao">검색</button>
             </td>
             <th>이메일</th>
             <td>
@@ -110,13 +174,18 @@
             <td></td>
         </tr>
         <tr>
+        	<td></td>
+        	<td></td>
+        	<td></td>
         	<td>
-        		<button type="button" onclick="join()">회원가입</button>
-        	<td>
+        		&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        		<button class="btn btn-outline-dark" type="button" onclick="join()">회원가입</button>
+        		<button class="btn btn-outline-dark" type="button" onclick="location.href='./'">돌아가기</button>
+        	</td>
         </tr>
         </table>
         </form>
-        <button type="button" onclick="location.href='./'">돌아가기</button>
+        
 </body>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>

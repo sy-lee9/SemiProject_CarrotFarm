@@ -102,24 +102,26 @@
 	      <br/><br/>
 	        <a href="/cf/team/teamGame.go?teamIdx=${team.teamIdx}">참여 경기</a>
 	      <br/><br/>
+	        <a href="/cf/teamnoticeboardList.do?teamIdx=${team.teamIdx}">팀 공지 사항</a>
+	      <br/><br/>
 	        <a href="/cf/teampictureboardList.do?teamIdx=${team.teamIdx}">팀 사진첩</a>
 	      <br/><br/>
-	        <a href="/cf/teaminquiryboardList.do?teamIdx=${team.teamIdx}" >팀 문의</a>
+
 	</div>
 	
 	<div id="content">
-		<div id="inline"><button onclick="location.href='teamList.go'">리스트로 돌아가기</button></div>
+		<div id="inline"><button onclick="location.href='teamList.go'" style="margin: 5px; font-size:15;" class="btn btn-outline-dark">리스트로 돌아가기</button></div>
 		<div id="teamMatchState" style="margin: 10px; display: flex; align-items: center; float:right; height: 40px;">
 			<p>${team.teamMatchState}</p>
 			<c:if test="${teamLeadersChk eq true}">
-				<div style="float:right;"><button type="button" id="joinCancelApp" onclick="location.href='teamJoinAppAlarm.go?teamIdx=${team.teamIdx}'">팀관리</button></div>
+				<div style="float:right;"><button type="button" style="margin: 5px; font-size:15;" class="btn btn-outline-dark" onclick="location.href='teamJoinAppAlarm.go?teamIdx=${team.teamIdx}'">팀관리</button></div>
 			</c:if>
 		</div> 
 		<c:if test="${team.teamMatchState == '모집중' && joinAppChk eq false && joinTeam eq false}">
-			<div style="float:right; margin: 10px; "><button type="button" id="joinApp" onclick="joinApp(${team.teamIdx})">가입신청</button></div>
+			<div style="float:right; margin: 10px; "><button type="button" id="joinApp" style="margin: 5px; font-size:15;" class="btn btn-outline-dark" onclick="joinApp(${team.teamIdx})">가입신청</button></div>
 		</c:if>
 		<c:if test="${team.teamMatchState == '모집중' && joinAppChk eq true}">
-			<div style="float:right; margin: 10px; "><button type="button" id="joinCancelApp" onclick="joinCancel(${team.teamIdx})">가입신청 취소</button></div>
+			<div style="float:right; margin: 10px; "><button type="button" id="joinCancelApp" style="margin: 5px; font-size:15;" class="btn btn-outline-dark" onclick="joinCancel(${team.teamIdx})">가입신청 취소</button></div>
 		</c:if>
 		<br/>
 		<br/>
@@ -184,7 +186,7 @@
 			</c:forEach>
 		</div>
 		<c:if test="${teamUserChk eq true}">
-			<button type="button" onclick="leaveTeam(${team.teamIdx})">팀 탈퇴</button>
+			<button type="button" onclick="leaveTeam(${team.teamIdx})" class="btn btn-danger" style="margin: 5px; font-size:15;">팀 탈퇴</button>
 		</c:if>		
 	</div>		
 

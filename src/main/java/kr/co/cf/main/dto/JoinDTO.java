@@ -26,6 +26,7 @@ public class JoinDTO {
 	private String gameDate;
 	private String gamePlay;
 	private int userIdx;
+	private String matchingIdx;
 	
 	
 	public String getUserId() {
@@ -129,6 +130,12 @@ public class JoinDTO {
 	}
 	public void setUserIdx(int userIdx) {
 		this.userIdx = userIdx;
+	}
+	public String getMatchingIdx() {
+		return matchingIdx;
+	}
+	public void setMatchingIdx(String matchingIdx) {
+		this.matchingIdx = matchingIdx;
 	}
 	
 	

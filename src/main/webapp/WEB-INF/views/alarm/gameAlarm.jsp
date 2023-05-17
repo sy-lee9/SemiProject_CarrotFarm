@@ -50,11 +50,12 @@
 	
 	table, th, td{
 		margin : 5px;
+		padding : 3px;
 	}
 	
 	table{
-		width:90%;
-		height:70%;
+		width:95%;
+		height:90%;
 		text-align:center;
 	}
 	
@@ -115,12 +116,12 @@
 	
 	<div id="content">
 	<br/>
-		<ul class="nav nav-tabs">
+		<ul class="nav nav-tabs" >
 		  <li class="nav-item">
 		    <a class="nav-link" href="/cf/userNoticeAlarm">공지사항</a>
 		  </li>
 		  <li class="nav-item">
-		    <a class="nav-link active" href="/cf/userGameAlarm">경기알림</a>
+		    <a style="font-size:17px; font-weight:700;" class="nav-link active" href="/cf/userGameAlarm">경기알림</a>
 		  </li>
 		  <li class="nav-item">
 		    <a class="nav-link" href="/cf/userWarningAlarm">경고알림</a>
@@ -132,16 +133,18 @@
 		<!-- </br>
 		<h2 style="margin:10px;">경기 알림</h2>
 		<hr/> -->
+		
 		<table>
 			<thead>
 					<tr>
-						<th style="width:20%;">No</th>
-						<th style="width:50%;">모집글</th>
-						<th style="width:30%;">알림 내용</th>
+						<th style="width:10%; text-align:left;"><input type="checkbox" id="all" /> &nbsp; <button style="font-size:15px;" class="btn btn-outline-dark" onclick="del()">삭제</button></th>
+						<th style="width:10%; text-align:left;">No</th>
+						<th style="width:40%;">모집글</th>
+						<th style="width:40%;">알림 내용</th>
 					</tr>
 				</thead>
 				<tr>
-					<th colspan="3"> <hr/> </th>
+					<th colspan="4"> <hr/> </th>
 				</tr>
 				<tbody>
 				
@@ -156,9 +159,10 @@
 				
 				
 				<tr>
-				  <th colspan="3" id="paging" style="text-align:center;">  
-				    <div class="container" >    
-				    <hr/>              
+				  <th colspan="4" id="paging" style="text-align:center;">  
+				    <div class="container" >
+				    <hr/> 
+				             
 				      <nav aria-label="Page navigation">
 				        <ul class="pagination justify-content-center" id="pagination"></ul>
 				      </nav>
@@ -219,21 +223,22 @@ function listPrint(list){
 	
 	if(list.length==0){
 		content +='<tr>';
-		content +='<th colspan="3"> 확인할 알림이 없습니다. </th>';
+		content +='<th colspan="4"> 확인할 알림이 없습니다. </th>';
 		content +='</tr>';
 	}else{
 		list.forEach(function(item,idx){
 		
 		
 		content +='<tr>';
-		content +='<td>'+item.alarmIdx+'</td>';
+		content +='<td style="text-align:left;"><input type="checkbox" value="'+item.alarmIdx+'">&nbsp&nbsp&nbsp&nbsp</td>';
+		content +='<td style="text-align:left;">'+item.alarmIdx+'</td>';
 		var delAlarm = item.alarmcontent;
 		
 		if (delAlarm.startsWith('삭제')) {
 			var delSubject = delAlarm.substring(2);
 			console.log(delSubject);
 			content +='<td id="subject">['+ delSubject +']</td>';
-			content +='<td> 삭제 </td>';
+			content +='<td> 모집글이 삭제되었습니다. </td>';
 			
 		} else{
 			/* 모집글 제목 출력 */
@@ -247,9 +252,13 @@ function listPrint(list){
 			
 			
 			if(item.alarmcontent=='초대'){
-				content +='<td>'+item.alarmcontent+' <button class="btn btn-outline-dark" onclick="inviteAccept('+item.matchingIdx+')">수락</button> <button class="btn btn-outline-dark" onclick="inviteReject('+item.matchingIdx+')">거절</button></td>';
+				content +='<td>경기 '+item.alarmcontent+'되었습니다. <button style="font-size:15px;" class="btn btn-outline-dark" onclick="inviteAccept('+item.matchingIdx+')">수락</button> <button style="font-size:15px;" class="btn btn-outline-dark" onclick="inviteReject('+item.matchingIdx+')">거절</button></td>';
+			}else if(item.alarmcontent=='리뷰'){
+				content +='<td>리뷰를 작성해 주세요</td>';
+			}else if(item.alarmcontent=='등록'){
+				content +='<td>선수로 등록되었습니다. </td>';
 			}else{
-				content +='<td>'+item.alarmcontent+'</td>';
+				content +='<td>'+item.alarmcontent+'되었습니다. </td>';
 			}
 		}
 
@@ -266,7 +275,15 @@ function listPrint(list){
 	$('#list').append(content);
 } 
 	
-
+$('#all').click(function(e){
+	var $chk = $('input[type="checkbox"]');
+	console.log($chk);
+	if($(this).is(':checked')){
+		$chk.prop('checked',true);
+	}else{
+		$chk.prop('checked',false);
+	}
+});
 	function inviteAccept(matchingIdx) {
 	 	console.log(matchingIdx);
 	 	location.href='inviteAccept?matchingIdx='+matchingIdx;
@@ -275,6 +292,40 @@ function listPrint(list){
 	
 	function inviteReject(matchingIdx) {
 		location.href='inviteReject?matchingIdx='+matchingIdx;
+	}
+	
+	function del(){
+		 
+		 var checkArr = [];
+		 
+		 // checkbox에 value를 지정하지 않으먄 스스로를 on으로 지정한다. 
+		 $('input[type="checkbox"]:checked').each(function(idx,item){
+			if($(this).val() != 'on'){
+				checkArr.push($(this).val());
+			}
+			 
+		 });
+		 
+		 console.log(checkArr);
+		 
+		$.ajax({
+			type:'get',
+			url:'deleteAlarm.ajax',
+			data:{'delList':checkArr},
+			dataType:'json',
+			success:function(data){
+				console.log(data);
+				if(data.success){
+					alert(data.msg);
+					
+					listCall(showPage);
+				}
+			},
+			error:function(e){
+				console.log(e);
+			}
+		});
+		
 	}
 
 

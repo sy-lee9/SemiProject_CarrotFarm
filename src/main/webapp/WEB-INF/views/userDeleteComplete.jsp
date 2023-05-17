@@ -20,7 +20,7 @@
 <div>안녕하세요 당근농장 입니다.</div>
  <div>서비스를 이용하시면서 불편함을 드렸다면 죄송합니다.</div>
  <div>더 나은 서비스를 제공하기 위해 노력하는 당근농장이 되겠습니다.</div>
- <button onclick="location.href='/cf/'">메인으로 돌아가기</button>
+ <button class="btn btn-outline-dark" onclick="location.href='/cf/'">메인으로 돌아가기</button>
 
 </body>
 <script></script>

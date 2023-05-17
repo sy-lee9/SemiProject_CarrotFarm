@@ -18,7 +18,7 @@
 	</select>
 	
 	<select id="totalTeamCount" resultType="int">
-		SELECT COUNT(alarmIdx) FROM alarm a LEFT JOIN team t on a.alarmKind = t.teamIdx WHERE a.userId='user01' AND a.categoryId ='ta01'
+		SELECT COUNT(alarmIdx) FROM alarm a LEFT JOIN team t on a.alarmKind = t.teamIdx WHERE a.userId=#{param1} AND a.categoryId ='ta01'
 	</select>
 	
 	<select id="list" resultType="kr.co.cf.matching.dto.MatchingDTO">
@@ -72,11 +72,12 @@
 			t.teamIdx,
 			t.teamName 
 		FROM alarm a
-		left join team t on a.alarmKind = t.teamIdx 
+		LEFT JOIN team t on a.alarmKind = t.teamIdx 
 		WHERE a.userId=#{param2} AND a.categoryId ='ta01'
 		ORDER By alarmIdx DESC 
 		LIMIT 10 OFFSET #{param1}
-		
 	</select>
+	
+
 	
 </mapper>
