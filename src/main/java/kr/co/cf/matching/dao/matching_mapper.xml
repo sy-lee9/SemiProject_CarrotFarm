@@ -30,8 +30,8 @@
  			(SELECT courtAddress From court Where courtIdx=m.courtIdx) AS courtAddress,
  			(SELECT courtTel From court Where courtIdx=m.courtIdx) AS courtTel
  		FROM matching m
- 		LEFT JOIN teamuser tu ON m.writerId = tu.userId
-		LEFT JOIN team t ON tu.teamIdx = t.teamIdx
+ 		LEFT JOIN teamuser tu ON m.writerId = tu.userId AND tu.teamUserState ='join'
+		LEFT JOIN team t ON tu.teamIdx = t.teamIdx 
  		Where matchingIdx = #{param1}
  		
  	</select>
@@ -168,7 +168,7 @@
 		  m.matchigState,
 		  m.bHit 
 		FROM matching m
-		LEFT JOIN teamuser tu ON m.writerId = tu.userId
+		LEFT JOIN teamuser tu ON m.writerId = tu.userId AND tu.teamUserState ='join'
 		LEFT JOIN team t ON tu.teamIdx = t.teamIdx
 		WHERE categoryId=#{param2} AND matchigState='matching'
 		ORDER By matchingIdx DESC 
@@ -193,7 +193,7 @@
 		  m.matchigState,
 		  m.bHit 
 		FROM matching m
-		LEFT JOIN teamuser tu ON m.writerId = tu.userId
+		LEFT JOIN teamuser tu ON m.writerId = tu.userId AND tu.teamUserState ='join'
 		INNER JOIN team t ON tu.teamIdx = t.teamIdx
 		WHERE gamePlay=#{gamePlay} AND categoryId =#{categoryId}
 		ORDER By matchingIdx DESC 
@@ -218,7 +218,7 @@
 		  m.matchigState,
 		  m.bHit 
 		FROM matching m
-		LEFT JOIN teamuser tu ON m.writerId = tu.userId
+		LEFT JOIN teamuser tu ON m.writerId = tu.userId AND tu.teamUserState ='join'
 		INNER JOIN team t ON tu.teamIdx = t.teamIdx
 		WHERE courtIdx IN (SELECT courtIdx FROM court WHERE locationIdx =#{locationIdx}) AND categoryId =  #{categoryId}
 		ORDER By matchingIdx DESC 
@@ -243,7 +243,7 @@
 		  m.matchigState,
 		  m.bHit 
 		FROM matching m
-		LEFT JOIN teamuser tu ON m.writerId = tu.userId
+		LEFT JOIN teamuser tu ON m.writerId = tu.userId AND tu.teamUserState ='join'
 		INNER JOIN team t ON tu.teamIdx = t.teamIdx
 		WHERE gamePlay=#{gamePlay} AND courtIdx IN (SELECT courtIdx FROM court WHERE locationIdx =#{locationIdx}) AND categoryId =  #{categoryId} 
 		ORDER By matchingIdx DESC 
@@ -268,7 +268,7 @@
 		  m.matchigState,
 		  m.bHit 
 		FROM matching m
-		LEFT JOIN teamuser tu ON m.writerId = tu.userId
+		LEFT JOIN teamuser tu ON m.writerId = tu.userId AND tu.teamUserState ='join'
 		INNER JOIN team t ON tu.teamIdx = t.teamIdx
 		WHERE categoryId=#{categoryId} AND (subject LIKE CONCAT('%' #{search} '%') OR writerId LIKE CONCAT('%' #{search} '%'))
 		ORDER By matchingIdx DESC 
@@ -362,7 +362,9 @@
 	<select id="userList" resultType="kr.co.cf.matching.dto.MatchingDTO">
 		SELECT userId
 		FROM user
-		WHERE userId NOT IN ( SELECT userId FROM game WHERE matchingIdx = #{param1} AND gameAppState IN ('신청', '확정','초대')	);
+		WHERE 
+		(userId NOT IN ( SELECT userId FROM game WHERE matchingIdx = #{param1} AND gameAppState IN ('신청', '확정','초대')	))
+		AND (userId != 'carrotadmin')
 	</select>
 	
 	<select id="teamList" resultType="kr.co.cf.matching.dto.MatchingDTO">
