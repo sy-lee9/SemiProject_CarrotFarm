@@ -230,7 +230,7 @@ function listPrint(list){
 		content +='<tr>';
 		content +='<td style="text-align:left;"><input type="checkbox" value="'+item.alarmIdx+'">&nbsp&nbsp&nbsp&nbsp</td>';
 		content +='<td>'+item.alarmIdx+'</td>';
-		content +='<td> 공지 <a href="//noticeboardDetail.do?bidx='+item.alarmkind+'"> ['+item.subject+']</a> 확인해주세요</td>';
+		content +='<td> 공지 <a href="/cf/noticeboardDetail.do?bidx='+item.alarmKind+'"> ['+item.subject+']</a> 확인해주세요</td>';
 		content +='</tr>';
 		
 	});
