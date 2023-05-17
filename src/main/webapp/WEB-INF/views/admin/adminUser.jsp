@@ -257,7 +257,7 @@ function listPrint(list){
 		content +='<td><input type="checkbox" value="'+item.userId+'"</td>';
 		content +='<td>'+item.userIdx+'</td>';
 		content +='<td>'+item.userState+'</td>';
-		content +='<td><a href="#" onclick="window.open(\'userprofilepop.go?userId='+item.userId+'\',\'width=600px,height=400px\')"/>'+item.userId+'</td>';
+		content +='<td><a href="#" onclick="window.open(\'userprofilepop.go?userId='+item.userId+'\',\'width=300px,height=200px\')"/>'+item.userId+'</td>';
 		content +='<td>'+item.userName+'</td>';
 		console.log(item.photoName);
 		if(item.photoName==null){

@@ -45,7 +45,7 @@
 		float:left;
 		margin : 5px;
 		font-weight: bold;
-        font-size: 15px;
+        font-size: 18px;
 		text-align:center;
 		
 	}
@@ -91,7 +91,7 @@
 			<br/><br/>
            <a href="/cf/userinfo.go">회원 정보</a>
            <br/><br/>
-           <a href="/cf/userprofile.go">회원 프로필</a>
+           <a href="/cf/userprofile.go?userId=${loginId}">회원 프로필</a>
            <br/><br/>
            <a href="/cf/userNoticeAlarm">알림</a>
            <br/><br/>
@@ -110,7 +110,7 @@
 	</select>
 	
 	<input type="text" id="searchInput" placeholder="제목 검색">
-	<button id="searchButton">검색</button>
+	<button class="btn btn-outline-dark" id="searchButton">검색</button>
 	
 	<table>
 		<colgroup>
@@ -131,14 +131,14 @@
 			<!-- list 출력 영역 -->
 		</tbody>
 		<tr>
-			<td colspan="4" id="paging">	
+			<th colspan="4" id="paging">	
 				<!-- 	플러그인 사용	(twbsPagination)	-->
-				<div class="container">									
+				<div style="text-align: center;" class="container">	
 					<nav aria-label="Page navigation" style="text-align:center">
-						<ul class="pagination" id="pagination"></ul>
+						<ul class="pagination justify-content-center" id="pagination"></ul>
 					</nav>					
 				</div>
-			</td>
+			</th>
 		</tr>
 	</table>
 	</div>

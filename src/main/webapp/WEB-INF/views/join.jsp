@@ -35,14 +35,16 @@
 		margin : 5px;
 		float:right;
 	}
+
 	
 	table {
+	margin : auto;
 		margin-left: 300px;
 		margin-top: 100px;
 	}
 	
 	th,td {
-		padding: 10px;
+		padding: 7px;
 		
 	}
 	
@@ -88,7 +90,7 @@
             <th>아이디</th>
             <td>
 	            <input type="text" name="userId" id="userId" pattern="^(?!.*(admin|guest)).*" required> <!-- 정규표현식 -->
-	            <button id="idChk" type="button">중복 확인</button><br>
+	            <button class="btn btn-outline-dark" id="idChk" type="button">중복 확인</button><br>
 	            admin 과 guest 는 ID에 사용 불가합니다.
 	        </td>
             <th>사진</th>
@@ -106,7 +108,7 @@
             <th>닉네임</th>
             <td>
             	<input type="text" name="nickName" id="nickName"/>
-            	<button id="nickChk" type="button">중복 확인</button><br>
+            	<button class="btn btn-outline-dark" id="nickChk" type="button">중복 확인</button><br>
             </td>
             <td id="nickMsg"></td>
             <td></td>
@@ -151,7 +153,7 @@
         	<th>선호 경기 지역</th>
             <td>
             	<input type="text" id="location" name="location" readonly/>
-            	<button type="button" id="address_kakao">검색</button>
+            	<button class="btn btn-outline-dark" type="button" id="address_kakao">검색</button>
             </td>
             <th>이메일</th>
             <td>
@@ -177,8 +179,8 @@
         	<td></td>
         	<td>
         		&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-        		<button type="button" onclick="join()">회원가입</button>
-        		<button type="button" onclick="location.href='./'">돌아가기</button>
+        		<button class="btn btn-outline-dark" type="button" onclick="join()">회원가입</button>
+        		<button class="btn btn-outline-dark" type="button" onclick="location.href='./'">돌아가기</button>
         	</td>
         </tr>
         </table>
