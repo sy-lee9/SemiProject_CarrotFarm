@@ -407,7 +407,7 @@ public class TeamService {
 		logger.info("params : "+params);
 		String selectedGameDate = String.valueOf(params.get("selectedGameDate"));
 		
-		int teamIdx = (int) params.get("teamIdx");
+		int teamIdx = params.get("teamIdx");
 		ArrayList<TeamDTO> teamLeaderList = TeamDAO.getTeamLeaders(teamIdx);
 		logger.info("getTeamLeader : "+teamLeaderList);
 		

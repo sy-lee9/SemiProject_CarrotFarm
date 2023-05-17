@@ -1,4 +1,4 @@
- <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
@@ -11,69 +11,69 @@
 
 <script src="resources/js/twbsPagination.js" type="text/javascript"></script>
 <!-- 부트스트랩 JavaScript 파일 불러오기 -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <style>
    
    body{
-		position:relative;
-		font-size:15px;
-		padding : 10px;
-		min-width: 1200px;
-	}
-	
-	#content {
-		width:78%;
-		height : 83%;
-		background-color: #f8f9fa;
-		padding: 10 30 10;
-		margin : 5px;
-		float:right;
-		
-	}
-	
-	#LNB {
-		width:20%;
-		height : 83%;
-		background-color: #f8f9fa;
-		float:left;
-		margin : 5px;
-		font-weight: bold;
+      position:relative;
+      font-size:15px;
+      padding : 10px;
+      min-width: 1200px;
+   }
+   
+   #content {
+      width:78%;
+      height : 83%;
+      background-color: #f8f9fa;
+      padding: 10 30 10;
+      margin : 5px;
+      float:right;
+      
+   }
+   
+   #LNB {
+      width:20%;
+      height : 83%;
+      background-color: #f8f9fa;
+      float:left;
+      margin : 5px;
+      font-weight: bold;
         font-size: 15px;
-		text-align:center;
-		
-	}
-	a {
-	  color : black;
-	}
-	
-	a:link {
-	  color : black;
-	}
-	a:visited {
-	  color : black;
-	}
-	a:hover {
-	 text-decoration-line: none;
-	  color : #FFA500 ;
-	}
-	
-	.pagination .page-link {
-  		color: gray; /* 기본 글자색을 검정색으로 지정 */
-	}
+      text-align:center;
+      
+   }
+   a {
+     color : black;
+   }
+   
+   a:link {
+     color : black;
+   }
+   a:visited {
+     color : black;
+   }
+   a:hover {
+    text-decoration-line: none;
+     color : #FFA500 ;
+   }
+   
+   .pagination .page-link {
+        color: gray; /* 기본 글자색을 검정색으로 지정 */
+   }
 
-	.pagination .page-item.active .page-link {
- 		background-color: #FFA500;
- 		border:none;
-	}
-	#searchCourt{
-		width: 300px;
-    	height: 22px;
-    	margin : 5px;
-	}
-	
-	table {
+   .pagination .page-item.active .page-link {
+       background-color: #FFA500;
+       border:none;
+   }
+   #searchCourt{
+      width: 300px;
+       height: 22px;
+       margin : 5px;
+   }
+   
+   table {
     border-collapse: collapse;
     width: 100%;
   }
@@ -86,200 +86,200 @@
 </style>
 </head>
 <body>
-	<div style="float: right;">
-		<%@ include file="loginBox.jsp" %>
-	</div> 
-	<%@ include file="GNB.jsp" %>
-	<div id="LNB">
-		<br/><br/>
-		 <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
-	    <br/><br/><br/><br/>
-	    <a href="/cf/court" style = "color: orange">경기장 리스트</a>
-	    
-	</div>
-	<div id="content">
-	
-	<select name="gu" id="gu" onchange="courtSort('gu')" style = "margin-left : 30px">
-		<option value="none">위치</option>
-		<option value="서울특별시">서울</option>
-		<c:forEach items="${guList}" var="gu">
-			console.log(${gu.gu});
-			<option value="${gu.gu}">${gu.gu}</option>
-		</c:forEach>
+   <div style="float: right;">
+      <%@ include file="loginBox.jsp" %>
+   </div> 
+   <%@ include file="GNB.jsp" %>
+   <div id="LNB">
+      <br/><br/>
+       <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
+       <br/><br/><br/><br/>
+       <a href="/cf/court" style = "color: orange">경기장 리스트</a>
+       
+   </div>
+   <div id="content">
+   
+   <select name="gu" id="gu" onchange="courtSort('gu')" style = "margin-left : 30px">
+      <option value="none">위치</option>
+      <option value="서울특별시">서울</option>
+      <c:forEach items="${guList}" var="gu">
+         console.log(${gu.gu});
+         <option value="${gu.gu}">${gu.gu}</option>
+      </c:forEach>
       </select>
       <select name="inOut" id="inOut" onchange="courtSort('inOut')">
-      	<option value="none">실내/외</option>
-      	<option value="in">실내</option>
-      	<option value="out">실외</option>
+         <option value="none">실내/외</option>
+         <option value="in">실내</option>
+         <option value="out">실외</option>
       </select>
       
-	<div id="map" style="width:420px; height:420px; float:left; margin: 20px, 10px, 0px, 20px;"></div>
-	<input id="searchCourt" type="text" name="searchCourt" placeholder="경기장 검색">
-	&nbsp; &nbsp; 
-	<button type="button" onclick="courtSort('courtSearch')" class="btn btn-outline-dark" id = "ssearchbutton">검색</button>
-	&nbsp;  &nbsp; 
-	<button onclick="window.open('courtTipOff.go','경기장 제보','width=400px,height=400px')" class="btn btn-outline-dark" id = "courtjaebo">경기장 제보</button>
-	<div>
-	<table id="courtList" style="width:800px; margin : 10px; float : right" >
-		<thead>
-		
-		</thead>
-		<tbody id="list">			
-			<c:forEach items="${courtList}" var="court" varStatus="status" end="9">
-				<tr>
-					<td style="width:10%;">${court.courtState}</td>
-					<td style="width:10%;">${court.gu}</td>				
-					<td style="width:10%;">
-						<c:if test="${court.courtInOut eq 'out'}">실외</c:if>
-						<c:if test="${court.courtInOut eq 'in'}">실내</c:if>
-					</td>
-					<td style="width:30%;" id="courtName"><a href="courtDetail.do?courtIdx=${court.courtIdx}">${court.courtName}</a></td>
-					<td style="width:30%;">${court.courtAddress}</td>
-					<td style="width:10%;">☆${court.courtStar}</td>
-				</tr>
-			</c:forEach>
-		</tbody>
-		
-		
-		<tbody style = "margin-top: 50px;">
-			<tr>
-			<th colspan="6" id="paging" style="border: none; width:800px;">	
-				<div class="container">									
-					<nav aria-label="Page navigation" style="text-align:center">
-						<ul class="pagination" id="pagination"></ul>
-					</nav>					
-				</div>
-			</th>
-		</tr>
-		</tbody>
-	</table>
-	</div>
-	</div>
+   <div id="map" style="width:35%; height:60%; float:left; margin: 20px, 10px, 0px, 20px;"></div>
+   <input id="searchCourt" type="text" name="searchCourt" placeholder="경기장 검색">
+   &nbsp; &nbsp; 
+   <button type="button" onclick="courtSort('courtSearch')" class="btn btn-outline-dark" id = "ssearchbutton">검색</button>
+   &nbsp;  &nbsp; 
+   <button onclick="window.open('courtTipOff.go','경기장 제보','width=400px,height=400px')" class="btn btn-outline-dark" id = "courtjaebo">경기장 제보</button>
+   <div>
+   <table id="courtList" style="width:60%; margin : 10px; float : right" >
+      <thead>
+      
+      </thead>
+      <tbody id="list">         
+         <c:forEach items="${courtList}" var="court" varStatus="status" end="9">
+            <tr>
+               <td style="width:10%;">${court.courtState}</td>
+               <td style="width:10%;">${court.gu}</td>            
+               <td style="width:10%;">
+                  <c:if test="${court.courtInOut eq 'out'}">실외</c:if>
+                  <c:if test="${court.courtInOut eq 'in'}">실내</c:if>
+               </td>
+               <td style="width:30%;" id="courtName"><a href="courtDetail.do?courtIdx=${court.courtIdx}">${court.courtName}</a></td>
+               <td style="width:30%;">${court.courtAddress}</td>
+               <td style="width:10%;">☆${court.courtStar}</td>
+            </tr>
+         </c:forEach>
+      </tbody>
+      
+      
+      <tbody style = "margin-top: 50px;">
+         <tr>
+         <th colspan="6" id="paging" style="border: none; width:800px;">   
+            <div class="container">                           
+               <nav aria-label="Page navigation" style="text-align:center">
+                  <ul class="pagination" id="pagination"></ul>
+               </nav>               
+            </div>
+         </th>
+      </tr>
+      </tbody>
+   </table>
+   </div>
+   </div>
 </body>
 <script>
-	paging("${totalPages}");
-	var showPage = 1;
-	var address="${address}";
-	
-	function courtSort(type,page1=1){
-		// 위치 , 실내 , 검색어 + type -> gu inout search -> if(type != 'search') {search=""}
-		address = $('#gu').val();
-		var inOut = $('#inOut').val();
-		var searchCourt =$('#searchCourt').val();
-		showPage=page1;
-		console.log(address);
-		console.log(inOut);
-		
-		$.ajax({
-			type:'get',
-			url:'courtList.ajax',
-			data:{"gu":address,
-				  "inOut":inOut,
-				  "searchCourt":searchCourt,
-				  "type":type,
-				  "page":showPage
-			},
-			dataType:'json',
-			success:function(data){
-				console.log(data);
-				console.log(data.courtList.length);
-				for(var i=0;i<markers.length;i++){
-					markers[i].setMap(null);
-				}
-				console.log(data.courtList);
-				markerDraw(data.courtList);
-				courtListDraw(data.courtList);
-				mapGeocoder(address);
-			    infowindow.close();
-			    
-			    $('#pagination').twbsPagination('destroy');
-			    //데이터가 없을 때
-			    if(data.totalList==0){
-			    	alert("검색결과가 없습니다.");
-			    	return;
-			    }
-			    
-			    $('#pagination').twbsPagination({
-					startPage:showPage,	//시작페이지
-					totalPages:Math.ceil(data.totalList/10),//총 페이지 수
-					visiblePages:5, //보여줄 페이지 [1][2][3][4][5]
-					onPageClick:function(event,page){// 페이지 클릭시 동작되는 함수(콜백)
-						if(page != showPage){
-							showPage = page;	
-							courtSort(type,showPage);
-						}	
-					}
-				});
-			    
-			    
-			    
-			},
-			error:function(e){
-				console.log(e);
-			}
-		});	
-	};
-	
-	//paging plugin
-	function paging(totalList, type = ""){
-		$('#pagination').twbsPagination({
-			startPage:showPage,	//시작페이지
-			totalPages:Math.ceil(totalList/10),//총 페이지 수
-			visiblePages:5, //보여줄 페이지 [1][2][3][4][5]
-			onPageClick:function(event,page){// 페이지 클릭시 동작되는 함수(콜백)
-			console.log(page);
-				if(page != showPage){
-					showPage = page;	
-					
-					if(type == "") {
-						// 리스트 + 페이징 함수 변경
-						$.ajax({
-							type:'get',
-							url:'courtPage.ajax',
-							data:{"page":page
-							},
-							dataType:'json',
-							success:function(data){
-								console.log(data.courtList);
-								courtListDraw(data.courtList);
-							},
-							error:function(e){
-								console.log(e);
-							}
-						});				
-						
-					}else{
-						
-					}
-					
-					
-					
-				}	
-			}
-		});	
-	}
-										
-		
-		
-	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-	mapOption = {
-	    center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-	    level: 6 // 지도의 확대 레벨
-	};  
+   paging("${totalPages}");
+   var showPage = 1;
+   var address="${address}";
+   
+   function courtSort(type,page1=1){
+      // 위치 , 실내 , 검색어 + type -> gu inout search -> if(type != 'search') {search=""}
+      address = $('#gu').val();
+      var inOut = $('#inOut').val();
+      var searchCourt =$('#searchCourt').val();
+      showPage=page1;
+      console.log(address);
+      console.log(inOut);
+      
+      $.ajax({
+         type:'get',
+         url:'courtList.ajax',
+         data:{"gu":address,
+              "inOut":inOut,
+              "searchCourt":searchCourt,
+              "type":type,
+              "page":showPage
+         },
+         dataType:'json',
+         success:function(data){
+            console.log(data);
+            console.log(data.courtList.length);
+            for(var i=0;i<markers.length;i++){
+               markers[i].setMap(null);
+            }
+            console.log(data.courtList);
+            markerDraw(data.courtList);
+            courtListDraw(data.courtList);
+            mapGeocoder(address);
+             infowindow.close();
+             
+             $('#pagination').twbsPagination('destroy');
+             //데이터가 없을 때
+             if(data.totalList==0){
+                alert("검색결과가 없습니다.");
+                return;
+             }
+             
+             $('#pagination').twbsPagination({
+               startPage:showPage,   //시작페이지
+               totalPages:Math.ceil(data.totalList/10),//총 페이지 수
+               visiblePages:5, //보여줄 페이지 [1][2][3][4][5]
+               onPageClick:function(event,page){// 페이지 클릭시 동작되는 함수(콜백)
+                  if(page != showPage){
+                     showPage = page;   
+                     courtSort(type,showPage);
+                  }   
+               }
+            });
+             
+             
+             
+         },
+         error:function(e){
+            console.log(e);
+         }
+      });   
+   };
+   
+   //paging plugin
+   function paging(totalList, type = ""){
+      $('#pagination').twbsPagination({
+         startPage:showPage,   //시작페이지
+         totalPages:Math.ceil(totalList/10),//총 페이지 수
+         visiblePages:5, //보여줄 페이지 [1][2][3][4][5]
+         onPageClick:function(event,page){// 페이지 클릭시 동작되는 함수(콜백)
+         console.log(page);
+            if(page != showPage){
+               showPage = page;   
+               
+               if(type == "") {
+                  // 리스트 + 페이징 함수 변경
+                  $.ajax({
+                     type:'get',
+                     url:'courtPage.ajax',
+                     data:{"page":page
+                     },
+                     dataType:'json',
+                     success:function(data){
+                        console.log(data.courtList);
+                        courtListDraw(data.courtList);
+                     },
+                     error:function(e){
+                        console.log(e);
+                     }
+                  });            
+                  
+               }else{
+                  
+               }
+               
+               
+               
+            }   
+         }
+      });   
+   }
+                              
+      
+      
+   var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+   mapOption = {
+       center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+       level: 6 // 지도의 확대 레벨
+   };  
 
-	//지도를 생성합니다    
-	var map = new kakao.maps.Map(mapContainer, mapOption); 
+   //지도를 생성합니다    
+   var map = new kakao.maps.Map(mapContainer, mapOption); 
 
-	//주소-좌표 변환 객체를 생성합니다
-	var geocoder = new kakao.maps.services.Geocoder();
-	
-	//주소로 좌표를 검색합니다
-	geocoder.addressSearch(address, function(result, status) {
-	
-	// 정상적으로 검색이 완료됐으면 
-	 if (status === kakao.maps.services.Status.OK) {
-	
-	    var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+   //주소-좌표 변환 객체를 생성합니다
+   var geocoder = new kakao.maps.services.Geocoder();
+   
+   //주소로 좌표를 검색합니다
+   geocoder.addressSearch(address, function(result, status) {
+   
+   // 정상적으로 검색이 완료됐으면 
+    if (status === kakao.maps.services.Status.OK) {
+   
+       var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
     // 결과값으로 받은 위치를 마커로 표시합니다
     var marker = new kakao.maps.Marker({
@@ -289,7 +289,7 @@
     markers.push(marker);
 
     // 인포윈도우로 장소에 대한 설명을 표시합니다
-    	infowindow = new kakao.maps.InfoWindow({
+       infowindow = new kakao.maps.InfoWindow({
         content: '<div class="test" style="width:150px;text-align:center;padding:6px 0;">선택지역</div>'
     });
     infowindow.open(map, marker);
@@ -298,119 +298,116 @@
     map.setCenter(coords);
 } 
 });
-	var markers=[];
-	var position=[];
-	var infowindow='';
-	<c:forEach items="${courtList}" var="item">
-		position.push({
-			 content :'${item.courtName}', latlng: new kakao.maps.LatLng(${item.courtLatitude}, ${item.courtLongitude})});
-	</c:forEach>
-	for(var i=0; i<position.length;i++){
-		
+   var markers=[];
+   var position=[];
+   var infowindow='';
+   <c:forEach items="${courtList}" var="item">
+      position.push({
+          content :'${item.courtName}', latlng: new kakao.maps.LatLng(${item.courtLatitude}, ${item.courtLongitude})});
+   </c:forEach>
+   for(var i=0; i<position.length;i++){
+      
 
-		// 마커를 생성합니다
-		var marker = new kakao.maps.Marker({
-		     map: map, // 마커를 표시할 지도
-		     position: position[i].latlng, // 마커를 표시할 위치 
-		});
-		markers.push(marker);
-		console.log(markers[i]);
-	       
-	    var infowindow = new kakao.maps.InfoWindow({
-	        content: position[i].content // 인포윈도우에 표시할 내용
-	    });
-	    kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
-	    kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
-	}
-	function makeOverListener(map, marker, infowindow) {
-	    return function() {
-	        infowindow.open(map, marker);
-	    };
-	}
-	function makeOutListener(infowindow) {
-	    return function() {
-	        infowindow.close();
-	    };
-	}
-	
-	function markerDraw(list){
-		markers=[];
-		position=[];
-		list.forEach(function(item,idx){
-			console.log(item.courtLatitude);
-		position.push({
-			 content :item.courtName, 
-			 latlng: new kakao.maps.LatLng(item.courtLatitude, item.courtLongitude)
-			 });
-		});
-		for(var i=0; i<position.length;i++){
-			// 마커를 생성합니다
-			var marker = new kakao.maps.Marker({
-		    	map: map, // 마커를 표시할 지도
-		     	position: position[i].latlng, // 마커를 표시할 위치 
-			});
-			markers.push(marker);
-			console.log(markers[i]);
-	    var infowindow = new kakao.maps.InfoWindow({
-	        content: position[i].content // 인포윈도우에 표시할 내용
-	    });
-	    kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
-	    kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
-		}
-		function makeOverListener(map, marker, infowindow) {
-	    	return function() {
-	        	infowindow.open(map, marker);
-	    	};
-		}
-		function makeOutListener(infowindow) {
-	    	return function() {
-	        	infowindow.close();
-	    	};
-		}
-	}
-	function courtListDraw(list){
-		$('#list').empty();
-		var content = '';
-		list.forEach(function(item,index){
-			content += '<tr>';
-			content += '<td>'+item.courtState+'</td>';
-			content+='<td>'+item.gu+'</td>';
-			if(item.courtInOut=='out'){
-				content +='<td>실외</td>';
-			}else{
-				content +='<td>실내</td>';
-			}
-			content +='<td id="courtName"><a href="courtDetail.do?courtIdx='+item.courtIdx+'">'+item.courtName+'</a></td>';
-			content +='<td>'+item.courtAddress+'</td>';
-			content +='<td>'+item.courtStar+'</td>';
-		});
-		$('#list').append(content);
-	}
-	function mapGeocoder(address){
-		var geocoder = new kakao.maps.services.Geocoder();
-		geocoder.addressSearch(address, function(result, status) {
-			 if (status === kakao.maps.services.Status.OK) {
-			
-			var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-		    var marker = new kakao.maps.Marker({
-		        map: map,
-		        position: coords
-		    });
-		    markers.push(marker);
-		    	infowindow = new kakao.maps.InfoWindow({
-		        content: '<div style="width:150px;text-align:center;padding:6px 0;">선택지역</div>'
-		    });
-		    infowindow.open(map, marker);
-		    map.setCenter(coords);
-		} 
-		});
-	}
-	
-	$(document).ready(function() {
-		  $('#courtjaebo').css('margin-top', '-2px');
-		  $('#ssearchbutton').css('margin-top', '-2px');
-		});
+      // 마커를 생성합니다
+      var marker = new kakao.maps.Marker({
+           map: map, // 마커를 표시할 지도
+           position: position[i].latlng, // 마커를 표시할 위치 
+      });
+      markers.push(marker);
+      console.log(markers[i]);
+          
+       var infowindow = new kakao.maps.InfoWindow({
+           content: position[i].content // 인포윈도우에 표시할 내용
+       });
+       kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
+       kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+   }
+   function makeOverListener(map, marker, infowindow) {
+       return function() {
+           infowindow.open(map, marker);
+       };
+   }
+   function makeOutListener(infowindow) {
+       return function() {
+           infowindow.close();
+       };
+   }
+   
+   function markerDraw(list){
+      markers=[];
+      position=[];
+      list.forEach(function(item,idx){
+         console.log(item.courtLatitude);
+      position.push({
+          content :item.courtName, 
+          latlng: new kakao.maps.LatLng(item.courtLatitude, item.courtLongitude)
+          });
+      });
+      for(var i=0; i<position.length;i++){
+         // 마커를 생성합니다
+         var marker = new kakao.maps.Marker({
+             map: map, // 마커를 표시할 지도
+              position: position[i].latlng, // 마커를 표시할 위치 
+         });
+         markers.push(marker);
+         console.log(markers[i]);
+       var infowindow = new kakao.maps.InfoWindow({
+           content: position[i].content // 인포윈도우에 표시할 내용
+       });
+       kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
+       kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
+      }
+      function makeOverListener(map, marker, infowindow) {
+          return function() {
+              infowindow.open(map, marker);
+          };
+      }
+      function makeOutListener(infowindow) {
+          return function() {
+              infowindow.close();
+          };
+      }
+   }
+   function courtListDraw(list){
+      $('#list').empty();
+      var content = '';
+      list.forEach(function(item,index){
+         content += '<tr>';
+         content += '<td>'+item.courtState+'</td>';
+         content+='<td>'+item.gu+'</td>';
+         if(item.courtInOut=='out'){
+            content +='<td>실외</td>';
+         }else{
+            content +='<td>실내</td>';
+         }
+         content +='<td id="courtName"><a href="courtDetail.do?courtIdx='+item.courtIdx+'">'+item.courtName+'</a></td>';
+         content +='<td>'+item.courtAddress+'</td>';
+         content +='<td>'+item.courtStar+'</td>';
+      });
+      $('#list').append(content);
+   }
+   function mapGeocoder(address){
+      var geocoder = new kakao.maps.services.Geocoder();
+      geocoder.addressSearch(address, function(result, status) {
+          if (status === kakao.maps.services.Status.OK) {
+         
+         var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+          var marker = new kakao.maps.Marker({
+              map: map,
+              position: coords
+          });
+          markers.push(marker);
+             infowindow = new kakao.maps.InfoWindow({
+              content: '<div style="width:150px;text-align:center;padding:6px 0;">선택지역</div>'
+          });
+          infowindow.open(map, marker);
+          map.setCenter(coords);
+      } 
+      });
+   }
+   
+   $(document).ready(function() {
+        $('#courtjaebo').css('margin-top', '-2px');
+        $('#ssearchbutton').css('margin-top', '-2px');
+      });
 </script>
-</html>
-	
-	
