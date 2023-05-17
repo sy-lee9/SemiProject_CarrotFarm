@@ -58,7 +58,7 @@
 	}
 	
 	table, th, td{
-		padding: 10px;
+		padding: 20px;
 		margin : 5px;
 		text-align: center;
 	}
@@ -181,8 +181,11 @@
 					<th style="border-bottom: 1px solid black;">경기리뷰</th>
 				</tr>
 			</table>
+			<br/>
 			<c:forEach items="${list}" var="team">
-				<p style="display: inline;">${team.tagContent} ${team.tagCount}</p>&nbsp;&nbsp;
+				<div style="display: inline;" class="alert alert-warning" role="alert">
+					${team.tagContent}&nbsp;&nbsp;${team.tagCount}
+				</div>&nbsp;&nbsp;
 			</c:forEach>
 		</div>
 		<c:if test="${teamUserChk eq true}">

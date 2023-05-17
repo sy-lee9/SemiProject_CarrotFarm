@@ -246,7 +246,7 @@
 			content +='<td><a href="../userprofile.go?userId='+list.userId+'">'+list.userId+'</a></td>';
 			content +='<td>'+list.teamJoinDate+'</td>';
 			if(loginId == list.userId && list.teamGrade != 'leader'){
-				content += '<td><button onclick="location.href=\'#\'">확인</button></td>';
+				content += '<td><button onclick="location.href=\'./warningDetail.go?userId='+list.userId+'&teamIdx='+teamIdx+'\'">확인</button></td>';
 			}
 			if(loginId != list.userId || list.teamGrade == 'leader'){
 				content += '<td></td>';
