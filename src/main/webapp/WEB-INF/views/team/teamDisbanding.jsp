@@ -3,23 +3,90 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<title>🏀 당근농장</title>
+	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
+	<script src="../resources/js/twbsPagination.js" type="text/javascript"></script>
+	
+	<!-- 부트스트랩 JavaScript 파일 불러오기 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <style>
+	body{
+		position:relative;
+		font-size:15px;
+		padding : 10px;
+		min-width: 1200px;
+	}
+
+	#content {
+		width:78%;
+		height : 83%;
+		background-color: #f8f9fa;
+		padding: 10 30 10;
+		margin : 5px;
+		float:right;		
+	}
+	
+	#LNB {
+		width:20%;
+		height : 83%;
+		background-color: #f8f9fa;
+		float:left;
+		margin : 5px;
+		font-weight: bold;
+        font-size: 18px;
+		text-align:center;		
+	}
+	
+	
+	table, th, td{
+		margin : 5px;
+	}
+	
+	table{
+		width:90%;
+		height:70%;
+		text-align:center;
+	}
+	
+	a {
+	  color : black;
+	}
+	
+	a:link {
+	  color : black;
+	}
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	 text-decoration-line: none;
+	  color : #FFA500 ;
+	}
+	
+	.pagination .page-link {
+  		color: gray; /* 기본 글자색을 검정색으로 지정 */
+	}
+
+	.pagination .page-item.active .page-link {
+ 		background-color: #FFA500;
+ 		border:none;
+	}
 	#div1{
 		margin: auto;
-		width: 200px;
-        height: 50px;
-		position: absolute;
-        top: 22%;
-        left: 27%;
+		width: 100%;
+        height: 10%;
+        top: 30%;
+        left: 50%;
 	}
 	#div2{
 		margin: auto;
 		background-color: #f8f9fa;
-		position: absolute;
-        width: 800px;
-        height: 400px;
+        width: 100%;
+        height: 60%;
         top: 30%;
         left: 25%;
 	}
@@ -30,6 +97,13 @@
 		margin: 10 10 10 80;
 		color: red;
 	}
+	
+	#div3{
+		float: left;
+		width : 70%;
+		height: 60%;
+	}
+
 	button{
 		margin: 20 10 10 350;
 	}
@@ -39,22 +113,59 @@
 </style>
 </head>
 <body>
-	<form action="teamDisbanding.do">
-	<input type="hidden" name="teamIdx" value="${teamIdx}"/>
-		<div id="div1"><h1>팀 해체</h1></div>
-		<div id="div2">
-			<hr>
-			<p>팀 해체는 팀에 관련된 모든 정보와 기록들이 삭제되는 것을 말합니다.</p>
-			<h5>해체된 팀의 모든 데이터는 복구가 불가능하오니, 신중하게 결정하시기 바랍니다.</h5>
-			<h4>팀 해체 예정일시는 신청일로부터 7일 후 입니다.</h4>
-			<h5>팀 해체 보류기간 동안 팀 해체를 취소할 수 있습니다.</h5>
-			<br/>
-			<br/>
-			<br/>
-			<button>팀 해체 신청</button>
-			<hr>
-		</div>
-	</form>
+
+	<div style="float: right;">
+		<%@ include file="../loginBox.jsp" %>
+	</div> 
+	
+	<%@ include file="../GNB.jsp" %>
+
+	<div id="LNB">
+		<br/><br/>
+        <c:if test="${loginId eq null}">
+			<img width="200" height="200" src="/photo/기본프로필.png">
+		</c:if>
+		<c:if test="${loginId ne null}">
+			<img width="200" height="200" src="/photo/${loginPhotoName}">
+		</c:if>
+      <br/><br/>
+        <a href="/cf/team/teamJoinAppAlarm.go?teamIdx=${teamIdx}">알림</a>
+      <br/><br/>
+        <a href="/cf/team/teamPageUpdate.go?teamIdx=${teamIdx}">팀정보 수정</a>
+      <br/><br/>
+        <a href="/cf/team/teamUserListLeader.go?teamIdx=${teamIdx}">팀원</a>
+      <br/><br/>
+        <a href="/cf/team/writeMatchingList.go?teamIdx=${teamIdx}">모집중인 경기</a>
+      <br/><br/>
+        <a href="/cf/team/gameMatchingRequest.go?teamIdx=${teamIdx}" >참가신청한 경기</a>
+        <br/><br/>
+        <a href="/cf/team/warningTeamUser.go?teamIdx=${teamIdx}">경고/강퇴</a>
+      <br/><br/>
+        <a href="/cf/team/teamDisbanding.go?teamIdx=${teamIdx}" >팀 해체</a>
+	</div>
+	
+	
+	<div id="content">
+		<form action="teamDisbanding.do">
+		<input type="hidden" name="teamIdx" value="${teamIdx}"/>
+			<div id="div3">
+				<br/><br/><br/><br/><br/><br/>
+				<div id="div1"><h1>팀 해체</h1></div>
+				<div id="div2">
+					<hr>
+					<p>팀 해체는 팀에 관련된 모든 정보와 기록들이 삭제되는 것을 말합니다.</p>
+					<h5>해체된 팀의 모든 데이터는 복구가 불가능하오니, 신중하게 결정하시기 바랍니다.</h5>
+					<h4>팀 해체 예정일시는 신청일로부터 7일 후 입니다.</h4>
+					<h5>팀 해체 보류기간 동안 팀 해체를 취소할 수 있습니다.</h5>
+					<br/>
+					<br/>
+					<br/>
+					<button>팀 해체 신청</button>
+					<hr>
+				</div>
+			</div>
+		</form>
+	</div>
 </body>
 <script>
 

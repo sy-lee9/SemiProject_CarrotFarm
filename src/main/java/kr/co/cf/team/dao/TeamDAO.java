@@ -53,7 +53,7 @@ public interface TeamDAO {
 
 	int disbandCancle(int teamIdx);
 
-	ArrayList<TeamDTO> getTeamUser(int teamIdx);
+	ArrayList<String> getTeamUser(int teamIdx);
 
 	void disbandAlarm(int teamIdx, String userId);
 	
@@ -158,6 +158,8 @@ public interface TeamDAO {
 	void removeNowAlarm(HashMap<String, Object> params);
 
 	String getTeamIdx(String loginId);
+
+	int teamLeadersChk(int teamIdx, String loginId);
 
 
 

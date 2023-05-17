@@ -5,13 +5,16 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import kr.co.cf.matching.dto.MatchingDTO;
 import kr.co.cf.team.dao.TeamDAO;
 import kr.co.cf.team.dto.TeamDTO;
 
@@ -268,14 +270,15 @@ public class TeamService {
 
 	public void disbandAlarm(int teamIdx) {
 		
-		ArrayList<TeamDTO> teamUserList = TeamDAO.getTeamUser(teamIdx);
+		//ArrayList<TeamDTO> teamUserList = TeamDAO.getTeamUser(teamIdx);
+		ArrayList<String> teamUserList = TeamDAO.getTeamUser(teamIdx);
 		logger.info("teamUserList : "+teamUserList);
 		
 		int row = 0;
 		
 		for (int i = 0; i < teamUserList.size(); i++) {
 			
-			String userId = (teamUserList.get(i).getUserId());			
+			String userId = (teamUserList.get(i));			
 			logger.info("userID : "+userId);
 			
 			TeamDAO.disbandAlarm(teamIdx,userId);
@@ -286,14 +289,15 @@ public class TeamService {
 	}
 	
 	public void disbandCancleAlarm(int teamIdx) {
-		ArrayList<TeamDTO> teamUserList = TeamDAO.getTeamUser(teamIdx);
+		//ArrayList<TeamDTO> teamUserList = TeamDAO.getTeamUser(teamIdx);
+		ArrayList<String> teamUserList = TeamDAO.getTeamUser(teamIdx);
 		logger.info("teamUserList : "+teamUserList);
 		
 		int row = 0;
 		
 		for (int i = 0; i < teamUserList.size(); i++) {
 			
-			String userId = (teamUserList.get(i).getUserId());			
+			String userId = (teamUserList.get(i));			
 			logger.info("userID : "+userId);
 			
 			TeamDAO.disbandCancleAlarm(teamIdx,userId);
@@ -311,13 +315,14 @@ public class TeamService {
 		logger.info(page+" 페이지 보여줘");
 		logger.info("한 페이지에 "+10+" 개씩 보여줄거야");
 		
-		int teamIdx = Integer.parseInt((String) params.get("page"));
-		ArrayList<TeamDTO> teamUserList = TeamDAO.getTeamUser(teamIdx);
+		int teamIdx = Integer.parseInt((String) params.get("teamIdx"));
+		//ArrayList<TeamDTO> teamUserList = TeamDAO.getTeamUser(teamIdx);
+		ArrayList<String> teamUserList = TeamDAO.getTeamUser(teamIdx);
 		logger.info("teamUserList : "+teamUserList);
 		
-		ArrayList<TeamDTO> list = null;	
-		ArrayList<TeamDTO> newList = null;		
-		Set<TeamDTO> set = new HashSet<TeamDTO>();		
+		ArrayList<TeamDTO> list = new ArrayList<TeamDTO>();
+		ArrayList<TeamDTO> newList = new ArrayList<TeamDTO>();
+		HashSet<TeamDTO> set = null;
 		HashMap<String, Object> map = new HashMap<String, Object>();	
 
 		//총 페이지 수 
@@ -329,7 +334,7 @@ public class TeamService {
 		if(teamUserList != null) {
 			for (int i = 0; i < teamUserList.size(); i++) {
 				
-				String userId = (teamUserList.get(i).getUserId());			
+				String userId = (teamUserList.get(i));			
 				logger.info("userID : "+userId);
 				params.put("userId", userId);
 				
@@ -363,14 +368,13 @@ public class TeamService {
 						list = TeamDAO.SearchGameList(params);		
 						logger.info("SearchGameList size : "+list.size());
 				}
-				
 				// 중복 list 값 제거 과정
-				set.addAll(list);
+				//set = new HashSet<TeamDTO>(list);
 			}
-			newList = new ArrayList<TeamDTO>(set);
+			//newList = new ArrayList<TeamDTO>(set);
+			newList = (ArrayList<TeamDTO>) list.stream().sorted(Comparator.comparing(TeamDTO::getMatchingIdx)).collect(Collectors.toList());
+			logger.info("newList : "+ newList.size());
 		}
-		
-		
 		logger.info("totalGameList size : "+newList.size());
 		
 		// 만들 수 있는 총 페이지 수 
@@ -395,19 +399,13 @@ public class TeamService {
 		logger.info("map : "+ map);
 		return map;
 	}
-
-
-	
-	
-	
-	
 	
 	public HashMap<String, Object> gameMatchingRequest(HashMap<String, Object> params) {
 		logger.info("service 도착");
 		logger.info("params : "+params);
 		String selectedGameDate = String.valueOf(params.get("selectedGameDate"));
 		
-		int teamIdx = (int) params.get("teamIdx");
+		int teamIdx = Integer.parseInt((String) params.get("teamIdx"));
 		ArrayList<TeamDTO> teamLeaderList = TeamDAO.getTeamLeaders(teamIdx);
 		logger.info("getTeamLeader : "+teamLeaderList);
 		
@@ -780,6 +778,10 @@ public class TeamService {
 
 	public ArrayList<TeamDTO> getTeamLeaders(int teamIdx) {
 		return TeamDAO.getTeamLeaders(teamIdx);
+	}
+
+	public int teamLeadersChk(int teamIdx, String loginId) {
+		return TeamDAO.teamLeadersChk(teamIdx,loginId);
 	}
 
 

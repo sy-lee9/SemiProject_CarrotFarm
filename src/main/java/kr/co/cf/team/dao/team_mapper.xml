@@ -132,7 +132,7 @@
 		UPDATE team SET disbandAppDate = null WHERE teamIdx = #{param1}
 	</update>
 	
-	<select id="getTeamUser"	resultType="kr.co.cf.team.dto.TeamDTO">
+	<select id="getTeamUser"	resultType="String">
 		SELECT userId
 			FROM teamUser WHERE teamIdx = #{param1}
 			AND teamUserState = 'join'
@@ -230,6 +230,12 @@
 		LIMIT 10 OFFSET #{offset}
 	</select>
 	
+	<select id="teamLeadersChk"	resultType="int">
+		SELECT COUNT(userId)
+		FROM teamUser WHERE teamIdx = #{param1} AND userId = #{param2}
+			AND teamUserState = 'join'
+			AND teamGrade IN ('leader','deputyLeader')
+	</select>	
 	
 	<select id="getTeamLeaders"	resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT userId
@@ -555,7 +561,6 @@
 		UPDATE teamUser SET teamGrade = #{selectedTeamGrade}
 			WHERE teamIdx = #{teamIdx}
 				AND userId = #{userId}
-			LIMIT 10 OFFSET #{offset}
 	</update>
 	
 	
