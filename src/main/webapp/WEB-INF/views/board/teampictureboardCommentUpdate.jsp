@@ -254,7 +254,7 @@
 		     
 		     <tr>
 
-			     <form method="post" action="teampictureboardcommentUpdate.do?">
+			     <form method="post" action="teampictureboardcommentUpdate.do?bidx=${bidxx}&teamIdx=${teamIdx}">
 					<th>
 						<input type="hidden" name="commentIdx" value="${tpcommentDto.commentIdx}">
 						<input type="hidden" name="bidx" value="${dto.get(0).boardIdx}" style= "border:none;">

@@ -10,7 +10,7 @@
 <body>
 	<form action="courtReviewReport.do" method="post" id="form">
 		<input name="courtReviewIdx" type="text" value="${courtReviewIdx}" hidden />
-		<input name="userId" type="text" value="user02" hidden />
+		<input name="userId" type="text" value="${sessionScope.loginId}" hidden />
 		<input name="reportUserId" type="text" value="${reportUserId}" hidden />
 		
 		<h3 >리뷰 신고</h3>
