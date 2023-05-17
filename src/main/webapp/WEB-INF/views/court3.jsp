@@ -40,10 +40,12 @@
 		float:left;
 		margin : 5px;
 		font-weight: bold;
-        font-size: 15px;
+        font-size: 18px;
 		text-align:center;
 		
 	}
+	
+	
 	a {
 	  color : black;
 	}
@@ -67,21 +69,22 @@
  		background-color: #FFA500;
  		border:none;
 	}
-	#searchCourt{
-		width: 300px;
-    	height: 22px;
+	#searchCourt, #gu, #inOut{
+		width: 200px;
+    	height: 30px;
     	margin : 5px;
-	}
+    }
+	
+	
 	
 	table {
     border-collapse: collapse;
-    width: 100%;
+    width:60%; 
+    height: 80%;
   }
   
   td, th {
-    border-bottom: 1px solid black;
     padding: 8px;
-    text-align: left;
   }
 </style>
 </head>
@@ -100,39 +103,50 @@
 			<br/> <h3 style="display:inline-block; margin-top:10px;">${loginId} </h3>님 <a href="/cf/userNoticeAlarm">🔔</a>
 		</c:if>
 		<br/><br/>
-	    <br/><br/><br/><br/>
 	    <a href="/cf/court" style = "color: orange">경기장 리스트</a>
-	    <br/><br/><br/><br/>
+	    <br/><br/>
 	    <a href="#" style = "color:black">경기장 상세보기</a>
 	    
 	</div>
 	<div id="content">
 	
-	<select name="gu" id="gu" onchange="courtSort('gu')" style = "margin-left : 30px">
-		<option value="none">위치</option>
-		<option value="서울특별시">서울</option>
-		<c:forEach items="${guList}" var="gu">
-			console.log(${gu.gu});
-			<option value="${gu.gu}">${gu.gu}</option>
-		</c:forEach>
-      </select>
-      <select name="inOut" id="inOut" onchange="courtSort('inOut')">
-      	<option value="none">실내/외</option>
-      	<option value="in">실내</option>
-      	<option value="out">실외</option>
-      </select>
-      
-	<div id="map" style="width:35%; height:60%; float:left; margin: 20px, 10px, 0px, 20px;"></div>
-	<input id="searchCourt" type="text" name="searchCourt" placeholder="경기장 검색">
-	&nbsp; &nbsp; 
-	<button type="button" onclick="courtSort('courtSearch')" class="btn btn-outline-dark" id = "ssearchbutton">검색</button>
-	&nbsp;  &nbsp; 
-	<button onclick="window.open('courtTipOff.go','경기장 제보','width=400px,height=400px')" class="btn btn-outline-dark" id = "courtjaebo">경기장 제보</button>
-	<div>
-	<table id="courtList" style="width:60%; margin : 10px; float : right" >
-		<thead>
+	<div >
+		<select name="gu" id="gu" onchange="courtSort('gu')" style = "margin-left : 30px">
+			<option value="none">위치</option>
+			<option value="서울특별시">서울</option>
+			<c:forEach items="${guList}" var="gu">
+				console.log(${gu.gu});
+				<option value="${gu.gu}">${gu.gu}</option>
+			</c:forEach>
+	      </select>
+	      <select name="inOut" id="inOut" onchange="courtSort('inOut')">
+	      	<option value="none">실내/외</option>
+	      	<option value="in">실내</option>
+	      	<option value="out">실외</option>
+	      </select>
+	      <input id="searchCourt" type="text" name="searchCourt" placeholder="경기장 검색">
+		<button type="button" style="font-size:15px;" onclick="courtSort('courtSearch')" class="btn btn-outline-dark" id = "ssearchbutton">검색</button>
+		<button style="font-size:15px;" onclick="window.open('courtTipOff.go','경기장 제보','width=400px,height=400px')" class="btn btn-outline-dark" id = "courtjaebo">경기장 제보</button>
 		
+    </div> 
+	<hr/>
+	<br/><br/>
+	<div id="map" style="width:35%; height:70%; float:left; margin: 20px, 10px, 0px, 20px;"></div>
+	
+	<table id="courtList" style="margin : 10px; float : right" >
+		<thead>
+			<tr>
+				<th style="width:10%;">사용여부</th>
+				<th style="width:10%;">지역</th>				
+				<th style="width:10%;">실내/외</th>
+				<th style="width:30%;" id="courtName"><a href="courtDetail.do?courtIdx=${court.courtIdx}">경기장 이름</a></th>
+				<th style="width:30%;">경기장 주소</th>
+				<th style="width:10%;">평점</th>
+			</tr>
 		</thead>
+			<tr>
+				<th colspan="6"> <hr/> </th>
+			</tr>
 		<tbody id="list">			
 			<c:forEach items="${courtList}" var="court" varStatus="status" end="9">
 				<tr>
@@ -150,19 +164,19 @@
 		</tbody>
 		
 		
-		<tbody style = "margin-top: 50px;">
 			<tr>
-			<th colspan="6" id="paging" style="border: none; width:800px;">	
-				<div class="container">									
-					<nav aria-label="Page navigation" style="text-align:center">
-						<ul class="pagination" id="pagination"></ul>
-					</nav>					
-				</div>
-			</th>
-		</tr>
-		</tbody>
+				  <th colspan="6" id="paging" style="text-align:center;">  
+				    <div class="container">                 
+				   
+				      <nav aria-label="Page navigation">
+				      	
+				        <ul class="pagination justify-content-center" id="pagination"></ul>
+				      </nav>
+				    </div>
+				  </th>
+				</tr>
 	</table>
-	</div>
+	
 	</div>
 </body>
 <script>

@@ -121,11 +121,11 @@
 	<div id="LNB">
 		 <br/><br/>
 		 <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
-	     <br/><br/><br/><br/>
+	     <br/><br/>
 	      <a href="/cf/noticeboardList.do" style="font-weight: bold; font-size: 18px; color: black;">공지사항</a>
-	   	 <br/><br/><br/><br/>
+	   	 <br/><br/>
 	     <a href="/cf/freeboardList.do" style="font-weight: bold; font-size: 18px ; color: black;">자유 게시판</a>
-	     <br/><br/><br/><br/>
+	     <br/><br/>
 	     <a href="/cf/inquiryboardList.do" style="font-weight: bold; font-size: 18px; color: orange;">문의</a>
 	</div>
 	

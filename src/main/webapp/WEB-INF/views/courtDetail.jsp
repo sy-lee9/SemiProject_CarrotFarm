@@ -97,21 +97,20 @@ body{
    </div> 
    <jsp:include page="GNB.jsp"></jsp:include>
    <div id="LNB">
-   		<br/><br/>
-   		<c:if test="${loginId eq null}">
+		<br/><br/>
+		<c:if test="${loginId eq null}">
 			<img width="200" height="200" src="/photo/기본프로필.png">
 		</c:if>
 		<c:if test="${loginId ne null}">
 			<img width="200" height="200" src="/photo/${loginPhotoName}"> 
 			<br/> <h3 style="display:inline-block; margin-top:10px;">${loginId} </h3>님 <a href="/cf/userNoticeAlarm">🔔</a>
 		</c:if>
-      <br/><br/>
-       <br/><br/><br/><br/>
-       <a href="/cf/court" style = "color: black">경기장 리스트</a>
-       <br/><br/><br/><br/>
-	   <a href="#" style = "color: orange">경기장 리스트</a>
-       
-   </div>
+		<br/><br/>
+	    <a href="/cf/court" style = "color: orange">경기장 리스트</a>
+	    <br/><br/>
+	    <a href="#" style = "color:black">경기장 상세보기</a>
+	    
+	</div>
    <div id="content">
    
    <div id="map" style="width:35%;height:84%;float:left; margin: 20px, 10px, 0px, 20px;"></div>

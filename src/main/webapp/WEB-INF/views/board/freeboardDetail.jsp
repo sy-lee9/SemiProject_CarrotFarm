@@ -127,11 +127,11 @@
 			<img width="200" height="200" src="/photo/${loginPhotoName}"> 
 			<br/> <h3 style="display:inline-block; margin-top:10px;">${loginId} </h3>님 <a href="/cf/userNoticeAlarm">🔔</a>
 		 </c:if>
-	     <br/><br/><br/><br/>
+	     <br/><br/>
 	     <a href="/cf/noticeboardList.do" style="font-weight: bold; font-size: 18px; color: black;">공지사항</a>
-	   	 <br/><br/><br/><br/>
+	   	 <br/><br/>
 	     <a href="/cf/freeboardList.do" style="font-weight: bold; font-size: 18px ; color: orange;">자유 게시판</a>
-	     <br/><br/><br/><br/>
+	     <br/><br/>
 	     <a href="/cf/inquiryboardList.do" style="font-weight: bold; font-size: 18px; color: black;">문의</a>
 
 	</div>
