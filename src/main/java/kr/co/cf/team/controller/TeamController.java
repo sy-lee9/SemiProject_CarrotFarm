@@ -912,24 +912,25 @@ public class TeamController {
 		logger.info("loginId : "+loginId);
 		
 		if(loginId != null) {	
-			//로그인한 아이디가 팀장, 부팀장인지 확인
-			if(TeamService.teamLeadersConf(Integer.parseInt(teamIdx),loginId) == 1){
-				logger.info("로그인확인&직급확인 완료");
+
+			ArrayList<TeamDTO> list = TeamService.warningHistory(Integer.parseInt(teamIdx),userId);
+			logger.info("list : " + list.size());		
+			if(list != null) {		
 				
-				ArrayList<TeamDTO> list = TeamService.warningHistory(Integer.parseInt(teamIdx),userId);
-				logger.info("list : " + list.size());		
-				if(list != null) {				
-					model.addAttribute("list", list);				
-					model.addAttribute("userId",userId);
-					model.addAttribute("teamIdx",teamIdx);
-					logger.info("warningDetail userId : "+userId);
-					
-					page = "/team/warningHistory";
+
+				if((TeamService.getTeamLeader(Integer.parseInt(teamIdx))).equals(loginId)){
+					logger.info("팀장확인 완료");
+						model.addAttribute("teamLeaderChk", true);	
 				}				
-			}else {
-				session.setAttribute("msg","팀장, 부팀장만 접근 가능합니다.");	
-				model.addAttribute("teamIdx", teamIdx);
-			}
+				
+				model.addAttribute("list", list);				
+				model.addAttribute("userId",userId);
+				model.addAttribute("teamIdx",teamIdx);
+				logger.info("warningDetail userId : "+userId);
+
+				page = "/team/warningHistory";
+			}	
+
 		}else {
 			session.setAttribute("msg","로그인 후 다시 시도해주세요.");	
 			model.addAttribute("teamIdx", teamIdx);
