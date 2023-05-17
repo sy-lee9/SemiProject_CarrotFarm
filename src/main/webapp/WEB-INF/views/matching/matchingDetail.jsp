@@ -322,7 +322,7 @@ body{
 				     		
 				     		<c:if test="${loginId != null }">
 				     			<th >
-				     				<input type="text" name="userId" value="${loginId}" style= "border:none; width:50px; background-color: #f8f9fa;" readonly>
+				     				<input type="text" name="userId" value="${loginId}" style= "border:none; width:100px; background-color: #f8f9fa;" readonly>
 				     			</th>
 					     		<th colspan="2">
 					     			<input type="text" name="commentContent" id="commentContent" style="background-color: white; border: 1px solid black; width: 100%; padding-left:20px; text-align:left;">
@@ -333,7 +333,7 @@ body{
 				     		</c:if>
 				     		<c:if test="${loginId == null }">
 				     			<th >
-				     				<input type="text" name="userId" value="guest" style= "border:none; width:50px; background-color: #f8f9fa;" readonly>
+				     				<input type="text" name="userId" value="guest" style= "border:none; width:100px; background-color: #f8f9fa;" readonly>
 				     			</th>
 					     		<th colspan="3">
 					     			<input type="text" name="commentContent" style= "border:none; width:400px; background-color: #f8f9fa;" placeholder="댓글 작성은 로그인 후 가능합니다. " readonly />

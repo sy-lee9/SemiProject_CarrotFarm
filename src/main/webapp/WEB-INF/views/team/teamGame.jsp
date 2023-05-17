@@ -112,9 +112,9 @@
 	      <br/><br/>
 	        <a href="/cf/team/teamGame.go?teamIdx=${teamIdx}">참여 경기</a>
 	      <br/><br/>
-	        <a href="/cf/teamnoticeboardList.do?teamIdx=${team.teamIdx}">팀 공지 사항</a>
+	        <a href="/cf/teamnoticeboardList.do?teamIdx=${teamIdx}">팀 공지 사항</a>
 	      <br/><br/>
-	        <a href="/cf/teampictureboardList.do?teamIdx=${team.teamIdx}">팀 사진첩</a>
+	        <a href="/cf/teampictureboardList.do?teamIdx=${teamIdx}">팀 사진첩</a>
 	      <br/><br/>
 	</div>
 	
