@@ -133,19 +133,7 @@
 	</div>
 	
 	<div id="content">
-		<div id="inline"><button onclick="location.href='teamList.go'">리스트로 돌아가기</button></div>
-		<div id="teamMatchState" style="margin: 10px; display: flex; align-items: center; float:right; height: 40px;">
-			<p>${team.teamMatchState}</p>
-			<c:if test="${teamLeadersChk eq true}">
-				<div style="float:right;"><button type="button" id="joinCancelApp" onclick="location.href='teamJoinAppAlarm.go?teamIdx=${team.teamIdx}'">팀관리</button></div>
-			</c:if>
-		</div> 
-		<c:if test="${team.teamMatchState == '모집중' && joinAppChk eq false && joinTeam eq false}">
-			<div style="float:right; margin: 10px; "><button type="button" id="joinApp" onclick="joinApp(${team.teamIdx})">가입신청</button></div>
-		</c:if>
-		<c:if test="${team.teamMatchState == '모집중' && joinAppChk eq true}">
-			<div style="float:right; margin: 10px; "><button type="button" id="joinCancelApp" onclick="joinCancel(${team.teamIdx})">가입신청 취소</button></div>
-		</c:if>
+		<div id="inline"><button onclick="location.href='teamList.go'" style="margin: 5px; font-size:15;" class="btn btn-outline-dark">리스트로 돌아가기</button></div>
 		<br/>
 		<br/>
 		<form action="teamRegist.do" method="post" enctype="multipart/form-data">
@@ -176,7 +164,7 @@
 					<th>주 활동지역</th>
 					<td>
 						<input type="text" id="location" name="location"  readonly /> &nbsp;&nbsp;
-						<input type="button" id="address_kakao" value="검색"/>
+						<input type="button" id="address_kakao" value="검색" style="margin: 5px; font-size:15;" class="btn btn-outline-dark"/>
 					</td>
 				</tr>
 				<tr>
@@ -210,7 +198,7 @@
 					</td>
 				<tr>
 					<th colspan="2">
-						<button type="button" onclick="teamRegist()">팀 생성하기</button>
+						<button type="button" onclick="teamRegist()" style="float: right; margin: 5px; font-size:15;" class="btn btn-outline-dark">팀 생성하기</button>
 					</th>
 				</tr>
 			</tbody>

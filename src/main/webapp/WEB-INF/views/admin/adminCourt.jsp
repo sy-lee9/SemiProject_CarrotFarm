@@ -3,39 +3,129 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>🏀 당근농장</title>
 <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>  
 <script src="resources/js/twbsPagination.js" type="text/javascript"></script>
+
+<!-- 부트스트랩 JavaScript 파일 불러오기 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <style>
-	table, th, td{
-      border : 1px solid black;
-      border-collapse: collapse;
-      padding : 5px 10px;
-   }
+	body{
+		position:relative;
+		font-size:15px;
+		padding : 10px;
+		min-width: 1200px;
+	}
+	
+	#content {
+		width:100%;
+		height : 87%;
+		background-color: #f8f9fa;
+		padding: 10 30 10;
+		margin : 5px;
+		float:right;
+		
+	}
+	
+	#LNB {
+		width:20%;
+		height : 87%;
+		background-color: #f8f9fa;
+		float:left;
+		margin : 5px;
+		font-weight: bold;
+        font-size: 15px;
+		text-align:center;
+		
+	}
+	
+	#LNB ul li {
+	margin-top : 30px;
+    margin-bottom: 90px; /* 원하는 줄간격 크기 */
+	}
+	
+	
+		th, td {
+		margin : 10px;
+		border : 1px solid black;	
+		padding : 10px 10px;
+		border-collapse : collapse;
+		border-left: none;
+    	border-right: none;
+	}
+	
+	
+	#gamePlay, #sort{
+		width: 100px;
+    	height: 30px;
+    	margin : 5px;
+	}
+	
+	#searchInput{
+		width: 200px;
+    	height: 25px;
+    	
+	}
+	
+	#searchButton, #writeButton {
+		font-size: 15px;
+		height: 25px;
+		margin : 5px;
+	
+	}
+	
+	#writeButton {
+		float:right;
+		margin-right : 60px;
+	}
+	
+	a {
+	  color : black;
+	}
+	
+	a:link {
+	  color : black;
+	}
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	 text-decoration-line: none;
+	  color : #FFA500 ;
+	}
+	
+	.pagination .page-link {
+  		color: gray; /* 기본 글자색을 검정색으로 지정 */
+	}
+
+	.pagination .page-item.active .page-link {
+ 		background-color: #FFA500;
+ 		border:none;
+	}
 </style>
 </head>
 <body>
-	<table>
+	<div style="float: right;">
+		<%@ include file="../loginBox.jsp" %>
+	</div> 
+	<%@ include file="../GNBA.jsp" %>
+	
+	<div id="content">
+	<a style="font-size : 35px; color:orange;" href="adminCourt">경기장 리스트</a>
+	<a style="font-size : 35px; margin-left:10px;" href="adminCourtTipOff">경기장 제보</a>
+
+				
+	
+	<button style="float:right;" class="btn btn-outline-dark" onclick="window.open('adminCourtRegist.go','경기장 등록','width=400px,height=400px')">경기장 등록</button>
+	<input style="margin-left: 50px;" id="searchCourt" type="text" name="searchCourt" placeholder="경기장 검색">
+	<button id="searchButton" class="btn btn-outline-dark">검색</button>
+	<table  style = "width:100%;, height:80%;, text-align:center;, margin : 15px;">
 		<tr>
-			<th>
-				<a href="adminCourt">
-					<h3>경기장 리스트</h3>
-				</a>
-			</th>
-			<th>
-				<a href="adminCourtTipOff">
-					<h3>경기장 제보</h3>
-				</a>
-			</th>
-		</tr>
-	</table>
-	<button onclick="location.href='adminCourtRegist.go'">경기장 등록</button>
-	<input id="searchCourt" type="text" name="searchCourt" placeholder="경기장 검색">
-	<button id="searchButton">검색</button>
-	<table>
-		<tr>
+
 			<th>경기장 이름</th>
 			<th>경기장 위치</th>
 			<th>사용 여부</th>
@@ -47,19 +137,20 @@
 	<tbody id="courtList">
 		
 	</tbody>
-	</table>
-	<table>
+	<tbody>
 		<tr>
-				<td colspan="6" id="paging">	
+				<th colspan="7" id="paging">	
 					<!-- 	플러그인 사용	(twbsPagination)	-->
 					<div class="container">									
 						<nav aria-label="Page navigation" style="text-align:center">
-							<ul class="pagination" id="pagination"></ul>
+							<ul class="pagination justify-content-center" id="pagination"></ul>
 					</nav>					
 				</div>
-			</td>
-		</tr>		
+			</th>
+		</tr>
+		</tbody>		
 	</table>
+	</div>
 </body>
 <script>
 var adminRight="${sessionScope.adminRight}";
@@ -119,26 +210,32 @@ function courtListDraw(list){
 	list.forEach(function(item,index){
 		console.log(item.courtDelete);
 		content += '<tr>';
-		content += '<th>'+item.courtName+'</th>';
-		content+='<th>'+item.courtAddress+'</th>';
-		content+='<th>'+item.courtState+'</th>';
+		content += '<td>'+item.courtName+'</td>';
+		content+='<td>'+item.courtAddress+'</td>';
+		content+='<td>'+item.courtState+'</td>';
 		if(item.courtInOut=='out'){
-			content +='<th>실외</th>';
+			content +='<td>실외</td>';
 		}else{
-			content +='<th>실내</th>';
+			content +='<td>실내</td>';
 		}
 		if(item.courtDelete=='1'){
-			content +='<th>등록</th>';
-			content +='<th><button onclick=location.href="adminCourtUpdate.go?courtIdx='+item.courtIdx+'">수정</button></th>';
-			content +='<th><button onclick=location.href="adminCourtDelete.do?courtIdx='+item.courtIdx+'">삭제</button></th>';
+			content +='<td>등록</td>';
+			content +='<th><button class="btn btn-outline-dark" onclick=location.href="adminCourtUpdate.go?courtIdx='+item.courtIdx+'">수정</button></th>';
+			content +='<th><button class="btn btn-outline-dark" onclick=location.href="adminCourtDelete.do?courtIdx='+item.courtIdx+'">삭제</button></th>';
 		}else{
-			content +='<th>삭제</th>';
-			content +='<th><button onclick=location.href="adminCourtReRegist.do?courtIdx='+item.courtIdx+'">재등록</button></th>';
-			content +='<th>삭제불가</th>';
+			content +='<td>삭제</td>';
+			content +='<th><button class="btn btn-outline-dark" onclick=location.href="adminCourtReRegist.do?courtIdx='+item.courtIdx+'">재등록</button></th>';
+			content +='<td>삭제불가</td>';
 		}
 	});
 	
 	$('#courtList').append(content);
+}
+
+var adminRight="${sessionScope.adminRight}";
+console.log("왜 안될까요?? "+adminRight);
+if(adminRight==''){
+   location.href="/cf/";
 }
 
 

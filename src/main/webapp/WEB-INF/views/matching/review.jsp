@@ -59,7 +59,7 @@
 				<c:forEach items="${playerList}" var="playerList" varStatus="status">
 				<c:if test="${playerList.userId ne loginId}">
 					<c:if test="${status.index % 2 == 1}"> 
-							<a href="#" onclick="window.open('../userprofilepop.go?userId=${playerList.userId}','회원프로필','width=600px,height=400px')">${playerList.userId}</a> 
+							<a href="#" onclick="window.open('../userprofilepop.go?userId=${playerList.userId}','회원프로필','width=400px,height=600px')">${playerList.userId}</a> 
 							<input type="radio" name="${playerList.userId}" id="${playerList.userId}" value="0.1"> 👍
 							<input type="radio" name="${playerList.userId}" id="${playerList.userId}" value="-0.1"> 👎
 							</br>

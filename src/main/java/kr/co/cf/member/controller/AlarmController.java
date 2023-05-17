@@ -1,5 +1,6 @@
 package kr.co.cf.member.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
@@ -164,5 +165,14 @@ public class AlarmController {
 		
 		
 		return "/alarm/gameAlarm";
+	}
+	
+	
+	@RequestMapping(value="/deleteAlarm.ajax")
+	@ResponseBody
+	public HashMap<String, Object> deleteAlarm(@RequestParam(value="delList[]") ArrayList<String> delList){
+		// 배열로 받을 경우 @RequestParam에 value를 반드시 명시 해야함
+		logger.info("delList : " + delList);
+		return matchingService.delete(delList);
 	}
 }

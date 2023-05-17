@@ -13,7 +13,8 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <style>
-   rating {
+
+rating {
   display: inline-block;
   position: relative;
   height: 25px;
@@ -45,17 +46,6 @@
 .rating:not(:checked) label:hover ~ label {
   color: #deb217;
 }
-
-/*    .image-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.image-grid img {
-  width: calc(13% - 10px);
-  margin-bottom: 10px;
-} */
 
 body{
       position:relative;
@@ -99,11 +89,6 @@ body{
     text-decoration-line: none;
      color : #FFA500 ;
    }
-   
-
-   
-
-
 </style>
 </head>
 <body>
@@ -141,7 +126,7 @@ body{
             <th>사용 여부 : ${courtInfo.courtState}</th>
          </tr>
       </table>
-   <br/></br/></br/></br/></br/></br/>
+   </br></br></br></br></br></br></br></br>
    </div>
    <div class="image-grid" style = "font-size : 13pt; font-weight: bold; margin : 10px;">
    <a style="margin:4%;" href="#" onclick="window.open('courtReviewPhoto.do?courtIdx=${courtInfo.courtIdx}','사진 모아보기','width=400px,height=400px')">사진 더보기</a>
@@ -163,7 +148,7 @@ body{
      <div style = "font-size : 13pt; font-weight: bold;">
 
           <a style="margin:4%;" href="#" onclick="window.open('courtReviews.do?courtIdx=${courtInfo.courtIdx}','리뷰 모아보기','width=600px,height=400px')">리뷰 더보기</a>
-         <table style = " width : 60% ; ">
+         <table style = " width : 730px ; float : right; ">
          <c:forEach items="${courtReviewList}" var="courtReview" end="3">
          <tr>
             <th>${courtReview.userId}</th>
@@ -192,6 +177,7 @@ body{
       <input type="hidden" name="courtIdx" value="${courtInfo.courtIdx}"/>
       <input type="hidden" name="courtName" value="${courtInfo.courtName}"/>
       <input type="hidden" name="userId" value="${sessionScope.loginId}"/>
+      </br></br></br></br></br></br></br></br></br></br></br>
       
       <hr/>리뷰작성 &nbsp; &nbsp; <input id="courtOneLineReview" type="text" name="courtOneLineReview" style="display: inline-block;"/>
       &nbsp; &nbsp; &nbsp; &nbsp; 
@@ -214,6 +200,7 @@ body{
    </div>
    </form>
    </c:if>
+>>>>>>> 5abb766d64a1633008f118294a701b7e4aebd548
 
 </body>
 <script>
@@ -252,3 +239,4 @@ body{
       }
 </script>
 </html>
+

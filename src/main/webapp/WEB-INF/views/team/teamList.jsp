@@ -14,8 +14,7 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">	
 <style>	
-
-body{
+	body{
 		position:relative;
 		font-size:15px;
 		padding : 10px;
@@ -39,17 +38,17 @@ body{
 		float:left;
 		margin : 5px;
 		font-weight: bold;
-        font-size: 15px;
+        font-size: 18px;
 		text-align:center;
 		
 	}
 	
 	a {
-	  color : balck;
+	  color : black;
 	}
 	
 	a:link {
-	  color : balck;
+	  color : black;
 	}
 	a:visited {
 	  color : black;
@@ -59,6 +58,26 @@ body{
 	  color : #FFA500 ;
 	}
 	
+	table, th, td{
+		padding: 10px;
+		margin : 5px;
+		text-align: center;
+	}
+	
+	table{
+		width: 100%;
+		margin : 5px;
+	}
+	
+	button{
+		margin: 5px;
+	}
+	
+	#inline{
+		float: left;
+		margin:0 20 5 0;
+	}
+			
 	.pagination .page-link {
   		color: gray; /* 기본 글자색을 검정색으로 지정 */
 	}
@@ -66,21 +85,6 @@ body{
 	.pagination .page-item.active .page-link {
  		background-color: #FFA500;
  		border:none;
-	}
-	
-	li {
-		margin : 2px;
-	}	
-	
-	table, th, td{
-		margin : 5px;
-	}
-	
-	table{
-/* 		border : 1px solid black; */
-		width:95%;
-		height:70%;
-		text-align:center;
 	}
 </style>
 </head>
@@ -122,9 +126,9 @@ body{
 		</select>
 		
 		<input type="text" id="searchInput" placeholder="팀이름 검색">
-		<button id="searchButton">검색</button>
+		<button id="searchButton" style="margin: 5px; font-size:15;" class="btn btn-outline-dark">검색</button>
 		&nbsp;&nbsp;
-		<button style="float:right;" id="teamRegist" onclick="location.href='team/teamRegist.go'">팀 개설하기</button>
+		<button style="float:right; 5px; font-size:15;" class="btn btn-primary" id="teamRegist" onclick="location.href='team/teamRegist.go'">팀 개설하기</button>
 		<br/>
 		<hr/>
 		<br/>

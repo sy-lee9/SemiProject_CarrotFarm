@@ -3,8 +3,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+<title>🏀 당근농장</title>
+	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
 	<script src="../resources/js/twbsPagination.js" type="text/javascript"></script>
@@ -12,65 +12,161 @@
 	<!-- 부트스트랩 JavaScript 파일 불러오기 -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-<style>	
-	table, th, td{
-		border: 1px solid black;
-		border-collapse: collapse;
-		padding : 5px 10px;	
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">	
+<style>
+	body{
+		position:relative;
+		font-size:15px;
+		padding : 10px;
+		min-width: 1200px;
 	}
-	th,td{
+	
+	#content {
+		width:78%;
+		height : 83%;
+		background-color: #f8f9fa;
+		padding: 10 30 10;
+		margin : 5px;
+		float:right;
+		
+	}
+	
+	#LNB {
+		width:20%;
+		height : 83%;
+		background-color: #f8f9fa;
+		float:left;
+		margin : 5px;
+		font-weight: bold;
+        font-size: 18px;
+		text-align:center;
+		
+	}
+	
+	a {
+	  color : black;
+	}
+	
+	a:link {
+	  color : black;
+	}
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	 text-decoration-line: none;
+	  color : #FFA500 ;
+	}
+	
+	table, th, td{
+		padding: 10px;
+		margin : 5px;
 		text-align: center;
 	}
+	
 	table{
-		width: 800;
-		height: 500;
+		width: 100%;
+		height: 80%;
+		margin : 5px;
 	}
+	
+	button{
+		margin: 5px;
+	}
+	
+	#inline{
+		float: left;
+		margin:0 20 5 0;
+	}
+		
+	.pagination .page-link {
+  		color: gray; /* 기본 글자색을 검정색으로 지정 */
+	}
+
+	.pagination .page-item.active .page-link {
+ 		background-color: #FFA500;
+ 		border:none;
+	}
+	
 </style>
 </head>
 <body>
 
-	<input type="text" id="loginId" value="${loginId}" hidden="true"/>
+	<div style="float: right;">
+		<%@ include file="../loginBox.jsp" %>
+	</div> 
 	
-	<select id="teamJoinDate">
-	  <option value="default">가입일순</option>
-	  <option value="DESC">최근순</option>
-	  <option value="ASC">오래된순</option>
-	</select>
+	<%@ include file="../GNB.jsp" %>
+
+	<div id="LNB">
+		<br/><br/>
+        <c:if test="${loginId eq null}">
+			<img width="200" height="200" src="/photo/기본프로필.png">
+		</c:if>
+		<c:if test="${loginId ne null}">
+			<img width="200" height="200" src="/photo/${loginPhotoName}">
+		</c:if>
+      <br/><br/>
+        <a href="/cf/team/teamJoinAppAlarm.go?teamIdx=${teamIdx}">알림</a>
+      <br/><br/>
+        <a href="/cf/team/teamPageUpdate.go?teamIdx=${teamIdx}">팀정보 수정</a>
+      <br/><br/>
+        <a href="/cf/team/teamUserListLeader.go?teamIdx=${teamIdx}">팀원</a>
+      <br/><br/>
+        <a href="/cf/team/writeMatchingList.go?teamIdx=${teamIdx}">모집중인 경기</a>
+      <br/><br/>
+        <a href="/cf/team/gameMatchingRequest.go?teamIdx=${teamIdx}" >참가신청한 경기</a>
+        <br/><br/>
+        <a href="/cf/team/warningTeamUser.go?teamIdx=${teamIdx}">경고/강퇴</a>
+      <br/><br/>
+        <a href="/cf/team/teamDisbanding.go?teamIdx=${teamIdx}" >팀 해체</a>
+	</div>
 	
-	<input type="text" id="searchInput" placeholder="팀원 검색">
-	<button id="searchButton">검색</button>
-	&nbsp;&nbsp;
-	<hr>
-	<table>
-		<colgroup>
-			<col width="20%"/>
-			<col width="30%"/>
-			<col width="30%"/>
-			<col width="20%"/>
-		</colgroup>
-		<thead>
+	
+	<div id="content">
+		<input type="text" id="loginId" value="${loginId}" hidden="true"/>
+		
+		<select id="teamJoinDate">
+		  <option value="default">가입일순</option>
+		  <option value="DESC">최근순</option>
+		  <option value="ASC">오래된순</option>
+		</select>
+		&nbsp;&nbsp;
+		<input type="text" id="searchInput" placeholder="팀원 검색">
+		<button id="searchButton" style="margin: 5px; font-size:15;" class="btn btn-outline-dark">검색</button>
+		<br/>
+		<hr>
+		<br/>
+		<table>
+			<colgroup>
+				<col width="20%"/>
+				<col width="30%"/>
+				<col width="30%"/>
+				<col width="20%"/>
+			</colgroup>
+			<thead>
+				<tr>
+					<th>직급</th>
+					<th>아이디</th>
+					<th>가입일</th>
+					<th>직급변경</th>
+				</tr>
+			</thead>
+			<tbody id="list">
+				<!-- list 출력 영역 -->
+			</tbody>
 			<tr>
-				<th>직급</th>
-				<th>아이디</th>
-				<th>가입일</th>
-				<th>직급변경</th>
+				<td colspan="4" id="paging">	
+					<!-- 	플러그인 사용	(twbsPagination)	-->
+					<div class="container">									
+						<nav aria-label="Page navigation" style="text-align:center">
+							<ul class="pagination justify-content-center" id="pagination"></ul>
+						</nav>					
+					</div>
+				</td>
 			</tr>
-		</thead>
-		<tbody id="list">
-			<!-- list 출력 영역 -->
-		</tbody>
-		<tr>
-			<td colspan="5" id="paging">	
-				<!-- 	플러그인 사용	(twbsPagination)	-->
-				<div class="container">									
-					<nav aria-label="Page navigation" style="text-align:center">
-						<ul class="pagination" id="pagination"></ul>
-					</nav>					
-				</div>
-			</td>
-		</tr>
-	</table>
+		</table>
+	</div>
 </body>
 <script>
 
@@ -163,11 +259,11 @@
 			if(list.teamGrade == 'leader'){
 				content += '<td><select><option value="leader">팀장</option></select></td>';
 			}else if(list.teamGrade == 'deputyLeader'){
-				content += '<td><select><option value="deputyLeader" selected>부팀장</option><option value="temporaryLeader">임시팀장</option><option value="teamMember">팀원</option></select></td>';	
+				content += '<td><select class="teamGrade"><option value="deputyLeader" selected>부팀장</option><option value="temporaryLeader">임시팀장</option><option value="teamMember">팀원</option></select></td>';	
 			}else if(list.teamGrade == 'temporaryLeader'){
-				content += '<td><select><option value="deputyLeader" >부팀장</option><option value="temporaryLeader" selected>임시팀장</option><option value="teamMember">팀원</option></select></td>';	
+				content += '<td><select class="teamGrade"><option value="deputyLeader" >부팀장</option><option value="temporaryLeader" selected>임시팀장</option><option value="teamMember">팀원</option></select></td>';	
 			}else if(list.teamGrade == 'teamMember'){
-				content += '<td><select><option value="deputyLeader" >부팀장</option><option value="temporaryLeader">임시팀장</option><option value="teamMember" selected>팀원</option></select></td>';
+				content += '<td><select class="teamGrade"><option value="deputyLeader" >부팀장</option><option value="temporaryLeader">임시팀장</option><option value="teamMember" selected>팀원</option></select></td>';
 			}
 			content +='</tr>';
 		}); 
@@ -175,7 +271,7 @@
 		$('#list').append(content);
 		
 		//직급변경
-		$('select').change(function(){
+		$('.teamGrade').change(function(){
 			console.log("change");
 			
 			selectedTeamGrade = $(this).val();

@@ -17,8 +17,6 @@
 		font-size:15px;
 		padding : 10px;
 		min-width: 1200px;
-		
-		
 	}
 	
 	#loginBack{
@@ -33,18 +31,6 @@
 		margin-left : 600px;
 		margin-top : 200px;
 		float:inherit;
-		
-	}
-	
-	#LNB {
-		width:20%;
-		height : 83%;
-		background-color: #f8f9fa;
-		float:left;
-		margin : 5px;
-		font-weight: bold;
-        font-size: 15px;
-		text-align:center;
 		
 	}
 	
@@ -93,10 +79,10 @@
 		</tr>
 		<tr>
 			<th colspan="2">
-				<button onclick="login()">로그인</button>
-				<button onclick="location.href='join'">회원 가입</button>
-				<button onclick="location.href='findIdView'">ID 찾기</button>
-				<button onclick="location.href='findpw.go'">PW 찾기</button>
+				<button class="btn btn-outline-dark" onclick="login()">로그인</button>
+				<button class="btn btn-outline-dark" onclick="location.href='join'">회원 가입</button>
+				<button class="btn btn-outline-dark" onclick="location.href='findIdView'">ID 찾기</button>
+				<button class="btn btn-outline-dark" onclick="location.href='findpw.go'">PW 찾기</button>
 			</th>
 		</tr>
 	</table>

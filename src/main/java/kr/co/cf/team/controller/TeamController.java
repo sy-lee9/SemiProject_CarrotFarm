@@ -148,8 +148,12 @@ public class TeamController {
 	               }else if(row == 0){
 	                  //해당 팀에 가입신청을 한 경우
 	                  model.addAttribute("joinAppChk",false);
-	                  logger.info("false");
 	               }
+	               //해당 팀 팀장여부 확인
+	               if(TeamService.teamLeadersChk(Integer.parseInt(teamIdx),loginId) == 1) {
+	            	   model.addAttribute("teamLeadersChk",true);
+	               }
+	               
 	            }   
 	            
 	            //가입신청 버튼 노출 여부 확인(로그인 안했을 경우)
@@ -536,7 +540,7 @@ public class TeamController {
 				ArrayList<TeamDTO> list = TeamService.writeMatchingList(Integer.parseInt(teamIdx));
 				logger.info("list size : "+list.size());
 				model.addAttribute("list", list);
-				
+				model.addAttribute("teamIdx",teamIdx);
 				page = "/team/writeMatchingList";
 				
 			}else {

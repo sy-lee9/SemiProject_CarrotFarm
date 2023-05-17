@@ -47,8 +47,8 @@
 	}
 	
 	table{
-		width:90%;
-		height:70%;
+		width:100%;
+		height:40%;
 		text-align:center;
 	}
 	
@@ -99,13 +99,13 @@
       <br/><br/>
         <a href="/cf/team/teamUserListLeader.go?teamIdx=${teamIdx}">팀원</a>
       <br/><br/>
-        <a href="/cf/writeMatchingList.go?teamIdx=${teamIdx}">모집중인 경기</a>
+        <a href="/cf/team/writeMatchingList.go?teamIdx=${teamIdx}">모집중인 경기</a>
       <br/><br/>
-        <a href="/cf/gameMatchingRequest.go?teamIdx=${teamIdx}" >참가신청한 경기</a>
+        <a href="/cf/team/gameMatchingRequest.go?teamIdx=${teamIdx}" >참가신청한 경기</a>
         <br/><br/>
-        <a href="/cf/warningTeamUser.go?teamIdx=${teamIdx}">경고/강퇴</a>
+        <a href="/cf/team/warningTeamUser.go?teamIdx=${teamIdx}">경고/강퇴</a>
       <br/><br/>
-        <a href="/cf/teamDisbanding.go?teamIdx=${teamIdx}" >팀 해체</a>
+        <a href="/cf/team/teamDisbanding.go?teamIdx=${teamIdx}" >팀 해체</a>
 	</div>
 	
 	
@@ -126,7 +126,7 @@
 		    <a class="nav-link active"  href="matchingInviteAlarm.go?teamIdx=${teamIdx}">경기 초대 알림</a>
 		  </li>
 		</ul>
-		<br/>
+		<br/><br/>
 		<table>
 			<colgroup>
 				<col width="10%"/>
@@ -153,7 +153,7 @@
 				<c:forEach items="${list}" var="team">
 					<tr>
 						<td><a href="teamPage.go?teamIdx=${team.teamIdx}">${team.teamName}</a></td>
-						<td><a href="../matching/detail.go?matchingIdx=${team.matchingIdx}">${team.subject}</a></td>
+						<td><a href="../matching/teamDetail.go?matchingIdx=${team.matchingIdx}">${team.subject}</a></td>
 						<td>${team.location}</td>
 						<td>${team.gameDate}</td>
 						<td>${team.gamePlay}:${team.gamePlay}</td>
