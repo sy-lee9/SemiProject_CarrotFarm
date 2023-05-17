@@ -22,7 +22,7 @@
 	}
 	
 	#content {
-		width:78%;
+		width:100%;
 		height : 87%;
 		background-color: #f8f9fa;
 		padding: 10 30 10;
@@ -123,6 +123,7 @@
 	</div> 
 	<%@ include file="../GNBA.jsp" %>
 	&nbsp; &nbsp; &nbsp; &nbsp; 
+	<div id="content">
 	<select name="stateCategory" id="stateCategory">
 		 <option value="default">팀상태</option>
 		 <option value="false">등록</option>
@@ -131,6 +132,9 @@
     &nbsp; &nbsp;   
     <input type="text" id="searchInput">
    	<button id="searchButton" class="btn btn-outline-dark">검색</button>
+	<button style="margin-left : 1070px;" class="btn btn-outline-dark" onclick="teamNameChange()">팀이름 변경</button>
+	&nbsp; &nbsp; &nbsp; &nbsp; 		
+	<button class="btn btn-outline-dark" onclick="teamProfileChange()">프로필 변경</button>
 	<table>
 		<thead>
 			<tr>
@@ -166,17 +170,8 @@
 	
 		</tbody>
 	</table>
-			
-			
-			
-
-
-
-			
-	<button onclick="teamNameChange()">팀이름 변경</button>
-	<button onclick="teamProfileChange()">프로필 변경</button>
-	<button onclick="location.href='logout'">로그아웃</button>
-	<button onclick="location.href='userdelete.go'">회원탈퇴</button>
+	</div>
+	
 </body>
 <script>
 
@@ -256,8 +251,8 @@ function listPrint(list){
 			
 		}
 		
-		content +='<td><button onclick=location.href="adminTeamNameChange.do?teamIdx='+item.teamIdx+'">팀이름 변경</button></td>';
-		content +='<td><button onclick=location.href="adminTeamProfileChange.do?teamIdx='+item.teamIdx+'">프로필 변경</button></td>';
+		content +='<td><button class="btn btn-outline-dark" onclick=location.href="adminTeamNameChange.do?teamIdx='+item.teamIdx+'">팀이름 변경</button></td>';
+		content +='<td><button class="btn btn-outline-dark" onclick=location.href="adminTeamProfileChange.do?teamIdx='+item.teamIdx+'">프로필 변경</button></td>';
 		content +='<td>'+item.teamOpenDate+'</td>';
 		content +='</tr>';
 			
@@ -333,5 +328,11 @@ if(msg != ""){
 $(document).ready(function() {
 	  $('#searchButton').css('margin-top', '+0.5px');
 	});
+	
+var adminRight="${sessionScope.adminRight}";
+console.log("왜 안될까요?? "+adminRight);
+if(adminRight==''){
+   location.href="/cf/";
+}
 </script>
 </html>

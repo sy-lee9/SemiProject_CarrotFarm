@@ -3,30 +3,136 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>🏀 당근농장</title>
 <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>  
 <script src="resources/js/twbsPagination.js" type="text/javascript"></script>
+
+<!-- 부트스트랩 JavaScript 파일 불러오기 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <style>
-	table, th, td{
-      border : 1px solid black;
-      border-collapse: collapse;
-      padding : 5px 10px;
-   }
+	body{
+		position:relative;
+		font-size:15px;
+		padding : 10px;
+		min-width: 1200px;
+	}
+	
+	#content {
+		width:100%;
+		height : 87%;
+		background-color: #f8f9fa;
+		padding: 10 30 10;
+		margin : 5px;
+		float:right;
+		
+	}
+	
+	#LNB {
+		width:20%;
+		height : 87%;
+		background-color: #f8f9fa;
+		float:left;
+		margin : 5px;
+		font-weight: bold;
+        font-size: 15px;
+		text-align:center;
+		
+	}
+	
+	#LNB ul li {
+	margin-top : 30px;
+    margin-bottom: 90px; /* 원하는 줄간격 크기 */
+	}
+	
+	
+		th, td {
+		margin : 10px;
+		border : 1px solid black;	
+		padding : 10px 10px;
+		border-collapse : collapse;
+		border-left: none;
+    	border-right: none;
+	}
+	
+	table{
+		width:95%;
+		height:90%;
+		text-align:center;
+		
+		border-collapse : collapse;
+		padding : 15px;
+		margin : 30px 10px 10px 30px;
+	}
+	
+	#gamePlay, #sort{
+		width: 100px;
+    	height: 30px;
+    	margin : 5px;
+	}
+	
+	#searchInput{
+		width: 200px;
+    	height: 25px;
+    	
+	}
+	
+	#searchButton, #writeButton {
+		font-size: 15px;
+		height: 25px;
+		margin : 5px;
+	
+	}
+	
+	#writeButton {
+		float:right;
+		margin-right : 60px;
+	}
+	
+	a {
+	  color : black;
+	}
+	
+	a:link {
+	  color : black;
+	}
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	 text-decoration-line: none;
+	  color : #FFA500 ;
+	}
+	
+	.pagination .page-link {
+  		color: gray; /* 기본 글자색을 검정색으로 지정 */
+	}
+
+	.pagination .page-item.active .page-link {
+ 		background-color: #FFA500;
+ 		border:none;
+	}
 </style>
 </head>
 <body>
-	신고 목록
+	<div style="float: right;">
+		<%@ include file="../loginBox.jsp" %>
+	</div> 
+	<%@ include file="../GNBA.jsp" %>
+	
 	</hr>
-	<select name="reportState" id="reportState">
+	<div id="content">
+	<select style="float:right;" name="reportState" id="reportState">
 		 <option value="default">신고상태</option>
          <option value="미처리">미처리</option>
          <option value="처리중">처리중</option>
          <option value="처리완료">처리완료</option>
       </select>
       
-      <select name="category" id="category">
+      <select style="float:right;" name="category" id="category">
 		 <option value="default">카테고리 종류</option>
          <option value="rm">모집글</option>
          <option value="rb">게시판</option>
@@ -42,7 +148,7 @@
       </select>
       
     <input type="text" id="searchInput">
-   	<button id="searchButton">검색</button>
+   	<button id="searchButton" class="btn btn-outline-dark">검색</button>
 	<table>
 		<tr>
 			<th>no</th>
@@ -75,6 +181,7 @@
 	
 		</tbody>
 	</table>
+	</div>
 </body>
 <script>
 	var showPage = 1;
@@ -171,6 +278,11 @@
 		});
 		$('#list').empty();
 		$('#list').append(content);
+	}
+	var adminRight="${sessionScope.adminRight}";
+	console.log("왜 안될까요?? "+adminRight);
+	if(adminRight==''){
+	   location.href="/cf/";
 	}
 </script>
 </html>

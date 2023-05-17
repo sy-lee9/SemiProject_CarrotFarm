@@ -120,9 +120,9 @@ body{
 	</div>
 	<div id="content">
 	
-	<div id="map" style="width:500px;height:650px;float:left; margin: 20px, 10px, 0px, 20px;"></div>
+	<div id="map" style="width:35%;height:84%;float:left; margin: 20px, 10px, 0px, 20px;"></div>
 	<div>
-		<table  style="width:700px; height:200px; margin : 10px; float : right">
+		<table  style="width:60%; margin : 10px; float : right">
 			<tr>
 				<th style="font-size: 20pt; height:65px;">
 					${courtInfo.courtName}
@@ -141,11 +141,10 @@ body{
 				<th>사용 여부 : ${courtInfo.courtState}</th>
 			</tr>
 		</table>
-	</br></br></br></br></br></br></br></br>
+	<br/></br/></br/></br/></br/></br/>
 	</div>
 	<div class="image-grid" style = "font-size : 13pt; font-weight: bold; margin : 10px;">
-	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 사진 모아보기 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-		<a href="#" onclick="window.open('courtReviewPhoto.do?courtIdx=${courtInfo.courtIdx}','사진 모아보기','width=400px,height=400px')">더보기</a>
+	<a style="margin:4%;" href="#" onclick="window.open('courtReviewPhoto.do?courtIdx=${courtInfo.courtIdx}','사진 모아보기','width=400px,height=400px')">사진 더보기</a>
 		</br></br>
 		<table style="margin-right : 20px; border : 1px solid black;" >
 			<c:if test="${reviewPhotoList eq '[]'}">
@@ -163,8 +162,8 @@ body{
 	</div>
 	  <div style = "font-size : 13pt; font-weight: bold;">
 
-		&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 경기장 리뷰 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<a href="#" onclick="window.open('courtReviews.do?courtIdx=${courtInfo.courtIdx}','리뷰 모아보기','width=600px,height=400px')">더보기</a>
-			<table style = " width : 730px ; float : right; ">
+		 	<a style="margin:4%;" href="#" onclick="window.open('courtReviews.do?courtIdx=${courtInfo.courtIdx}','리뷰 모아보기','width=600px,height=400px')">리뷰 더보기</a>
+			<table style = " width : 60% ; ">
 			<c:forEach items="${courtReviewList}" var="courtReview" end="3">
 			<tr>
 				<th>${courtReview.userId}</th>
@@ -193,7 +192,6 @@ body{
 		<input type="hidden" name="courtIdx" value="${courtInfo.courtIdx}"/>
 		<input type="hidden" name="courtName" value="${courtInfo.courtName}"/>
 		<input type="hidden" name="userId" value="${sessionScope.loginId}"/>
-		</br></br></br></br></br></br></br></br></br></br></br>
 		
 		<hr/>리뷰작성 &nbsp; &nbsp; <input id="courtOneLineReview" type="text" name="courtOneLineReview" style="display: inline-block;"/>
 		&nbsp; &nbsp; &nbsp; &nbsp; 

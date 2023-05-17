@@ -22,7 +22,7 @@
 	}
 	
 	#content {
-		width:78%;
+		width:100%;
 		height : 87%;
 		background-color: #f8f9fa;
 		padding: 10 30 10;
@@ -120,9 +120,10 @@
 <body>
 	<div style="float: right;">
 		<%@ include file="../loginBox.jsp" %>
-	</div> 
+	</div>  
 	<%@ include file="../GNBA.jsp" %>
-	&nbsp; &nbsp; &nbsp; &nbsp; 
+	&nbsp; &nbsp; &nbsp; &nbsp;
+	<div id="content">
 	<select name="stateCategory" id="stateCategory">
 		 <option value="default">회원상태</option>
          <option value="사용중">사용중</option>
@@ -144,7 +145,7 @@
     <input type="text" id="searchInput">
    	&nbsp; &nbsp; 
    	<button id="searchButton" class="btn btn-outline-dark">검색</button>
-	<button onclick="nicknameChange()" style="margin-left : 900px;" class="btn btn-outline-dark">닉네임 변경</button>
+	<button onclick="nicknameChange()" style="margin-left : 80%;" class="btn btn-outline-dark">닉네임 변경</button>
 	&nbsp; &nbsp; &nbsp; &nbsp; 		
 	<button onclick="profileChange()" class="btn btn-outline-dark">프로필 변경</button>
 	<table>
@@ -181,6 +182,7 @@
 			</tr>	
 		</tbody>
 	</table>
+	</div>
 			
 
 			

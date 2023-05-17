@@ -54,8 +54,11 @@
 				<th>경기장 주소</th>
 				<th><input type="text" name="courtAddress" required/></th>
 			</tr>
+			<tr>
+				<th colspan="2"><button class="btn btn-outline-dark">전송</button></th>
+			</tr>
 		</table>
-		<button>전송</button>
+		
 	</form>
 
 </body>

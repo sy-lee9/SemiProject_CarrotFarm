@@ -113,14 +113,14 @@
       	<option value="out">실외</option>
       </select>
       
-	<div id="map" style="width:420px; height:420px; float:left; margin: 20px, 10px, 0px, 20px;"></div>
+	<div id="map" style="width:35%; height:60%; float:left; margin: 20px, 10px, 0px, 20px;"></div>
 	<input id="searchCourt" type="text" name="searchCourt" placeholder="경기장 검색">
 	&nbsp; &nbsp; 
 	<button type="button" onclick="courtSort('courtSearch')" class="btn btn-outline-dark" id = "ssearchbutton">검색</button>
 	&nbsp;  &nbsp; 
 	<button onclick="window.open('courtTipOff.go','경기장 제보','width=400px,height=400px')" class="btn btn-outline-dark" id = "courtjaebo">경기장 제보</button>
 	<div>
-	<table id="courtList" style="width:800px; margin : 10px; float : right" >
+	<table id="courtList" style="width:60%; margin : 10px; float : right" >
 		<thead>
 		
 		</thead>

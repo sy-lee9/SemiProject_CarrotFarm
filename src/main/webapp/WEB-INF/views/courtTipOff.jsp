@@ -16,15 +16,15 @@
 <body>
 	<h3>경기장 제보</h3>
 	<form action="courtTipOff.do">
-		<input type="hidden" name="userId" value="test1"/>
+		<input type="hidden" name="userId" value="${sessionScope.loginId}"/>
 		<table>
 			<tr>
 				<th>경기장 이름</th>
-				<th><input type="text" name="courtName"/></th>
+				<th><input type="text" name="courtName" required/></th>
 			</tr>
 			<tr>
 				<th>경기장 주소</th>
-				<th><input type="text" name="courtAddress"/></th>
+				<th><input type="text" name="courtAddress" required/></th>
 			</tr>
 			<tr>
 				<th colspan="2"><button>저장</button><button type="button" onclick="window.close()">닫기</button></th>
