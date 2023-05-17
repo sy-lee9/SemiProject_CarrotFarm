@@ -23,6 +23,7 @@
 	
 	#content {
 		width:78%;
+		height:83%;
 		background-color: #f8f9fa;
 		padding: 10 30 10;
 		margin : 5px;
@@ -80,8 +81,15 @@
 <jsp:include page="GNB.jsp"></jsp:include>
 
 <div id="LNB">
+    
        <br/><br/>
-			<img width="200" height="200" src="/photo/${loginPhotoName}">
+		<c:if test="${loginId eq null}">
+			<img width="200" height="200" src="/photo/기본프로필.png">
+		</c:if>
+		<c:if test="${loginId ne null}">
+			<img width="200" height="200" src="/photo/${loginPhotoName}"> 
+			<br/> <h3 style="display:inline-block; margin-top:10px;">${loginId} </h3>님 <a href="/cf/userNoticeAlarm">🔔</a>
+		</c:if>
 			<br/><br/>
            <a href="/cf/userinfo.go">회원 정보</a>
            <br/><br/>

@@ -67,11 +67,12 @@
 id="email" aria-describedby="emailHelp" name="email"
  placeholder="Enter Email Address...">
 </div>
-<button class="btn btn-outline-dark" type="submit">
+<a href="/cf/login" style="display: inline;">[로그인 페이지]</a> <a href="/cf/" style="display: inline;">[메인페이지]</a>
+<button style="float: right;" class="btn btn-outline-dark" type="submit">
 Find ID
 </button>
 </form>
-<a href="/cf/login">[로그인 페이지]</a> <a href="/cf/">[메인페이지]</a>
+
 
 </body>
 <script>

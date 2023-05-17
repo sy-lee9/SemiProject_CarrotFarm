@@ -239,7 +239,7 @@
 			if(list.warningCount < 1){
 				content += '<td><button disabled="true" onclick="window.open(\'warningCancel.go?userId='+list.userId+'&teamIdx='+teamIdx+'\',\'경고 취소\',\'width=550px,height=280px\')" style="margin: 10px; font-size: 15;" class="btn btn-warning">취소</button></td>';
 			}
-			if(list.warningCount > 1){
+			if(list.warningCount >= 1){
 				content += '<td><button onclick="window.open(\'warningCancel.go?userId='+list.userId+'&teamIdx='+teamIdx+'\',\'경고 취소\',\'width=550px,height=280px\')" style="margin: 10px; font-size: 15;" class="btn btn-warning">취소</button></td>';
 			}
 			

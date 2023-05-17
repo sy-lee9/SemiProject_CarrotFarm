@@ -21,11 +21,12 @@
 	
 	#content {
 		width:78%;
-		height:87%;
+		height:83%;
 		background-color: #f8f9fa;
 		padding: 10 30 10;
 		margin : 5px;
 		float:right;
+		font-size: 16pt;
 		
 	}
 	
@@ -80,14 +81,21 @@
     
     th,td {
     	padding:5px;
+    	
     }
     
     .tableGab {
         margin-bottom: 50px; /* 아래쪽 간격 설정 */
+        
     }
     
     #infoTable th,td {
     	padding : 5px 10px;
+    	
+    }
+    
+    #btn {
+    	float: bottom;
     }
 
 
@@ -102,7 +110,13 @@
 	
 	<div id="LNB">
        <br/><br/>
-	<img width="200" height="200" src="/photo/${loginPhotoName}">
+	<c:if test="${loginId eq null}">
+			<img width="200" height="200" src="/photo/기본프로필.png">
+		</c:if>
+		<c:if test="${loginId ne null}">
+			<img width="200" height="200" src="/photo/${loginPhotoName}"> 
+			<br/> <h3 style="display:inline-block; margin-top:10px;">${loginId} </h3>님 <a href="/cf/userNoticeAlarm">🔔</a>
+		</c:if>
 	<br/><br/>
            <a href="/cf/userinfo.go">회원 정보</a>
            <br/><br/>
@@ -118,37 +132,38 @@
 	<div id="content" >
 	
 	<h3>회원 프로필</h3>
-	
+	<br/>
 	<div id="inline" style=" float:left; width :30%; height:40%;">
 		<img width="100%" src="/photo/${profileInfo.photoName}"/>
 	</div>
 
 	
-	<div class="tableGab">
-		<table id="infoTable">
+	<div  class="tableGab">
+		<table  id="infoTable">
 			<tr>
-				<th>닉네임</th>
-				<td>${profileInfo.nickName}</td>
+				<th style="font-size: 16pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;닉네임</th>
+
+				<td style="font-size: 15pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${profileInfo.nickName}</td>
 			</tr>
 			<tr>
-				<th>키</th>
-				<td>${profileInfo.height}</td>
+				<th style="font-size: 16pt;"><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;키</th>
+				<td style="font-size: 16pt;"><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${profileInfo.height}</td>
 			</tr>
 			<tr>
-				<th>포지션</th>
-				<td>${profileInfo.position}</td>
+				<th style="font-size: 16pt;"><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;포지션</th>
+				<td style="font-size: 16pt;"><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${profileInfo.position}</td>
 			</tr>
 			<tr>
-				<th>선호 지역</th>
-				<td>${profileInfo.gu}</td>
+				<th style="font-size: 16pt;"><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;선호 지역</th>
+				<td style="font-size: 16pt;"><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${profileInfo.gu}</td>
 			</tr>
 			<tr>
-				<th>선호 시간</th>
-				<td>${profileInfo.favTime}</td>
+				<th style="font-size: 16pt;"><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;선호 시간</th>
+				<td style="font-size: 16pt;"><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${profileInfo.favTime}</td>
 			</tr>
 			<tr>
-				<th>매너 점수</th>
-				<td>${mannerPoint}</td>
+				<th style="font-size: 16pt;"><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;매너 점수</th>
+				<td style="font-size: 16pt;"><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${mannerPoint}</td>
 			</tr>
 	
 			
@@ -164,7 +179,7 @@
         <col style="width:15%;">
     </colgroup>
 			<tr>
-				<th colspan="4" style="text-align:center;">참여 경기 목록</th>
+				<th colspan="4" style="text-align:center; font-size: 16pt;"><br/>참여 경기 목록</th>
 			</tr>
 			<c:if test="${profileGames ne '[]'}">
 			<tr>
@@ -188,13 +203,14 @@
 				</tr>
 			</c:forEach>
 		</table>
-		
 		</div>
-		<c:set var="loginId" value="${sessionScope.loginId}" />
-			<c:if test="${loginId != null}">
-				<button class="btn btn-outline-dark" onclick="window.open('userReport.go?userId=${profileInfo.userId}&userIdx=${profileInfo.userIdx}','회원 신고','width=600px,height=400px')">신고</button>
-			</c:if>
 		
+		<div id="btn">
+		<c:set var="loginId" value="${sessionScope.loginId}" />
+			<c:if test="${profileInfo.userId ne sessionScope.loginId && sessionScope.loginId ne null}">
+				<button style=";" class="btn btn-outline-dark" onclick="window.open('userReport.go?userId=${profileInfo.userId}&userIdx=${profileInfo.userIdx}','회원 신고','width=600px,height=400px')">신고</button>
+			</c:if>
+		</div>
 	</div>
 </body>
 <script>

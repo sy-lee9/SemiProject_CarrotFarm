@@ -8,9 +8,6 @@ public class JoinDTO {
 	private String nickName;
 	private String userName;
 	private String email;
-	
-	
-	
 	private Date birthday;
 	private int locationIdx;
 	private String favTime;
