@@ -198,7 +198,7 @@
 
 	var teamUserManner = "${team.teamManner}";
 	var teamUserCount = "${team.teamUser}";
-	var teamManner = teamUserManner / teamUserCount;
+	var teamManner = (teamUserManner / teamUserCount).toFixed(1);
 	$('#teamManner').text(teamManner);
 
 	function leaveTeam(teamIdx){
