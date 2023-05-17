@@ -36,7 +36,7 @@ public class TeamMatchingController {
 		model.addAttribute("writeRight", "no");
 		
 		if(session.getAttribute("loginId") == null) {
-			model.addAttribute("loginId", "guest");
+			//model.addAttribute("loginId", "guest");
 			model.addAttribute("writeRight", "no");
 		}else {
 			// 본인이 리더인 (해체되지 않은)팀이 있는지
@@ -112,7 +112,7 @@ public class TeamMatchingController {
 		
 		// 로그인 정보가 없을 시
 		if(session.getAttribute("loginId") == null) {
-			model.addAttribute("loginId", "guest");
+			//model.addAttribute("loginId", "guest");
 		}
 		if(session.getAttribute("loginId") != null) {
 			// 초대 가능한 팀 리스트 
@@ -264,7 +264,7 @@ public class TeamMatchingController {
 		
 		// 로그인 정보가 없을 시
 		if(session.getAttribute("loginId") == null) {
-			model.addAttribute("loginId", "guest");
+			//model.addAttribute("loginId", "guest");
 		}
 		if(session.getAttribute("loginId") != null) {
 			// 초대 가능한 팀 리스트 

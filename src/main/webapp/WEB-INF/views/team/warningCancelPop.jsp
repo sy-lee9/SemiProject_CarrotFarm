@@ -34,7 +34,7 @@
 		<label>취소 사유</label>
 			<input type="text" name="reason" id="reason" style="width: 450px;" placeholder="취소사유를 입력해 주세요."/>
 		<br/>	
-		<input type="button" value="제출" onclick="subChk()" style="margin: 10px;" />	
+		<input type="button" value="제출" onclick="subChk()" style="margin: 10px; font-size: 15;" class="btn btn-warning"/>	
 	
 </body>
 <script>	

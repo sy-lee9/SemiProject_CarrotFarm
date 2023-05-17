@@ -13,7 +13,8 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <style>
-   rating {
+
+rating {
   display: inline-block;
   position: relative;
   height: 25px;
@@ -45,17 +46,6 @@
 .rating:not(:checked) label:hover ~ label {
   color: #deb217;
 }
-
-/*    .image-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.image-grid img {
-  width: calc(13% - 10px);
-  margin-bottom: 10px;
-} */
 
 body{
       position:relative;
@@ -99,11 +89,6 @@ body{
     text-decoration-line: none;
      color : #FFA500 ;
    }
-   
-
-   
-
-
 </style>
 </head>
 <body>
@@ -253,3 +238,4 @@ body{
       }
 </script>
 </html>
+

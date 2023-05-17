@@ -78,6 +78,15 @@
 		float: left;
 		margin:0 20 5 0;
 	}
+		
+	.pagination .page-link {
+  		color: gray; /* 기본 글자색을 검정색으로 지정 */
+	}
+
+	.pagination .page-item.active .page-link {
+ 		background-color: #FFA500;
+ 		border:none;
+	}
 </style>
 </head>
 <body>
@@ -103,9 +112,10 @@
 	      <br/><br/>
 	        <a href="/cf/team/teamGame.go?teamIdx=${teamIdx}">참여 경기</a>
 	      <br/><br/>
-	        <a href="/cf/teampictureboardList.do?teamIdx=${teamIdx}">팀 사진첩</a>
+	        <a href="/cf/teamnoticeboardList.do?teamIdx=${team.teamIdx}">팀 공지 사항</a>
 	      <br/><br/>
-	        <a href="/cf/teaminquiryboardList.do?teamIdx=${teamIdx}" >팀 문의</a>
+	        <a href="/cf/teampictureboardList.do?teamIdx=${team.teamIdx}">팀 사진첩</a>
+	      <br/><br/>
 	</div>
 	
 	<div id="content">
@@ -115,9 +125,9 @@
 		  <option value="DESC">경기일 최신순</option>
 		  <option value="ASC">경기일 오래된순</option>
 		</select>
-		
+		&nbsp;&nbsp;
 		<input type="text" id="searchInput" placeholder="제목 검색">
-		<button id="searchButton">검색</button>
+		<button id="searchButton" style="margin: 5px; font-size:15;" class="btn btn-outline-dark">검색</button>
 		<br/><br/>
 		<table>
 			<colgroup>
@@ -142,7 +152,7 @@
 					<!-- 	플러그인 사용	(twbsPagination)	-->
 					<div class="container">									
 						<nav aria-label="Page navigation" style="text-align:center">
-							<ul class="pagination" id="pagination"></ul>
+							<ul class="pagination justify-content-center" id="pagination"></ul>
 						</nav>					
 					</div>
 				</td>
@@ -217,7 +227,7 @@
 		
 		if(list.length==0){
 			content +='<tr>';
-			content +='<th colspan="4"> 확인할 알림이 없습니다. </th>';
+			content +='<th colspan="4"> 참여한 경기가  없습니다. </th>';
 			content +='</tr>';
 		}else{
 		list.forEach(function(list, idx){

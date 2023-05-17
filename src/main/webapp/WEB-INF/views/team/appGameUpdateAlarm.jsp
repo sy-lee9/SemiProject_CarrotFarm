@@ -43,14 +43,13 @@
 		
 	}
 	
-	
 	table, th, td{
 		margin : 5px;
 	}
 	
 	table{
-		width:90%;
-		height:70%;
+		width:100%;
+		height:40%;
 		text-align:center;
 	}
 	
@@ -101,13 +100,13 @@
       <br/><br/>
         <a href="/cf/team/teamUserListLeader.go?teamIdx=${teamIdx}">팀원</a>
       <br/><br/>
-        <a href="/cf/writeMatchingList.go?teamIdx=${teamIdx}">모집중인 경기</a>
+        <a href="/cf/team/writeMatchingList.go?teamIdx=${teamIdx}">모집중인 경기</a>
       <br/><br/>
-        <a href="/cf/gameMatchingRequest.go?teamIdx=${teamIdx}" >참가신청한 경기</a>
+        <a href="/cf/team/gameMatchingRequest.go?teamIdx=${teamIdx}" >참가신청한 경기</a>
         <br/><br/>
-        <a href="/cf/warningTeamUser.go?teamIdx=${teamIdx}">경고/강퇴</a>
+        <a href="/cf/team/warningTeamUser.go?teamIdx=${teamIdx}">경고/강퇴</a>
       <br/><br/>
-        <a href="/cf/teamDisbanding.go?teamIdx=${teamIdx}" >팀 해체</a>
+        <a href="/cf/team/teamDisbanding.go?teamIdx=${teamIdx}" >팀 해체</a>
 	</div>
 	
 	
@@ -128,7 +127,7 @@
 		    <a class="nav-link"  href="matchingInviteAlarm.go?teamIdx=${teamIdx}">경기 초대 알림</a>
 		  </li>
 		</ul>
-		<br/>
+		<br/><br/>
 		<table>
 			<colgroup>
 				<col width="40%"/>
