@@ -159,10 +159,10 @@
 	     				
 	     				<c:if test="${myTeamDto.teamGrade eq 'leader'}">
 	     					<c:forEach items="${playerList}" var="playerList">
-	     					<c:if test="${playerList.userId eq loginId}">
-	     						<button class="btn btn-outline-dark" id="teamRegist">팀원등록</button>
-	     					</c:if>
-	     				</c:forEach>
+		     					<c:if test="${playerList.userId eq loginId}">
+		     						<button class="btn btn-outline-dark" id="teamRegist">팀원등록</button>
+		     					</c:if>
+	     					</c:forEach>
 	     				
 	     				</c:if>
 	     			</c:if>
