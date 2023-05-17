@@ -3,60 +3,150 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<title>🏀 당근농장</title>
+	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
+	<script src="../resources/js/twbsPagination.js" type="text/javascript"></script>
+	
+	<!-- 부트스트랩 JavaScript 파일 불러오기 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <style>
+	body{
+		position:relative;
+		font-size:15px;
+		padding : 10px;
+		min-width: 1200px;
+	}
+	
+	#content {
+		width:78%;
+		height : 83%;
+		background-color: #f8f9fa;
+		padding: 10 30 10;
+		margin : 5px;
+		float:right;
+		
+	}
+	
+	#LNB {
+		width:20%;
+		height : 83%;
+		background-color: #f8f9fa;
+		float:left;
+		margin : 5px;
+		font-weight: bold;
+        font-size: 18px;
+		text-align:center;
+		
+	}
+	
+	table, th, td{
+		margin : 5px;
+	}
+	
 	table{
-		width: 1000;
-		height: 300;
-		margin: 30;
+		width:100%;
+		height:40%;
+		text-align:center;
 	}
-	th,td{
-		text-align: center;
+	
+	a {
+	  color : black;
 	}
-	td{
-		height: 10;
+	
+	a:link {
+	  color : black;
 	}
-	#gameDate{
-		margin: 30;
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	 text-decoration-line: none;
+	  color : #FFA500 ;
+	}
+	
+	.pagination .page-link {
+  		color: gray; /* 기본 글자색을 검정색으로 지정 */
+	}
+
+	.pagination .page-item.active .page-link {
+ 		background-color: #FFA500;
+ 		border:none;
 	}
 </style>
 </head>
 <body>
-	<input type="hidden" name="teamIdx" value="${teamIdx}"/>
-	<select id="gameDate">
-	  <option value="default">모집일순</option>
-	  <option value="DESC">경기일 최신순</option>
-	  <option value="ASC">경기일 오래된순</option>
-	</select>
+	<div style="float: right;">
+		<%@ include file="../loginBox.jsp" %>
+	</div> 
+	
+	<%@ include file="../GNB.jsp" %>
 
-	<table>
-		<colgroup>
-			<col width="10%"/>
-			<col width="30%"/>
-			<col width="30%"/>
-			<col width="10%"/>
-			<col width="10%"/>
-			<col width="10%"/>
-		</colgroup>
-		<thead>
-			<tr>
-				<th>장소</th>
-				<th>제목</th>
-				<th>경기일시</th>
-				<th>경기방식</th>
-				<th>모집상태</th>
-				<th>응답상태</th>
-			</tr>
-		</thead>
-		<tbody id="list">
-			<!-- list 출력 영역 -->
-		</tbody>
-	</table>
+	<div id="LNB">
+		<br/><br/>
+        <c:if test="${loginId eq null}">
+			<img width="200" height="200" src="/photo/기본프로필.png">
+		</c:if>
+		<c:if test="${loginId ne null}">
+			<img width="200" height="200" src="/photo/${loginPhotoName}">
+		</c:if>
+      <br/><br/>
+        <a href="/cf/team/teamJoinAppAlarm.go?teamIdx=${teamIdx}">알림</a>
+      <br/><br/>
+        <a href="/cf/team/teamPageUpdate.go?teamIdx=${teamIdx}">팀정보 수정</a>
+      <br/><br/>
+        <a href="/cf/team/teamUserListLeader.go?teamIdx=${teamIdx}">팀원</a>
+      <br/><br/>
+        <a href="/cf/team/writeMatchingList.go?teamIdx=${teamIdx}">모집중인 경기</a>
+      <br/><br/>
+        <a href="/cf/team/gameMatchingRequest.go?teamIdx=${teamIdx}" >참가신청한 경기</a>
+        <br/><br/>
+        <a href="/cf/team/warningTeamUser.go?teamIdx=${teamIdx}">경고/강퇴</a>
+      <br/><br/>
+        <a href="/cf/team/teamDisbanding.go?teamIdx=${teamIdx}" >팀 해체</a>
+	</div>
+	
+	
+	<div id="content">
+		 <br/>
+		<input type="hidden" name="teamIdx" value="${teamIdx}"/>
+		<select id="gameDate">
+		  <option value="default">모집일순</option>
+		  <option value="DESC">경기일 최신순</option>
+		  <option value="ASC">경기일 오래된순</option>
+		</select>
+		<br/><br/>
+		<table>
+			<colgroup>
+				<col width="10%"/>
+				<col width="30%"/>
+				<col width="30%"/>
+				<col width="10%"/>
+				<col width="10%"/>
+				<col width="10%"/>
+			</colgroup>
+			<thead>
+				<tr>
+					<th>장소</th>
+					<th>제목</th>
+					<th>경기일시</th>
+					<th>경기방식</th>
+					<th>모집상태</th>
+					<th>응답상태</th>
+				</tr>
+			</thead>
+			<tbody id="list">
+				<!-- list 출력 영역 -->
+			</tbody>
+		</table>
+	</div>
 </body>
 <script>
 	var selectedGameDate = 'default';
-	var teamIdx = ${teamIdx}
+	var teamIdx = "${teamIdx}";
 	console.log(selectedGameDate);
 	console.log(teamIdx);
 	listCall();

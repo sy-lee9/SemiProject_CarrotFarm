@@ -114,7 +114,7 @@
 		<div id="teamMatchState" style="margin: 10px; display: flex; align-items: center; float:right; height: 40px;">
 			<p>${team.teamMatchState}</p>
 			<c:if test="${teamLeadersChk eq true}">
-				<div style="float:right;"><button type="button" id="joinCancelApp" onclick="location.href='teamJoinAppAlarm.go?teamIdx=${team.teamIdx}'">팀관리</button></div>
+				<div style="float:right;"><button type="button" onclick="location.href='teamJoinAppAlarm.go?teamIdx=${team.teamIdx}'">팀관리</button></div>
 			</c:if>
 		</div> 
 		<c:if test="${team.teamMatchState == '모집중' && joinAppChk eq false && joinTeam eq false}">
