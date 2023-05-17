@@ -144,7 +144,7 @@
 			</tr>
 			<tr>
 				<th>매너점수</th>
-				<td>${team.teamManner}</td>			
+				<td id="teamManner"></td>			
 			</tr>
 			<tr>
 				<th>팀원 수</th>
@@ -195,6 +195,11 @@
 
 </body>
 <script>
+
+	var teamUserManner = "${team.teamManner}";
+	var teamUserCount = "${team.teamUser}";
+	var teamManner = (teamUserManner / teamUserCount).toFixed(1);
+	$('#teamManner').text(teamManner);
 
 	function leaveTeam(teamIdx){
 		console.log("팀탈퇴 시작");
