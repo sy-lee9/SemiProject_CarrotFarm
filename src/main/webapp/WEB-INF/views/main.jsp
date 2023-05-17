@@ -83,7 +83,7 @@
 	<div id="content" style="text-align:center;">
 		<hr/>
 		<br/><br/>
-		<img id="image" src="/photo/mainLogo.png"/ >
+		<img id="image"  src="/photo/mainLogo.png"/ >
 		<br/><br/>
 		<hr/>
 		

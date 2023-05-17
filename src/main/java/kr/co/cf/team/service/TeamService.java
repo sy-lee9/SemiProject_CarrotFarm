@@ -390,10 +390,12 @@ public class TeamService {
 		logger.info("params : "+params);
 		String selectedGameDate = String.valueOf(params.get("selectedGameDate"));
 		
+
 		int teamIdx = Integer.parseInt((String) params.get("teamIdx"));
 		String leaderId = TeamDAO.getTeamLeader(teamIdx);
 		logger.info("getTeamLeader : "+leaderId);
 		params.put("userId", leaderId);
+
 		
 		ArrayList<TeamDTO> list = new ArrayList<TeamDTO>();
 		HashMap<String, Object> map = new HashMap<String, Object>();		
