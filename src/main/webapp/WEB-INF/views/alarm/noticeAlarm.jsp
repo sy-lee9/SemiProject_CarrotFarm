@@ -50,11 +50,12 @@
 	
 	table, th, td{
 		margin : 5px;
+		padding : 3px;
 	}
 	
 	table{
-		width:90%;
-		height:70%;
+		width:95%;
+		height:90%;
 		text-align:center;
 	}
 	
@@ -117,7 +118,7 @@
 	<br/>
 		<ul class="nav nav-tabs">
 		  <li class="nav-item">
-		    <a class="nav-link active" href="/cf/userNoticeAlarm">공지사항</a>
+		    <a style="font-size:17px; font-weight:700;" class="nav-link active" href="/cf/userNoticeAlarm">공지사항</a>
 		  </li>
 		  <li class="nav-item">
 		    <a class="nav-link " href="/cf/userGameAlarm">경기알림</a>
@@ -135,7 +136,8 @@
 		<table>
 			<thead>
 					<tr>
-						<th style="width:20%;">No</th>
+						<th style="width:10%; text-align:left;"><input type="checkbox" id="all" /> &nbsp; <button style="font-size:15px;" class="btn btn-outline-dark" onclick="del()">삭제</button></th>
+						<th style="width:10%; text-align:left;">No</th>
 						<th style="width:80%;">공지사항</th>
 					</tr>
 				</thead>
@@ -237,7 +239,49 @@ function listPrint(list){
 	$('#list').empty();
 	$('#list').append(content);
 } 
-	
 
+$('#all').click(function(e){
+	var $chk = $('input[type="checkbox"]');
+	console.log($chk);
+	if($(this).is(':checked')){
+		$chk.prop('checked',true);
+	}else{
+		$chk.prop('checked',false);
+	}
+});	
+
+function del(){
+	 
+	 var checkArr = [];
+	 
+	 // checkbox에 value를 지정하지 않으먄 스스로를 on으로 지정한다. 
+	 $('input[type="checkbox"]:checked').each(function(idx,item){
+		if($(this).val() != 'on'){
+			checkArr.push($(this).val());
+		}
+		 
+	 });
+	 
+	 console.log(checkArr);
+	 
+	$.ajax({
+		type:'get',
+		url:'deleteAlarm.ajax',
+		data:{'delList':checkArr},
+		dataType:'json',
+		success:function(data){
+			console.log(data);
+			if(data.success){
+				alert(data.msg);
+				
+				listCall(showPage);
+			}
+		},
+		error:function(e){
+			console.log(e);
+		}
+	});
+	
+}
 </script>
 </html>

@@ -50,11 +50,12 @@
 	
 	table, th, td{
 		margin : 5px;
+		padding : 3px;
 	}
 	
 	table{
-		width:90%;
-		height:70%;
+		width:95%;
+		height:90%;
 		text-align:center;
 	}
 	
@@ -126,7 +127,7 @@
 		    <a class="nav-link" href="/cf/userWarningAlarm">경고알림</a>
 		  </li>
 		  <li class="nav-item">
-		    <a class="nav-link active" href="/cf/userTeamAlarm">팀 알림</a>
+		    <a style="font-size:17px; font-weight:700;" class="nav-link active" href="/cf/userTeamAlarm">팀 알림</a>
 		  </li>
 		</ul>
 		<!-- </br>
@@ -135,13 +136,14 @@
 		<table>
 			<thead>
 					<tr>
-						<th style="width:20%;">No</th>
+						<th style="width:10%; text-align:left;"><input type="checkbox" id="all" /> &nbsp; <button style="font-size:15px;" class="btn btn-outline-dark" onclick="del()">삭제</button></th>
+						<th style="width:10%; text-align:left;">No</th>
 						<th style="width:20%;">팀</th>
 						<th style="width:60%;">알림내역</th>
 					</tr>
 				</thead>
 				<tr>
-					<th colspan="3"> <hr/> </th>
+					<th colspan="4"> <hr/> </th>
 				</tr>
 				<tbody>
 				
@@ -156,7 +158,7 @@
 				
 				
 				<tr>
-				  <th colspan="3" id="paging" style="text-align:center;">  
+				  <th colspan="4" id="paging" style="text-align:center;">  
 				    <div class="container" >    
 				    <hr/>              
 				      <nav aria-label="Page navigation">
@@ -219,7 +221,7 @@ function listPrint(list){
 	
 	if(list.length==0){
 		content +='<tr>';
-		content +='<th colspan="3"> 확인할 알림이 없습니다. </th>';
+		content +='<th colspan="4"> 확인할 알림이 없습니다. </th>';
 		content +='</tr>';
 	}else{
 		list.forEach(function(item,idx){
@@ -238,6 +240,48 @@ function listPrint(list){
 	$('#list').append(content);
 } 
 	
+$('#all').click(function(e){
+	var $chk = $('input[type="checkbox"]');
+	console.log($chk);
+	if($(this).is(':checked')){
+		$chk.prop('checked',true);
+	}else{
+		$chk.prop('checked',false);
+	}
+});	
 
+function del(){
+	 
+	 var checkArr = [];
+	 
+	 // checkbox에 value를 지정하지 않으먄 스스로를 on으로 지정한다. 
+	 $('input[type="checkbox"]:checked').each(function(idx,item){
+		if($(this).val() != 'on'){
+			checkArr.push($(this).val());
+		}
+		 
+	 });
+	 
+	 console.log(checkArr);
+	 
+	$.ajax({
+		type:'get',
+		url:'deleteAlarm.ajax',
+		data:{'delList':checkArr},
+		dataType:'json',
+		success:function(data){
+			console.log(data);
+			if(data.success){
+				alert(data.msg);
+				
+				listCall(showPage);
+			}
+		},
+		error:function(e){
+			console.log(e);
+		}
+	});
+	
+}
 </script>
 </html>

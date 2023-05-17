@@ -169,7 +169,7 @@
 		  m.bHit 
 		FROM matching m
 		LEFT JOIN teamuser tu ON m.writerId = tu.userId
-		INNER JOIN team t ON tu.teamIdx = t.teamIdx
+		LEFT JOIN team t ON tu.teamIdx = t.teamIdx
 		WHERE categoryId=#{param2} AND matchigState='matching'
 		ORDER By matchingIdx DESC 
 		LIMIT 10 OFFSET #{param1}
@@ -539,6 +539,14 @@
 	<select id="getSubject" resultType="String">
 		SELECT subject FROM matching WHERE matchingIdx=#{param1}
 	</select>
+	
+	<insert id="reviewAlarm">
+		INSERT INTO alarm(categoryId,userId,alarmcontent,alarmKind) VALUES(#{param1},#{param2},'리뷰',#{param3})
+	</insert>
+	
+	<delete id="delete">
+		DELETE FROM alarm WHERE alarmIdx=#{parma1}
+	</delete>
 </mapper>
 
 
