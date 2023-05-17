@@ -321,7 +321,7 @@
 			t.teamName,
 			tu.teamGrade 
 		FROM game g 
-		LEFT JOIN teamuser tu ON tu.userId = g.userId 
+		LEFT JOIN teamuser tu ON tu.userId = g.userId AND tu.teamUserState ='join'
 		JOIN team t ON tu.teamIdx =t.teamIdx 
 		WHERE matchingIdx=#{param1} AND gameAppState='확정'
 	</select>
@@ -522,7 +522,7 @@
 			tu.teamIdx,
 			t.userId 
 		FROM teamuser tu
-		RIGHT JOIN teamuser t ON tu.teamIdx = t.teamIdx 
+		RIGHT JOIN teamuser t ON tu.teamIdx = t.teamIdx AND tu.teamUserState ='join'
 		WHERE tu.userId=#{param1} AND t.userId NOT IN (SELECT userId FROM game WHERE matchingIdx=#{param2} AND gameAppState='확정')
 	</select>
 	

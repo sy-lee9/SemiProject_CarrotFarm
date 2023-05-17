@@ -227,8 +227,9 @@ function listPrint(list){
 		
 		
 		content +='<tr>';
+		content +='<td style="text-align:left;"><input type="checkbox" value="'+item.alarmIdx+'">&nbsp&nbsp&nbsp&nbsp</td>';
 		content +='<td>'+item.alarmIdx+'</td>';
-		content +='<td>'+item.alarmkind+'</td>';
+		content +='<td>'+item.alarmcontent+'를 받았습니다. </td>';
 		content +='</tr>';
 		
 	});

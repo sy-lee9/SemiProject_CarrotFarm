@@ -228,6 +228,7 @@ function listPrint(list){
 		
 		
 		content +='<tr>';
+		content +='<td style="text-align:left;"><input type="checkbox" value="'+item.alarmIdx+'">&nbsp&nbsp&nbsp&nbsp</td>';
 		content +='<td>'+item.alarmIdx+'</td>';
 		content +='<td> <a href="team/teamPage.go?teamIdx='+item.teamIdx+'">'+item.teamName+'</a></td>';
 		content +='<td>'+item.alarmcontent+'</td>';
