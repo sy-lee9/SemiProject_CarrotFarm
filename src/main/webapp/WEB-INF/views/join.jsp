@@ -39,7 +39,7 @@
 	
 	table {
 	margin : auto;
-		margin-left: 300px;
+		margin-left: 500px;
 		margin-top: 100px;
 	}
 	
@@ -178,7 +178,7 @@
         	<td></td>
         	<td></td>
         	<td>
-        		&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         		<button class="btn btn-outline-dark" type="button" onclick="join()">회원가입</button>
         		<button class="btn btn-outline-dark" type="button" onclick="location.href='./'">돌아가기</button>
         	</td>

@@ -28,10 +28,14 @@
 	#content {
 		width:100%;
 		padding: 10 30 10;
-		margin-left : 600px;
-		margin-top : 200px;
+		margin-left : 780px;
+		margin-top : 250px;
 		float:inherit;
 		
+	}
+	
+	button {
+		margin: 5px;
 	}
 	
 	a {
