@@ -126,7 +126,8 @@
 			<img width="200" height="200" src="/photo/기본프로필.png">
 		</c:if>
 		<c:if test="${loginId ne null}">
-			<img width="200" height="200" src="/photo/${loginPhotoName}">
+			<img width="200" height="200" src="/photo/${loginPhotoName}"> 
+			<br/> <h3 style="display:inline-block; margin-top:10px;">${loginId} </h3>님 <a href="/cf/userNoticeAlarm">🔔</a>
 		</c:if>
 	      <br/><br/>
 	    <a href="/cf/matching/list.do">개인 모집글</a> 
@@ -319,7 +320,7 @@
 					<th >
 						<input type="text" name="commentIdx" value="${commentDto.commentIdx}" hidden>
 						<input type="text" name="matchingIdx" value="${dto.matchingIdx}" style= "border:none;" hidden>
-						<input type="text" name="userId" value="${loginId}" style= "border:none; width:50px; background-color: #f8f9fa;" readonly>
+						<input type="text" name="userId" value="${loginId}" style= "border:none; width:100px; background-color: #f8f9fa;" readonly>
 					</th>
 					<c:if test="${loginId != null }">
 						<th colspan="2">

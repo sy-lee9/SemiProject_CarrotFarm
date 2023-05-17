@@ -96,18 +96,19 @@ public class TeamBoardController {
 	
 	
 	@RequestMapping(value = "/teampictureboardDelete.do")
-	public String tpdelete(@RequestParam String bidx) {
+	public String tpdelete(Model model, @RequestParam String bidx, @RequestParam String teamIdx) {
+		model.addAttribute("teamIdx",teamIdx);
 		service.tpdelete(bidx);
 		return "redirect:/teampictureboardList.do";
 	}
 	
 	@RequestMapping(value = "/teampictureboardUpdate.go")
-	public String tpupdateForm(Model model, @RequestParam String bidx) {
+	public String tpupdateForm(Model model, @RequestParam String bidx, @RequestParam String teamIdx) {
 		logger.info("tpupdate : " + bidx);
 		String page = "redirect:/board/teampictureboardList.do";
 		
 		ArrayList<TeamBoardDTO> dto = service.tpdetail(bidx,"/board/teampictureboardUpdate");
-
+		model.addAttribute("teamIdx", teamIdx);
 		if(dto != null) {
 			page = "/board/teampictureboardUpdateForm";
 			model.addAttribute("dto", dto);
@@ -123,28 +124,29 @@ public class TeamBoardController {
 	
 
 	@RequestMapping(value = "teampictureboardcommentWrite.do")
-	public String tpcommentWrite(@RequestParam HashMap<String, String> params) {
-
+	public String tpcommentWrite(Model model, @RequestParam HashMap<String, String> params, @RequestParam String teamIdx) {
+		model.addAttribute("teamIdx",teamIdx);
 		logger.info("댓글 작성" + params);
 
 		service.tpcommentWrite(params);
-		return "redirect:/teampictureboardDetail.do?bidx=" + params.get("comentId");
+		return "redirect:/teampictureboardDetail.do?bidx=" + params.get("comentId")+"&teamIdx="+params.get("teamIdx");
 	}
 	
 	@RequestMapping(value = "teampictureboardcommentDelete.do")
-	public String tpcommentDelete(@RequestParam String commentIdx,@RequestParam String bidx) {
+	public String tpcommentDelete(Model model, @RequestParam String commentIdx,@RequestParam String bidx, @RequestParam String teamIdx) {
 
 		logger.info("댓글 지우기 commentIdx : " + commentIdx);
+		model.addAttribute("teamIdx",teamIdx);
 		service.tpcommentDelete(commentIdx);
 		return "redirect:/teampictureboardDetail.do?bidx=" + bidx ;
 	}
 	
 	
 	@RequestMapping(value = "teampictureboardcommentUpdate.go")
-	public String tpcommentUpdateGo(@RequestParam String commentIdx,@RequestParam String bidx, Model model, HttpSession session) {
+	public String tpcommentUpdateGo(@RequestParam String commentIdx,@RequestParam String bidx, Model model, HttpSession session, @RequestParam String teamIdx) {
 
 		logger.info("댓글 수정 commentIdx : " + commentIdx);
-		
+		model.addAttribute("teamIdx",teamIdx);
 		//TeamBoardDTO dto = new TeamBoardDTO();
 		ArrayList<TeamBoardDTO> dto = service.tpdetail(bidx, commentIdx);
 		model.addAttribute("dto", dto);
@@ -170,12 +172,13 @@ public class TeamBoardController {
 	}
 	
 	@RequestMapping(value = "teampictureboardcommentUpdate.do")
-	public String tpcommentUpdateGo(@RequestParam HashMap<String, String> params) {
+	public String tpcommentUpdateDo(@RequestParam HashMap<String, String> params) {
 
 		service.tpcommentUpdate(params);
 		String bidx = params.get("bidx");
+		String teamIdx = params.get("teamIdx");
 		logger.info("bidx : "+ bidx);		
-		return "redirect:/teampictureboardDetail.do?bidx="+bidx ;
+		return "redirect:/teampictureboardDetail.do?bidx="+bidx + "&teamIdx=" +  teamIdx;
 	};
 	
 	@RequestMapping(value= "teampictureboardReport.go")

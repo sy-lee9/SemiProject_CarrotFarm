@@ -17,31 +17,38 @@
 		position:relative;
 		font-size:15px;
 		padding : 10px;
+		min-width: 1200px;
 	}
 	
 	#content {
-		width:82%;
-		height : 85%;
+		width:78%;
+		height : 87%;
 		background-color: #f8f9fa;
-		padding: 15 30 10;
+		padding: 10 30 10;
+		margin : 5px;
 		float:right;
+		
 	}
 	
 	#LNB {
-		width:16%;
-		height : 85%;
+		width:20%;
+		height : 87%;
 		background-color: #f8f9fa;
 		float:left;
-		margin : 0px 0px 5px 5px;
+		margin : 5px;
+		font-weight: bold;
+        font-size: 15px;
+		text-align:center;
+		
 	}
 	
 	#LNB ul li {
 	margin-top : 30px;
-    margin-bottom: 40px; /* 원하는 줄간격 크기 */
+    margin-bottom: 90px; /* 원하는 줄간격 크기 */
 	}
-
 	
-	th, td {
+	
+		th, td {
 		margin : 10px;
 		border : 1px solid black;	
 		padding : 10px 10px;
@@ -51,69 +58,104 @@
 	}
 	
 	table{
-		width:98%;
-		height:60%;
+		width:95%;
+		height:70%;
 		text-align:center;
-		border : 3px solid black;	
+
 		border-collapse : collapse;
 		padding : 15px 10px;
+	}
+	
+	#gamePlay, #sort{
+		width: 100px;
+    	height: 30px;
+    	margin : 5px;
 	}
 	
 	#teamnoticeboardSearchInput{
 		width: 200px;
     	height: 30px;
+    	
 	}
 	
-	#teamnoticeboardSearchButton {
+	#teamnoticeboardSearchButton, #registerBtn {
+		font-size: 15px;
 		height: 30px;
+		margin : 5px;
+	
 	}
+	
+	#registerBtn {
+		float:right;
+		margin-right : 60px;
+	}
+	
+	a {
+	  color : black;
+	}
+	
+	a:link {
+	  color : black;
+	}
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	 text-decoration-line: none;
+	  color : #FFA500 ;
+	}
+	
+	.pagination .page-link {
+  		color: gray; /* 기본 글자색을 검정색으로 지정 */
+	}
+
+	.pagination .page-item.active .page-link {
+ 		background-color: #FFA500;
+ 		border:none;
+	}
+	
+
 </style>
 </head>
 <body>
-
+	<div style="float: right;">
+		<%@ include file="../loginBox.jsp" %>
+	</div> 
 	<%@ include file="../GNB.jsp" %>
 	
 
 	<div id="LNB">
-		 <ul style="list-style-type: none;">
-	      <li>
-	        <div style="width: 180px; height: 150px; border : 1px solid black; border-collapse: collapse;">프로필</div>
-	      </li>
-	      
-	      <li>
-	        <a href="/cf/" style="font-weight: bold; font-size: 20px ; color: black;">팀소개</a>
-	      </li>
-	      
-	      <li>
-	        <a href="/cf/" style="font-weight: bold; font-size: 20px; color: black;">팀원</a>
-	      </li>
-	      
-	      <li>
-	        <a href="/cf/" style="font-weight: bold; font-size: 20px; color: black;">참여 경기</a>
-	      </li>
-	      
-	      <li>
-	        <a href="/cf/teamnoticeboardList.do?teamIdx=${teamIdx}" style="font-weight: bold; font-size: 20px ; color: orange;">팀 공지 사항</a>
-	      </li>
-	      
-	      <li>
-	        <a href="/cf/teampictureboardList.do?teamIdx=${teamIdx}" style="font-weight: bold; font-size: 20px; color: black;">팀 사진첩</a>
-	      </li>
-
-	    </ul>
+		<br/><br/>
+	     <c:if test="${loginId eq null}">
+			<img width="200" height="200" src="/photo/기본프로필.png">
+		 </c:if>
+		 <c:if test="${loginId ne null}">
+			<img width="200" height="200" src="/photo/${loginPhotoName}"> 
+			<br/> <h3 style="display:inline-block; margin-top:10px;">${loginId} </h3>님 <a href="/cf/userNoticeAlarm">🔔</a>
+		 </c:if>
+	      <br/><br/>
+	        <a href="/cf/team/teamPage.go?teamIdx=${teamIdx}" style="font-weight: bold; font-size: 18px; color: black;">팀소개</a>
+	      <br/><br/>
+	        <a href="/cf/team/teamUserList.go?teamIdx=${teamIdx}" style="font-weight: bold; font-size: 18px; color: black;">팀원</a>
+	      <br/><br/>
+	        <a href="/cf/team/teamGame.go?teamIdx=${teamIdx}" style="font-weight: bold; font-size: 18px; color: black;">참여 경기</a>
+	      <br/><br/>
+	        <a href="/cf/teamnoticeboardList.do?teamIdx=${teamIdx}" style="font-weight: bold; font-size: 18px ; color: orange;">팀 공지 사항</a>
+	      <br/><br/>
+	        <a href="/cf/teampictureboardList.do?teamIdx=${teamIdx}" style="font-weight: bold; font-size: 18px; color: black;">팀 사진첩</a>
 	</div>
 	
 	<div id="content">
 
 	<br/>
 	<input type ="text" id="teamnoticeboardSearchInput" placeholder="제목 또는 닉네임을 입력">
-	<button id ="teamnoticeboardSearchButton">검색</button>
+	<button class="btn btn-outline-dark" id ="teamnoticeboardSearchButton">검색</button>
 	
 	<br/>
 	<br/>
-<%-- 	<c:if test="${loginId != null }"></c:if> --%>
-	<button id="registerBtn" onclick="location.href='teamnoticeboardWrite.go?teamIdx=${teamIdx}'">공지사항 등록</button>
-	
+	<c:if test="${loginId != null }"> <!-- teamIdx 써야할듯 -->	
+	<button class="btn btn-outline-dark" id="registerBtn" onclick="location.href='teamnoticeboardWrite.go?teamIdx=${teamIdx}'">공지사항 등록</button>
+	</c:if>
 	<br/>
 	<br/>
 	<table>
@@ -142,7 +184,7 @@
 	</div>
 </body>
 <script>
-
+gradeCheck();
 var teamIdx="${teamIdx}";
 console.log("받아온 팀idx :" +teamIdx);
 var searchText = 'default';
@@ -155,22 +197,27 @@ $('#teamnoticeboardSearchButton').click(function(){
 	$('#pagination').twbsPagination('destroy');
 });
 
-
-/* $.ajax({
-	type:'post',
-	url:'tnuserRight.ajax',
-	data:{},
-	dataType:'json',
-	success:function(data){
-		console.log(data);
-		if (data != "1") {
-			document.getElementById("registerBtn").style.display = "none";
+function gradeCheck(){
+	console.log("함수 실행");
+	$.ajax({
+		type:'post',
+		url:'tnuserRight.ajax',
+		data:{},
+		dataType:'json',
+		success:function(data){
+			console.log("팀장 정보  :"+data);
+			if (data != "leader") {
+				
+				document.getElementById("registerBtn").style.display = "none";
+			}
+		},
+		error:function(e){
+			console.log(e);
 		}
-	},
-	error:function(e){
-		console.log(e);
-	}
-}); */
+	});
+	
+}
+
 
 function listCall(page){
 	$.ajax({
@@ -224,5 +271,9 @@ function listPrint(tnalist){
 	$('#list').empty();
 	$('#list').append(content);
 }
+
+$(document).ready(function() {
+	  $('#teamnoticeboardSearchButton').css('margin-top', '+0.5px');
+	});
 </script>
 </html>

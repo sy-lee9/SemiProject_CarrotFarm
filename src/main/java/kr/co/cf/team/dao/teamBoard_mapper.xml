@@ -29,12 +29,12 @@
 	
 	
 	<select id="tpatotalCount" resultType="int">
-		SELECT COUNT(boardIdx) FROM board
+		SELECT COUNT(boardIdx) FROM board  WHERE categoryId='b011'
 	</select>
 	
 	<select id="tpatotalCountSearch" resultType="int">
 		SELECT COUNT(boardIdx) FROM board
-			WHERE subject LIKE CONCAT('%' #{param1} '%') OR userId LIKE CONCAT('%' #{param1} '%')
+			WHERE subject LIKE CONCAT('%' #{param1} '%') OR userId LIKE CONCAT('%' #{param1} '%') AND categoryId='b011'
 	</select>
 	
 	<insert 
@@ -268,12 +268,12 @@
 	</select>	
 	
 	<select id="tnatotalCount" resultType="int">
-		SELECT COUNT(boardIdx) FROM board
+		SELECT COUNT(boardIdx) FROM board WHERE categoryId='b013'
 	</select>
 	
 	<select id="tnatotalCountSearch" resultType="int">
 		SELECT COUNT(boardIdx) FROM board
-			WHERE subject LIKE CONCAT('%' #{param1} '%') OR userId LIKE CONCAT('%' #{param1} '%')
+			WHERE subject LIKE CONCAT('%' #{param1} '%') OR userId LIKE CONCAT('%' #{param1} '%') AND categoryId='b013'
 	</select>
 	
 	<insert 
@@ -322,7 +322,7 @@
 	</update>
 	
 	<select id="tnuserRight" resultType="String">
-		SELECT userRight FROM user WHERE userId = #{param1}
+		SELECT teamGrade FROM teamuser WHERE userId = #{param1}
 	</select>
 	
 	

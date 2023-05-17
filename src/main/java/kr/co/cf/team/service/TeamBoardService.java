@@ -170,7 +170,7 @@ public class TeamBoardService {
 			tpfileSave(bidx, photo);
 		}
 		
-		String page = row >0 ? "redirect:/teampictureboardDetail.do?bidx=" + bidx : "redirect:/teampictureboardList.do";
+		String page = row >0 ? "redirect:/teampictureboardDetail.do?bidx=" + bidx +"&teamIdx="+params.get("teamIdx"): "redirect:/teampictureboardList.do?teamIdx="+params.get("teamIdx");
 		logger.info("update => " + page);
 		return page;
 	}

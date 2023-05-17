@@ -131,10 +131,4 @@ public interface BoardDAO {
 
 	void iinquirytabledelete(String bidx, String inquiryState);
 
-	
-
-	
-
-	
-
 }
