@@ -266,16 +266,18 @@
 					<th colspan="4"><hr/></th>
 				</tr>
 		     	<tr >
-		     		<th>
-		     		 	<p>리뷰결과</p>
+		     		<th colspan="4">
+		     		 	<p> 리뷰결과</p>
 		     		</th>
 		     	</tr>	
 		     	<tr>
-		     		<th colspan="1" style="border-left:1px solid gray;">
+		     		<th colspan="1" >
 		     		 	<p>${dto.teamName}</p>
-		     		 	<p>팀리뷰결과</p>
+		     		 	<p>팀페이지에서 확인해 주세요 </p>
+		     		 	
+		     		 	
 		     		</th>
-		     		<th colspan="3">
+		     		<th colspan="3" style="border-left:1px solid gray;">
 		     		 	<p>MVP</p>
 		     		 	<p>${mvp}</p>
 		     		</th>

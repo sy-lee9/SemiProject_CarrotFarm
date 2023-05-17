@@ -175,11 +175,8 @@ public class TeamMatchingController {
 				
 				model.addAttribute("mvp",mvp);
 				
-				
-				
-				//float mannerPoint = matchingService.mannerPoint((String)session.getAttribute("loginId"));
-				//model.addAttribute("mannerPoint", mannerPoint);
-
+		// 태그리뷰 
+		
 		
 		return "/matching/teamMatchingDetail";
 	}

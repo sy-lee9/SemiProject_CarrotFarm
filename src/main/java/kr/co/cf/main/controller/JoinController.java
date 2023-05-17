@@ -109,12 +109,13 @@ public class JoinController {
 	    }
 	 
 	 @RequestMapping(value="/join.do", method = RequestMethod.POST)
-		public String write(Model model, MultipartFile userProfile, @RequestParam HashMap<String, String> params) {
+		public String write(HttpSession session, Model model, MultipartFile userProfile, @RequestParam HashMap<String, String> params) {
 		 String msg = service.write(userProfile,params);
-			model.addAttribute("msg",msg);
 			service.mannerDefalut(params.get("userId"));
-			return "main";
-		}
+			session.setAttribute("msg",msg);
+			return "redirect:/";
+		
+	 }
 	 
 	 /* 아이디 찾기 */
 	 @RequestMapping(value="/findIdView")

@@ -2,6 +2,8 @@ package kr.co.cf.main.controller;
 
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,7 @@ public class MainController {
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@RequestMapping(value = "/")
-	public String main(Model model) {
+	public String main(Model model,HttpSession session) {
 		
 		ArrayList<MatchingDTO> matchingList = new ArrayList<MatchingDTO>();
 		matchingList = mainService.matchingList();
@@ -37,6 +39,14 @@ public class MainController {
 		noticeList = mainService.noticeList();
 		model.addAttribute("noticeList", noticeList);
 		
+		
+		String msg = (String) session.getAttribute("msg");
+	      logger.info(msg);
+	      if(msg != null) {
+	         model.addAttribute("msg",msg);
+	         //사용한 세션은 반드시 바로 삭제해야함
+	         session.removeAttribute("msg");
+	      }    
 		return "main";
 	}
 	

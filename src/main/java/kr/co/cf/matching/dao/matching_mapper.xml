@@ -101,7 +101,7 @@
 			commentWriteTime,
 			commentContent
 		FROM comment
-		WHERE comentId=#{param1}
+		WHERE comentId=#{param1} AND categoryId='m01' OR categoryId='m02'
 	</select>
 	
 	<insert id="commentWrite" parameterType="hashmap">
