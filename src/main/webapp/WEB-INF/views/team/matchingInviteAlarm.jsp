@@ -153,7 +153,7 @@
 				<c:forEach items="${list}" var="team">
 					<tr>
 						<td><a href="teamPage.go?teamIdx=${team.teamIdx}">${team.teamName}</a></td>
-						<td><a href="../matching/detail.go?matchingIdx=${team.matchingIdx}">${team.subject}</a></td>
+						<td><a href="../matching/teamDetail.go?matchingIdx=${team.matchingIdx}">${team.subject}</a></td>
 						<td>${team.location}</td>
 						<td>${team.gameDate}</td>
 						<td>${team.gamePlay}:${team.gamePlay}</td>

@@ -137,7 +137,8 @@
 	<div id="content">
 		<br/>
 		<h1>${userId}</h1>
-		<button onclick="window.open('removeNow.go?userId=${userId}&teamIdx=${teamIdx}','즉시강퇴','width=800px,height=550px')">즉시강퇴</button>
+		<button onclick="window.open('removeNow.go?userId=${userId}&teamIdx=${teamIdx}','즉시강퇴','width=500px,height=400px')"  
+			class="btn btn-danger" style="margin: 10px; font-size:15;">즉시강퇴</button>
 		<br/><br/>
 		<hr/>
 		<br/>

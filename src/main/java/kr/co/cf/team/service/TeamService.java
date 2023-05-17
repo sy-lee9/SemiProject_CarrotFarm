@@ -327,9 +327,7 @@ public class TeamService {
 
 		//총 페이지 수 
 		int offset = (page-1)*10;
-		params.put("offset", offset);
-		
-		int matchingIdx = 0;
+		params.put("offset", offset);		
 		
 		if(teamUserList != null) {
 			for (int i = 0; i < teamUserList.size(); i++) {
@@ -342,25 +340,16 @@ public class TeamService {
 					if(selectedGameDate.equals("default")) {
 						// 전체 보여주기
 							list = TeamDAO.gameList(params);
-							logger.info("gameList size : "+list.size());								
-							/*
-							 * list.get(i).getMatchingIdx(); logger.info("matcingIdx : "+matchingIdx);
-							 */
+							logger.info("gameList size : "+list.size());												 
 					}else{
 						// 경기순을 선택한 경우
 						if(selectedGameDate.equals("DESC")) {
 								list = TeamDAO.GameDateListDesc(params);
 								logger.info("GameDateList size : "+list.size());	
-
-								list.get(i).getMatchingIdx();
-								logger.info("matcingIdx : "+matchingIdx);
 						}else {
 							params.put("range", "ASC");
 							list = TeamDAO.GameDateListAsc(params);
 								logger.info("GameDateList size : "+list.size());	
-
-								list.get(i).getMatchingIdx();
-								logger.info("matcingIdx : "+matchingIdx);
 						}
 					}
 				}else {
@@ -369,10 +358,9 @@ public class TeamService {
 						logger.info("SearchGameList size : "+list.size());
 				}
 				// 중복 list 값 제거 과정
-				//set = new HashSet<TeamDTO>(list);
+				set = new LinkedHashSet<TeamDTO>(list);
 			}
-			//newList = new ArrayList<TeamDTO>(set);
-			newList = (ArrayList<TeamDTO>) list.stream().sorted(Comparator.comparing(TeamDTO::getMatchingIdx)).collect(Collectors.toList());
+			newList = new ArrayList<TeamDTO>(set);
 			logger.info("newList : "+ newList.size());
 		}
 		logger.info("totalGameList size : "+newList.size());
@@ -393,9 +381,6 @@ public class TeamService {
 		logger.info("list : "+ newList);
 		map.put("list", newList);
 		
-		logger.info("matchingIdx : "+ matchingIdx);
-		map.put("matchingIdx", matchingIdx);
-		
 		logger.info("map : "+ map);
 		return map;
 	}
@@ -406,44 +391,31 @@ public class TeamService {
 		String selectedGameDate = String.valueOf(params.get("selectedGameDate"));
 		
 		int teamIdx = Integer.parseInt((String) params.get("teamIdx"));
-		ArrayList<TeamDTO> teamLeaderList = TeamDAO.getTeamLeaders(teamIdx);
-		logger.info("getTeamLeader : "+teamLeaderList);
+		String leaderId = TeamDAO.getTeamLeader(teamIdx);
+		logger.info("getTeamLeader : "+leaderId);
+		params.put("userId", leaderId);
 		
-		ArrayList<TeamDTO> list = null;	
-		ArrayList<TeamDTO> newList = null;		
-		Set<TeamDTO> set = new HashSet<TeamDTO>();		
-		HashMap<String, Object> map = new HashMap<String, Object>();	
+		ArrayList<TeamDTO> list = new ArrayList<TeamDTO>();
+		HashMap<String, Object> map = new HashMap<String, Object>();		
 		
-		if(teamLeaderList != null) {
-			for (int i = 0; i < teamLeaderList.size(); i++) {
-				
-				String userId = (teamLeaderList.get(i).getUserId());			
-				logger.info("userID : "+userId);
-				params.put("userId", userId);
-				
-					if(selectedGameDate.equals("default")) {
-						// 전체 보여주기
-							list = TeamDAO.matchingRequestList(userId);
-							logger.info("matchingRequestList size : "+list.size());					
-					}else{
-						// 경기순을 선택한 경우
-						if(selectedGameDate.equals("DESC")) {
-								list = TeamDAO.matchingRequestListDesc(userId);
-								logger.info("matchingRequestListDesc size : "+list.size());		
-						}else {
-							params.put("range", "ASC");
-							list = TeamDAO.matchingRequestListAsc(userId);
-								logger.info("matchingRequestListAsc size : "+list.size());					
-						}
-					}				
-				// 중복 list 값 제거 과정
-				set.addAll(list);
+		if(selectedGameDate.equals("default")) {
+			// 전체 보여주기
+				list = TeamDAO.matchingRequestList(leaderId);
+				logger.info("matchingRequestList size : "+list.size());					
+		}else{
+			// 경기순을 선택한 경우
+			if(selectedGameDate.equals("DESC")) {
+					list = TeamDAO.matchingRequestListDesc(leaderId);
+					logger.info("matchingRequestListDesc size : "+list.size());		
+			}else {
+				params.put("range", "ASC");
+				list = TeamDAO.matchingRequestListAsc(leaderId);
+					logger.info("matchingRequestListAsc size : "+list.size());					
 			}
-			newList = new ArrayList<TeamDTO>(set);
-		}
-		logger.info("totalMatchingRequestList size : "+newList.size());
+		}				
+		logger.info("totalMatchingRequestList size : "+list.size());
 
-		map.put("list", newList);
+		map.put("list", list);
 		logger.info("map : "+ map);
 		return map;
 	}

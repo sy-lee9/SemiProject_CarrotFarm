@@ -27,7 +27,9 @@
 		background-color: #f8f9fa;
 		padding: 10 30 10;
 		margin : 5px;
-		float:right;		
+		float:right;
+		text-align:center;		
+		font-size:17;
 	}
 	
 	#LNB {
@@ -44,12 +46,7 @@
 	
 	table, th, td{
 		margin : 5px;
-	}
-	
-	table{
-		width:90%;
-		height:70%;
-		text-align:center;
+		font-size: 11;
 	}
 	
 	a {
@@ -75,38 +72,18 @@
  		background-color: #FFA500;
  		border:none;
 	}
-	#div1{
-		margin: auto;
-		width: 100%;
-        height: 10%;
-        top: 30%;
-        left: 50%;
-	}
+
 	#div2{
-		margin: auto;
 		background-color: #f8f9fa;
-        width: 100%;
-        height: 60%;
         top: 30%;
-        left: 25%;
-	}
-	#div2 p,br,h4{
-		margin: 60 10 10 80;
-	}
-	#div2 h5{
-		margin: 10 10 10 80;
-		color: red;
-	}
-	
-	#div3{
-		float: left;
-		width : 70%;
-		height: 60%;
 	}
 
-	button{
-		margin: 20 10 10 350;
+	#div2 h5{
+		color: red;
+		font-weight: bold;
 	}
+
+
 	hr{
 		margin: 20;
 	}
@@ -146,24 +123,26 @@
 	
 	
 	<div id="content">
-		<form action="teamDisbanding.do">
+		<form style="width:95%; height:95%; margin:10% 3% 0% 3%;" action="teamDisbanding.do">
 		<input type="hidden" name="teamIdx" value="${teamIdx}"/>
-			<div id="div3">
-				<br/><br/><br/><br/><br/><br/>
-				<div id="div1"><h1>팀 해체</h1></div>
+			
+				
 				<div id="div2">
+					<h1>팀 해체</h1>
+					 <br/>
 					<hr>
+					<br/><br/>
 					<p>팀 해체는 팀에 관련된 모든 정보와 기록들이 삭제되는 것을 말합니다.</p>
 					<h5>해체된 팀의 모든 데이터는 복구가 불가능하오니, 신중하게 결정하시기 바랍니다.</h5>
+					<br/><br/>
 					<h4>팀 해체 예정일시는 신청일로부터 7일 후 입니다.</h4>
 					<h5>팀 해체 보류기간 동안 팀 해체를 취소할 수 있습니다.</h5>
 					<br/>
 					<br/>
 					<br/>
-					<button>팀 해체 신청</button>
+					<button class="btn btn-danger" style="font-size:15;">팀 해체 신청</button>
 					<hr>
-				</div>
-			</div>
+				</div>			
 		</form>
 	</div>
 </body>

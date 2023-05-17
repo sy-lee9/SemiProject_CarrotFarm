@@ -180,11 +180,17 @@
 	
 	function listPrint(list){
 
-		var content = '';				
+		var content = '';		
+		
+		if(list.length==0){
+			content +='<tr>';
+			content +='<th colspan="6"> 신청한 경기가  없습니다. </th>';
+			content +='</tr>';
+		}else{
 		list.forEach(function(list){		
 			content +='<tr>';
 			content +='<td>'+list.gu+'</td>';
-			content +='<td><a href="../matching/detail.go?matchingIdx=${list.matchingIdx}">'+list.subject+'</a></td>';
+			content +='<td><a href="../matching/teamDetail.go?matchingIdx='+list.matchingIdx+'">'+list.subject+'</a></td>';
 			content +='<td>'+list.gameDate+'</td>';
 			content +='<td>'+list.gamePlay+' : '+list.gamePlay+'</td>';
 			
@@ -207,6 +213,7 @@
 		});
 		$('#list').empty();
 		$('#list').append(content);
+		}
 	}
 </script>
 </html>

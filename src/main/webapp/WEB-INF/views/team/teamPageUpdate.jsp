@@ -134,7 +134,7 @@
 	<div id="content">
 		<form action="teamPageUpdate.do" method="post" enctype="multipart/form-data">	
 			<input type="hidden" name="teamIdx" value="${team.teamIdx}"/>
-			<button type="button" style="float: right;" onclick="update()">저장</button>
+			<button type="button" style="float: right; margin: 5px; font-size:15;" class="btn btn-outline-dark" onclick="update()">저장</button>
 			<table>
 				<thead>
 					<colgroup>
@@ -159,7 +159,7 @@
 							</c:if>
 							<c:if test="${team.photoName ne null}">
 								<p>프로필 사진은 한장만 업로드 할 수 있습니다.</p>
-								<input type="file" name="teamProfilePhoto" />
+								<input type="file" name="teamProfilePhoto"/>
 								<img width="300" src="/photo/${team.photoName}"/>
 								<div hidden="true"><input type="text" name="photoName" value="${team.photoName}"/></div>							
 							</c:if>		
@@ -176,7 +176,7 @@
 						<th>주 활동지역</th>
 						<td>
 							<input type="text" id="location" name="location" value="${team.gu}" readonly/> &nbsp;&nbsp;
-							<input type="button" id="address_kakao" value="검색"/>
+							<input type="button" id="address_kakao" value="검색" style="margin: 5px; font-size:15;" class="btn btn-outline-dark"/>
 							<div hidden="true"><input type="text" name="locationIdx" value="${team.locationIdx}"/></div>
 						</td>
 					</tr>

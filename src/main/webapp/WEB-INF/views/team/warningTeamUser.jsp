@@ -123,7 +123,7 @@
 	
 	<div id="content">
 		<input type="text" id="searchInput" placeholder="아이디 검색">
-		<button id="searchButton">검색</button>
+		<button id="searchButton" style="margin: 5px; font-size:15;" class="btn btn-outline-dark">검색</button>
 		&nbsp;&nbsp;
 		<br/><br/>
 		<hr>
@@ -234,21 +234,21 @@
 			
 			content +='<td>'+teamGrade+'</td>';
 			content +='<td><a href="../userprofile.go?userId='+list.userId+'">'+list.userId+'</a></td>';
-			content += '<td><button onclick="window.open(\'warning.go?userId='+list.userId+'&teamIdx='+teamIdx+'\',\'경고\',\'width=550px,height=530px\')">경고</button></td>';
+			content += '<td><button onclick="window.open(\'warning.go?userId='+list.userId+'&teamIdx='+teamIdx+'\',\'경고\',\'width=550px,height=530px\')" style="margin: 10px; font-size: 15;" class="btn btn-warning">경고</button></td>';
 			if(list.warningCount < 1){
-				content += '<td><button disabled="true" onclick="window.open(\'warningCancel.go?userId='+list.userId+'&teamIdx='+teamIdx+'\',\'경고 취소\',\'width=550px,height=280px\')">취소</button></td>';
+				content += '<td><button disabled="true" onclick="window.open(\'warningCancel.go?userId='+list.userId+'&teamIdx='+teamIdx+'\',\'경고 취소\',\'width=550px,height=280px\')" style="margin: 10px; font-size: 15;" class="btn btn-warning">취소</button></td>';
 			}
 			if(list.warningCount > 1){
-				content += '<td><button onclick="window.open(\'warningCancel.go?userId='+list.userId+'&teamIdx='+teamIdx+'\',\'경고 취소\',\'width=550px,height=280px\')">취소</button></td>';
+				content += '<td><button onclick="window.open(\'warningCancel.go?userId='+list.userId+'&teamIdx='+teamIdx+'\',\'경고 취소\',\'width=550px,height=280px\')" style="margin: 10px; font-size: 15;" class="btn btn-warning">취소</button></td>';
 			}
 			
 			content +='<td><a href="./warningDetail.go?userId='+list.userId+'&teamIdx='+teamIdx+'">'+list.warningCount+'</a></td>';
 			
 			if(list.warningCount >= 5){
-				content += '<td><button onclick="window.open(\'remove.go?userId='+list.userId+'&teamIdx='+teamIdx+'\',\'강퇴\',\'width=550px,height=280px\')">강퇴</button></td>';
+				content += '<td><button onclick="window.open(\'remove.go?userId='+list.userId+'&teamIdx='+teamIdx+'\',\'강퇴\',\'width=550px,height=280px\')" style="margin: 10px; font-size:15;" class="btn btn-danger">강퇴</button></td>';
 			}
 			if(list.warningCount < 5){
-				content += '<td><button disabled="true" onclick="window.open(\'remove.go?userId='+list.userId+'&teamIdx='+teamIdx+'\',\'강퇴\',\'width=550px,height=280px\')">강퇴</button></td>';
+				content += '<td><button disabled="true" onclick="window.open(\'remove.go?userId='+list.userId+'&teamIdx='+teamIdx+'\',\'강퇴\',\'width=550px,height=280px\')" style="margin: 10px; font-size:15;" class="btn btn-danger">강퇴</button></td>';
 			}
 			
 			content +='</tr>';

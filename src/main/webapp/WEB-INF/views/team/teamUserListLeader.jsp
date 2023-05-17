@@ -133,7 +133,7 @@
 		</select>
 		&nbsp;&nbsp;
 		<input type="text" id="searchInput" placeholder="팀원 검색">
-		<button id="searchButton">검색</button>
+		<button id="searchButton" style="margin: 5px; font-size:15;" class="btn btn-outline-dark">검색</button>
 		<br/>
 		<hr>
 		<br/>

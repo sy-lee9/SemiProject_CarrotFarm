@@ -62,8 +62,6 @@ public interface TeamDAO {
 	//참가한 경기기록 보기
 	ArrayList<TeamDTO> gameList(HashMap<String, Object> params);
 
-	ArrayList<TeamDTO> GameDateList(HashMap<String, Object> params);
-
 	ArrayList<TeamDTO> SearchGameList(HashMap<String, Object> params);
 
 	ArrayList<TeamDTO> GameDateListDesc(HashMap<String, Object> params);
@@ -73,11 +71,11 @@ public interface TeamDAO {
 	//신청한 경기 모집글 확인
 	ArrayList<TeamDTO> getTeamLeaders(int teamIdx);
 
-	ArrayList<TeamDTO> matchingRequestList(String userId);
+	ArrayList<TeamDTO> matchingRequestList(String leaderId);
 
-	ArrayList<TeamDTO> matchingRequestListDesc(String userId);
+	ArrayList<TeamDTO> matchingRequestListDesc(String leaderId);
 
-	ArrayList<TeamDTO> matchingRequestListAsc(String userId);
+	ArrayList<TeamDTO> matchingRequestListAsc(String leaderId);
 	
 	//신청한 경기 모집글 변경사항 알림
 	ArrayList<TeamDTO> appGameUpdateAlarm(String teamIdx);
