@@ -7,7 +7,7 @@
 <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
-	<script src="/cf/resources/js/twbsPagination.js" type="text/javascript"></script>
+	<script src="resources/js/twbsPagination.js" type="text/javascript"></script>
 	
 	<!-- 부트스트랩 JavaScript 파일 불러오기 -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
@@ -45,7 +45,7 @@
 		float:left;
 		margin : 5px;
 		font-weight: bold;
-        font-size: 15px;
+        font-size: 18px;
 		text-align:center;
 		
 		}
@@ -89,7 +89,7 @@
 			<br/><br/>
            <a href="/cf/userinfo.go">회원 정보</a>
            <br/><br/>
-           <a href="/cf/userprofile.go">회원 프로필</a>
+           <a href="/cf/userprofile.go?userId=${loginId}">회원 프로필</a>
            <br/><br/>
            <a href="/cf/userNoticeAlarm">알림</a>
            <br/><br/>
@@ -108,7 +108,7 @@
 	</select>
 	
 	<input type="text" id="searchInput" placeholder="제목 검색">
-	<button id="searchButton">검색</button>
+	<button class="btn btn-outline-dark" id="searchButton">검색</button>
 	<table>
 		<colgroup>
 			<col width="15%"/>
@@ -132,7 +132,7 @@
 				<!-- 	플러그인 사용	(twbsPagination)	-->
 				<div class="container">									
 					<nav aria-label="Page navigation" style="text-align:center">
-						<ul class="pagination" id="pagination"></ul>
+						<ul class="pagination justify-content-center" id="pagination"></ul>
 					</nav>					
 				</div>
 			</td>
@@ -206,7 +206,7 @@
 		list.forEach(function(list, idx){
 			content +='<tr>';
 			content +='<td>'+list.gu+'</td>';
-			'<td><a href="./matching/detail.go?matchingIdx='+list.matchingIdx+'">'+list.subject+'</a></td>';
+			content +='<td><a href="./matching/detail.go?matchingIdx='+list.matchingIdx+'">'+list.subject+'</a></td>';
 			content +='<td>'+list.gameDate+'</td>';
 			content +='<td>'+list.gamePlay+' : '+list.gamePlay+'</td>';
 			content +='</tr>';

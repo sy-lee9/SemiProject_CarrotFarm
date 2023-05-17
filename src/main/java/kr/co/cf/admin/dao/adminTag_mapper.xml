@@ -10,7 +10,7 @@
 	</select>
 	
 	<select id="tagList" resultType="kr.co.cf.admin.dto.AdminTagDTO">
-		SELECT tagIdx,tagId,tagContent FROM tag
+		SELECT tagIdx,tagContent FROM tag
 		LIMIT 10 OFFSET #{parma1}
 	</select>
 	
@@ -20,7 +20,7 @@
 	</select>
 	
 	<select id="tagSearchList" resultType="kr.co.cf.admin.dto.AdminTagDTO" >
-		SELECT tagIdx,tagId,tagContent FROM tag
+		SELECT tagIdx,tagContent FROM tag
 		WHERE tagContent LIKE concat('%', #{param1}, '%')
 		LIMIT 10 OFFSET #{param2}
 	</select>
@@ -45,7 +45,7 @@
 	</select>
 	
 	<insert id="tagRegist" parameterType="hashmap">
-		INSERT INTO tag(tagId,tagContent)
-		VALUES(#{tagId},#{tagContent})
+		INSERT INTO tag(tagContent)
+		VALUES(#{tagContent})
 	</insert>
 </mapper>

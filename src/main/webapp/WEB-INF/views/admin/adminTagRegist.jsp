@@ -19,14 +19,6 @@
 		<hr/>
 		<table>
 			<tr>
-				<th>추가할 태그ID</th>
-				<th><input type="text" id="tagId" name="tagId" oninput="tagIdChange()"/></th>
-				<th><button type="button" onclick="tagIdChk()">중복체크</button></th>
-			</tr>
-			<tr>
-				<td colspan="3" id="tagIdMsg"></td>
-			</tr>
-			<tr>
 				<th>추가할 태그내용</th>
 				<th><input type="text" id="tagContent" name="tagContent" oninput="tagContentChange()"/></th>
 				<th><button type="button" onclick="tagContentChk()">중복체크</button></th>
@@ -49,40 +41,7 @@
 	}
 	
 	var overlayChk = false;
-	var tagIdOverlayChk = false;
 	
-	
-	function tagIdChk(){
-		var tagId= $('#tagId').val();
-		console.log(tagId);
-		 $.ajax({
-		      type:'post',
-		      url:'tagIdChk.ajax',
-		      data:{"tagId" : tagId},
-		      dataType:'json',           
-		      success:function(data){
-		         console.log(data.tagIdChk);
-		         if(data.msg==null){
-			         if(data.tagIdChk==1){
-			        	 $('#tagIdMsg').css({'font-size':'8px', 'color':'red'});
-				         $('#tagIdMsg').html('이미 존재하는 태그ID 입니다.');
-			         }else{
-			        	 $('#tagIdMsg').css({'font-size':'8px', 'color':'darkgreen'});
-				         $('#tagIdMsg').html('사용 가능한 태그ID 입니다.');
-				         tagIdOverlayChk=true;
-			         }
-		         }else{
-		        	 alert(data.msg);
-		         }
-		        	 
-		      }
-		   });
-	}
-		
-	function tagIdChange(){
-		tagIdOverlayChk = false;
-		$('#tagIdMsg').html('');
-	}
 	
 	
 	
@@ -119,14 +78,12 @@
 	}
 	
 	function tagRegist(){
-		if(overlayChk == true && tagIdOverlayChk==true ){
+		if(overlayChk == true){
 			$('#registButton').attr('type','submit');
 		}else{
-			if(overlayChk==false){
-				alert('태그내용 중복 확인 해주세요!');
-			}else if(tagIdOverlayChk==false){
-				alert('태그ID 중복 확인 해주세요!');
-			}
+			
+			alert('태그내용 중복 확인 해주세요!');
+			
 		}
 	}
 
