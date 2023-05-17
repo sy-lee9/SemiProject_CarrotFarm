@@ -46,14 +46,14 @@
 	}
 	
 	#image{
-		height:40%;
+		height:30%;
 	}
 	
 	#listDiv{
 		display:inline-block;
-		
-		width: 33%;
+		width: 30%;
 		height:50%;
+		margin : 20px;
 	}
 	table, th, td{
 		margin : 5px;
@@ -82,13 +82,15 @@
 
 	<div id="content" style="text-align:center;">
 		<hr/>
+		<br/><br/>
 		<img id="image" src="/photo/mainLogo.png"/ >
+		<br/><br/>
 		<hr/>
 		
-		<div id="listDiv" style="border-right:1px solid gray;">	
+		<div id="listDiv" >	
 			<table>
 				<tr>
-					<th colspan="3"><h5 style="display:inline;">공지사항</h5></th>
+					<th colspan="3"><h3 style="display:inline;">공지사항</h3></th>
 				</tr>
 				<tr style="height:5px; font-size:12px;">
 					<td colspan="2"></td>
@@ -108,10 +110,10 @@
 			</table>
 		</div>
 		
-		<div id="listDiv" style="border-right:1px solid gray;">	
+		<div id="listDiv" >	
 			<table>
 				<tr>
-					<th colspan="3"><h5 style="display:inline;">경기 모집</h5></th>
+					<th colspan="3"><h3 style="display:inline;">경기 모집</h3></th>
 				</tr>
 				<tr style="height:5px; font-size:12px;">
 					<td colspan="2"></td>
@@ -134,7 +136,7 @@
 		<div id="listDiv" >	
 			<table>
 				<tr>
-					<th colspan="3"><h5 style="display:inline;">팀 둘러보기</h5></th>
+					<th colspan="3"><h3 style="display:inline;">팀 둘러보기</h3></th>
 				</tr>
 				<tr style="height:5px; font-size:12px;">
 					<td colspan="2"></td>
@@ -154,7 +156,8 @@
 				
 			</table>
 		</div>
-		
+		<br/>
+		<hr/>
 	</div>
 	
 
