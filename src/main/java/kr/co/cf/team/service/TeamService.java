@@ -96,7 +96,7 @@ public class TeamService {
 					try {
 						byte[] bytes = teamProfilePhoto.getBytes();//1-3. 바이트 추출
 						//1-5. 추출한 바이트 저장
-						Path path = Paths.get("C:/carrot_farm/t01/"+photoName);
+						Path path = Paths.get("C:/img/upload"+photoName);
 						Files.write(path, bytes);
 						logger.info(photoName+" save OK");
 					} catch (IOException e) {
