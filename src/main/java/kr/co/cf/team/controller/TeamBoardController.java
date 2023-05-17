@@ -96,18 +96,19 @@ public class TeamBoardController {
 	
 	
 	@RequestMapping(value = "/teampictureboardDelete.do")
-	public String tpdelete(@RequestParam String bidx) {
+	public String tpdelete(Model model, @RequestParam String bidx, @RequestParam String teamIdx) {
+		model.addAttribute("teamIdx",teamIdx);
 		service.tpdelete(bidx);
 		return "redirect:/teampictureboardList.do";
 	}
 	
 	@RequestMapping(value = "/teampictureboardUpdate.go")
-	public String tpupdateForm(Model model, @RequestParam String bidx) {
+	public String tpupdateForm(Model model, @RequestParam String bidx, @RequestParam String teamIdx) {
 		logger.info("tpupdate : " + bidx);
 		String page = "redirect:/board/teampictureboardList.do";
 		
 		ArrayList<TeamBoardDTO> dto = service.tpdetail(bidx,"/board/teampictureboardUpdate");
-
+		model.addAttribute("teamIdx", teamIdx);
 		if(dto != null) {
 			page = "/board/teampictureboardUpdateForm";
 			model.addAttribute("dto", dto);
@@ -123,8 +124,8 @@ public class TeamBoardController {
 	
 
 	@RequestMapping(value = "teampictureboardcommentWrite.do")
-	public String tpcommentWrite(@RequestParam HashMap<String, String> params) {
-
+	public String tpcommentWrite(Model model, @RequestParam HashMap<String, String> params, @RequestParam String teamIdx) {
+		model.addAttribute("teamIdx",teamIdx);
 		logger.info("댓글 작성" + params);
 
 		service.tpcommentWrite(params);

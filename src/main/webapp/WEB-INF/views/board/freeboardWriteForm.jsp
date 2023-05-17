@@ -122,11 +122,11 @@
 		 <br/><br/>
 		 <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
 	     <br/><br/><br/><br/>
-	     <a href="/cf/freeboardList.do" style="font-weight: bold; font-size: 20px ; color: orange;">자유 게시판</a>
+	     <a href="/cf/noticeboardList.do" style="font-weight: bold; font-size: 18px; color: black;">공지사항</a>
 	   	 <br/><br/><br/><br/>
-	     <a href="/cf/noticeboardList.do" style="font-weight: bold; font-size: 20px; color: black;">공지사항</a>
+	     <a href="/cf/freeboardList.do" style="font-weight: bold; font-size: 18px ; color: orange;">자유 게시판</a>
 	     <br/><br/><br/><br/>
-	     <a href="/cf/inquiryboardList.do" style="font-weight: bold; font-size: 20px; color: black;">문의</a>
+	     <a href="/cf/inquiryboardList.do" style="font-weight: bold; font-size: 18px; color: black;">문의</a>
 
 	</div>
 	
@@ -148,7 +148,7 @@
 			</tr>
 			<tr>
 				<th>내용</th>
-				<td><textarea name="content" id="contentInput" style="width : 950px; height : 500px; resize: none"/></textarea></td>
+				<td><textarea name="content" id="contentInput" style="width : 950px; height : 200px; resize: none"/></textarea></td>
 			</tr>
 			<tr>
 				<th>사진</th>

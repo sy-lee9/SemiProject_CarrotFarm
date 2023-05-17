@@ -64,7 +64,7 @@
 		width:95%;
 		height:70%;
 		text-align:center;
-		border : 3px solid black;	
+
 		border-collapse : collapse;
 		padding : 15px 10px;
 	}
@@ -130,11 +130,11 @@
 		 <br/><br/>
 		 <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
 	     <br/><br/><br/><br/>
-	     <a href="/cf/freeboardList.do" style="font-weight: bold; font-size: 20px ; color: black;">자유 게시판</a>
+	     <a href="/cf/noticeboardList.do" style="font-weight: bold; font-size: 18px; color: orange;">공지사항</a>
 	   	 <br/><br/><br/><br/>
-	     <a href="/cf/noticeboardList.do" style="font-weight: bold; font-size: 20px; color: orange;">공지사항</a>
+	     <a href="/cf/freeboardList.do" style="font-weight: bold; font-size: 18px ; color: black;">자유 게시판</a>
 	     <br/><br/><br/><br/>
-	     <a href="/cf/inquiryboardList.do" style="font-weight: bold; font-size: 20px; color: black;">문의</a>
+	     <a href="/cf/inquiryboardList.do" style="font-weight: bold; font-size: 18px; color: black;">문의</a>
 
 	</div>
 	
@@ -196,6 +196,7 @@ $.ajax({
 	dataType:'json',
 	success:function(data){
 		console.log(data);
+		console.log("관리자 권한 확인");
 		if (data != "1") {
 			document.getElementById("registerBtn").style.display = "none";
 		}
