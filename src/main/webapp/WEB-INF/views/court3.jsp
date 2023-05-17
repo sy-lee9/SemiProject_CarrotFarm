@@ -92,9 +92,18 @@
 	<%@ include file="GNB.jsp" %>
 	<div id="LNB">
 		<br/><br/>
-		 <div style="width: 200px; height: 200px; border : 1px solid black; border-collapse: collapse;  margin: auto;">프로필</div>
+		<c:if test="${loginId eq null}">
+			<img width="200" height="200" src="/photo/기본프로필.png">
+		</c:if>
+		<c:if test="${loginId ne null}">
+			<img width="200" height="200" src="/photo/${loginPhotoName}"> 
+			<br/> <h3 style="display:inline-block; margin-top:10px;">${loginId} </h3>님 <a href="/cf/userNoticeAlarm">🔔</a>
+		</c:if>
+		<br/><br/>
 	    <br/><br/><br/><br/>
 	    <a href="/cf/court" style = "color: orange">경기장 리스트</a>
+	    <br/><br/><br/><br/>
+	    <a href="#" style = "color:black">경기장 상세보기</a>
 	    
 	</div>
 	<div id="content">
@@ -382,7 +391,7 @@
 			}
 			content +='<td id="courtName"><a href="courtDetail.do?courtIdx='+item.courtIdx+'">'+item.courtName+'</a></td>';
 			content +='<td>'+item.courtAddress+'</td>';
-			content +='<td>'+item.courtStar+'</td>';
+			content +='<td>⭐'+item.courtStar.toFixed(2)+'</td>';
 		});
 		$('#list').append(content);
 	}
