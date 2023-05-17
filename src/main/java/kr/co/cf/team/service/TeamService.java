@@ -89,7 +89,7 @@ public class TeamService {
 				
 				String photoName = "";
 				if(oriFileName == null || oriFileName == "") {
-					photoName = "기본프로필.png";
+					photoName = "팀기본프로필.png";
 				}else {
 					//1-2. 새이름 생성
 					photoName = teamIdx+oriFileName;
