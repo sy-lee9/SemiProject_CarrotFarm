@@ -159,10 +159,10 @@
 	     				
 	     				<c:if test="${myTeamDto.teamGrade eq 'leader'}">
 	     					<c:forEach items="${playerList}" var="playerList">
-	     					<c:if test="${playerList.userId eq loginId}">
-	     						<button class="btn btn-outline-dark" id="teamRegist">팀원등록</button>
-	     					</c:if>
-	     				</c:forEach>
+		     					<c:if test="${playerList.userId eq loginId}">
+		     						<button class="btn btn-outline-dark" id="teamRegist">팀원등록</button>
+		     					</c:if>
+	     					</c:forEach>
 	     				
 	     				</c:if>
 	     			</c:if>
@@ -317,7 +317,7 @@
 	
 				     <form method="post" action="commentWrite.do?categoryId=m01&comentId=${dto.matchingIdx}" id="commentForm">
 				     		<th >
-				     			<input type="text" name="userId" value="${loginId}" style= "border:none; width:50px; background-color: #f8f9fa;" readonly>
+				     			<input type="text" name="userId" value="${loginId}" style= "border:none; width:100px; background-color: #f8f9fa;" readonly>
 				     		</th>
 				     		<c:if test="${loginId != null }">
 					     		<th colspan="2">

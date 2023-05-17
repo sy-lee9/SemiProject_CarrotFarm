@@ -319,7 +319,7 @@
 					<th >
 						<input type="text" name="commentIdx" value="${commentDto.commentIdx}" hidden>
 						<input type="text" name="matchingIdx" value="${dto.matchingIdx}" style= "border:none;" hidden>
-						<input type="text" name="userId" value="${loginId}" style= "border:none; width:50px; background-color: #f8f9fa;" readonly>
+						<input type="text" name="userId" value="${loginId}" style= "border:none; width:100px; background-color: #f8f9fa;" readonly>
 					</th>
 					<c:if test="${loginId != null }">
 						<th colspan="2">
