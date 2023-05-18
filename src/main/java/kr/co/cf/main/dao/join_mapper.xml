@@ -55,14 +55,16 @@
       UPDATE user SET userBlind = true, userState='탈퇴'  WHERE userId = #{param1}
    </update>
    
-   <!-- 회원 정보 -->
+
+	
+	 <!-- 회원 정보 -->
    <select id="userInfo" resultType="kr.co.cf.main.dto.JoinDTO">
-		SELECT u.userId, u.nickName, u.userPw, u.userName, u.birthday, u.email,
-		d.height, d.position, d.favTime, l.si, l.gu,
-		(select photoName from photo where photoId = u.userId) as photoName
-		FROM user u JOIN userData d ON u.userId = d.userId JOIN location l ON d.locationIdx = l.locationIdx
-		WHERE u.userId = #{param1} AND u.userBlind = false;
-	</select>
+      SELECT u.userId, u.nickName, u.userPw, u.userName, u.birthday, u.email,
+      d.height, d.position, d.favTime, l.si, l.gu,
+      (select photoName from photo where photoId = u.userId) as photoName
+      FROM user u JOIN userData d ON u.userId = d.userId JOIN location l ON d.locationIdx = l.locationIdx
+      WHERE u.userId = #{param1}
+   </select>
 	
 	<!-- 회원정보 수정 -->
 	<update id="userInfoUpdate" parameterType="hashmap">
