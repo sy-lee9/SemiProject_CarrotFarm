@@ -76,7 +76,7 @@ body{
         top: 20%;
         left: 50%;
         width: 400px;
-        height: 400px;
+        height: 550px;
         background-color: #f8f9fa;
         border: 1px solid black;
         z-index: 9999;
