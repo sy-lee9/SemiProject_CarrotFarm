@@ -73,9 +73,11 @@ public class TeamService {
 			//팀 개설한 회원을 팀장으로 저장
 			TeamDAO.addTeamLeader(teamIdx,loginId);
 			
-			logger.info("파일 업로드 작업");
-			photoSave(teamProfilePhoto,teamIdx);
-			logger.info("파일 업로드 성공");
+			if(!(teamProfilePhoto == null)) {
+				logger.info("파일 업로드 작업");
+				photoSave(teamProfilePhoto,teamIdx);
+				logger.info("파일 업로드 성공");
+			}
 		}
 
 		return "redirect:/team/teamPage.go?teamIdx="+teamIdx;
@@ -87,27 +89,21 @@ public class TeamService {
 				//1-1. 원본 이름 추출
 				String oriFileName = teamProfilePhoto.getOriginalFilename();
 				
-				String photoName = "";
-				if(oriFileName == null || oriFileName == "") {
-					photoName = "팀기본프로필.png";
-				}else {
-					//1-2. 새이름 생성
-					photoName = teamIdx+oriFileName;
-					try {
-						byte[] bytes = teamProfilePhoto.getBytes();//1-3. 바이트 추출
-						//1-5. 추출한 바이트 저장
-						Path path = Paths.get("C:/img/upload/"+photoName);
-						Files.write(path, bytes);
-						logger.info(photoName+" save OK");
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+				//1-2. 새이름 생성
+				String photoName = teamIdx+oriFileName;
+				try {
+				byte[] bytes = teamProfilePhoto.getBytes();//1-3. 바이트 추출
+				//1-5. 추출한 바이트 저장
+				Path path = Paths.get("C:/img/upload/"+photoName);
+				Files.write(path, bytes);
+				logger.info(photoName+" save OK");
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-					// 2. 저장 정보를 DB 에 저장
-					//2-1. teamProfilePhoto, photoName insert
-					TeamDAO.photoWrite(photoName,teamIdx);
-					logger.info("photoName 저장완료");
-							
+				// 2. 저장 정보를 DB 에 저장
+				//2-1. teamProfilePhoto, photoName insert
+				TeamDAO.photoWrite(photoName,teamIdx);
+				logger.info("photoName 저장완료");							
 	}
 
 	//사용자가 입력한 location의 idx를 받아오는 메서드

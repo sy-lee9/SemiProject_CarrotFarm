@@ -102,9 +102,10 @@
 	<select id="updateForm"	resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT 
 			t.teamIdx,t.teamMatchState,t.locationIdx,t.teamName,t.teamIntroduce,teamFavTime,teamFavNum,
-			(select photoName from photo where photoId = #{param1}) as photoName, 
+			(select photoName from photo where photoId = #{param1} AND category = 'p03') as photoName, 
 			(SELECT gu FROM location WHERE locationIdx = t.locationIdx) AS gu
 		FROM team t WHERE t.teamIdx = #{param1}
+		
 	</select>
 	
 	<update id="teamPageUpdate" parameterType="kr.co.cf.team.dto.TeamDTO">
@@ -608,6 +609,8 @@
 	<insert id="warningCancel">
 		INSERT INTO warning (teamIdx,warningRecieveId,warningReason,warningResult,warningDate) VALUES(#{teamIdx},#{userId},#{reason},'경고취소',NOW());
 	</insert>
+	
+	
 	
 	<update id="remove">
 		UPDATE teamUser SET teamUserState = 'remove'
