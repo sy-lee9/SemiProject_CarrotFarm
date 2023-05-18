@@ -75,7 +75,7 @@ body{
         position: fixed;
         top: 20%;
         left: 50%;
-        width: 300px;
+        width: 400px;
         height: 400px;
         background-color: #f8f9fa;
         border: 1px solid black;
@@ -100,8 +100,8 @@ body{
 	}
 	
 	#scroll{
-		width: 270px;
-        height: 230px;
+		width: 350px;
+        height: 350px;
 		overflow: auto;
 	}
 	

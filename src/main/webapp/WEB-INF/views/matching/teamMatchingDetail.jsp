@@ -74,7 +74,7 @@
         position: fixed;
         top: 20%;
         left: 50%;
-        width: 300px;
+        width: 400px;
         height: 400px;
         background-color: #f8f9fa;
         border: 1px solid black;
@@ -99,7 +99,7 @@
 	}
 	
 	#scroll{
-		width: 250px;
+		width: 350px;
         height: 230px;
 		overflow: auto;
 	}
@@ -345,7 +345,7 @@
 		   <div id="playerListPopup">
 				<h3>참가자 목록</h3>
 				<hr>
-				<div id="scroll" style="height: 150px; overflow: auto;">
+				<div id="scroll" >
 				<ul>
 					<c:forEach items="${playerList}" var="playerList">
 						<c:if test="${playerList.teamName eq dto.teamName}">
@@ -403,6 +403,7 @@
 	     		<div id="gameApplyListPopup">
 					<h3>신청팀 목록</h3>
 					<hr>
+					<div id="scroll" >
 					<ul>
 						<c:forEach items="${teamApplyList}" var="gameApplyList">
 							<li><a href="#" onclick="window.open('/cf/team/teamPagePop.go?teamIdx=${gameApplyList.teamIdx}', '팀페이지팝업창', 'width=1000px,height=600px');">${gameApplyList.teamName}</a>
@@ -414,6 +415,7 @@
 							</li>
 						</c:forEach>
 					</ul>
+					</div>
 					<button class="btn btn-outline-dark" id="closeGameApplyListBtn">닫기</button>
 				</div>
 				
