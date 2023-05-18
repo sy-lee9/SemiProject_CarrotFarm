@@ -23,7 +23,7 @@ body{
 	
 	#content {
 		width:78%;
-		height : 83%;
+		height : 85%;
 		background-color: #f8f9fa;
 		padding: 10 30 10;
 		margin : 5px;
@@ -66,7 +66,7 @@ body{
 	table{
 /* 		border : 1px solid black; */
 		width:95%;
-		height:70%;
+		height:73%;
 		text-align:center;
 	}
 

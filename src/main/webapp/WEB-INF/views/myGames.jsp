@@ -14,14 +14,6 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <style>
-	table{
-		width: 800;
-		height: 500;
-	}
-	th,td{
-		text-align: center;
-	}
-	
 	body{
 		position:relative;
 		font-size:15px;
@@ -37,6 +29,7 @@
 		margin : 5px;
 		float:right;
 		
+		
 	}
 	
 	#LNB {
@@ -49,31 +42,60 @@
         font-size: 18px;
 		text-align:center;
 		
-		}
-		
-		a {
-		  color : balck;
-		}
-		
-		a:link {
-		  color : balck;
-		}
-		a:visited {
-		  color : black;
-		}
-		a:hover {
-		 text-decoration-line: none;
-		  color : #FFA500 ;
-		}
-		
-		.pagination .page-link {
-	  		color: gray; /* 기본 글자색을 검정색으로 지정 */
-		}
+	}
 	
-		.pagination .page-item.active .page-link {
-	 		background-color: #FFA500;
-	 		border:none;
-		}
+	table, th, td{
+		margin : 5px;
+	}
+	
+	table{
+		width:95%;
+		height:90%;
+		text-align:center;
+	}
+	
+	a {
+	  color : black;
+	}
+	
+	a:link {
+	  color : black;
+	}
+	a:visited {
+	  color : black;
+	}
+	a:hover {
+	 text-decoration-line: none;
+	  color : #FFA500 ;
+	}
+	
+	.pagination .page-link {
+  		color: gray; /* 기본 글자색을 검정색으로 지정 */
+	}
+
+	.pagination .page-item.active .page-link {
+ 		background-color: #FFA500;
+ 		border:none;
+	}
+	
+	#searchInput{
+		width: 200px;
+    	height: 30px;
+    	margin : 5px;
+	}
+	
+	#searchButton, #writeButton {
+		font-size: 15px;
+		height: 30px;
+    	margin : 5px;
+	
+	}
+	
+	#gameDate{
+		width: 100px;
+    	height: 30px;
+    	margin : 5px;
+	}
 </style>
 </head>
 <body>
@@ -116,6 +138,7 @@
 	
 	<input type="text" id="searchInput" placeholder="제목 검색">
 	<button class="btn btn-outline-dark" id="searchButton">검색</button>
+	<hr/>
 	<table>
 		<colgroup>
 			<col width="15%"/>
@@ -131,6 +154,9 @@
 				<th>경기방식</th>
 			</tr>
 		</thead>
+		<tr>
+			<th colspan="4"> <hr/> </th>
+		</tr>
 		<tbody id="list">
 			<!-- list 출력 영역 -->
 		</tbody>
@@ -138,6 +164,7 @@
 			<td colspan="4" id="paging">	
 				<!-- 	플러그인 사용	(twbsPagination)	-->
 				<div class="container">									
+				<hr/> 
 					<nav aria-label="Page navigation" style="text-align:center">
 						<ul class="pagination justify-content-center" id="pagination"></ul>
 					</nav>					
@@ -211,9 +238,18 @@
 		var content = '';
 		
 		list.forEach(function(list, idx){
+			var categoryId = list.categoryId;
+			console.log(categoryId);
 			content +='<tr>';
 			content +='<td>'+list.gu+'</td>';
-			content +='<td><a href="./matching/detail.go?matchingIdx='+list.matchingIdx+'">'+list.subject+'</a></td>';
+		
+			if(categoryId == 'm01' ){
+				content +='<td id="subject"><a href="matching/detail.go?matchingIdx='+ list.matchingIdx+'">'+list.subject+'</a></td>';
+			}
+			if(categoryId == 'm02'){
+				content +='<td id="subject"><a href="matching/teamDetail.go?matchingIdx='+ list.matchingIdx+'">'+list.subject+'</a></td>';
+			}
+			
 			content +='<td>'+list.gameDate+'</td>';
 			content +='<td>'+list.gamePlay+' : '+list.gamePlay+'</td>';
 			content +='</tr>';

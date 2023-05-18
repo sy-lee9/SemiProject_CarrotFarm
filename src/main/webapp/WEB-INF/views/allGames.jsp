@@ -4,23 +4,17 @@
 <head>
 <meta charset="UTF-8">
 <title>참여 경기 리스트</title>
-<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
-<script src="resources/js/twbsPagination.js" type="text/javascript"></script>
+	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>    
+	<script src="resources/js/twbsPagination.js" type="text/javascript"></script>
 
 <!-- 부트스트랩 JavaScript 파일 불러오기 -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <style>
-	table{
-		width: 800;
-		height: 500;
-	}
-	th,td{
-		text-align: center;
-	}
+
 	
 	body{
 		position:relative;
@@ -52,12 +46,22 @@
 		
 	}
 	
+	table, th, td{
+		margin : 5px;
+	}
+	
+	table{
+		width:95%;
+		height:90%;
+		text-align:center;
+	}
+	
 	a {
-	  color : balck;
+	  color : black;
 	}
 	
 	a:link {
-	  color : balck;
+	  color : black;
 	}
 	a:visited {
 	  color : black;
@@ -75,7 +79,24 @@
  		background-color: #FFA500;
  		border:none;
 	}
-		
+	
+	#searchInput{
+		width: 200px;
+    	height: 30px;
+    	margin : 5px;
+	}
+	
+	#searchButton, #writeButton {
+		font-size: 15px;
+		height: 30px;
+    	margin : 5px;
+	
+	}
+	
+	#gameDate{
+		width: 100px;
+    	height: 30px;
+    	margin : 5px;
 	}
 </style>
 </head>
@@ -110,47 +131,55 @@
    </div>
    
    <div id="content" >
-	<input type="hidden" name="myGameIdx"/>
-	<select id="gameDate">
-	  <option value="default">모집일순</option>
-	  <option value="DESC">경기일 최신순</option>
-	  <option value="ASC">경기일 오래된순</option>
-	</select>
-	
-	<input type="text" id="searchInput" placeholder="제목 검색">
-	<button class="btn btn-outline-dark" id="searchButton">검색</button>
-	
-	<table>
-		<colgroup>
-			<col width="15%"/>
-			<col width="40%"/>
-			<col width="30%"/>
-			<col width="15%"/>
-		</colgroup>
-		<thead>
+		<input type="hidden" name="myGameIdx"/>
+		<select id="gameDate">
+		  <option value="default">모집일순</option>
+		  <option value="DESC">경기일 최신순</option>
+		  <option value="ASC">경기일 오래된순</option>
+		</select>
+		
+		<input type="text" id="searchInput" placeholder="제목 검색">
+		<button class="btn btn-outline-dark" id="searchButton">검색</button>
+			<hr/>
+		<table>
+			<colgroup>
+				<col width="15%"/>
+				<col width="40%"/>
+				<col width="30%"/>
+				<col width="15%"/>
+			</colgroup>
+			<thead>
+				<tr>
+					<th>장소</th>
+					<th>제목</th>
+					<th>경기일시</th>
+					<th>경기방식</th>
+				</tr>
+			</thead>
+			
 			<tr>
-				<th>장소</th>
-				<th>제목</th>
-				<th>경기일시</th>
-				<th>경기방식</th>
+				<th colspan="4"> <hr/> </th>
 			</tr>
-		</thead>
-		<tbody id="list">
-			<!-- list 출력 영역 -->
-		</tbody>
-		<tr>
-			<th colspan="4" id="paging">	
-				<!-- 	플러그인 사용	(twbsPagination)	-->
-				<div style="text-align: center;" class="container">	
-					<nav aria-label="Page navigation" style="text-align:center">
-						<ul class="pagination justify-content-center" id="pagination"></ul>
-					</nav>					
-				</div>
-			</th>
-		</tr>
-	</table>
+				
+			<tbody id="list">
+				<!-- list 출력 영역 -->
+			</tbody>
+			<tr>
+				<th colspan="4" id="paging">	
+					<!-- 	플러그인 사용	(twbsPagination)	-->
+					<div style="text-align: center;" class="container">	
+					<hr/> 
+						<nav aria-label="Page navigation" style="text-align:center">
+							<ul class="pagination justify-content-center" id="pagination"></ul>
+						</nav>					
+					</div>
+				</th>
+			</tr>
+		</table>
 	</div>
 </body>
+
+
 <script>
 	var showPage = 1;
 	var selectedGameDate = 'default';

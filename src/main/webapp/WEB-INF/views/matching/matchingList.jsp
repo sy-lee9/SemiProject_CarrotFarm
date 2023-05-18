@@ -28,6 +28,7 @@
 	
 	#content {
 		width:78%;
+		height:83%;
 		background-color: #f8f9fa;
 		padding: 10 30 10;
 		margin : 5px;
@@ -54,7 +55,7 @@
 	
 	table{
 		width:95%;
-		height:70%;
+		height:90%;
 		text-align:center;
 	}
 	

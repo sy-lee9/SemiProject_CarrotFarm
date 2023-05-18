@@ -24,8 +24,15 @@ public class JoinDTO {
 	private String gamePlay;
 	private int userIdx;
 	private String matchingIdx;
+	private String categoryId;
 	
 	
+	public String getCategoryId() {
+		return categoryId;
+	}
+	public void setCategoryId(String categoryId) {
+		this.categoryId = categoryId;
+	}
 	public String getUserId() {
 		return userId;
 	}

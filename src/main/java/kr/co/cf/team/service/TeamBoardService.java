@@ -109,7 +109,7 @@ public class TeamBoardService {
 	            
 	         }
 		 }
-		 page = "redirect:/teampictureboardDetail.do?bidx=" + bidx+"&teamIdx="+params.get("teamidx");
+		 page = "redirect:/teampictureboardDetail.do?bidx=" + bidx+"&teamIdx="+params.get("teamIdx");
 		 return page;
 	}
 	
