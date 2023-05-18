@@ -602,11 +602,11 @@
 	</select>
 	
 	<insert id="warning">
-		INSERT INTO warning (teamIdx,warningRecieveId,warningReason,warningResult) VALUES(#{teamIdx},#{userId},#{reason},'경고');
+		INSERT INTO warning (teamIdx,warningRecieveId,warningReason,warningResult,warningDate) VALUES(#{teamIdx},#{userId},#{reason},'경고',NOW());
 	</insert>
 	
 	<insert id="warningCancel">
-		INSERT INTO warning (teamIdx,warningRecieveId,warningReason,warningResult) VALUES(#{teamIdx},#{userId},#{reason},'경고취소');
+		INSERT INTO warning (teamIdx,warningRecieveId,warningReason,warningResult,warningDate) VALUES(#{teamIdx},#{userId},#{reason},'경고취소',NOW());
 	</insert>
 	
 	<update id="remove">
