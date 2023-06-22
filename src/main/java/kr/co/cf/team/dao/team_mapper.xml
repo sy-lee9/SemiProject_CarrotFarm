@@ -5,6 +5,22 @@
 
 <mapper namespace="kr.co.cf.team.dao.TeamDAO">
 	
+	<select id="teamLeadersChk"	resultType="int">
+		SELECT COUNT(userId)
+		FROM teamUser WHERE teamIdx = #{param1} AND userId = #{param2}
+			AND teamUserState = 'join'
+			AND teamGrade IN ('leader','deputyLeader')
+	</select>	
+	
+	<select id="getTeamLeaders"	resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT userId
+		FROM teamUser WHERE teamIdx = #{param1}
+			AND teamUserState = 'join'
+			AND teamGrade IN ('leader','deputyLeader')
+	</select>
+	
+	
+	<!-- 팀 리스트 -->
  	<select id="locationList" resultType="kr.co.cf.team.dto.TeamDTO">
  		SELECT locationIdx, gu FROM location;
  	</select>
@@ -54,6 +70,7 @@
 	</select>
 	
 	
+	<!-- 팀 생성 -->
 	<select id="overlay" resultType="int">
 		SELECT COUNT(teamName) FROM team WHERE teamName = #{param1}
 	</select>
@@ -80,6 +97,8 @@
 		INSERT INTO photo(categoryId,photoName,photoId) VALUES('p03',#{param1},#{param2})
 	</insert>
 	
+	
+	<!-- 팀 정보 -->
 	<select id="teamInfo"	resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT 
 			(SELECT SUM(userMannerScore) FROM review WHERE receiveId IN (SELECT u.userId FROM teamUser u WHERE teamIdx = t.teamIdx)) AS teamManner,
@@ -102,7 +121,7 @@
 	<select id="updateForm"	resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT 
 			t.teamIdx,t.teamMatchState,t.locationIdx,t.teamName,t.teamIntroduce,teamFavTime,teamFavNum,
-			(select photoName from photo where photoId = #{param1} AND category = 'p03') as photoName, 
+			(select photoName from photo where photoId = #{param1} AND categoryId = 'p03') as photoName, 
 			(SELECT gu FROM location WHERE locationIdx = t.locationIdx) AS gu
 		FROM team t WHERE t.teamIdx = #{param1}
 		
@@ -126,6 +145,8 @@
 				AND photoId = #{param2}
 	</update>
 	
+	
+	<!-- 팀 해체 -->
 	<update id="disband">
 		UPDATE team SET disbandAppDate = NOW() WHERE teamIdx = #{param1}
 	</update>
@@ -159,6 +180,7 @@
 	</insert>
 	
 
+	<!-- 경기 기록 -->
 	<select id="gameList" resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT 
 			m.matchingIdx,
@@ -170,8 +192,8 @@
 		FROM matching m 
 		INNER JOIN game g ON m.matchingIdx = g.matchingIdx
 		WHERE m.categoryId = 'm02'
-			AND m.matchigState = 'review'
-			AND g.userId = 'user06'
+			AND m.matchigState IN ('review','finish')
+			AND g.userId = #{userId}
 			AND g.gameAppState = '확정'
 		ORDER BY m.matchingIdx DESC
 	</select>
@@ -187,7 +209,7 @@
 		FROM matching m 
 		INNER JOIN game g ON m.matchingIdx = g.matchingIdx
 		WHERE m.categoryId = 'm02'
-			AND m.matchigState = 'review'
+			AND m.matchigState IN ('review','finish')
 			AND g.userId = #{userId}
 			AND g.gameAppState = '확정'
 		ORDER BY m.gameDate DESC
@@ -205,7 +227,7 @@
 		FROM matching m 
 		INNER JOIN game g ON m.matchingIdx = g.matchingIdx
 		WHERE m.categoryId = 'm02'
-			AND m.matchigState = 'review'
+			AND m.matchigState IN ('review','finish')
 			AND g.userId = #{userId}
 			AND g.gameAppState = '확정'
 		ORDER BY m.gameDate ASC	
@@ -223,7 +245,7 @@
 		FROM matching m
 		INNER JOIN game g ON m.matchingIdx = g.matchingIdx
 		WHERE m.categoryId = 'm02'
-			AND m.matchigState = 'review'
+			AND m.matchigState IN ('review','finish')
 			AND g.userId = #{userId}
 			AND g.gameAppState = '확정'
 			AND subject LIKE CONCAT(#{searchText})
@@ -231,20 +253,8 @@
 		LIMIT 10 OFFSET #{offset}
 	</select>
 	
-	<select id="teamLeadersChk"	resultType="int">
-		SELECT COUNT(userId)
-		FROM teamUser WHERE teamIdx = #{param1} AND userId = #{param2}
-			AND teamUserState = 'join'
-			AND teamGrade IN ('leader','deputyLeader')
-	</select>	
 	
-	<select id="getTeamLeaders"	resultType="kr.co.cf.team.dto.TeamDTO">
-		SELECT userId
-		FROM teamUser WHERE teamIdx = #{param1}
-			AND teamUserState = 'join'
-			AND teamGrade IN ('leader','deputyLeader')
-	</select>
-	
+	<!-- 경기 참가신청 리스트 -->
 	<select id="matchingRequestList" resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT 
 			m.matchingIdx,
@@ -306,13 +316,6 @@
 	</select>
 	
 	
-	<select id="teamLeadersConf"	resultType="int">
-		SELECT COUNT(userId)
-			FROM teamUser WHERE teamIdx = #{param1}
-			AND userId = #{param2}
-			AND teamGrade IN ('leader','deputyLeader')
-	</select>
-	
 	<!-- 신청한 경기 변경사항 알림 -->
 	<select id="appGameUpdateAlarm" resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT 
@@ -332,6 +335,7 @@
 		    AND a.alarmContent IN ('수정','취소')
 		ORDER BY m.gameDate DESC
 	</select>
+	
 	
 	<!-- 초대된 경기 알림 -->
 	<select id="matchingInviteAlarm" resultType="kr.co.cf.team.dto.TeamDTO">
@@ -356,6 +360,7 @@
 		ORDER BY m.gameDate DESC
 	</select>
 	
+	
 	<!-- 경기 참가신청 알림 -->
 	<select id="gameMatchingAppAlarm" resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT 
@@ -366,7 +371,8 @@
 			(SELECT gu FROM location WHERE locationIdx = (SELECT locationIdx FROM team WHERE teamIdx = 
 				(SELECT teamIdx FROM teamUser WHERE userId = m.writerId))) AS gu,
 			(SELECT SUM(userMannerScore) FROM review WHERE receiveId IN (SELECT u.userId FROM teamUser u WHERE teamIdx = 
-				(SELECT teamIdx FROM teamUser WHERE userId = m.writerId))) AS teamManner
+				(SELECT teamIdx FROM teamUser WHERE userId = m.writerId))) AS teamManner,				
+			(SELECT COUNT(u.userId) FROM teamUser u WHERE teamIdx = (SELECT teamIdx FROM teamUser WHERE userId = m.writerId)) AS teamUser	
 		FROM 
 			matching m
 			INNER JOIN alarm a ON m.matchingIdx = a.alarmKind
@@ -384,6 +390,8 @@
 			AND teamGrade = 'leader'
 	</select>
 	
+	
+	<!-- 모집중인 경기 리스트 -->
 	<select id="writeMatchingList" resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT 
 			m.matchingIdx,
@@ -399,6 +407,8 @@
 		ORDER BY m.gameDate DESC
 	</select>
 	
+	
+	<!-- 팀 가입 신청 및 취소 -->
 	<select id="teamJoinChk"	resultType="int">
 		SELECT COUNT(userId)
 		FROM teamUser 
@@ -432,6 +442,8 @@
 				AND userId = #{param2}
 	</delete>
 	
+	
+	<!-- 팀 가입 수락 및 거절 -->
 	<select id="teamJoinAppList" resultType="kr.co.cf.team.dto.TeamDTO">
 		SELECT
 			t.teamIdx,
@@ -466,7 +478,7 @@
 				AND teamAppState = '신청'
 	</update>
 	
-	
+	<!-- 팀장 권한 양도 -->
 	<select id="teamUserChk"	resultType="int">
 		SELECT COUNT(userId)
 		FROM teamUser 
@@ -482,6 +494,8 @@
 			LIMIT 1
 	</update>
 	
+	
+	<!-- 팀 탈퇴 -->
 	<update id="leaveTeam">
 		UPDATE teamUser SET teamUserState = 'leave'
 			WHERE teamIdx = #{param1}
@@ -611,7 +625,7 @@
 	</insert>
 	
 	
-	
+	<!-- 강퇴 -->
 	<update id="remove">
 		UPDATE teamUser SET teamUserState = 'remove'
 			WHERE teamIdx = #{teamIdx}
@@ -627,14 +641,6 @@
 		#{teamIdx})
 	</insert>
 	
-	<select id="warningHistory" resultType="kr.co.cf.team.dto.TeamDTO">
-		SELECT warningDate, warningResult, warningReason
-			FROM warning
-				WHERE teamIdx = #{param1}
-					AND warningRecieveId = #{param2}
-				ORDER BY warningDate DESC
-	</select>
-	
 	<insert id="removeNowAlarm" parameterType="String">
 		insert into alarm(categoryId,userId,alarmContent,alarmKind) 
 		values(
@@ -644,6 +650,15 @@
 		#{teamIdx})
 	</insert>
 	
+	
+	<!-- 경고 히스토리 -->
+	<select id="warningHistory" resultType="kr.co.cf.team.dto.TeamDTO">
+		SELECT warningDate, warningResult, warningReason
+			FROM warning
+				WHERE teamIdx = #{param1}
+					AND warningRecieveId = #{param2}
+				ORDER BY warningDate DESC
+	</select>
 	
 	
 	

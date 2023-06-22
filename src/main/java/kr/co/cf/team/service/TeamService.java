@@ -32,11 +32,42 @@ public class TeamService {
 	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
+	// 팀 idx 가져오기
+	public String getTeamIdx(String loginId) {
+		return TeamDAO.getTeamIdx(loginId);
+	}
 
+	// 팀장, 부팀장 id 가져오기
+	public ArrayList<TeamDTO> getTeamLeaders(int teamIdx) {
+		return TeamDAO.getTeamLeaders(teamIdx);
+	}
+
+	// 팀장, 부팀장 권한 확인
+	public int teamLeadersChk(int teamIdx, String loginId) {
+		return TeamDAO.teamLeadersChk(teamIdx,loginId);
+	}
+	
+	// 팀 가입여부 확인
 	public int teamUserChk(String loginId) {
 		return TeamDAO.teamUserCount(loginId);
 	}
+	
+	// 팀장 id 가져오기
+	public String getTeamLeader(int teamIdx) {
+		return TeamDAO.getTeamLeader(teamIdx);
+	}
 
+	// 팀 가입여부 확인
+	public int teamJoinChk(String loginId) {
+		return TeamDAO.teamJoinChk(loginId);
+	}
+
+	// 강퇴회원 확인
+	public int removeChk(int teamIdx, String loginId) {
+		return TeamDAO.removeChk(teamIdx,loginId);
+	}
+
+	// 팀 이름 중복확인
 	public HashMap<String, Object> overlay(String teamName) {
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
@@ -46,6 +77,7 @@ public class TeamService {
 		return map;
 	}
 
+	// 팀 생성
 	public String teamRegist(MultipartFile teamProfilePhoto, HashMap<String, String> params, String loginId) {
 		logger.info("teamRegist service");
 		
@@ -83,6 +115,7 @@ public class TeamService {
 		return "redirect:/team/teamPage.go?teamIdx="+teamIdx;
 	}
 
+	// 프로필 사진 등록
 	private void photoSave(MultipartFile teamProfilePhoto,int teamIdx) {
 		
 		// 1. 파일을 C:/carrot_farm/t01/ 에 저장
@@ -116,10 +149,12 @@ public class TeamService {
 		return locationIdx;
 	}
 
+	// 위치 리스트
 	public ArrayList<TeamDTO> locationList() {
 		return TeamDAO.locationList();
 	}
 
+	// 팀 리스트
 	public HashMap<String, Object> list(HashMap<String, Object> params) {
 		
 		int page = Integer.parseInt((String) params.get("page"));
@@ -171,18 +206,30 @@ public class TeamService {
 		return map;
 	}
 
+	// 팀 정보
 	public TeamDTO teamInfo(int teamIdx) {
-		return TeamDAO.teamInfo(teamIdx);
+		TeamDTO TeamDTO = TeamDAO.teamInfo(teamIdx);
+		
+		int totalTeamManner = TeamDTO.getTeamManner();
+		int teamUser = TeamDTO.getTeamUser();
+		int teamManner = totalTeamManner/teamUser;
+		
+		TeamDTO.setTeamManner(teamManner);
+		
+		return TeamDTO;
 	}
 
+	// 팀 리뷰
 	public ArrayList<TeamDTO> tagReview(int teamIdx) {
 		return TeamDAO.tagReview(teamIdx);
 	}
 
+	// 팀 기존 정보 불러오기 
 	public TeamDTO updateForm(String teamIdx) {		
 		return TeamDAO.updateForm(teamIdx);
 	}
 
+	// 팀 정보 수정
 	public String teamPageUpdate(MultipartFile teamProfilePhoto, HashMap<String, String> params) {
 		logger.info("service params : "+params);
 		
@@ -225,6 +272,7 @@ public class TeamService {
 		return page;
 	}
 
+	// 팀 프로필 사진 변경
 	private int photoUpdateSave(MultipartFile teamProfilePhoto,String photoName,int teamIdx) {
 		int photoUpRow = 0;	
 		
@@ -254,16 +302,19 @@ public class TeamService {
 		return photoUpRow;
 		}
 
+	// 팀 해체
 	public int disband(int teamIdx) {		
 		logger.info("disband teamIdx : "+teamIdx);
 		return TeamDAO.disband(teamIdx);
 	}
-
+	
+	// 팀 해체 취소
 	public int disbandCancle(int teamIdx) {
 		logger.info("disbandCancle teamIdx : "+teamIdx);
 		return TeamDAO.disbandCancle(teamIdx);
 	}
 
+	// 팀해체 알림 전송
 	public void disbandAlarm(int teamIdx) {
 		
 		//ArrayList<TeamDTO> teamUserList = TeamDAO.getTeamUser(teamIdx);
@@ -278,12 +329,13 @@ public class TeamService {
 			logger.info("userID : "+userId);
 			
 			TeamDAO.disbandAlarm(teamIdx,userId);
-			logger.info("알람전송 성공");
+			logger.info("알림 전송 성공");
 			row += 1;			
 		}
 		logger.info("sendAlarmCount : "+row);		
 	}
 	
+	// 팀해체 취소 알림 전송
 	public void disbandCancleAlarm(int teamIdx) {
 		//ArrayList<TeamDTO> teamUserList = TeamDAO.getTeamUser(teamIdx);
 		ArrayList<String> teamUserList = TeamDAO.getTeamUser(teamIdx);
@@ -303,6 +355,7 @@ public class TeamService {
 		logger.info("sendAlarmCount : "+row);			
 	}
 
+	// 참가한 경기 리스트
 	public HashMap<String, Object> gameList(HashMap<String, Object> params) { 
 		
 		int page = Integer.parseInt((String) params.get("page"));
@@ -317,8 +370,6 @@ public class TeamService {
 		logger.info("teamUserList : "+teamUserList);
 		
 		ArrayList<TeamDTO> list = new ArrayList<TeamDTO>();
-		ArrayList<TeamDTO> newList = new ArrayList<TeamDTO>();
-		HashSet<TeamDTO> set = null;
 		HashMap<String, Object> map = new HashMap<String, Object>();	
 
 		//총 페이지 수 
@@ -326,9 +377,8 @@ public class TeamService {
 		params.put("offset", offset);		
 		
 		if(teamUserList != null) {
-			for (int i = 0; i < teamUserList.size(); i++) {
 				
-				String userId = (teamUserList.get(i));			
+				String userId = TeamDAO.getTeamLeader(teamIdx);	
 				logger.info("userID : "+userId);
 				params.put("userId", userId);
 				
@@ -353,17 +403,13 @@ public class TeamService {
 						list = TeamDAO.SearchGameList(params);		
 						logger.info("SearchGameList size : "+list.size());
 				}
-				// 중복 list 값 제거 과정
-				set = new LinkedHashSet<TeamDTO>(list);
-			}
-			newList = new ArrayList<TeamDTO>(set);
-			logger.info("newList : "+ newList.size());
+				
 		}
-		logger.info("totalGameList size : "+newList.size());
+		logger.info("list size : "+list.size());
 		
 		// 만들 수 있는 총 페이지 수 
 		// 전체 게시물 / 페이지당 보여줄 수
-		int total = newList.size();
+		int total = list.size();
 		logger.info("total "+total);
 		int range = total%10 == 0 ? total/10 : (total/10)+1;
 		logger.info("전체 게시물 수 : "+total);
@@ -374,13 +420,15 @@ public class TeamService {
 		map.put("currPage", page);
 		map.put("pages", range);
 				
-		logger.info("list : "+ newList);
-		map.put("list", newList);
+		logger.info("list : "+ list);
+		map.put("list", list);
 		
 		logger.info("map : "+ map);
 		return map;
 	}
 	
+	
+	// 참가신청한 경기 리스트
 	public HashMap<String, Object> gameMatchingRequest(HashMap<String, Object> params) {
 		logger.info("service 도착");
 		logger.info("params : "+params);
@@ -418,6 +466,8 @@ public class TeamService {
 		return map;
 	}
 
+	
+	//신청한 경기 변경사항 알림
 	public ArrayList<TeamDTO> appGameUpdateAlarm(String teamIdx) {
 		
 		String userId = TeamDAO.getTeamLeader(Integer.parseInt(teamIdx));
@@ -426,6 +476,8 @@ public class TeamService {
 		return TeamDAO.appGameUpdateAlarm(userId);
 	}
 
+	
+	// 경기 초대 알림
 	public ArrayList<TeamDTO> matchingInviteAlarm(String teamIdx) {
 
 		String userId = TeamDAO.getTeamLeader(Integer.parseInt(teamIdx));
@@ -434,14 +486,29 @@ public class TeamService {
 		return TeamDAO.matchingInviteAlarm(userId);
 	}
 
+	
+	// 경기참가 신청 알림
 	public ArrayList<TeamDTO> gameMatchingAppAlarm(String teamIdx) {
 
 		String userId = TeamDAO.getTeamLeader(Integer.parseInt(teamIdx));
 		logger.info("getTeamLeader : "+userId);
 		
-		return TeamDAO.gameMatchingAppAlarm(userId);
+		ArrayList<TeamDTO> list = TeamDAO.gameMatchingAppAlarm(userId);
+		
+		for (int i = 0; i < list.size(); i++) {
+			int totalManner = list.get(i).getTeamManner();
+			int teamUserNum = list.get(i).getTeamUser();
+			int teamManner = totalManner/teamUserNum;
+			//logger.info("list : "+totalManner+" / "+teamUserNum+" / "+teamManner);
+			
+			list.get(i).setTeamManner(teamManner);
+		}
+		
+		return list;
 	}
 
+	
+	// 작성한 경기 모집글 리스트
 	public ArrayList<TeamDTO> writeMatchingList(int teamIdx) {
 		
 		String userId = TeamDAO.getTeamLeader(teamIdx);
@@ -452,34 +519,22 @@ public class TeamService {
 		return list;
 	}
 
-	public String getTeamLeader(int teamIdx) {
-		return TeamDAO.getTeamLeader(teamIdx);
-	}
-
-	public int teamLeadersConf(int teamIdx, String loginId) {
-		return TeamDAO.teamLeadersConf(teamIdx, loginId);
-	}
-
-	public int teamJoinChk(String loginId) {
-		return TeamDAO.teamJoinChk(loginId);
-	}
-
-	public int removeChk(int teamIdx, String loginId) {
-		return TeamDAO.removeChk(teamIdx,loginId);
-	}
-
+	// 팀 가입 신청
 	public int teamJoinApp(int teamIdx, String loginId) {
 		return TeamDAO.teamJoinApp(teamIdx,loginId);
 	}
 
+	// 팀 가입신청 여부 확인
 	public int joinAppChk(int teamIdx, String loginId) {
 		return TeamDAO.joinAppChk(teamIdx,loginId);
 	}
 
+	// 가입 취소
 	public void joinCancel(int teamIdx, String loginId) {
 		TeamDAO.joinAppCancel(teamIdx,loginId);
 	}
 
+	// 팀 가입 신청자 리스트
 	public HashMap<String, Object> teamJoinAppList(int teamIdx) {
 		logger.info("teamJoinAppList call : "+teamIdx);
 		
@@ -494,6 +549,7 @@ public class TeamService {
 		return map;
 	}
 
+	// 팀 가입 수락
 	public HashMap<String, Object> teamJoinAccept(int teamIdx, String userId) {
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();  
@@ -508,6 +564,7 @@ public class TeamService {
 		return map;
 	}
 
+	// 팀 가입 거절
 	public HashMap<String, Object> teamJoinReject(int teamIdx, String userId) {
 
 		HashMap<String, Object> map = new HashMap<String, Object>();  
@@ -541,6 +598,8 @@ public class TeamService {
 		return map;
 	}
 
+	
+	// 팀원 리스트
 	public HashMap<String, Object> teamUserList(HashMap<String, Object> params) {
 		
 		int page = Integer.parseInt((String) params.get("page"));
@@ -601,6 +660,8 @@ public class TeamService {
 		return map;
 	}
 
+	
+	// 팀원 리스트(팀장용)
 	public HashMap<String, Object> teamUserListLeader(HashMap<String, Object> params) {
 		
 		int page = Integer.parseInt((String) params.get("page"));
@@ -660,6 +721,8 @@ public class TeamService {
 		return map;
 	}
 
+	
+	// 팀장 권한 양도
 	public HashMap<String, Object> changeTeamGrade(HashMap<String, Object> params) {
 		logger.info("changeTeamGrade : "+params);
 		
@@ -672,6 +735,8 @@ public class TeamService {
 		return map;
 	}
 
+	
+	// 팀원 경고 리스트
 	public HashMap<String, Object> warningList(HashMap<String, Object> params) {
 		
 		int page = Integer.parseInt((String) params.get("page"));
@@ -716,43 +781,43 @@ public class TeamService {
 		return map;
 	}
 
+	
+	// 경고 부여
 	public void warning(HashMap<String, Object> params) {
 		int row = TeamDAO.warning(params);	
 		logger.info("update row : "+row);
 	}
 
+	
+	// 경고 취소
 	public void warningCancel(HashMap<String, Object> params) {
 		int row = TeamDAO.warningCancel(params);	
 		logger.info("update row : "+row);
 	}
 
+	
+	// 강퇴
 	public int remove(HashMap<String, Object> params) {
 		return TeamDAO.remove(params);
 	}
 
+	// 강퇴 알림 전송
 	public void removeAlarm(HashMap<String, Object> params) {
 		TeamDAO.removeAlarm(params);
 	}
 
+	// 경고 히스토리 
 	public ArrayList<TeamDTO> warningHistory(int teamIdx, String userId) {
 		return TeamDAO.warningHistory(teamIdx,userId);
 	}
 
+	// 즉시 강퇴 알림 전송
 	public void removeNowAlarm(HashMap<String, Object> params) {
 		TeamDAO.removeNowAlarm(params);
 	}
 
-	public String getTeamIdx(String loginId) {
-		return TeamDAO.getTeamIdx(loginId);
-	}
-
-	public ArrayList<TeamDTO> getTeamLeaders(int teamIdx) {
-		return TeamDAO.getTeamLeaders(teamIdx);
-	}
-
-	public int teamLeadersChk(int teamIdx, String loginId) {
-		return TeamDAO.teamLeadersChk(teamIdx,loginId);
-	}
+	
+	
 
 
 

@@ -153,7 +153,7 @@
 				</c:if>
 				<c:forEach items="${list}" var="team">
 					<tr>
-						<td><a href="../matching/detail.go?matchingIdx=${team.matcingIdx}">${team.subject}</a></td>
+						<td><a href="../matching/detail.go?matchingIdx=${team.matchingIdx}">${team.subject}</a></td>
 						<td><a href="#" onclick="window.open('teamPagePop.go?teamIdx=${team.teamIdx}', '팀페이지팝업창', 'width=1000px,height=600px');">${team.teamName}</a></td>
 						<td>${team.gu}</td>
 						<td>${team.teamManner}</td>

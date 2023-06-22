@@ -27,6 +27,7 @@ public class TeamController {
 	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
+	// 팀 리스트
 	@RequestMapping(value = "/team")
 	public String list(HttpSession session, Model model) {		
 		String loginId = (String) session.getAttribute("loginId");
@@ -50,7 +51,6 @@ public class TeamController {
 		logger.info(msg);
 		if(msg != null) {
 			model.addAttribute("msg",msg);
-			//사용한 세션은 반드시 바로 삭제해야함
 			session.removeAttribute("msg");
 		}		
 		return "/team/teamList";
@@ -76,6 +76,8 @@ public class TeamController {
 		return TeamService.list(params);
 	}
 
+	
+	// 팀 생성
 	@RequestMapping(value = "/team/teamRegist.go")
 	public String teamRegistGo(HttpSession session, Model model) {
 		
@@ -99,6 +101,7 @@ public class TeamController {
 		return page;	
 	}
 	
+	// 팀 이름 중복확인
 	@RequestMapping(value = "/team/overlayTeamName.ajax", method = RequestMethod.POST)
 	@ResponseBody
 	public HashMap<String, Object> overlay(@RequestParam String teamName) {
@@ -118,6 +121,8 @@ public class TeamController {
 		return page;
 	}
 
+	
+	// 팀 페이지
 	 @RequestMapping(value="/team/teamPage.go")
 	   public String teamPage(Model model, @RequestParam String teamIdx,HttpSession session) {
 	      logger.info("teamPage : "+teamIdx);
@@ -126,11 +131,13 @@ public class TeamController {
 	      String loginId = (String) session.getAttribute("loginId");
 	      logger.info("loginId : " + loginId);
 	      
+	      // 팀 정보
 	      TeamDTO TeamDTO = TeamService.teamInfo(Integer.parseInt(teamIdx));
 	      logger.info("teamInfo");
 	      if(TeamDTO != null) {
 	         model.addAttribute("team", TeamDTO);
 	         
+	         // 팀 리뷰
 	         ArrayList<TeamDTO> list = TeamService.tagReview(Integer.parseInt(teamIdx));
 	         logger.info("list : " + list.size());      
 	         if(list != null) {            
@@ -190,6 +197,7 @@ public class TeamController {
 	      return page;
 	   }
 	
+	 // 팀 페이지 팝업창
 	@RequestMapping(value="/team/teamPagePop.go")
 	public String teamPagePop(Model model, @RequestParam String teamIdx,HttpSession session) {
 		
@@ -207,6 +215,8 @@ public class TeamController {
 		return "/team/teamPagePop";
 	}
 	
+	
+	// 팀 정보 수정
 	@RequestMapping(value="/team/teamPageUpdate.go")
 	public String updateForm(Model model, @RequestParam String teamIdx,HttpSession session) {
 		logger.info("updateForm : "+teamIdx);
@@ -250,6 +260,8 @@ public class TeamController {
 		return page;
 	}
 
+	
+	// 팀 해체
 	@RequestMapping(value="/team/teamDisbanding.go")
 	public String disbandForm(Model model, @RequestParam String teamIdx,HttpSession session) {
 		logger.info("DisbandingForm : "+teamIdx);			
@@ -303,6 +315,8 @@ public class TeamController {
 		return page;
 	}
 	
+	
+	// 팀 해체 취소
 	@RequestMapping(value="/team/teamDisbandCancle.go")
 	public String disbandCancleForm(Model model, @RequestParam String teamIdx,HttpSession session) {
 		logger.info("disbandCancleForm : "+teamIdx);		
@@ -358,6 +372,8 @@ public class TeamController {
 		return page;
 	}
 	
+	
+	// 참가 경기 리스트
 	@RequestMapping(value="/team/teamGame.go")
 	public String teamGameList(Model model, @RequestParam String teamIdx) {
 		logger.info("teamGameList : "+teamIdx);		
@@ -372,6 +388,8 @@ public class TeamController {
 		return TeamService.gameList(params);
 	}
 	
+	
+	// 신청한 경기 리스트
 	@RequestMapping(value="/team/gameMatchingRequest.go")
 	public String gameMatchingRequest(Model model, @RequestParam String teamIdx,HttpSession session) {
 		logger.info("teamGameList : "+teamIdx);		
@@ -381,7 +399,7 @@ public class TeamController {
 		
 		if(loginId != null) {	
 			//로그인한 아이디가 팀장, 부팀장인지 확인
-			if(TeamService.teamLeadersConf(Integer.parseInt(teamIdx),loginId) == 1){
+			if(TeamService.teamLeadersChk(Integer.parseInt(teamIdx),loginId) == 1){
 				logger.info("로그인확인&직급확인 완료");
 				model.addAttribute("teamIdx", teamIdx);	
 				page = "/team/gameMatchingRequest";
@@ -412,7 +430,7 @@ public class TeamController {
 		
 		if(loginId != null) {	
 			//로그인한 아이디가 팀장, 부팀장인지 확인
-			if(TeamService.teamLeadersConf(Integer.parseInt(teamIdx),loginId) == 1){
+			if(TeamService.teamLeadersChk(Integer.parseInt(teamIdx),loginId) == 1){
 				logger.info("로그인확인&직급확인 완료");
 				model.addAttribute("teamIdx", teamIdx);	
 				page = "/team/teamJoinAppAlarm";
@@ -427,6 +445,7 @@ public class TeamController {
 		return page;
 	}
 	
+	
 	//신청한 게임 모집글 변경사항 알림
 	@RequestMapping(value="/team/appGameUpdateAlarm.go")
 	public String appGameUpdateAlarm(Model model, @RequestParam String teamIdx,HttpSession session) {
@@ -437,7 +456,7 @@ public class TeamController {
 		
 		if(loginId != null) {	
 			//로그인한 아이디가 팀장, 부팀장인지 확인
-			if(TeamService.teamLeadersConf(Integer.parseInt(teamIdx),loginId) == 1){
+			if(TeamService.teamLeadersChk(Integer.parseInt(teamIdx),loginId) == 1){
 				logger.info("로그인확인&직급확인 완료");
 				
 				//모집중인 경기 참가신청 알림 불러오기
@@ -459,6 +478,7 @@ public class TeamController {
 		return page;
 	}
 	
+	
 	//경기 초대 알림
 	@RequestMapping(value="/team/matchingInviteAlarm.go")
 	public String matcingInviteAlram(Model model, @RequestParam String teamIdx,HttpSession session) {
@@ -469,7 +489,7 @@ public class TeamController {
 		
 		if(loginId != null) {	
 			//로그인한 아이디가 팀장, 부팀장인지 확인
-			if(TeamService.teamLeadersConf(Integer.parseInt(teamIdx),loginId) == 1){
+			if(TeamService.teamLeadersChk(Integer.parseInt(teamIdx),loginId) == 1){
 				logger.info("로그인확인&직급확인 완료");
 				
 				//모집중인 경기 참가신청 알림 불러오기
@@ -491,6 +511,7 @@ public class TeamController {
 		return page;
 	}
 	
+	
 	//경기 참가신청 알림 
 	@RequestMapping(value="/team/gameMatchingAppAlarm.go")
 	public String gameMatchingAppAlarm(Model model, @RequestParam String teamIdx,HttpSession session) {
@@ -501,7 +522,7 @@ public class TeamController {
 		
 		if(loginId != null) {	
 			//로그인한 아이디가 팀장, 부팀장인지 확인
-			if(TeamService.teamLeadersConf(Integer.parseInt(teamIdx),loginId) == 1){
+			if(TeamService.teamLeadersChk(Integer.parseInt(teamIdx),loginId) == 1){
 				logger.info("로그인확인&직급확인 완료");
 				
 				//모집중인 경기 참가신청 알림 불러오기
@@ -523,7 +544,8 @@ public class TeamController {
 		return page;
 	}
 	
-	//작성한 모집글 리스트 보기
+	
+	//작성한 경기 리스트 보기
 	@RequestMapping(value="/team/writeMatchingList.go")
 	public String writeMatchingList(Model model, @RequestParam String teamIdx,HttpSession session) {
 		logger.info("writeMatchingList : "+teamIdx);	
@@ -533,7 +555,7 @@ public class TeamController {
 		
 		if(loginId != null) {	
 			//로그인한 아이디가 팀장, 부팀장인지 확인
-			if(TeamService.teamLeadersConf(Integer.parseInt(teamIdx),loginId) == 1){
+			if(TeamService.teamLeadersChk(Integer.parseInt(teamIdx),loginId) == 1){
 				logger.info("로그인확인&직급확인 완료");
 				
 				//작성한 모집글 리스트 불러오기
@@ -554,6 +576,8 @@ public class TeamController {
 		return page;
 	}
 	
+	
+	// 팀가입 신청 
 	@RequestMapping(value="/team/joinApp.ajax", method = RequestMethod.POST)
 	@ResponseBody
 	public HashMap<String, Object> joinApp(@RequestParam String teamIdx,HttpSession session,Model model){
@@ -593,6 +617,7 @@ public class TeamController {
 		return map;
 	}
 	
+	// 팀 가입 신청 취소
 	@RequestMapping(value="/team/joinCancel.ajax", method = RequestMethod.POST)
 	@ResponseBody
 	public HashMap<String, Object> joinCancel(@RequestParam String teamIdx,HttpSession session,Model model){		
@@ -616,6 +641,7 @@ public class TeamController {
 		return map;
 	}
 	
+	// 팀 가입 신청자 리스트
 	@RequestMapping(value="/team/teamJoinAppList.ajax", method = RequestMethod.POST)
 	@ResponseBody
 	public HashMap<String, Object> teamJoinAppList(@RequestParam String teamIdx){
@@ -623,13 +649,15 @@ public class TeamController {
 		return TeamService.teamJoinAppList(Integer.parseInt(teamIdx));
 	}
 	
+	// 팀 가입 수락
 	@RequestMapping(value="/team/teamJoinAccept.ajax", method = RequestMethod.POST)
 	@ResponseBody
 	public HashMap<String, Object> teamJoinAccept(@RequestParam String teamIdx, @RequestParam String userId){
 		logger.info("teamJoinAccept "+ "teamIdx : "+teamIdx+ "userId : "+userId);
 		return TeamService.teamJoinAccept(Integer.parseInt(teamIdx),userId);
 	}
-	
+
+	// 팀 가입 거절
 	@RequestMapping(value="/team/teamJoinReject.ajax", method = RequestMethod.POST)
 	@ResponseBody
 	public HashMap<String, Object> teamJoinReject(@RequestParam String teamIdx, @RequestParam String userId){
@@ -637,6 +665,8 @@ public class TeamController {
 		return TeamService.teamJoinReject(Integer.parseInt(teamIdx),userId);
 	}
 	
+	
+	// 팀 탈퇴
 	@RequestMapping(value="/team/leaveTeam.ajax", method = RequestMethod.POST)
 	@ResponseBody
 	public HashMap<String, Object> leaveTeam(@RequestParam String teamIdx,HttpSession session){
@@ -658,6 +688,8 @@ public class TeamController {
 		return map;
 	}
 	
+	
+	// 팀원 리스트
 	@RequestMapping(value = "/team/teamUserList.go")
 	public String teamUserListForm(HttpSession session, Model model, @RequestParam String teamIdx) {
 		logger.info("teamUserList : "+teamIdx);
@@ -684,6 +716,7 @@ public class TeamController {
 		return TeamService.teamUserList(params);
 	}
 	
+	// 팀원 리스트(팀장용)
 	@RequestMapping(value = "/team/teamUserListLeader.go")
 	public String teamUserListLeader(HttpSession session, Model model, @RequestParam String teamIdx) {
 		logger.info("teamUserListLeader : "+teamIdx);
@@ -721,6 +754,7 @@ public class TeamController {
 		return TeamService.changeTeamGrade(params);
 	}
 	
+	
 	//팀원 경고 리스트 보기
 	@RequestMapping(value = "/team/warningTeamUser.go")
 	public String warningTeamUser(HttpSession session, Model model, @RequestParam String teamIdx) {
@@ -753,7 +787,7 @@ public class TeamController {
 		return TeamService.warningList(params);
 	}
 	
-	//경고
+	// 팀원 경고
 	@RequestMapping(value = "/team/warning.go")
 	public String warningForm(HttpSession session, Model model,@RequestParam String teamIdx,@RequestParam String userId) {
 
@@ -763,7 +797,7 @@ public class TeamController {
 		
 		if(loginId != null) {	
 			//로그인한 아이디가 팀장, 부팀장인지 확인
-			if(TeamService.teamLeadersConf(Integer.parseInt(teamIdx),loginId) == 1){
+			if(TeamService.teamLeadersChk(Integer.parseInt(teamIdx),loginId) == 1){
 				logger.info("로그인확인&직급확인 완료");
 				
 				model.addAttribute("userId",userId);
@@ -815,7 +849,7 @@ public class TeamController {
 		
 		if(loginId != null) {	
 			//로그인한 아이디가 팀장, 부팀장인지 확인
-			if(TeamService.teamLeadersConf(Integer.parseInt(teamIdx),loginId) == 1){
+			if(TeamService.teamLeadersChk(Integer.parseInt(teamIdx),loginId) == 1){
 				logger.info("로그인확인&직급확인 완료");
 				
 				model.addAttribute("userId",userId);
@@ -837,6 +871,7 @@ public class TeamController {
 		return page;
 	}
 	
+	// 경고 취소
 	@RequestMapping(value = "/team/warningCancel.ajax", method = RequestMethod.POST)
 	@ResponseBody
 	public HashMap<String, Object> warningCancel(HttpSession session, Model model,@RequestParam HashMap<String, Object> params) {		
@@ -861,7 +896,7 @@ public class TeamController {
 		
 		if(loginId != null) {	
 			//로그인한 아이디가 팀장, 부팀장인지 확인
-			if(TeamService.teamLeadersConf(Integer.parseInt(teamIdx),loginId) == 1){
+			if(TeamService.teamLeadersChk(Integer.parseInt(teamIdx),loginId) == 1){
 				logger.info("로그인확인&직급확인 완료");
 				
 				model.addAttribute("userId",userId);
@@ -938,7 +973,7 @@ public class TeamController {
 		return page;
 	}
 	
-	//즉시강퇴
+	// 즉시강퇴
 	@RequestMapping(value = "/team/removeNow.go")
 	public String removeNowForm(HttpSession session, Model model,@RequestParam String teamIdx,@RequestParam String userId) {
 
@@ -948,7 +983,7 @@ public class TeamController {
 		
 		if(loginId != null) {	
 			//로그인한 아이디가 팀장, 부팀장인지 확인
-			if(TeamService.teamLeadersConf(Integer.parseInt(teamIdx),loginId) == 1){
+			if(TeamService.teamLeadersChk(Integer.parseInt(teamIdx),loginId) == 1){
 				logger.info("로그인확인&직급확인 완료");
 				
 				model.addAttribute("userId",userId);

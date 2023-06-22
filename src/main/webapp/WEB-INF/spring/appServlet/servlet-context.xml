@@ -30,11 +30,11 @@
 		<beans:property name="driverClassName" value="org.mariadb.jdbc.Driver"/>
 
 
-		<beans:property name="url" value="jdbc:mariadb://192.168.12.35:3306/carrot_farm"/>
+		<beans:property name="url" value="jdbc:mariadb://localhost:1512/carrot_farm"/>
 
 
 
-		<beans:property name="username" value="carrot_farmer"/>
+		<beans:property name="username" value="web_user"/>
 		<beans:property name="password" value="pass"/>
 	</beans:bean>
 	

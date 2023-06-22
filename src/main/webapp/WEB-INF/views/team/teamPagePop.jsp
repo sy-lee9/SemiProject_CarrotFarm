@@ -49,7 +49,7 @@
 		<tr>
 			<th rowspan="6">
 				<c:if test="${team.photoName eq null}">
-					<img width="600" height="300" src="/photo/팀이미지.png"/>
+					<img width="600" height="300" src="/photo/팀기본프로필.png"/>
 				</c:if>
 				<c:if test="${team.photoName ne null}">
 					<img width="600" height="300" src="/photo/${team.photoName}"/>
